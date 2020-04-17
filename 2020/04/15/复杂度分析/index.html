@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="时间复杂度与空间复杂度&amp;最好、最坏、平均、均摊复杂度">
+  <meta name="description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复杂度分析">
 <meta property="og:url" content="http://yoursite.com/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="时间复杂度与空间复杂度&amp;最好、最坏、平均、均摊复杂度">
+<meta property="og:description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-04-15T09:49:06.000Z">
-<meta property="article:modified_time" content="2020-04-17T01:18:18.463Z">
+<meta property="article:modified_time" content="2020-04-17T02:39:13.811Z">
 <meta property="article:author" content="Magic Candy">
 <meta property="article:tag" content="时间复杂度">
 <meta property="article:tag" content="空间复杂度">
@@ -194,7 +194,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-17 09:18:18" itemprop="dateModified" datetime="2020-04-17T09:18:18+08:00">2020-04-17</time>
+                <time title="修改时间：2020-04-17 10:39:13" itemprop="dateModified" datetime="2020-04-17T10:39:13+08:00">2020-04-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -207,7 +207,7 @@
             </span>
 
           
-            <div class="post-description">时间复杂度与空间复杂度&最好、最坏、平均、均摊复杂度</div>
+            <div class="post-description">复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系</div>
 
         </div>
       </header>
@@ -306,7 +306,7 @@
 
           </div>
           
-
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -369,7 +369,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -382,7 +382,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -469,7 +469,30 @@
 
 
 
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
 
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c1e8d36eb1b20fedc56e',
+      clientSecret: 'af27c30109ed557e340de636e348c5e50008c827',
+      repo        : 'guoyushuai.github.io',
+      owner       : 'guoyushuai',
+      admin       : ['guoyushuai'],
+      id          : 'f47af1d1eda4d807b02bba32be15120b',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+  
+  
+
+  
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
 
@@ -481,8 +504,8 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       clientSecret: 'af27c30109ed557e340de636e348c5e50008c827',
       repo        : 'guoyushuai.github.io',
       owner       : 'guoyushuai',
-      admin       : [''],
-      id          : 'f47af1d1eda4d807b02bba32be15120b',
+      admin       : ['guoyushuai'],
+      id          : '644601435a6c189b98c6fd8f9e6fcd38',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -490,10 +513,6 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 </script>
-
-  
-
-  
 
 </body>
 </html>

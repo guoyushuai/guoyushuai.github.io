@@ -262,7 +262,10 @@
     <a href="/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/" rel="prev" title="复杂度分析">
       <i class="fa fa-chevron-left"></i> 复杂度分析
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/17/%E9%93%BE%E8%A1%A8/" rel="next" title="链表">
+      链表 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -275,7 +278,7 @@
 
           </div>
           
-
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -338,7 +341,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -351,7 +354,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -438,7 +441,30 @@
 
 
 
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
 
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c1e8d36eb1b20fedc56e',
+      clientSecret: 'af27c30109ed557e340de636e348c5e50008c827',
+      repo        : 'guoyushuai.github.io',
+      owner       : 'guoyushuai',
+      admin       : ['guoyushuai'],
+      id          : 'f47af1d1eda4d807b02bba32be15120b',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+  
+  
+
+  
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
 
@@ -450,8 +476,8 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       clientSecret: 'af27c30109ed557e340de636e348c5e50008c827',
       repo        : 'guoyushuai.github.io',
       owner       : 'guoyushuai',
-      admin       : [''],
-      id          : 'f47af1d1eda4d807b02bba32be15120b',
+      admin       : ['guoyushuai'],
+      id          : 'd9ac4b1bf3e6672167c8d2043e2bc62c',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -459,10 +485,6 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 </script>
-
-  
-
-  
 
 </body>
 </html>
