@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="时间复杂度与空间复杂度">
+  <meta name="description" content="时间复杂度与空间复杂度&amp;最好、最坏、平均、均摊复杂度">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复杂度分析">
 <meta property="og:url" content="http://yoursite.com/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="时间复杂度与空间复杂度">
+<meta property="og:description" content="时间复杂度与空间复杂度&amp;最好、最坏、平均、均摊复杂度">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-04-15T09:49:06.000Z">
-<meta property="article:modified_time" content="2020-04-16T01:23:38.377Z">
+<meta property="article:modified_time" content="2020-04-17T01:18:18.463Z">
 <meta property="article:author" content="Magic Candy">
 <meta property="article:tag" content="时间复杂度">
 <meta property="article:tag" content="空间复杂度">
@@ -194,7 +194,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-16 09:23:38" itemprop="dateModified" datetime="2020-04-16T09:23:38+08:00">2020-04-16</time>
+                <time title="修改时间：2020-04-17 09:18:18" itemprop="dateModified" datetime="2020-04-17T09:18:18+08:00">2020-04-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -207,7 +207,7 @@
             </span>
 
           
-            <div class="post-description">时间复杂度与空间复杂度</div>
+            <div class="post-description">时间复杂度与空间复杂度&最好、最坏、平均、均摊复杂度</div>
 
         </div>
       </header>
@@ -221,7 +221,7 @@
         <h2 id="时间复杂度与空间复杂度"><a href="#时间复杂度与空间复杂度" class="headerlink" title="时间复杂度与空间复杂度"></a>时间复杂度与空间复杂度</h2><p>复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系。  </p>
 <h3 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h3><p>代码执行时间随数据规模增长的变化趋势，叫作渐进时间复杂度（asymptotic time complexity），简称<strong>时间复杂度</strong>。  </p>
 <p>所有代码的执行时间T(n)与每行代码的执行次数成正比  </p>
-<p><code>T(n) = O(f(n))**</code>  </p>
+<p><code>T(n) = O(f(n))</code>  </p>
 <blockquote>
 <p>其中T(n)表示算法执行的总时间，f(n)表示每行代码执行总次数，而n往往表示数据的规模。常量阶、低阶、系数对增长趋势不产生决定性影响，在做复杂度分析时可忽略这些项。</p>
 </blockquote>
@@ -290,7 +290,10 @@
     <a href="/2020/04/14/hello-world/" rel="prev" title="Hello World">
       <i class="fa fa-chevron-left"></i> Hello World
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/17/%E6%95%B0%E7%BB%84/" rel="next" title="数组">
+      数组 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -366,7 +369,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -379,7 +382,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -479,7 +482,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'guoyushuai.github.io',
       owner       : 'guoyushuai',
       admin       : [''],
-      id          : 'a676607444a8bc8b150c9a3aff884e61',
+      id          : 'f47af1d1eda4d807b02bba32be15120b',
         language: 'zh-CN',
       distractionFreeMode: true
     });
