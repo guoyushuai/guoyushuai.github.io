@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="尺有所短，寸有所长。">
+  <meta name="description" content="将一组零散的内存块串联起来进行数据存储的数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="链表">
 <meta property="og:url" content="http://yoursite.com/2020/04/17/%E9%93%BE%E8%A1%A8/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="尺有所短，寸有所长。">
+<meta property="og:description" content="将一组零散的内存块串联起来进行数据存储的数据结构">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-04-17T02:24:25.000Z">
-<meta property="article:modified_time" content="2020-04-17T02:25:46.844Z">
+<meta property="article:modified_time" content="2020-04-19T14:38:18.947Z">
 <meta property="article:author" content="Magic Candy">
 <meta property="article:tag" content="链表">
 <meta name="twitter:card" content="summary">
@@ -185,10 +185,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-04-17 10:24:25 / 修改时间：10:25:46" itemprop="dateCreated datePublished" datetime="2020-04-17T10:24:25+08:00">2020-04-17</time>
+              <time title="创建时间：2020-04-17 10:24:25" itemprop="dateCreated datePublished" datetime="2020-04-17T10:24:25+08:00">2020-04-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 22:38:18" itemprop="dateModified" datetime="2020-04-19T22:38:18+08:00">2020-04-19</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -200,6 +206,7 @@
             </span>
 
           
+            <div class="post-description">将一组零散的内存块串联起来进行数据存储的数据结构</div>
 
         </div>
       </header>
@@ -210,7 +217,79 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>链表的内存结构是不连续的内存空间，将一组零散的内存块串联起来进行数据存储的数据结构。</p>
+<p>引子：缓存淘汰策略</p>
+<blockquote>
+<ul>
+<li>先进先出FITO(First In,First Out)</li>
+<li>最少使用LFU(Least Frequently Used)</li>
+<li>最近最少使用LRU(Least Recently Used)</li>
+</ul>
+</blockquote>
+<h4 id="常见链表结构"><a href="#常见链表结构" class="headerlink" title="常见链表结构"></a>常见链表结构</h4><ol>
+<li>单链表  <blockquote>
+<p>-&gt;(数据+后继指针next)-&gt;<br>首结点地址表示整条链表，尾结点的后继指针指向空地址null </p>
+</blockquote>
+</li>
+<li>双向链表<blockquote>
+<p>-&gt;(前驱指针prev+数据+后继指针next)-&gt;<br>首结点的前驱指针prev和尾结点的后继指针均指向空地址null</p>
+<ul>
+<li>给定数据值删除对应结点,需要从头到尾遍历时间复杂度O(n);  </li>
+<li>给定结点地址删除结点,单链表需要从头到尾遍历前驱结点时间复杂度O(n),双向链表可以直接找到前驱结点时间复杂度O(1)。</li>
+</ul>
+</blockquote>
+</li>
+<li>循环链表<blockquote>
+<p>尾结点的后继指针指向链表的首结点的地址</p>
+</blockquote>
+</li>
+<li>双向循环链表</li>
+</ol>
+<h4 id="实现链表"><a href="#实现链表" class="headerlink" title="实现链表"></a>实现链表</h4><ol>
+<li>理解指针或引用的含义(所指或引用对象的内存地址)<br>将某个变量赋值给指针，实际上就是将这个变量的地址赋值给指针；指针中存储了这个变量的内存地址，指向了这个变量，通过指针就能找到这个变量。</li>
+<li>警惕指针丢失和内存泄漏<br>插入结点时，一定要注意操作的顺序；删除结点时，一定要记得手动释放内存空间。</li>
+<li>利用哨兵简化实现难度<br>针对链表的插入、删除操作，需要对插入第一个结点和删除最后一个结点的情况进行特殊处理。利用哨兵解决边界问题，不直接参与业务逻辑。<br>引入哨兵结点，在任何时候，不管链表是不是空，head指针都会一直指向这个哨兵结点，哨兵结点不存储数据。</li>
+<li>重点留意边界条件处理<br>链表为空、链表只包含一个结点、链表只包含两个结点、代码逻辑在处理头结点和尾结点等情况时，是否能正常工作。</li>
+<li>举例画图，辅助思考  </li>
+<li>多写多练，没有捷径<br>单链表反转、链表中环的检测、两个有序的链表合并、删除链表倒数第n个结点、求链表的中间结点</li>
+</ol>
+<h4 id="链表or数组"><a href="#链表or数组" class="headerlink" title="链表or数组"></a>链表or数组</h4><table>
+<thead>
+<tr>
+<th>时间复杂度</th>
+<th>数组</th>
+<th>链表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入操作</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>随机访问</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+</tbody></table>
+<p>与数组相比，链表除了存储数据，需要消耗更多的内存空间，存储后继指针。<br>对链表进行频繁的插入和删除操作，会导致频繁的内存申请和释放，容易造成内存碎片。</p>
+<p>数组需要连续的内存空间。有利有弊，便于借助CPU缓冲机制于都数组中的数据；不能充分利用不连续的内存空间。<br>数组大小固定，若存储空间不足需要进行扩容，一旦扩容需要进行数据复制，非常耗时。</p>
+<h4 id="链表实现LRU算法"><a href="#链表实现LRU算法" class="headerlink" title="链表实现LRU算法"></a>链表实现LRU算法</h4><p>维护一个有序单链表，越靠近链表尾部的结点是越早之前访问的。当有有一个新的数据被访问时，从链表头开始顺序遍历链表。  </p>
+<blockquote>
+<ol>
+<li>数据之前已经被缓存在链表中了，将遍历得到的对应结点从原来的位置删除，然后再插入到链表的头部。</li>
+<li>数据没有在缓存链表中，若缓存未满，将结点直接插入到链表的头部；若缓存已满，将链表尾结点删除，将新数据结点插入链表的头部。</li>
+</ol>
+</blockquote>
+<h4 id="数组实现LRU算法"><a href="#数组实现LRU算法" class="headerlink" title="数组实现LRU算法"></a>数组实现LRU算法</h4><p>维护一个有序数组，越靠近数组尾部的元素是越早访问的，当有一个新的数据被访问时，从数组第一个元素开始遍历数组</p>
+<blockquote>
+<ol>
+<li>数据在数组中，将当前数据对应元素前的元素后移一位，并将当前数据放入头部。</li>
+<li>数据不在数组中，若缓存未满，将当前数组所有元素后移一位，将数据放入头部；若缓存已满，先删除数组最后一个元素，将数组所有元素后移一位，将数据放入头部。</li>
+</ol>
+</blockquote>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>单链表判断回文字符串</p>
+
     </div>
 
     
@@ -291,6 +370,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见链表结构"><span class="nav-number">1.</span> <span class="nav-text">常见链表结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现链表"><span class="nav-number">2.</span> <span class="nav-text">实现链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链表or数组"><span class="nav-number">3.</span> <span class="nav-text">链表or数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链表实现LRU算法"><span class="nav-number">4.</span> <span class="nav-text">链表实现LRU算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组实现LRU算法"><span class="nav-number">5.</span> <span class="nav-text">数组实现LRU算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展"><span class="nav-number"></span> <span class="nav-text">扩展</span></a></div>
       </div>
       <!--/noindex-->
 
