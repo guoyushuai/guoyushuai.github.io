@@ -1,65 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>复杂度分析</title>
-    <url>/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<h2 id="时间复杂度与空间复杂度"><a href="#时间复杂度与空间复杂度" class="headerlink" title="时间复杂度与空间复杂度"></a>时间复杂度与空间复杂度</h2><p>复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系。  </p>
-<h3 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h3><p>代码执行时间随数据规模增长的变化趋势，叫作渐进时间复杂度（asymptotic time complexity），简称<strong>时间复杂度</strong>。  </p>
-<p>所有代码的执行时间T(n)与每行代码的执行次数成正比  </p>
-<p><code>T(n) = O(f(n))</code>  </p>
-<blockquote>
-<p>其中T(n)表示算法执行的总时间，f(n)表示每行代码执行总次数，而n往往表示数据的规模。常量阶、低阶、系数对增长趋势不产生决定性影响，在做复杂度分析时可忽略这些项。</p>
-</blockquote>
-<h4 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h4><ol>
-<li>单段代码看高频：比如循环。</li>
-<li>多段代码取最大：比如一段代码中有单循环和多重循环，那么取多重循环的复杂度。</li>
-<li>嵌套代码求乘积：比如递归、多重循环等。</li>
-<li>多个规模求加法：比如方法有两个参数控制两个循环的次数，那么这是就取二者复杂度相加。</li>
+    <title>冒泡排序、插入排序、选择排序</title>
+    <url>/2020/04/23/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%E3%80%81%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E3%80%81%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<h4 id="排序算法分析方法"><a href="#排序算法分析方法" class="headerlink" title="排序算法分析方法"></a>排序算法分析方法</h4><ol>
+<li>分析排序算法的执行效率  </li>
 </ol>
-<h4 id="级别"><a href="#级别" class="headerlink" title="级别"></a>级别</h4><p><em>多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用，按照多项式的比例增长。</p>
+<ul>
+<li>最好情况、最坏情况、平均情况时间复杂度以及原始数据的有序度(有序度不同对排序的执行时间有影响)</li>
+<li>时间复杂度反应的是大规模数据的增长趋势，实际中规模小需要考虑系数、常数、低阶</li>
+<li>元素比较次数和交换/移动次数（基于比较的排序算法）  </li>
+</ul>
+<ol start="2">
+<li>排序算法的内存消耗（空间复杂度）  </li>
+</ol>
+<ul>
+<li><strong>原地排序</strong>算法：空间复杂度为O(1)的排序算法。</li>
+</ul>
+<ol start="3">
+<li>排序算法的稳定性    </li>
+</ol>
+<ul>
+<li>稳定性：如果待排序的序列中存在值相等的元素，经过排序之后，相等元素之间原有的先后顺序不变。稳定的排序算法||不稳定的排序算法  </li>
+</ul>
+<p>插入排序和冒泡排序的时间复杂度相同，都是O(n<sup>2</sup>)</p>
+<a id="more"></a>
+
+<h4 id="冒泡排序-1"><a href="#冒泡排序-1" class="headerlink" title="冒泡排序 1"></a>冒泡排序 <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>冒泡排序只会操作相邻的两个数据。每次冒泡操作都会对相邻的两个元素进行比较，看是否满足大小关系要求，如果不满足就让它俩互换。一次冒泡会让至少一个元素移动到它应该在的位置，重复n次，就完成了n个数据的排序工作。<br>优化：当某次冒泡操作已经没有数据交换时，说明已经达到完全有序，不用再继续执行后续的冒泡操作。  </p>
 <ol>
-<li>常量阶 O(1)  </li>
-<li>对数阶 O(logn)  </li>
-<li>线性阶 O(n)  </li>
-<li>线性对数阶 O(nlogn)  </li>
-<li>O(n<sup>2</sup>)平方阶、O(n<sup>3</sup>)立方阶……</li>
+<li>冒泡过程只涉及相邻数据的交换操作，只需要常量级的临时空间，空间复杂度为O(1)，属于<strong>原地排序算法</strong>。</li>
+<li>冒泡排序中只有交换才改变两个元素的前后顺序。为了保证冒泡排序算法的稳定性，当有相邻的两个元素大小相等的时候，不做交换，相同大小的数据在排序前后不会改变顺序，属于<strong>稳定的排序算法</strong>。</li>
+<li>时间复杂度  </li>
 </ol>
-<p><em>非多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用暴增，这类算法的性能极差</p>
-<ol start="6">
-<li>指数阶 O(2<sup>n</sup>)  </li>
-<li>阶乘阶 O(n!)  </li>
+<ul>
+<li><p><strong>最好情况时间复杂度是O(n)</strong>，数据有序，进行一次冒泡操作;</p>
+</li>
+<li><p><strong>最坏情况时间复杂度O(n<sup>2</sup>)</strong>，数据倒序，进行n次冒泡操作。</p>
+</li>
+<li><p><strong>平均时间复杂度</strong>：</p>
+<blockquote>
+<p>对于包含n个数据的数组，这n个数据有n!种排序方式。不同的排列方式，冒泡排序执行的时间不同。用概率论方法定量分析平均时间复杂度较复杂。  </p>
+</blockquote>
+<p><strong>有序度</strong>：数组中具有有序关系的元素对的个数。有序元素对：a[i] &lt;= a[j];i&lt;j。<br>倒序排列的数组，有序度为0;<br>完全有序的数组，有序度n<em>(n-1)/2. 满有序度。<br>*</em>逆序度**。逆序元素对：a[i] &gt; a[j];i&lt;j。<br>逆序度 = 满有序度 - 有序度。排序的过程就是一种增加有序度，减少逆序度的过程，最后达到满有序度。  </p>
+<p>冒泡排序包含两个操作原子，<strong>比较&amp;交换</strong>。每交换一次，有序度加1，交换次数是确定的，为逆序度：n<em>(n-1)/2 - 初始有序度。<br>对于包含n个数据的数组进行冒泡排序，最坏情况下，初始状态的有序度是0，要进行n</em>(n-1)/2次交换；最好情况下，初始状态的有序度是n<em>(n-1)/2，不需要进行交换。取中间值n</em>(n-1)/4来表示初始有序度。平均情况下要进行n<em>(n-1)/4次交换操作，比较操作比交换操作多，复杂度的上限是O(n<sup>2</sup>)，所以*</em>平均情况下的时间复杂度是O(n<sup>2</sup>)**。</p>
+</li>
+</ul>
+<h4 id="插入排序-2"><a href="#插入排序-2" class="headerlink" title="插入排序 2"></a>插入排序 <a href="#refer-anchor-2"><sup>2</sup></a></h4><p>动态的往有序集合中添加数据，遍历数组找到数据应该插入的位置进行插入，保持集合中的数据一直有序。  </p>
+<p>将数组中的数据分为两个区间：<strong>已排序区间&amp;未排序区间</strong>。初始已排序区间只有一个元素-数组的第一个元素。插入排序的核心思想是取未排序区间中的元素，在已排序区间中找到合适的插入位置将其插入，并保证已排序区间数据一直有序。重复这个过程，直到未排序区间中元素为空，算法结束。  </p>
+<p>插入排序包含两种操作：<strong>元素的比较</strong>，<strong>元素的移动</strong>。将一个数据a插入到已排序区间时，需要拿a与已排序区间的元素一次比较大小，找到合适的插入位置。找到插入点之后，需要将插入点之后的元素往后移动一位，腾出位置给元素a插入。 不同的查找插入点方法（从头到尾、从尾到头），元素的比较次数是有区别的，但对于一个给定的初始序列，移动操作的次数是固定等于逆序度。  </p>
+<ol>
+<li>插入排序算法的运行并不需要额外的存储空间，空间复杂度是O(1)，属于<strong>原地排序算法</strong>。</li>
+<li>在插入排序中，对值相同的元素，可以选择将后面出现的元素，插入到前面出现元素的后面，这样可以保证原有的前后顺序不变，插入排序是<strong>稳定的排序算法</strong>。</li>
+<li>时间复杂度</li>
 </ol>
-<h3 id="空间复杂度分析"><a href="#空间复杂度分析" class="headerlink" title="空间复杂度分析"></a>空间复杂度分析</h3><p><strong>空间复杂度</strong>全称就是渐进空间复杂度（asymptotic space complexity），表示算法的存储空间与数据规模之间的增长关系。  </p>
-<p>类似于时间复杂度</p>
-<h3 id="其他复杂度"><a href="#其他复杂度" class="headerlink" title="其他复杂度"></a>其他复杂度</h3><ol>
-<li><p>最好情况时间复杂度（best case time complexity）  </p>
-<blockquote>
-<p>在最理想的情况下，执行这段代码的时间复杂度  </p>
+<ul>
+<li><strong>最好时间复杂度O(n)</strong>，数据有序，不需要搬移任何数据。如果从尾到头在有序数组里面查找插入位置，每次只需要比较一个数据（当前元素与其前一个元素比较，当前大不小于不用动）就能确定插入的位置。（内层循环只执行一次就break）</li>
+<li><strong>最坏时间复杂度O(n<sup>2</sup>)</strong>，数据倒序，每次插入都相当于在数据的第一个位置插入新的数据，需要移动大量的数据。</li>
+<li><strong>平均时间复杂度</strong>：<blockquote>
+<p>在数组中插入一个数据的平均时间复杂度是O(n)（详见数组篇）。对于插入排序，每次插入操作都相当于在数组中插入一个数据，循环执行n次插入操作，<strong>平均时间复杂度为O(n<sup>2</sup>)</strong>。  </p>
 </blockquote>
 </li>
-<li><p>最坏情况时间复杂度（worst case time complexity）</p>
-<blockquote>
-<p>在最糟糕的情况下，执行这段代码的时间复杂度  </p>
-</blockquote>
-</li>
-<li><p>平均情况时间复杂度（average case time complexity）</p>
-<blockquote>
-<p>加权平均时间复杂度/期望时间复杂度<br>用代码在所有情况下执行的次数的加权平均值表示</p>
-</blockquote>
-</li>
-<li><p>均摊时间复杂度（amortized time complexity）</p>
-<blockquote>
-<p>摊还分析、平摊分析。一种特殊的平均时间复杂度。<br>在代码执行的所有复杂度情况中绝大部分是低级别的复杂度，个别情况是高级别复杂度且发生具有时序关系时，可以将个别高级别复杂度均摊到低级别复杂度上。基本上均摊结果等于低级别复杂度。（重点1、高级别少数2、低高出现具有时序规律）</p>
-</blockquote>
-</li>
+</ul>
+<h4 id="插入与冒泡对比"><a href="#插入与冒泡对比" class="headerlink" title="插入与冒泡对比"></a>插入与冒泡对比</h4><p>冒泡跟插入不管怎么优化，元素移动的次数是一个固定值，等于原始数据的逆序度。<br>冒泡的数据交换要比插入的数据移动复杂，3个赋值操作&gt;1个赋值操作。</p>
+<h4 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h4><p>选择排序类似插入排序，分为已排序区间&amp;未排序区间。选择排序每次会从未排序区间中找到最小的元素，将其放到已排序区间的末尾。  </p>
+<ol>
+<li>空间复杂度为O(1)，<strong>原地排序算法</strong>。</li>
+<li>时间复杂度：<strong>最好、最坏、平均时间复杂度都为O(n<sup>2</sup>)</strong>。</li>
+<li>选择排序是一种<strong>不稳定的排序算法</strong>。选择排序每次都要找到剩余未排序元素中的最小值，并和前面的元素交换位置，这样破坏了稳定性。  </li>
 </ol>
-]]></content>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+- [1] 冒泡排序：  
+
+<pre><code>public void bubbleSort(int[] a) {
+    int n = a.length;
+    if(n &lt;= 1) return;
+    //未排序区间+已排序区间
+    for (int i = 0; i &lt; n; i++) {
+        boolean flag = false;
+        //从第一个元素开始进行比较，选出前面剩余未排序区间（n-i-1）元素的最大值
+        for(int j = 0; j &lt; n - i -1; j++) {
+            //当前元素大于下一个元素值，交换两个元素位置
+            if(a[j] &gt; a[j+1]) {
+                int temp = a[j];
+                a[j] = a[j+1];
+                a[j+1] = temp;
+                //有数据交换交换需要继续进行
+                flag = true;
+            }
+        }
+        if(!flag) break;
+    }
+    for (int i : a)
+        System.out.print(i);
+}  </code></pre><div id="refer-anchor-1"></div>  
+- [2]插入排序：  
+
+<pre><code>public void insertionSort(int[] a) {
+    int n = a.length;
+    if(n &lt;= 1) return;
+    //已排序区间+未排序区间
+    for (int i = 1; i &lt; n; i++) {
+        //当前要排序（插入）的元素值
+        int temp = a[i];
+        //从已排序区间(i-1)元素最大下标，倒着一一进行比较
+        int j = i - 1;
+        for (; j &gt;= 0; j--) {
+            if (a[j] &gt; temp) {
+                //已排序区间目前元素值大于当前元素值，则交换位置，继续与前一个元素值比较
+                a[j+1] = a[j];
+            } else {
+                break;
+            }
+        }
+        //for循环中与j--之后的元素比较后break，最终移入的下标应为j++
+        a[j+1] = temp;
+    }
+    for (int i : a)
+        System.out.println(i);
+}  </code></pre>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>时间复杂度</tag>
-        <tag>空间复杂度</tag>
+        <tag>排序</tag>
       </tags>
   </entry>
   <entry>
@@ -79,6 +142,47 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>数组</title>
+    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
+<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
+<li>线性表<blockquote>
+<p>数组、链表、队列、栈  </p>
+</blockquote>
+</li>
+<li>非线性表<blockquote>
+<p>二叉树、堆、图  </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a[i]_address &#x3D; base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+<ol>
+<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
+<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
+<p>快速排序的思想</p>
+</blockquote>
+</li>
+<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
+<p>JVM标记清除垃圾回收算法的核心思想</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
   </entry>
   <entry>
     <title>递归</title>
@@ -141,44 +245,65 @@
       </tags>
   </entry>
   <entry>
-    <title>数组</title>
-    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
-    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
-<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
-<li>线性表<blockquote>
-<p>数组、链表、队列、栈  </p>
+    <title>复杂度分析</title>
+    <url>/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h2 id="时间复杂度与空间复杂度"><a href="#时间复杂度与空间复杂度" class="headerlink" title="时间复杂度与空间复杂度"></a>时间复杂度与空间复杂度</h2><p>复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系。  </p>
+<h3 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h3><p>代码执行时间随数据规模增长的变化趋势，叫作渐进时间复杂度（asymptotic time complexity），简称<strong>时间复杂度</strong>。  </p>
+<p>所有代码的执行时间T(n)与每行代码的执行次数成正比  </p>
+<p><code>T(n) = O(f(n))</code>  </p>
+<blockquote>
+<p>其中T(n)表示算法执行的总时间，f(n)表示每行代码执行总次数，而n往往表示数据的规模。常量阶、低阶、系数对增长趋势不产生决定性影响，在做复杂度分析时可忽略这些项。</p>
 </blockquote>
-</li>
-<li>非线性表<blockquote>
-<p>二叉树、堆、图  </p>
-</blockquote>
-</li>
+<h4 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h4><ol>
+<li>单段代码看高频：比如循环。</li>
+<li>多段代码取最大：比如一段代码中有单循环和多重循环，那么取多重循环的复杂度。</li>
+<li>嵌套代码求乘积：比如递归、多重循环等。</li>
+<li>多个规模求加法：比如方法有两个参数控制两个循环的次数，那么这是就取二者复杂度相加。</li>
 </ol>
-<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a[i]_address &#x3D; base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+<h4 id="级别"><a href="#级别" class="headerlink" title="级别"></a>级别</h4><p><em>多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用，按照多项式的比例增长。</p>
 <ol>
-<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
-<li>插入操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)  ，最好O(1)，最坏O(n)<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
-<p>快速排序的思想</p>
+<li>常量阶 O(1)  </li>
+<li>对数阶 O(logn)  </li>
+<li>线性阶 O(n)  </li>
+<li>线性对数阶 O(nlogn)  </li>
+<li>O(n<sup>2</sup>)平方阶、O(n<sup>3</sup>)立方阶……</li>
+</ol>
+<p><em>非多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用暴增，这类算法的性能极差</p>
+<ol start="6">
+<li>指数阶 O(2<sup>n</sup>)  </li>
+<li>阶乘阶 O(n!)  </li>
+</ol>
+<h3 id="空间复杂度分析"><a href="#空间复杂度分析" class="headerlink" title="空间复杂度分析"></a>空间复杂度分析</h3><p><strong>空间复杂度</strong>全称就是渐进空间复杂度（asymptotic space complexity），表示算法的存储空间与数据规模之间的增长关系。  </p>
+<p>类似于时间复杂度</p>
+<h3 id="其他复杂度"><a href="#其他复杂度" class="headerlink" title="其他复杂度"></a>其他复杂度</h3><ol>
+<li><p>最好情况时间复杂度（best case time complexity）  </p>
+<blockquote>
+<p>在最理想的情况下，执行这段代码的时间复杂度  </p>
 </blockquote>
 </li>
-<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
-<p>JVM标记清除垃圾回收算法的核心思想</p>
+<li><p>最坏情况时间复杂度（worst case time complexity）</p>
+<blockquote>
+<p>在最糟糕的情况下，执行这段代码的时间复杂度  </p>
+</blockquote>
+</li>
+<li><p>平均情况时间复杂度（average case time complexity）</p>
+<blockquote>
+<p>加权平均时间复杂度/期望时间复杂度<br>用代码在所有情况下执行的次数的加权平均值表示</p>
+</blockquote>
+</li>
+<li><p>均摊时间复杂度（amortized time complexity）</p>
+<blockquote>
+<p>摊还分析、平摊分析。一种特殊的平均时间复杂度。<br>在代码执行的所有复杂度情况中绝大部分是低级别的复杂度，个别情况是高级别复杂度且发生具有时序关系时，可以将个别高级别复杂度均摊到低级别复杂度上。基本上均摊结果等于低级别复杂度。（重点1、高级别少数2、低高出现具有时序规律）</p>
 </blockquote>
 </li>
 </ol>
-<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
-</ul>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>数组</tag>
+        <tag>时间复杂度</tag>
+        <tag>空间复杂度</tag>
       </tags>
   </entry>
   <entry>
