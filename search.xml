@@ -4,63 +4,53 @@
     <title>冒泡排序、插入排序、选择排序</title>
     <url>/2020/04/23/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%E3%80%81%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E3%80%81%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<h4 id="排序算法分析方法"><a href="#排序算法分析方法" class="headerlink" title="排序算法分析方法"></a>排序算法分析方法</h4><ol>
-<li>分析排序算法的执行效率  </li>
-</ol>
-<ul>
+<li>分析排序算法的执行效率  <ul>
 <li>最好情况、最坏情况、平均情况时间复杂度以及原始数据的有序度(有序度不同对排序的执行时间有影响)</li>
 <li>时间复杂度反应的是大规模数据的增长趋势，实际中规模小需要考虑系数、常数、低阶</li>
 <li>元素比较次数和交换/移动次数（基于比较的排序算法）  </li>
 </ul>
-<ol start="2">
-<li>排序算法的内存消耗（空间复杂度）  </li>
-</ol>
-<ul>
+</li>
+<li>排序算法的内存消耗（空间复杂度）  <ul>
 <li><strong>原地排序</strong>算法：空间复杂度为O(1)的排序算法。</li>
 </ul>
-<ol start="3">
-<li>排序算法的稳定性    </li>
-</ol>
-<ul>
+</li>
+<li>排序算法的稳定性    <ul>
 <li>稳定性：如果待排序的序列中存在值相等的元素，经过排序之后，相等元素之间原有的先后顺序不变。稳定的排序算法||不稳定的排序算法  </li>
 </ul>
+</li>
+</ol>
 <p>插入排序和冒泡排序的时间复杂度相同，都是O(n<sup>2</sup>)</p>
 <a id="more"></a>
 
 <h4 id="冒泡排序-1"><a href="#冒泡排序-1" class="headerlink" title="冒泡排序 1"></a>冒泡排序 <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>冒泡排序只会操作相邻的两个数据。每次冒泡操作都会对相邻的两个元素进行比较，看是否满足大小关系要求，如果不满足就让它俩互换。一次冒泡会让至少一个元素移动到它应该在的位置，重复n次，就完成了n个数据的排序工作。<br>优化：当某次冒泡操作已经没有数据交换时，说明已经达到完全有序，不用再继续执行后续的冒泡操作。  </p>
 <ol>
-<li>冒泡过程只涉及相邻数据的交换操作，只需要常量级的临时空间，空间复杂度为O(1)，属于<strong>原地排序算法</strong>。</li>
-<li>冒泡排序中只有交换才改变两个元素的前后顺序。为了保证冒泡排序算法的稳定性，当有相邻的两个元素大小相等的时候，不做交换，相同大小的数据在排序前后不会改变顺序，属于<strong>稳定的排序算法</strong>。</li>
-<li>时间复杂度  </li>
-</ol>
+<li><p>冒泡过程只涉及相邻数据的交换操作，只需要常量级的临时空间，空间复杂度为O(1)，属于<strong>原地排序算法</strong>。</p>
+</li>
+<li><p>冒泡排序中只有交换才改变两个元素的前后顺序。为了保证冒泡排序算法的稳定性，当有相邻的两个元素大小相等的时候，不做交换，相同大小的数据在排序前后不会改变顺序，属于<strong>稳定的排序算法</strong>。</p>
+</li>
+<li><p>时间复杂度  </p>
 <ul>
-<li><p><strong>最好情况时间复杂度是O(n)</strong>，数据有序，进行一次冒泡操作;</p>
-</li>
-<li><p><strong>最坏情况时间复杂度O(n<sup>2</sup>)</strong>，数据倒序，进行n次冒泡操作。</p>
-</li>
-<li><p><strong>平均时间复杂度</strong>：</p>
-<blockquote>
-<p>对于包含n个数据的数组，这n个数据有n!种排序方式。不同的排列方式，冒泡排序执行的时间不同。用概率论方法定量分析平均时间复杂度较复杂。  </p>
-</blockquote>
+<li><strong>最好情况时间复杂度是O(n)</strong>，数据有序，进行一次冒泡操作;</li>
+<li><strong>最坏情况时间复杂度O(n<sup>2</sup>)</strong>，数据倒序，进行n次冒泡操作。</li>
+<li><strong>平均时间复杂度</strong>：对于包含n个数据的数组，这n个数据有n!种排序方式。不同的排列方式，冒泡排序执行的时间不同。用概率论方法定量分析平均时间复杂度较复杂。  </li>
+</ul>
 <p><strong>有序度</strong>：数组中具有有序关系的元素对的个数。有序元素对：a[i] &lt;= a[j];i&lt;j。<br>倒序排列的数组，有序度为0;<br>完全有序的数组，有序度n<em>(n-1)/2. 满有序度。<br>*</em>逆序度**。逆序元素对：a[i] &gt; a[j];i&lt;j。<br>逆序度 = 满有序度 - 有序度。排序的过程就是一种增加有序度，减少逆序度的过程，最后达到满有序度。  </p>
 <p>冒泡排序包含两个操作原子，<strong>比较&amp;交换</strong>。每交换一次，有序度加1，交换次数是确定的，为逆序度：n<em>(n-1)/2 - 初始有序度。<br>对于包含n个数据的数组进行冒泡排序，最坏情况下，初始状态的有序度是0，要进行n</em>(n-1)/2次交换；最好情况下，初始状态的有序度是n<em>(n-1)/2，不需要进行交换。取中间值n</em>(n-1)/4来表示初始有序度。平均情况下要进行n<em>(n-1)/4次交换操作，比较操作比交换操作多，复杂度的上限是O(n<sup>2</sup>)，所以*</em>平均情况下的时间复杂度是O(n<sup>2</sup>)**。</p>
 </li>
-</ul>
+</ol>
 <h4 id="插入排序-2"><a href="#插入排序-2" class="headerlink" title="插入排序 2"></a>插入排序 <a href="#refer-anchor-2"><sup>2</sup></a></h4><p>动态的往有序集合中添加数据，遍历数组找到数据应该插入的位置进行插入，保持集合中的数据一直有序。  </p>
 <p>将数组中的数据分为两个区间：<strong>已排序区间&amp;未排序区间</strong>。初始已排序区间只有一个元素-数组的第一个元素。插入排序的核心思想是取未排序区间中的元素，在已排序区间中找到合适的插入位置将其插入，并保证已排序区间数据一直有序。重复这个过程，直到未排序区间中元素为空，算法结束。  </p>
 <p>插入排序包含两种操作：<strong>元素的比较</strong>，<strong>元素的移动</strong>。将一个数据a插入到已排序区间时，需要拿a与已排序区间的元素一次比较大小，找到合适的插入位置。找到插入点之后，需要将插入点之后的元素往后移动一位，腾出位置给元素a插入。 不同的查找插入点方法（从头到尾、从尾到头），元素的比较次数是有区别的，但对于一个给定的初始序列，移动操作的次数是固定等于逆序度。  </p>
 <ol>
 <li>插入排序算法的运行并不需要额外的存储空间，空间复杂度是O(1)，属于<strong>原地排序算法</strong>。</li>
 <li>在插入排序中，对值相同的元素，可以选择将后面出现的元素，插入到前面出现元素的后面，这样可以保证原有的前后顺序不变，插入排序是<strong>稳定的排序算法</strong>。</li>
-<li>时间复杂度</li>
-</ol>
-<ul>
+<li>时间复杂度<ul>
 <li><strong>最好时间复杂度O(n)</strong>，数据有序，不需要搬移任何数据。如果从尾到头在有序数组里面查找插入位置，每次只需要比较一个数据（当前元素与其前一个元素比较，当前大不小于不用动）就能确定插入的位置。（内层循环只执行一次就break）</li>
 <li><strong>最坏时间复杂度O(n<sup>2</sup>)</strong>，数据倒序，每次插入都相当于在数据的第一个位置插入新的数据，需要移动大量的数据。</li>
-<li><strong>平均时间复杂度</strong>：<blockquote>
-<p>在数组中插入一个数据的平均时间复杂度是O(n)（详见数组篇）。对于插入排序，每次插入操作都相当于在数组中插入一个数据，循环执行n次插入操作，<strong>平均时间复杂度为O(n<sup>2</sup>)</strong>。  </p>
-</blockquote>
-</li>
+<li><strong>平均时间复杂度</strong>：在数组中插入一个数据的平均时间复杂度是O(n)（详见数组篇）。对于插入排序，每次插入操作都相当于在数组中插入一个数据，循环执行n次插入操作，<strong>平均时间复杂度为O(n<sup>2</sup>)</strong>。  </li>
 </ul>
+</li>
+</ol>
 <h4 id="选择排序-3"><a href="#选择排序-3" class="headerlink" title="选择排序  3"></a>选择排序  <a href="#refer-anchor-3"><sup>3</sup></a></h4><p>选择排序类似插入排序，分为已排序区间&amp;未排序区间。选择排序每次会从未排序区间中找到最小的元素，将其放到已排序区间的末尾。  </p>
 <ol>
 <li>空间复杂度为O(1)，<strong>原地排序算法</strong>。</li>
@@ -120,7 +110,7 @@
 }  </code></pre><div id="refer-anchor-3"></div>  
 - [3]选择排序：
 
-<pre><code>public static void selectSort(int[] a) {
+<pre><code>public void selectSort(int[] a) {
     int n = a.length;
     if(n &lt;= 1) return;
     //已排序区间+未排序区间
@@ -164,6 +154,179 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>数组</title>
+    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
+<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
+<li>线性表<blockquote>
+<p>数组、链表、队列、栈  </p>
+</blockquote>
+</li>
+<li>非线性表<blockquote>
+<p>二叉树、堆、图  </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a[i]_address &#x3D; base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+<ol>
+<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
+<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
+<p>快速排序的思想</p>
+</blockquote>
+</li>
+<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
+<p>JVM标记清除垃圾回收算法的核心思想</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>归并排序、快速排序</title>
+    <url>/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>归并排序和快速排序的时间复杂度为O(nlogn)。利用分治思想将大问题分解成小问题解决；利用递归代码实现归并排序。  </p>
+<h4 id="归并排序1"><a href="#归并排序1" class="headerlink" title="归并排序1"></a>归并排序<a href="#refer-anchor-1"><sup>1</sup></a></h4><p>先把数组从中间分成前后两部分，然后对前后两部分分别排序，再将排好序的两部分合并在一起。  </p>
+<ul>
+<li>递推公式:<br>merge_sort(p…r) = merge(merge_sort(p…q),merge_sort(q+1…r))  </li>
+<li>终止条件：<br>p = r 不用再继续分解  <blockquote>
+<p>merge_sort(p…r)表示给下标从p到r之间的数组排序。将此问题转化为了两个子问题：merge(merge_sort(p…q),merge_sort(q+1…r))，其中下标q等于p和r的中间位置(p+r)/2。当下标从p到q和从q+1到r这两个子数组都排好序之后，再将两个有序的子数组合并在一起，那么下标从p到r之间的数据也就排好序了。<br>合并函数merge([p…r],[p…q],[q+1…r])，申请一个临时数组temp,大小与数组[p…r]相同。用两个游标i和j，分别指向[p…q]和[q+1…r]的第一个元素。比较这两个元素[i]、[j]的大小，将较小的元素放入到临时数组temp中，并将相应的游标后移一位。  </p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><p>归并排序是一个<strong>稳定的排序算法</strong>，合并数组时，遇到值相同的元素，现将[p…q]区间的元素放入到临时数组temp中，保证值相同的元素在合并前后的先后顺序不变。  </p>
+</li>
+<li><p>最好、最坏、平均情况时间复杂度都是<strong>O(nlogn)</strong>。  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">T(1) &#x3D; C；   n&#x3D;1时，只需要常量级的执行时间，所以表示为C。</span><br><span class="line">T(n) &#x3D; 2*T(n&#x2F;2) + n； n&gt;1</span><br><span class="line">     &#x3D; 2*(2*T(n&#x2F;4) + n&#x2F;2) + n &#x3D; 4*T(n&#x2F;4) + 2*n</span><br><span class="line">     &#x3D; 4*(2*T(n&#x2F;8) + n&#x2F;4) + 2*n &#x3D; 8*T(n&#x2F;8) + 3*n</span><br><span class="line">     &#x3D; 8*(2*T(n&#x2F;16) + n&#x2F;8) + 3*n &#x3D; 16*T(n&#x2F;16) + 4*n</span><br><span class="line">     ......</span><br><span class="line">     &#x3D; 2^k * T(n&#x2F;2^k) + k * n</span><br><span class="line">     ......</span><br></pre></td></tr></table></figure>
+<p>当T(n/2^k)=T(1)时，k=log<sub>2</sub>n，T(n)=Cn+nlog<sub>2</sub>n  </p>
+</li>
+<li><p>归并排序<strong>不是原地排序算法</strong>。<br>归并排序在合并两个有序数组为一个有序数组时，需要借助额外的存储空间。每次合并操作都需要申请额外的内存空间，但在合并完成之后，临时开辟的内存空间就被释放掉了。在任意时刻，CPU只会有一个函数在执行，也就只会有一个临时的内存空间在使用。临时内存空间最大也不会超过n个数据的大小，<strong>空间复杂度是O(n)</strong>。  </p>
+</li>
+</ol>
+<h4 id="快速排序2"><a href="#快速排序2" class="headerlink" title="快速排序2"></a>快速排序<a href="#refer-anchor-2"><sup>2</sup></a></h4><p>如果要排序数组中下标从p到r之间的一组数据，选择p到r之间的任意一个数据作为分区点(pivot)。遍历p到r之间的数据，将小于pivot的放到左边，将大于pivot的放到右边，将pivot放到中间。这样数组p到r之间的数据被分成了三个部分，前面p到q-1之间都是小于pivot的，中间是pivot，后面的q+1到r之间是大于pivot的。<br>根据分治、递归的处理思想，可以用递归排序下标从p到q-1之间的数据和下标从q+1到r之间的数据，直到区间缩小为1，就说明所有的数据都有序了。  </p>
+<ul>
+<li>递推公式：<br>quick_sort(p…r) = quick_sort(p…q-1) + quick_sort(q+1…r)  </li>
+<li>终止条件：<br>p = r  <blockquote>
+<p>快速排序中的分区函数partition()，随机选择一个元素作为分区点pivot，一般情况下可以选择p到r区间的最后一个元素，对数组进行分区，函数返回分区点pivot的下标。  </p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><p>空间复杂度</p>
+<ul>
+<li>不考虑空间消耗可以申请两个临时数组X和Y，遍历数组，将小于分区点的元素拷贝到临时数组X，大于分区点的元素拷贝到临时数组Y，最后将数组X、Y中的数据顺序拷贝到原数组中。   </li>
+<li>原地分区操作，类似选择排序<br>通过游标i将数组[p…r-1]分成两部分，已处理区间[p…i-1]和未处理区间[i…r-1]，每次从未处理区间中取出一个元素[j]和分区点对比，如果小于，则将其加入到已处理区间的尾部[i]的位置。优化：不搬移数据，交换操作，将a[i]与a[j]交换。</li>
+</ul>
+</li>
+<li><p>涉及交换操作，属于<strong>不稳定的排序算法</strong>。  </p>
+</li>
+<li><p>时间复杂度<br>分区极其均衡，每次分区操作都能正好把数组分成大小接近相等的两个小区间，<strong>最好时间复杂度为O(nlogn)</strong>。<br>分区极其不均衡，数组正序，需要n次分区操作，每次分区平均要扫描n、2个元素，<strong>最坏时间复杂度为O(n<sup>2</sup>)</strong>。<br>大部分情况下的时间复杂度都可以做到O(nlogn)，只有在极端情况下，才会退化到O(n<sup>2</sup>)。<strong>平均时间复杂度O(nlogn)</strong>。   </p>
+</li>
+</ol>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p>归并排序的处理过程是由下到上的，先处理子问题，然后再合并。<br>快速排序的处理过程是由上到下的，先分区，然后再处理子问题。</p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>  
+[1] 归并排序  
+
+<pre><code>//归并排序
+public void mergeSort(int[] a) {
+    mergeSortInter(a,0,a.length-1);
+}
+public void mergeSortInter(int[] a,int start,int end) {
+    //终止条件
+    if(start==end) return;
+
+    //中间结点
+    int mid = (start+end)/2;
+
+    mergeSortInter(a,start,mid);
+    mergeSortInter(a,mid+1,end);
+
+    //合并函数
+    merge(a,start,mid,end);
+}
+public void merge(int[] a,int left,int mid,int right) {
+    //临时数组，大小为当前分区的大小
+    int[] temp = new int[right - left + 1];
+
+    int m = 0, i = left, j = mid + 1;
+    while (i &lt;= mid &amp;&amp; j &lt;= right) {
+        //取左右区间中元素最小值放入当前位置
+        temp[m++] = a[i] &lt;= a[j] ? a[i++] : a[j++];
+    }
+    //拷贝剩余数据到临时数组
+    while (i &lt;= mid)
+        temp[m++] = a[i++];
+    while (j &lt;= right)
+        temp[m++] = a[j++];
+
+    //拷贝临时数据到原数组对应区间
+    for (int k=0;k &lt;= right-left;k++)
+        a[left+k] = temp[k];
+}</code></pre><div id="refer-anchor-2"></div>  
+[2] 快速排序  
+
+<pre><code>//快速排序
+public void quickSort(int[] a) {
+    quickSortInter(a,0,a.length-1);
+}
+
+public void quickSortInter(int[] a,int start,int end) {
+    //终止条件  start 可能大于end
+    if(start&gt;=end) return;
+
+    //分区函数获取分区点
+    int p = partition(a,start,end);
+
+    quickSortInter(a,start,p-1);
+    quickSortInter(a,p+1,end);
+}
+
+public int partition(int[] a,int start,int end) {
+    //取当前分区最后一个元素做分区点
+    int pivot = a[end];
+    //记录下一个小于分区点元素值的元素应放置的下标
+    int i = start;
+    for(int j = start; j &lt; end; j++) {
+        //当前元素与分区点元素值比较，小于则当前元素与上一个小于分区点元素的后一个元素进行交换
+        if(a[j] &lt; pivot) {
+            if(i == j) {
+                i++;
+            } else {
+                int temp = a[i];
+                a[i++] = a[j];
+                a[j] = temp;
+            }
+        }
+    }
+
+    //分区点元素值与上一个小于分区点元素的后一个元素进行交换
+    int temp = a[i];
+    a[i] =a[end];
+    a[end] = temp;
+
+    return i;
+}</code></pre>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+      </tags>
   </entry>
   <entry>
     <title>复杂度分析</title>
@@ -285,47 +448,6 @@
       </categories>
       <tags>
         <tag>递归</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数组</title>
-    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
-    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
-<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
-<li>线性表<blockquote>
-<p>数组、链表、队列、栈  </p>
-</blockquote>
-</li>
-<li>非线性表<blockquote>
-<p>二叉树、堆、图  </p>
-</blockquote>
-</li>
-</ol>
-<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a[i]_address &#x3D; base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
-<ol>
-<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
-<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
-<p>快速排序的思想</p>
-</blockquote>
-</li>
-<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
-<p>JVM标记清除垃圾回收算法的核心思想</p>
-</blockquote>
-</li>
-</ol>
-<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>数组</tag>
       </tags>
   </entry>
   <entry>
