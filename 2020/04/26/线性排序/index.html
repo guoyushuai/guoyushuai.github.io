@@ -20,17 +20,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="尺有所短，寸有所长。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
-<meta property="og:url" content="https://guoyushuai.github.io/tags/%E6%A0%88/index.html">
+  <meta name="description" content="线性排序：桶排序、计数排序、基数排序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性排序">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="尺有所短，寸有所长。">
+<meta property="og:description" content="线性排序：桶排序、计数排序、基数排序">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-28T16:07:15.694Z">
 <meta property="article:author" content="Magic Candy">
+<meta property="article:tag" content="排序">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/tags/%E6%A0%88/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/">
 
 
 <script id="page-configurations">
@@ -38,12 +41,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: 栈 | Blog</title>
+  <title>线性排序 | Blog</title>
   
 
 
@@ -190,51 +193,143 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">栈
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性排序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-26 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-26T00:00:00+08:00">2020-04-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-29 00:07:15" itemprop="dateModified" datetime="2020-04-29T00:07:15+08:00">2020-04-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+            <div class="post-description">线性排序：桶排序、计数排序、基数排序</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <p>时间复杂度为O(n)的线性排序算法：桶排序、计数排序、基数排序。<br>算法是非基于比较的排序算法（主排序是非比较的），不涉及元素之间的比较操作。对要排序的数据要求比较苛刻。  </p>
+<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><ul>
+<li><p>原理<br>核心思想是将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行排序。桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。</p>
+</li>
+<li><p>时间复杂度<br>如果要排序的数据有n个，把他们均匀的划分到m个桶内，每个桶有k=n/m个元素。每个桶内部使用快速排序，时间复杂度为O(k<em>logk)。m个桶排序的时间复杂度为O(m</em>k<em>logk)。因为k=n/m，所以整个桶排序的时间复杂度为O(n</em>log(n/m))。当桶的个数m接近数据个数n时，log(n/m)为一个非常小的常量，这时桶排序的时间复杂度接近O(n)。  </p>
+</li>
+<li><p>适用场景<br>排序的数据需要很容易就能划分为m个桶，桶与桶之间有着天然的大小顺序，每个桶内的数据都排序完成之后，桶与桶之间的数据不需要再进行排序。<br>数据再各个桶之间的分布是比较均匀的。如果数据经过桶的划分之后，有的桶数据非常多，有的非常少，那桶内数据排序的时间复杂度就不是常量级了。在极端情况下，如果数据都被划分到一个桶里，那就退化为O(nlogn)的排序算法了。  </p>
+<p>桶排序适合用在外部排序中。数据存储在外部磁盘中，数据量比较大，内存有限，无法将数据全部加载到内存中。  </p>
+</li>
+</ul>
+<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><ul>
+<li><p>时间复杂度<br>计数排序是桶排序的一种特殊情况。当要排序的n个数据，所处的范围并不大的时候，比如最大值为k，可以把数据划分成k个桶，每个桶内的数据值都是相同的，省去了桶内排序的时间。只涉及扫描遍历操作，时间复杂度为O(n)。  </p>
+</li>
+<li><p>原理<br>计数排序用一个数据范围大小的统计数组C[k+1]（原数组A中元素取值范围为0-k），下标k等于原数组A中元素的值，遍历原数组A将各个元素值出现的次数存储在统计数组C对应下标中c[k]（即C[k]存储的是原数组A等于k的元素的个数）。然后对统计数组C顺序求和，各个下标处C[k]存储的是小于等于k的元素个数。<br>扫描原数组A（从后面开始遍历-保证稳定性），依次取出元素的值如a作为统计数组C的下标得到统计数组C对应的值C[a]，说明到目前为止，原数组A中小于等于a的值还有C[a]个，元素a是排好序的新数组R中的第C[a]个元素(放在新数组R下标为C[a]-1的位置)，将其a放入新数组R后，原数组A小于等于a的元素剩下C[a]-1个，则统计数组C[a]=C[a]-1，类推取原数组A下一个元素值。（从后往前做减法，确定该值可以放的最大下标）</p>
+</li>
+<li><p>适用场景<br>计数排序只能用在数据范围不大的场景中，如果数据范围k比要排序的数据n大很多，就不适合用计数排序。而且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。  </p>
+</li>
+</ul>
+<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><ul>
+<li><p>原理<br>以11位手机号排序为例，如果前面几位中，其中一个数据已经比较大了，那么后几位就不用看了。先按照最后一位排序，再按照倒数第二位排序，以此类推，最后按照第一位排序，经过11次排序后，手机号有序。要求按照每位来排序的排序算法是稳定的。  </p>
+</li>
+<li><p>时间复杂度<br>根据每位来排序，可以用桶排序或者计数排序，时间复杂度可以做到O(n)。如果要排序的数据有k位，那么需要进行k次桶排序或者计数排序，总的时间复杂度是O(k*n)。当k不大时，基数排序的时间复杂度就近似于O(n)。  </p>
+</li>
+<li><p>适用场景<br>基数排序要求要排序的数据可以分割出独立的“位”来比较，而且位之间有递进关系-数据可以划分成高低位。比较两个数只需要比较高位，高位相同再比较低位。<br>每一位的数据范围不能太大，要借助线性排序算法-桶排序/计数排序来完成每一位的排序工作，否则计数排序的时间复杂度无法做到O(n)。  </p>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>桶排序：分桶-快排/归并<br>计数排序：分桶-计数-统计<br>基数排序：高位桶排序-低位桶排序</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-19T00:00:00+08:00"
-              content="2020-04-19">
-          04-19
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/04/19/%E6%A0%88/" itemprop="url">
-            <span itemprop="name">栈</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="prev" title="归并排序、快速排序">
+      <i class="fa fa-chevron-left"></i> 归并排序、快速排序
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -287,6 +382,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#桶排序"><span class="nav-number">1.</span> <span class="nav-text">桶排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计数排序"><span class="nav-number">2.</span> <span class="nav-text">计数排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基数排序"><span class="nav-number">3.</span> <span class="nav-text">基数排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
