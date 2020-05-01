@@ -269,6 +269,44 @@ public int partition(int[] a,int start,int end) {
       </tags>
   </entry>
   <entry>
+    <title>线性排序</title>
+    <url>/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>时间复杂度为O(n)的线性排序算法：桶排序、计数排序、基数排序。<br>算法是非基于比较的排序算法（主排序是非比较的），不涉及元素之间的比较操作。对要排序的数据要求比较苛刻。  </p>
+<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><ul>
+<li><p>原理<br>核心思想是将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行排序。桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。</p>
+</li>
+<li><p>时间复杂度<br>如果要排序的数据有n个，把他们均匀的划分到m个桶内，每个桶有k=n/m个元素。每个桶内部使用快速排序，时间复杂度为O(k<em>logk)。m个桶排序的时间复杂度为O(m</em>k<em>logk)。因为k=n/m，所以整个桶排序的时间复杂度为O(n</em>log(n/m))。当桶的个数m接近数据个数n时，log(n/m)为一个非常小的常量，这时桶排序的时间复杂度接近O(n)。  </p>
+</li>
+<li><p>适用场景<br>排序的数据需要很容易就能划分为m个桶，桶与桶之间有着天然的大小顺序，每个桶内的数据都排序完成之后，桶与桶之间的数据不需要再进行排序。<br>数据再各个桶之间的分布是比较均匀的。如果数据经过桶的划分之后，有的桶数据非常多，有的非常少，那桶内数据排序的时间复杂度就不是常量级了。在极端情况下，如果数据都被划分到一个桶里，那就退化为O(nlogn)的排序算法了。  </p>
+<p>桶排序适合用在外部排序中。数据存储在外部磁盘中，数据量比较大，内存有限，无法将数据全部加载到内存中。  </p>
+</li>
+</ul>
+<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><ul>
+<li><p>时间复杂度<br>计数排序是桶排序的一种特殊情况。当要排序的n个数据，所处的范围并不大的时候，比如最大值为k，可以把数据划分成k个桶，每个桶内的数据值都是相同的，省去了桶内排序的时间。只涉及扫描遍历操作，时间复杂度为O(n)。  </p>
+</li>
+<li><p>原理<br>计数排序用一个数据范围大小的统计数组C[k+1]（原数组A中元素取值范围为0-k），下标k等于原数组A中元素的值，遍历原数组A将各个元素值出现的次数存储在统计数组C对应下标中c[k]（即C[k]存储的是原数组A等于k的元素的个数）。然后对统计数组C顺序求和，各个下标处C[k]存储的是小于等于k的元素个数。<br>扫描原数组A（从后面开始遍历-保证稳定性），依次取出元素的值如a作为统计数组C的下标得到统计数组C对应的值C[a]，说明到目前为止，原数组A中小于等于a的值还有C[a]个，元素a是排好序的新数组R中的第C[a]个元素(放在新数组R下标为C[a]-1的位置)，将其a放入新数组R后，原数组A小于等于a的元素剩下C[a]-1个，则统计数组C[a]=C[a]-1，类推取原数组A下一个元素值。（从后往前做减法，确定该值可以放的最大下标）</p>
+</li>
+<li><p>适用场景<br>计数排序只能用在数据范围不大的场景中，如果数据范围k比要排序的数据n大很多，就不适合用计数排序。而且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。  </p>
+</li>
+</ul>
+<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><ul>
+<li><p>原理<br>以11位手机号排序为例，如果前面几位中，其中一个数据已经比较大了，那么后几位就不用看了。先按照最后一位排序，再按照倒数第二位排序，以此类推，最后按照第一位排序，经过11次排序后，手机号有序。要求按照每位来排序的排序算法是稳定的。  </p>
+</li>
+<li><p>时间复杂度<br>根据每位来排序，可以用桶排序或者计数排序，时间复杂度可以做到O(n)。如果要排序的数据有k位，那么需要进行k次桶排序或者计数排序，总的时间复杂度是O(k*n)。当k不大时，基数排序的时间复杂度就近似于O(n)。  </p>
+</li>
+<li><p>适用场景<br>基数排序要求要排序的数据可以分割出独立的“位”来比较，而且位之间有递进关系-数据可以划分成高低位。比较两个数只需要比较高位，高位相同再比较低位。<br>每一位的数据范围不能太大，要借助线性排序算法-桶排序/计数排序来完成每一位的排序工作，否则计数排序的时间复杂度无法做到O(n)。  </p>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>桶排序：分桶-快排/归并<br>计数排序：分桶-计数-统计<br>基数排序：高位桶排序-低位桶排序</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>二分查找</title>
     <url>/2020/04/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<p>二分查找算法-折半查找算法  </p>
@@ -324,103 +362,6 @@ private int bserachInter(int[] a,int low,int high,int value) {
 </li>
 <li><p>数据量太大不适合二分查找<br>二分查找底层依赖数组这种数据结构，数组为了支持随机访问特性，要求内存空间连续，对内存的要求比较苛刻。即使拥有更多的内存空间剩余，如果是零散的不连续，依然无法申请相应大小的数组。  </p>
 </li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二分查找</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>变体二分查找</title>
-    <url>/2020/04/30/%E5%8F%98%E4%BD%93%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<h4 id="查找第一个值等于给定值的元素"><a href="#查找第一个值等于给定值的元素" class="headerlink" title="查找第一个值等于给定值的元素"></a>查找第一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
-    int low = 0;
-    int hight = a.length - 1;
-    while(low &lt;= high) {
-        int mid = low + ((high - low) &gt;&gt; 1);
-        if(a[mid] &gt; value) {
-            high = mid + 1;
-        }else if(a[mid] &lt; value) {
-            low = mid + 1;
-        } else {
-            if((mid == 0) || (a[mid - 1] != value)) {
-                return mid;
-            } else {
-                high = mid -1;
-            }
-        }
-    }
-    return -1;
-}</code></pre><p>a[mid]跟目标value的大小关系有三种情况：大于、小于、等于。  </p>
-<ul>
-<li>对于a[mid] &gt; value的情况，需要更新high=mid-1；  </li>
-<li>对于a[mid] &lt; value的情况。需要更新low=mid+1；  </li>
-<li>当a[mid] = value时：如果查找的是任意一个值等于给定值的元素，a[mid]就是要找的元素。如果查找的是第一个值等于给定值的元素，需要进一步确认：代码中如果mid=0，那么这个元素已经是数组的第一个元素，那它肯定是要找的元素；如果mid!=0，但a[mid]的前一个元素a[mid-1]!=value，那么a[mid]就是要找的元素；如果经过检查后发现a[mid-1]=value，则a[mid]肯定不是要找的第一个值等于给定值的元素，需要更新high=mid-1，要找的元素肯定出现在[low,mid-1]之间。  </li>
-</ul>
-<h4 id="查找最后一个值等于给定值的元素"><a href="#查找最后一个值等于给定值的元素" class="headerlink" title="查找最后一个值等于给定值的元素"></a>查找最后一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
-    int low = 0;
-    int high = a.length - 1;
-    while(low &lt;= high) {
-        int mid = low + ((high -low) &gt;&gt; 1);
-        if(a[mid] &gt; value) {
-            high = mid - 1;
-        } else if(a[mid] &lt; value) {
-            low = mid + 1;
-        } else {
-            if((mid == a.length -1) || (a[mid + 1] != value)) {
-                return mid;
-            } else {
-                low = mid + 1;
-            }
-        }
-    }
-
-}  </code></pre><ul>
-<li>当a[mid] = value时：如果mid=0，a[mid]已经是数组中最后一个元素，那它肯定是要找的元素；如果a[mid]的后一个元素a[mid+1]!=value，那么a[mid]是要找的元素；如果经过检查后发现a[mid+1]=value，那a[mid]不是最后一个值等于给定值的元素，需要更新low=mid+1，要找的元素肯定出现在[mid+1,high]之间。  </li>
-</ul>
-<h4 id="查找第一个大于等于给定值的元素"><a href="#查找第一个大于等于给定值的元素" class="headerlink" title="查找第一个大于等于给定值的元素"></a>查找第一个大于等于给定值的元素</h4><pre><code>public int bsearch(int a[],int value) {
-    int low = 0;
-    int high = a.length -1;
-    while(low &lt;= high) {
-        int mid = low + ((high -low) &gt;&gt; 1);
-        if(a[mid] &gt;= value) {
-            if((mid == 0) || (a[mid - 1] &lt; value)) {
-                return mid;
-            } else {
-                high = mid - 1;
-            }
-        } else {
-            low = mid + 1;
-        }
-    }
-    return -1;
-}</code></pre><ul>
-<li>如果a[mid] &lt; value，那要找的值肯定在[mid+1,high]之间，所以更新low=mid+1；  </li>
-<li>对于a[mid] &gt;= value的情况，首先判断a[mid]是不是要找的第一个值大于等于给定值的元素。如果mid=0,a[mid]前面已经没有元素就是第一个元素，那么a[mid]就是要找的元素；或者a[mid]前面的一个元素a[mid-1]小于指定值value，那么a[mid]就是要找的元素。如果a[mid-1]&gt;=value，那么说明要找的元素在[low,mid-1]之间。  </li>
-</ul>
-<h4 id="查找最后一个小于等于给定值的元素"><a href="#查找最后一个小于等于给定值的元素" class="headerlink" title="查找最后一个小于等于给定值的元素"></a>查找最后一个小于等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
-    int low = 0;
-    int high = a.length -1;
-    while(low &lt;= high) {
-        int mid = low + ((high -low) &gt;&gt; 1);
-        if(a[mid] &gt; value]) {
-            high = mid -1;
-        } else {
-            if((mid == a.length -1) || (a[mid +1] &gt; value)) {
-                return mid;
-            } else {
-                low = mid + 1;
-            }
-        }
-    }
-}</code></pre><h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>凡是用二分查找能解决的，绝大部分更倾向于用散列表或者二叉查找树。二分查找更适合用在“近似”查找问题，用其他数据结构比较难实现。<br>变体二分查找实现注意细节问题：</p>
-<ul>
-<li>终止条件  </li>
-<li>区间上下界更新方法  </li>
-<li>返回值选择  </li>
 </ul>
 ]]></content>
       <categories>
@@ -536,41 +477,101 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
-    <title>线性排序</title>
-    <url>/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>时间复杂度为O(n)的线性排序算法：桶排序、计数排序、基数排序。<br>算法是非基于比较的排序算法（主排序是非比较的），不涉及元素之间的比较操作。对要排序的数据要求比较苛刻。  </p>
-<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><ul>
-<li><p>原理<br>核心思想是将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行排序。桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。</p>
-</li>
-<li><p>时间复杂度<br>如果要排序的数据有n个，把他们均匀的划分到m个桶内，每个桶有k=n/m个元素。每个桶内部使用快速排序，时间复杂度为O(k<em>logk)。m个桶排序的时间复杂度为O(m</em>k<em>logk)。因为k=n/m，所以整个桶排序的时间复杂度为O(n</em>log(n/m))。当桶的个数m接近数据个数n时，log(n/m)为一个非常小的常量，这时桶排序的时间复杂度接近O(n)。  </p>
-</li>
-<li><p>适用场景<br>排序的数据需要很容易就能划分为m个桶，桶与桶之间有着天然的大小顺序，每个桶内的数据都排序完成之后，桶与桶之间的数据不需要再进行排序。<br>数据再各个桶之间的分布是比较均匀的。如果数据经过桶的划分之后，有的桶数据非常多，有的非常少，那桶内数据排序的时间复杂度就不是常量级了。在极端情况下，如果数据都被划分到一个桶里，那就退化为O(nlogn)的排序算法了。  </p>
-<p>桶排序适合用在外部排序中。数据存储在外部磁盘中，数据量比较大，内存有限，无法将数据全部加载到内存中。  </p>
-</li>
+    <title>变体二分查找</title>
+    <url>/2020/04/30/%E5%8F%98%E4%BD%93%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<h4 id="查找第一个值等于给定值的元素"><a href="#查找第一个值等于给定值的元素" class="headerlink" title="查找第一个值等于给定值的元素"></a>查找第一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
+    int low = 0;
+    int hight = a.length - 1;
+    while(low &lt;= high) {
+        int mid = low + ((high - low) &gt;&gt; 1);
+        if(a[mid] &gt; value) {
+            high = mid + 1;
+        }else if(a[mid] &lt; value) {
+            low = mid + 1;
+        } else {
+            if((mid == 0) || (a[mid - 1] != value)) {
+                return mid;
+            } else {
+                high = mid -1;
+            }
+        }
+    }
+    return -1;
+}</code></pre><p>a[mid]跟目标value的大小关系有三种情况：大于、小于、等于。  </p>
+<ul>
+<li>对于a[mid] &gt; value的情况，需要更新high=mid-1；  </li>
+<li>对于a[mid] &lt; value的情况。需要更新low=mid+1；  </li>
+<li>当a[mid] = value时：如果查找的是任意一个值等于给定值的元素，a[mid]就是要找的元素。如果查找的是第一个值等于给定值的元素，需要进一步确认：代码中如果mid=0，那么这个元素已经是数组的第一个元素，那它肯定是要找的元素；如果mid!=0，但a[mid]的前一个元素a[mid-1]!=value，那么a[mid]就是要找的元素；如果经过检查后发现a[mid-1]=value，则a[mid]肯定不是要找的第一个值等于给定值的元素，需要更新high=mid-1，要找的元素肯定出现在[low,mid-1]之间。  </li>
 </ul>
-<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><ul>
-<li><p>时间复杂度<br>计数排序是桶排序的一种特殊情况。当要排序的n个数据，所处的范围并不大的时候，比如最大值为k，可以把数据划分成k个桶，每个桶内的数据值都是相同的，省去了桶内排序的时间。只涉及扫描遍历操作，时间复杂度为O(n)。  </p>
-</li>
-<li><p>原理<br>计数排序用一个数据范围大小的统计数组C[k+1]（原数组A中元素取值范围为0-k），下标k等于原数组A中元素的值，遍历原数组A将各个元素值出现的次数存储在统计数组C对应下标中c[k]（即C[k]存储的是原数组A等于k的元素的个数）。然后对统计数组C顺序求和，各个下标处C[k]存储的是小于等于k的元素个数。<br>扫描原数组A（从后面开始遍历-保证稳定性），依次取出元素的值如a作为统计数组C的下标得到统计数组C对应的值C[a]，说明到目前为止，原数组A中小于等于a的值还有C[a]个，元素a是排好序的新数组R中的第C[a]个元素(放在新数组R下标为C[a]-1的位置)，将其a放入新数组R后，原数组A小于等于a的元素剩下C[a]-1个，则统计数组C[a]=C[a]-1，类推取原数组A下一个元素值。（从后往前做减法，确定该值可以放的最大下标）</p>
-</li>
-<li><p>适用场景<br>计数排序只能用在数据范围不大的场景中，如果数据范围k比要排序的数据n大很多，就不适合用计数排序。而且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。  </p>
-</li>
+<h4 id="查找最后一个值等于给定值的元素"><a href="#查找最后一个值等于给定值的元素" class="headerlink" title="查找最后一个值等于给定值的元素"></a>查找最后一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
+    int low = 0;
+    int high = a.length - 1;
+    while(low &lt;= high) {
+        int mid = low + ((high -low) &gt;&gt; 1);
+        if(a[mid] &gt; value) {
+            high = mid - 1;
+        } else if(a[mid] &lt; value) {
+            low = mid + 1;
+        } else {
+            if((mid == a.length -1) || (a[mid + 1] != value)) {
+                return mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+    }
+    return -1;
+}  </code></pre><ul>
+<li>当a[mid] = value时：如果mid=0，a[mid]已经是数组中最后一个元素，那它肯定是要找的元素；如果a[mid]的后一个元素a[mid+1]!=value，那么a[mid]是要找的元素；如果经过检查后发现a[mid+1]=value，那a[mid]不是最后一个值等于给定值的元素，需要更新low=mid+1，要找的元素肯定出现在[mid+1,high]之间。  </li>
 </ul>
-<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><ul>
-<li><p>原理<br>以11位手机号排序为例，如果前面几位中，其中一个数据已经比较大了，那么后几位就不用看了。先按照最后一位排序，再按照倒数第二位排序，以此类推，最后按照第一位排序，经过11次排序后，手机号有序。要求按照每位来排序的排序算法是稳定的。  </p>
-</li>
-<li><p>时间复杂度<br>根据每位来排序，可以用桶排序或者计数排序，时间复杂度可以做到O(n)。如果要排序的数据有k位，那么需要进行k次桶排序或者计数排序，总的时间复杂度是O(k*n)。当k不大时，基数排序的时间复杂度就近似于O(n)。  </p>
-</li>
-<li><p>适用场景<br>基数排序要求要排序的数据可以分割出独立的“位”来比较，而且位之间有递进关系-数据可以划分成高低位。比较两个数只需要比较高位，高位相同再比较低位。<br>每一位的数据范围不能太大，要借助线性排序算法-桶排序/计数排序来完成每一位的排序工作，否则计数排序的时间复杂度无法做到O(n)。  </p>
-</li>
+<h4 id="查找第一个大于等于给定值的元素"><a href="#查找第一个大于等于给定值的元素" class="headerlink" title="查找第一个大于等于给定值的元素"></a>查找第一个大于等于给定值的元素</h4><pre><code>public int bsearch(int a[],int value) {
+    int low = 0;
+    int high = a.length -1;
+    while(low &lt;= high) {
+        int mid = low + ((high -low) &gt;&gt; 1);
+        if(a[mid] &gt;= value) {
+            if((mid == 0) || (a[mid - 1] &lt; value)) {
+                return mid;
+            } else {
+                high = mid - 1;
+            }
+        } else {
+            low = mid + 1;
+        }
+    }
+    return -1;
+}</code></pre><ul>
+<li>如果a[mid] &lt; value，那要找的值肯定在[mid+1,high]之间，所以更新low=mid+1；  </li>
+<li>对于a[mid] &gt;= value的情况，首先判断a[mid]是不是要找的第一个值大于等于给定值的元素。如果mid=0,a[mid]前面已经没有元素就是第一个元素，那么a[mid]就是要找的元素；或者a[mid]前面的一个元素a[mid-1]小于指定值value，那么a[mid]就是要找的元素。如果a[mid-1]&gt;=value，那么说明要找的元素在[low,mid-1]之间。  </li>
 </ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>桶排序：分桶-快排/归并<br>计数排序：分桶-计数-统计<br>基数排序：高位桶排序-低位桶排序</p>
+<h4 id="查找最后一个小于等于给定值的元素"><a href="#查找最后一个小于等于给定值的元素" class="headerlink" title="查找最后一个小于等于给定值的元素"></a>查找最后一个小于等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
+    int low = 0;
+    int high = a.length -1;
+    while(low &lt;= high) {
+        int mid = low + ((high -low) &gt;&gt; 1);
+        if(a[mid] &gt; value) {
+            high = mid -1;
+        } else {
+            if((mid == a.length -1) || (a[mid +1] &gt; value)) {
+                return mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+    }
+    return -1;
+}</code></pre><h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>凡是用二分查找能解决的，绝大部分更倾向于用散列表或者二叉查找树。二分查找更适合用在“近似”查找问题，用其他数据结构比较难实现。<br>变体二分查找实现注意细节问题：</p>
+<ul>
+<li>终止条件  </li>
+<li>区间上下界更新方法  </li>
+<li>返回值选择  </li>
+</ul>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>排序</tag>
+        <tag>二分查找</tag>
       </tags>
   </entry>
   <entry>
@@ -612,26 +613,6 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </categories>
       <tags>
         <tag>数组</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>栈</title>
-    <url>/2020/04/19/%E6%A0%88/</url>
-    <content><![CDATA[<p>从栈的操作特性上看，栈是一种”操作受限”的线性表，只允许在一端插入和删除数据。并且满足先进后出、后进先出的特性。</p>
-<h4 id="实现栈"><a href="#实现栈" class="headerlink" title="实现栈"></a>实现栈</h4><p>栈主要包含两个操作：入栈push()，在栈顶插入一个数据；出栈pop()，从栈顶删除一个数据。<br>用数组实现的栈-<strong>顺序栈</strong>。<br>用链表实现的栈-<strong>链式栈</strong>。<br>空间复杂度为O(1)<br>时间复杂度为O(1)<br>动态扩容的顺序栈的入栈操作的均摊时间复杂度为O(1)</p>
-<h4 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h4><ul>
-<li>函数调用栈<br>操作系统给每个线程分配了一块独立的内存空间，用来存储函数调用时的临时变量。每进入一个函数，就会将临时变量作为一个栈帧入栈，当被调用函数执行完成返回之后，将这个函数对应的栈帧出栈。  </li>
-<li>表达式求值<br>通过两个栈实现，其中一个保存操作数的栈，另一个是保存运算符的栈。从左向右遍历表达式，遇到数字就压入操作数栈；遇到操作符与运算符栈的栈顶元素进行比较，<br>比运算符栈顶元素的优先级高，将当前运算符压入栈；<br>比运算符栈顶元素的优先级低或者相同，从运算符中取栈顶运算符，从操作数栈顶取两个操作数，进行计算，把计算结果压入操作数栈。  </li>
-<li>匹配括号<br>用栈保存未匹配的左括号，从左到右依次扫描字符串。扫描到左括号压入栈；扫描到右括号，从栈顶取出一个左括号进行匹配。</li>
-<li>浏览器前进&amp;后退<br>两个栈实现，浏览页面依次压入栈X，后退时，从栈X中出栈，压入栈Y;前进时，从栈Y中出栈，压入栈X.</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>JVM内存管理中堆栈</p>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>栈</tag>
       </tags>
   </entry>
   <entry>
@@ -697,22 +678,64 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/04/14/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+    <title>栈</title>
+    <url>/2020/04/19/%E6%A0%88/</url>
+    <content><![CDATA[<p>从栈的操作特性上看，栈是一种”操作受限”的线性表，只允许在一端插入和删除数据。并且满足先进后出、后进先出的特性。</p>
+<h4 id="实现栈"><a href="#实现栈" class="headerlink" title="实现栈"></a>实现栈</h4><p>栈主要包含两个操作：入栈push()，在栈顶插入一个数据；出栈pop()，从栈顶删除一个数据。<br>用数组实现的栈-<strong>顺序栈</strong>。<br>用链表实现的栈-<strong>链式栈</strong>。<br>空间复杂度为O(1)<br>时间复杂度为O(1)<br>动态扩容的顺序栈的入栈操作的均摊时间复杂度为O(1)</p>
+<h4 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h4><ul>
+<li>函数调用栈<br>操作系统给每个线程分配了一块独立的内存空间，用来存储函数调用时的临时变量。每进入一个函数，就会将临时变量作为一个栈帧入栈，当被调用函数执行完成返回之后，将这个函数对应的栈帧出栈。  </li>
+<li>表达式求值<br>通过两个栈实现，其中一个保存操作数的栈，另一个是保存运算符的栈。从左向右遍历表达式，遇到数字就压入操作数栈；遇到操作符与运算符栈的栈顶元素进行比较，<br>比运算符栈顶元素的优先级高，将当前运算符压入栈；<br>比运算符栈顶元素的优先级低或者相同，从运算符中取栈顶运算符，从操作数栈顶取两个操作数，进行计算，把计算结果压入操作数栈。  </li>
+<li>匹配括号<br>用栈保存未匹配的左括号，从左到右依次扫描字符串。扫描到左括号压入栈；扫描到右括号，从栈顶取出一个左括号进行匹配。</li>
+<li>浏览器前进&amp;后退<br>两个栈实现，浏览页面依次压入栈X，后退时，从栈X中出栈，压入栈Y;前进时，从栈Y中出栈，压入栈X.</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>JVM内存管理中堆栈</p>
 ]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>递归</title>
+    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
+    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
+<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
+<li>一个问题的解可以分解为几个子问题的解</li>
+<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
+<li>存在递归终止条件</li>
+</ul>
+<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
+<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
+<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
+<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
+<li>时间空间成本</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
+<blockquote>
+<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
+</blockquote>
+<p>递归代码的调试方法</p>
+<blockquote>
+<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
+</blockquote>
+<p>检测递归中环的存在</p>
+<blockquote>
+<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
+</blockquote>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>递归</tag>
+      </tags>
   </entry>
   <entry>
     <title>链表</title>
@@ -801,44 +824,22 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
-    <title>递归</title>
-    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
-    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
-<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
-<li>一个问题的解可以分解为几个子问题的解</li>
-<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
-<li>存在递归终止条件</li>
-</ul>
-<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
-<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
-<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
-<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
-<li>时间空间成本</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
-<blockquote>
-<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
-</blockquote>
-<p>递归代码的调试方法</p>
-<blockquote>
-<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
-</blockquote>
-<p>检测递归中环的存在</p>
-<blockquote>
-<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
-</blockquote>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
+    <title>Hello World</title>
+    <url>/2020/04/14/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
-</ul>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>递归</tag>
-      </tags>
   </entry>
   <entry>
     <title>队列</title>
