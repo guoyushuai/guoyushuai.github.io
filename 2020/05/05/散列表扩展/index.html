@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="通用高性能的排序函数实现">
+  <meta name="description" content="散列表设计原则">
 <meta property="og:type" content="article">
-<meta property="og:title" content="排序优化">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/04/29/%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:title" content="散列表扩展">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E6%89%A9%E5%B1%95/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="通用高性能的排序函数实现">
+<meta property="og:description" content="散列表设计原则">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-29T08:56:39.442Z">
+<meta property="article:published_time" content="2020-05-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-05T14:13:59.870Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="排序">
+<meta property="article:tag" content="散列表">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/04/29/%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E6%89%A9%E5%B1%95/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>排序优化 | Blog</title>
+  <title>散列表扩展 | Blog</title>
   
 
 
@@ -200,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/04/29/%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E6%89%A9%E5%B1%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          排序优化
+          散列表扩展
         </h1>
 
         <div class="post-meta">
@@ -224,7 +224,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-29 00:00:00 / 修改时间：16:56:39" itemprop="dateCreated datePublished" datetime="2020-04-29T00:00:00+08:00">2020-04-29</time>
+              <time title="创建时间：2020-05-05 00:00:00 / 修改时间：22:13:59" itemprop="dateCreated datePublished" datetime="2020-05-05T00:00:00+08:00">2020-05-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,16 +249,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
+              <span>2.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>4 分钟</span>
             </span>
-            <div class="post-description">通用高性能的排序函数实现</div>
+            <div class="post-description">散列表设计原则</div>
 
         </div>
       </header>
@@ -269,100 +269,54 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <table>
-<thead>
-<tr>
-<th>算法</th>
-<th>时间复杂度</th>
-<th>稳定</th>
-<th>原地</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>冒泡</td>
-<td>O(n<sup>2</sup>)</td>
-<td>Y</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>插入</td>
-<td>O(n<sup>2</sup>)</td>
-<td>Y</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>选择</td>
-<td>O(n<sup>2</sup>)</td>
-<td>N</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>归并</td>
-<td>O(nlogn)</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-<tr>
-<td>快速</td>
-<td>O(nlogn)</td>
-<td>N</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>桶</td>
-<td>O(n)</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-<tr>
-<td>计数</td>
-<td>O(n+k) k是数据范围</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-<tr>
-<td>基数</td>
-<td>O(dn) d是维度</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-</tbody></table>
-<h4 id="优化快排"><a href="#优化快排" class="headerlink" title="优化快排"></a>优化快排</h4><p>最坏情况下快排的时间复杂度是O(n<sup>2</sup>)，如果数据本来就是有序的或者接近有序的，每次分区点都选择最后一个数据，那快速排序算法的时间复杂度就会退化为O(n<sup>2</sup>)。主要愿意是分区点选的不够合理。  </p>
-<p>最理想的分区点是：被分区点分开的两个分区中，数据的数量差不多。</p>
+        <p>散列函数、装载因子、散列冲突等都会影响散列表的查询效率。<br>极端情况，所有的数据经过散列函数之后，都散列到同一个槽里，如果使用基于链表的冲突解决方法，散列表就会退化为链表，查询的时间复杂度从O(1)急剧退化为O(n)。  </p>
+<h4 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h4><p>散列函数设计的好坏，决定了散列表冲突的概率大小，也直接决定了散列表的性能。  </p>
 <ul>
-<li>三数取中法<br>从区间的首、尾、中间分别取出一个数，然后对比大小，取这3个数的中间值作为分区点。如果要排序的数组比较大，可以使用五数取中、十数取中。  </li>
-<li>随机法<br>每次从要排序的区间中，随机选择一个元素作为分区点。不能保证每次分区点都选择的比较好，但是从概率的角度来看，也不大可能出现每次分区点都选的很差的情况，平均情况下，这样选的分区点是比较好的。  </li>
+<li>散列函数的设计不能太复杂<br>过于复杂的撒捏函数，会消耗很多计算时间，间接影响到散列表的性能。  </li>
+<li>散列函数生成的值要尽可能随机并且均匀分布<br>避免或者最小化散列冲突，即便出现冲突，散列到每个槽里的数据也会比较平均，不会出现某个槽内数据特别多的情况。  </li>
+<li>考虑关键字的长度、特点、分布、散列表的大小等其他因素  </li>
 </ul>
-<p>快排是用递归来实现的，递归要警惕堆栈溢出。避免递归过深而堆栈过小，导致堆栈溢出。  </p>
+<p>数据分析法<br>直接寻址法<br>平方取中法<br>折叠法<br>随机数法<br>。。。</p>
+<h4 id="装载因子"><a href="#装载因子" class="headerlink" title="装载因子"></a>装载因子</h4><p>装载因子越大说明散列表中的元素越多，空闲位置越少，散列冲突的概率就越大。插入数据的过程要多次寻址或者拉很长的链，查找的过程也会变得很慢。  </p>
 <ul>
-<li>限制递归深度，一旦递归过深，超过了设定的阈值就停止递归。  </li>
-<li>在堆上模拟实现一个函数调用栈，手动模拟递归压栈、出栈的过程，这样就没有了系统栈大小的限制。(将递归调用改写为循环非递归方式)  </li>
+<li>静态数据<br>没有频繁的插入和删除的静态数据集合。  </li>
+<li>动态散列表<br>数据集合是频繁变动的，事先无法预估将要加入的数据个数，无法事先申请一个足够大的散列表。随着数据慢慢加入，装载因子就会慢慢变大。当装载因子过大时，需要进行动态扩容。<br>散列表的大小变了，数据的存储位置也变了，需要通过散列函数重新计算每个数据的存储位置。<br>插入一个数据，最好情况下不需要扩容，最好时间复杂度为O(1)；最坏情况下，散列表装载因子过高启动扩容，需要重新申请内存空间，重新计算哈希位置，并且搬移数据，时间复杂度为O(n)。用摊还分析法，均摊情况下，时间复杂度接近最好情况O(1)。<br>随着数据的删除，散列表中的数据会越来越少，空闲空间会越来越多。如果对空间消耗非常敏感，可以在装载因子小于某个值之后，启动动态缩容。<br>装载因子阈值的设置要权衡时间、空间复杂度。同事要避免数据的插入和删除导致频繁的扩容和缩容。  </li>
 </ul>
-<p>时间复杂度代表的是一个增长趋势。大O复杂度表示法中，会省略低阶、系数、常数。在小规模数据面前，O(n<sup>2</sup>)时间复杂度的算法并不一定比O(nlogn)的算法执行时间长。</p>
-<h4 id="排序函数"><a href="#排序函数" class="headerlink" title="排序函数"></a>排序函数</h4><p>Java<br>基础数据类型：<br>Arrays.sort() -&gt; DualPivotQuicksort.sort()  </p>
-<ul>
-<li>元素个数&lt;47，插入排序</li>
-<li>元素个数47-286，快速排序</li>
-<li>元素个数&gt;286，归并排序（类似TimSort）  </li>
-</ul>
-<p>对象类型：<br>Collections.sort() -&gt; Arrays.sort() -&gt; TimSort  </p>
-<ul>
-<li><p>元素个数&lt;32，采用二分查找插入排序Binary Sort；  </p>
+<h4 id="动态扩容"><a href="#动态扩容" class="headerlink" title="动态扩容"></a>动态扩容</h4><p>大部分情况下，动态扩容的散列表插入一个数据都很快，当装载银子啊已经达到阈值，需要先进行扩容，再插入数据，插入数据就会变得很慢。<br>解决一次性扩容耗时过多的情况，可以将扩容操作穿插在插入操作的过程中，分批完成。当装载时因子触达阈值之后，只申请新空间，但并不将老的数据搬移到新散列表中。<br>当新数据要插入时，将新数据插入新散列表中，并从老散列表中拿出一个数据放入到新散列表。每次插入一个数据到散列表，重复上述过程，避免了集中一次性数据搬移。任何情况下，插入一个数据的时间复杂度都是O(1)。<br>查询操作，兼容新、老散列表的数据，先从新散列表中查找，如果没有找到，再去老散列表中查找。  </p>
+<h4 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h4><ul>
+<li><p>开放寻址法<br>数据量小、装载因子小。ThreadLocalMap  </p>
+<p>优点：<br>散列表的数据存储在数组中，可以有效利用CPU缓存加快查询速度，序列化起来比较简单。  </p>
+<p>缺点：<br>删除数据比较麻烦，需要特殊标记已经删掉的数据。所有的数据存储在一个数组中，冲突的代价高。装载因子的上限不能太大，浪费内存空间。  </p>
 </li>
-<li><p>元素个数&gt;=32，采用归并排序，归并的核心是分区Run;  </p>
-</li>
-<li><p>找连续升或者降的序列作为分区，分区最终被调整为升序后压入栈；  </p>
-</li>
-<li><p>如果分区长度太小，通过二分插入排序扩充分区长度到分区最小阈值minrun；  </p>
-</li>
-<li><p>每次压入栈，都要检查栈内已存在的分区是否满足合并条件，满足则进行合并；  </p>
-</li>
-<li><p>最终栈内分区被全部合并，得到一个排序好的数组。  </p>
-<blockquote>
-<p>TimSort合并：<br>  找出左分区最后一个元素在右分区的位置；<br>  找出右分区第一个元素在左分区的位置；<br>  仅对这两个位置之间的元素进行合并，之外的元素本身就是有序的。  </p>
-</blockquote>
+<li><p>链表法<br>大对象、大数据量。LinkedHashMap  </p>
+<p>优点：<br>内存利用率高。链表结点可以在需要的时候再创建，并不需要事先申请好。<br>对大装载因子的容忍度高。只要散列函数的值随机均匀，更大的装载因子也就是链表的长度变长了而已，虽然查找效率有所下降，但是比顺序查找快。  </p>
+<p>缺点：<br>链表要存储指针，对于比较小的对象的存储比较消耗内存。如果存储的是大对象，要存储的对象的大小远远大于一个指针的大小（4个字节或者8个字节），指针的内存消耗在大对象面前可以忽略。<br>链表中的结点是零散分布在内存中的，不是连续的，对CPU缓存是不友好的，对执行效率有一定影响。  </p>
+<p>将链表法中的链表改造为其他高效的动态数据结构：跳表、红黑树。极端情况下，所有的数据都散列到同一个桶内，查找的时间复杂度为O(logn)，能避免散列碰撞攻击。  </p>
 </li>
 </ul>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><ul>
+<li>初始大小<br>默认初始大小16。  </li>
+<li>装载因子<br>默认0.75。当hashMap中元素个数超过0.75*capacity的时候，就会启动自动扩容，每次扩容都会扩容为原来的两倍大小。  </li>
+<li>散列冲突<br>链表法。会出现拉链过长的情况，影响HashMap的性能。<br>JDK1.8中，引入了红黑树，当链表长度太长（超过8）时，链表就转换为红黑树。当红黑树的结点个数小于6时，会将红黑树转化为链表。  </li>
+</ul>
+<h4 id="散列函数-1"><a href="#散列函数-1" class="headerlink" title="散列函数"></a>散列函数</h4><pre><code>
+int hash(Object key) {
+    int h = key.hashCode()；
+    return (h ^ (h &gt;&gt;&gt; 16)) &amp; (capicity -1); //capicity表示散列表的大小
+}
+
+public int hashCode() {
+  int var1 = this.hash;
+  if(var1 == 0 &amp;&amp; this.value.length &gt; 0) {
+    char[] var2 = this.value;
+    for(int var3 = 0; var3 &lt; this.value.length; ++var3) {
+      var1 = 31 * var1 + var2[var3];
+    }
+    this.hash = var1;
+  }
+  return var1;
+}</code></pre><p>简单高效、分布均匀  </p>
+<p>hashcode是32位整型值，4294967296，获取对象的hashcode后，先进行移位运算，再和自己做异或运算=&gt;hashcode ^ (hashcode &gt;&gt;&gt; 16)，将高16位移到16位，混合原哈希码的高位和低位，计算出来的整型值具有高位和低位的性质，并加大了低位的随机性。<br>用hash表当前的容量减一，再和计算出来的整型值做位于运算A % B = A &amp; (B - 1)，当B是2的指数时等式成立。即(h ^ (h &gt;&gt;&gt; 16)) &amp; (capitity -1) = (h ^ (h &gt;&gt;&gt; 16)) % capitity，即除留余数法保证位置分布均匀。</p>
 
     </div>
 
@@ -372,7 +326,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+              <a href="/tags/%E6%95%A3%E5%88%97%E8%A1%A8/" rel="tag"># 散列表</a>
           </div>
 
         
@@ -381,13 +335,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="prev" title="二分查找">
-      <i class="fa fa-chevron-left"></i> 二分查找
+    <a href="/2020/05/01/%E6%95%A3%E5%88%97%E8%A1%A8/" rel="prev" title="散列表">
+      <i class="fa fa-chevron-left"></i> 散列表
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/30/%E5%8F%98%E4%BD%93%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="next" title="变体二分查找">
-      变体二分查找 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -446,7 +397,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#优化快排"><span class="nav-number">1.</span> <span class="nav-text">优化快排</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#排序函数"><span class="nav-number">2.</span> <span class="nav-text">排序函数</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#散列函数"><span class="nav-number">1.</span> <span class="nav-text">散列函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装载因子"><span class="nav-number">2.</span> <span class="nav-text">装载因子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态扩容"><span class="nav-number">3.</span> <span class="nav-text">动态扩容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#冲突解决"><span class="nav-number">4.</span> <span class="nav-text">冲突解决</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HashMap"><span class="nav-number">5.</span> <span class="nav-text">HashMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#散列函数-1"><span class="nav-number">6.</span> <span class="nav-text">散列函数</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
