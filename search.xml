@@ -149,6 +149,47 @@
       </tags>
   </entry>
   <entry>
+    <title>数组</title>
+    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
+<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
+<li>线性表<blockquote>
+<p>数组、链表、队列、栈  </p>
+</blockquote>
+</li>
+<li>非线性表<blockquote>
+<p>二叉树、堆、图  </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">a[i]_address</span> = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+<ol>
+<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
+<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
+<p>快速排序的思想</p>
+</blockquote>
+</li>
+<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
+<p>JVM标记清除垃圾回收算法的核心思想</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>栈</title>
     <url>/2020/04/19/%E6%A0%88/</url>
     <content><![CDATA[<p>从栈的操作特性上看，栈是一种”操作受限”的线性表，只允许在一端插入和删除数据。并且满足先进后出、后进先出的特性。</p>
@@ -228,6 +269,137 @@
       </categories>
       <tags>
         <tag>递归</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>归并排序、快速排序</title>
+    <url>/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>归并排序和快速排序的时间复杂度为O(nlogn)。利用分治思想将大问题分解成小问题解决；利用递归代码实现归并排序。  </p>
+<h4 id="归并排序1"><a href="#归并排序1" class="headerlink" title="归并排序1"></a>归并排序<a href="#refer-anchor-1"><sup>1</sup></a></h4><p>先把数组从中间分成前后两部分，然后对前后两部分分别排序，再将排好序的两部分合并在一起。  </p>
+<ul>
+<li>递推公式:<br>merge_sort(p…r) = merge(merge_sort(p…q),merge_sort(q+1…r))  </li>
+<li>终止条件：<br>p = r 不用再继续分解  <blockquote>
+<p>merge_sort(p…r)表示给下标从p到r之间的数组排序。将此问题转化为了两个子问题：merge(merge_sort(p…q),merge_sort(q+1…r))，其中下标q等于p和r的中间位置(p+r)/2。当下标从p到q和从q+1到r这两个子数组都排好序之后，再将两个有序的子数组合并在一起，那么下标从p到r之间的数据也就排好序了。<br>合并函数merge([p…r],[p…q],[q+1…r])，申请一个临时数组temp,大小与数组[p…r]相同。用两个游标i和j，分别指向[p…q]和[q+1…r]的第一个元素。比较这两个元素[i]、[j]的大小，将较小的元素放入到临时数组temp中，并将相应的游标后移一位。  </p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><p>归并排序是一个<strong>稳定的排序算法</strong>，合并数组时，遇到值相同的元素，现将[p…q]区间的元素放入到临时数组temp中，保证值相同的元素在合并前后的先后顺序不变。  </p>
+</li>
+<li><p>最好、最坏、平均情况时间复杂度都是<strong>O(nlogn)</strong>。  </p>
+<figure class="highlight excel"><table><tr><td class="code"><pre><span class="line"><span class="built_in">T</span>(<span class="number">1</span>) = C；   <span class="built_in">n</span>=<span class="number">1</span>时，只需要常量级的执行时间，所以表示为C。</span><br><span class="line"><span class="built_in">T</span>(<span class="built_in">n</span>) = <span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">2</span>) + <span class="built_in">n</span>； <span class="built_in">n</span>&gt;<span class="number">1</span></span><br><span class="line">     = <span class="number">2</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">4</span>) + <span class="built_in">n</span>/<span class="number">2</span>) + <span class="built_in">n</span> = <span class="number">4</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">4</span>) + <span class="number">2</span>*<span class="built_in">n</span></span><br><span class="line">     = <span class="number">4</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">8</span>) + <span class="built_in">n</span>/<span class="number">4</span>) + <span class="number">2</span>*<span class="built_in">n</span> = <span class="number">8</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">8</span>) + <span class="number">3</span>*<span class="built_in">n</span></span><br><span class="line">     = <span class="number">8</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">16</span>) + <span class="built_in">n</span>/<span class="number">8</span>) + <span class="number">3</span>*<span class="built_in">n</span> = <span class="number">16</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">16</span>) + <span class="number">4</span>*<span class="built_in">n</span></span><br><span class="line">     ......</span><br><span class="line">     = <span class="number">2</span>^k * <span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">2</span>^k) + k * <span class="built_in">n</span></span><br><span class="line">     ......</span><br></pre></td></tr></table></figure>
+<p>当T(n/2^k)=T(1)时，k=log<sub>2</sub>n，T(n)=Cn+nlog<sub>2</sub>n  </p>
+</li>
+<li><p>归并排序<strong>不是原地排序算法</strong>。<br>归并排序在合并两个有序数组为一个有序数组时，需要借助额外的存储空间。每次合并操作都需要申请额外的内存空间，但在合并完成之后，临时开辟的内存空间就被释放掉了。在任意时刻，CPU只会有一个函数在执行，也就只会有一个临时的内存空间在使用。临时内存空间最大也不会超过n个数据的大小，<strong>空间复杂度是O(n)</strong>。  </p>
+</li>
+</ol>
+<h4 id="快速排序2"><a href="#快速排序2" class="headerlink" title="快速排序2"></a>快速排序<a href="#refer-anchor-2"><sup>2</sup></a></h4><p>如果要排序数组中下标从p到r之间的一组数据，选择p到r之间的任意一个数据作为分区点(pivot)。遍历p到r之间的数据，将小于pivot的放到左边，将大于pivot的放到右边，将pivot放到中间。这样数组p到r之间的数据被分成了三个部分，前面p到q-1之间都是小于pivot的，中间是pivot，后面的q+1到r之间是大于pivot的。<br>根据分治、递归的处理思想，可以用递归排序下标从p到q-1之间的数据和下标从q+1到r之间的数据，直到区间缩小为1，就说明所有的数据都有序了。  </p>
+<ul>
+<li>递推公式：<br>quick_sort(p…r) = quick_sort(p…q-1) + quick_sort(q+1…r)  </li>
+<li>终止条件：<br>p = r  <blockquote>
+<p>快速排序中的分区函数partition()，随机选择一个元素作为分区点pivot，一般情况下可以选择p到r区间的最后一个元素，对数组进行分区，函数返回分区点pivot的下标。  </p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><p>空间复杂度</p>
+<ul>
+<li>不考虑空间消耗可以申请两个临时数组X和Y，遍历数组，将小于分区点的元素拷贝到临时数组X，大于分区点的元素拷贝到临时数组Y，最后将数组X、Y中的数据顺序拷贝到原数组中。   </li>
+<li>原地分区操作，类似选择排序<br>通过游标i将数组[p…r-1]分成两部分，已处理区间[p…i-1]和未处理区间[i…r-1]，每次从未处理区间中取出一个元素[j]和分区点对比，如果小于，则将其加入到已处理区间的尾部[i]的位置。优化：不搬移数据，交换操作，将a[i]与a[j]交换。</li>
+</ul>
+</li>
+<li><p>涉及交换操作，属于<strong>不稳定的排序算法</strong>。  </p>
+</li>
+<li><p>时间复杂度<br>分区极其均衡，每次分区操作都能正好把数组分成大小接近相等的两个小区间，<strong>最好时间复杂度为O(nlogn)</strong>。<br>分区极其不均衡，数组正序，需要n次分区操作，每次分区平均要扫描n、2个元素，<strong>最坏时间复杂度为O(n<sup>2</sup>)</strong>。<br>大部分情况下的时间复杂度都可以做到O(nlogn)，只有在极端情况下，才会退化到O(n<sup>2</sup>)。<strong>平均时间复杂度O(nlogn)</strong>。   </p>
+</li>
+</ol>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p>归并排序的处理过程是由下到上的，先处理子问题，然后再合并。<br>快速排序的处理过程是由上到下的，先分区，然后再处理子问题。</p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>  
+[1] 归并排序  
+
+<pre><code>//归并排序
+public void mergeSort(int[] a) {
+    mergeSortInter(a,0,a.length-1);
+}
+public void mergeSortInter(int[] a,int start,int end) {
+    //终止条件
+    if(start==end) return;
+
+    //中间结点
+    int mid = (start+end)/2;
+
+    mergeSortInter(a,start,mid);
+    mergeSortInter(a,mid+1,end);
+
+    //合并函数
+    merge(a,start,mid,end);
+}
+public void merge(int[] a,int left,int mid,int right) {
+    //临时数组，大小为当前分区的大小
+    int[] temp = new int[right - left + 1];
+
+    int m = 0, i = left, j = mid + 1;
+    while (i &lt;= mid &amp;&amp; j &lt;= right) {
+        //取左右区间中元素最小值放入当前位置
+        temp[m++] = a[i] &lt;= a[j] ? a[i++] : a[j++];
+    }
+    //拷贝剩余数据到临时数组
+    while (i &lt;= mid)
+        temp[m++] = a[i++];
+    while (j &lt;= right)
+        temp[m++] = a[j++];
+
+    //拷贝临时数据到原数组对应区间
+    for (int k=0;k &lt;= right-left;k++)
+        a[left+k] = temp[k];
+}</code></pre><div id="refer-anchor-2"></div>  
+[2] 快速排序  
+
+<pre><code>//快速排序
+public void quickSort(int[] a) {
+    quickSortInter(a,0,a.length-1);
+}
+
+public void quickSortInter(int[] a,int start,int end) {
+    //终止条件  start 可能大于end
+    if(start&gt;=end) return;
+
+    //分区函数获取分区点
+    int p = partition(a,start,end);
+
+    quickSortInter(a,start,p-1);
+    quickSortInter(a,p+1,end);
+}
+
+public int partition(int[] a,int start,int end) {
+    //取当前分区最后一个元素做分区点
+    int pivot = a[end];
+    //记录下一个小于分区点元素值的元素应放置的下标
+    int i = start;
+    for(int j = start; j &lt; end; j++) {
+        //当前元素与分区点元素值比较，小于则当前元素与上一个小于分区点元素的后一个元素进行交换
+        if(a[j] &lt; pivot) {
+            if(i != j) {
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+            }
+            i++;
+        }
+    }
+
+    //分区点元素值与最后一个小于分区点元素的后一个元素进行交换
+    int temp = a[i];
+    a[i] =a[end];
+    a[end] = temp;
+
+    return i;
+}</code></pre>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
       </tags>
   </entry>
   <entry>
@@ -365,178 +537,6 @@
       </categories>
       <tags>
         <tag>排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>归并排序、快速排序</title>
-    <url>/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>归并排序和快速排序的时间复杂度为O(nlogn)。利用分治思想将大问题分解成小问题解决；利用递归代码实现归并排序。  </p>
-<h4 id="归并排序1"><a href="#归并排序1" class="headerlink" title="归并排序1"></a>归并排序<a href="#refer-anchor-1"><sup>1</sup></a></h4><p>先把数组从中间分成前后两部分，然后对前后两部分分别排序，再将排好序的两部分合并在一起。  </p>
-<ul>
-<li>递推公式:<br>merge_sort(p…r) = merge(merge_sort(p…q),merge_sort(q+1…r))  </li>
-<li>终止条件：<br>p = r 不用再继续分解  <blockquote>
-<p>merge_sort(p…r)表示给下标从p到r之间的数组排序。将此问题转化为了两个子问题：merge(merge_sort(p…q),merge_sort(q+1…r))，其中下标q等于p和r的中间位置(p+r)/2。当下标从p到q和从q+1到r这两个子数组都排好序之后，再将两个有序的子数组合并在一起，那么下标从p到r之间的数据也就排好序了。<br>合并函数merge([p…r],[p…q],[q+1…r])，申请一个临时数组temp,大小与数组[p…r]相同。用两个游标i和j，分别指向[p…q]和[q+1…r]的第一个元素。比较这两个元素[i]、[j]的大小，将较小的元素放入到临时数组temp中，并将相应的游标后移一位。  </p>
-</blockquote>
-</li>
-</ul>
-<ol>
-<li><p>归并排序是一个<strong>稳定的排序算法</strong>，合并数组时，遇到值相同的元素，现将[p…q]区间的元素放入到临时数组temp中，保证值相同的元素在合并前后的先后顺序不变。  </p>
-</li>
-<li><p>最好、最坏、平均情况时间复杂度都是<strong>O(nlogn)</strong>。  </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">T(1) &#x3D; C；   n&#x3D;1时，只需要常量级的执行时间，所以表示为C。</span><br><span class="line">T(n) &#x3D; 2*T(n&#x2F;2) + n； n&gt;1</span><br><span class="line">     &#x3D; 2*(2*T(n&#x2F;4) + n&#x2F;2) + n &#x3D; 4*T(n&#x2F;4) + 2*n</span><br><span class="line">     &#x3D; 4*(2*T(n&#x2F;8) + n&#x2F;4) + 2*n &#x3D; 8*T(n&#x2F;8) + 3*n</span><br><span class="line">     &#x3D; 8*(2*T(n&#x2F;16) + n&#x2F;8) + 3*n &#x3D; 16*T(n&#x2F;16) + 4*n</span><br><span class="line">     ......</span><br><span class="line">     &#x3D; 2^k * T(n&#x2F;2^k) + k * n</span><br><span class="line">     ......</span><br></pre></td></tr></table></figure>
-<p>当T(n/2^k)=T(1)时，k=log<sub>2</sub>n，T(n)=Cn+nlog<sub>2</sub>n  </p>
-</li>
-<li><p>归并排序<strong>不是原地排序算法</strong>。<br>归并排序在合并两个有序数组为一个有序数组时，需要借助额外的存储空间。每次合并操作都需要申请额外的内存空间，但在合并完成之后，临时开辟的内存空间就被释放掉了。在任意时刻，CPU只会有一个函数在执行，也就只会有一个临时的内存空间在使用。临时内存空间最大也不会超过n个数据的大小，<strong>空间复杂度是O(n)</strong>。  </p>
-</li>
-</ol>
-<h4 id="快速排序2"><a href="#快速排序2" class="headerlink" title="快速排序2"></a>快速排序<a href="#refer-anchor-2"><sup>2</sup></a></h4><p>如果要排序数组中下标从p到r之间的一组数据，选择p到r之间的任意一个数据作为分区点(pivot)。遍历p到r之间的数据，将小于pivot的放到左边，将大于pivot的放到右边，将pivot放到中间。这样数组p到r之间的数据被分成了三个部分，前面p到q-1之间都是小于pivot的，中间是pivot，后面的q+1到r之间是大于pivot的。<br>根据分治、递归的处理思想，可以用递归排序下标从p到q-1之间的数据和下标从q+1到r之间的数据，直到区间缩小为1，就说明所有的数据都有序了。  </p>
-<ul>
-<li>递推公式：<br>quick_sort(p…r) = quick_sort(p…q-1) + quick_sort(q+1…r)  </li>
-<li>终止条件：<br>p = r  <blockquote>
-<p>快速排序中的分区函数partition()，随机选择一个元素作为分区点pivot，一般情况下可以选择p到r区间的最后一个元素，对数组进行分区，函数返回分区点pivot的下标。  </p>
-</blockquote>
-</li>
-</ul>
-<ol>
-<li><p>空间复杂度</p>
-<ul>
-<li>不考虑空间消耗可以申请两个临时数组X和Y，遍历数组，将小于分区点的元素拷贝到临时数组X，大于分区点的元素拷贝到临时数组Y，最后将数组X、Y中的数据顺序拷贝到原数组中。   </li>
-<li>原地分区操作，类似选择排序<br>通过游标i将数组[p…r-1]分成两部分，已处理区间[p…i-1]和未处理区间[i…r-1]，每次从未处理区间中取出一个元素[j]和分区点对比，如果小于，则将其加入到已处理区间的尾部[i]的位置。优化：不搬移数据，交换操作，将a[i]与a[j]交换。</li>
-</ul>
-</li>
-<li><p>涉及交换操作，属于<strong>不稳定的排序算法</strong>。  </p>
-</li>
-<li><p>时间复杂度<br>分区极其均衡，每次分区操作都能正好把数组分成大小接近相等的两个小区间，<strong>最好时间复杂度为O(nlogn)</strong>。<br>分区极其不均衡，数组正序，需要n次分区操作，每次分区平均要扫描n、2个元素，<strong>最坏时间复杂度为O(n<sup>2</sup>)</strong>。<br>大部分情况下的时间复杂度都可以做到O(nlogn)，只有在极端情况下，才会退化到O(n<sup>2</sup>)。<strong>平均时间复杂度O(nlogn)</strong>。   </p>
-</li>
-</ol>
-<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p>归并排序的处理过程是由下到上的，先处理子问题，然后再合并。<br>快速排序的处理过程是由上到下的，先分区，然后再处理子问题。</p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>  
-[1] 归并排序  
-
-<pre><code>//归并排序
-public void mergeSort(int[] a) {
-    mergeSortInter(a,0,a.length-1);
-}
-public void mergeSortInter(int[] a,int start,int end) {
-    //终止条件
-    if(start==end) return;
-
-    //中间结点
-    int mid = (start+end)/2;
-
-    mergeSortInter(a,start,mid);
-    mergeSortInter(a,mid+1,end);
-
-    //合并函数
-    merge(a,start,mid,end);
-}
-public void merge(int[] a,int left,int mid,int right) {
-    //临时数组，大小为当前分区的大小
-    int[] temp = new int[right - left + 1];
-
-    int m = 0, i = left, j = mid + 1;
-    while (i &lt;= mid &amp;&amp; j &lt;= right) {
-        //取左右区间中元素最小值放入当前位置
-        temp[m++] = a[i] &lt;= a[j] ? a[i++] : a[j++];
-    }
-    //拷贝剩余数据到临时数组
-    while (i &lt;= mid)
-        temp[m++] = a[i++];
-    while (j &lt;= right)
-        temp[m++] = a[j++];
-
-    //拷贝临时数据到原数组对应区间
-    for (int k=0;k &lt;= right-left;k++)
-        a[left+k] = temp[k];
-}</code></pre><div id="refer-anchor-2"></div>  
-[2] 快速排序  
-
-<pre><code>//快速排序
-public void quickSort(int[] a) {
-    quickSortInter(a,0,a.length-1);
-}
-
-public void quickSortInter(int[] a,int start,int end) {
-    //终止条件  start 可能大于end
-    if(start&gt;=end) return;
-
-    //分区函数获取分区点
-    int p = partition(a,start,end);
-
-    quickSortInter(a,start,p-1);
-    quickSortInter(a,p+1,end);
-}
-
-public int partition(int[] a,int start,int end) {
-    //取当前分区最后一个元素做分区点
-    int pivot = a[end];
-    //记录下一个小于分区点元素值的元素应放置的下标
-    int i = start;
-    for(int j = start; j &lt; end; j++) {
-        //当前元素与分区点元素值比较，小于则当前元素与上一个小于分区点元素的后一个元素进行交换
-        if(a[j] &lt; pivot) {
-            if(i != j) {
-                int temp = a[i];
-                a[i] = a[j];
-                a[j] = temp;
-            }
-            i++;
-        }
-    }
-
-    //分区点元素值与最后一个小于分区点元素的后一个元素进行交换
-    int temp = a[i];
-    a[i] =a[end];
-    a[end] = temp;
-
-    return i;
-}</code></pre>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数组</title>
-    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
-    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
-<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
-<li>线性表<blockquote>
-<p>数组、链表、队列、栈  </p>
-</blockquote>
-</li>
-<li>非线性表<blockquote>
-<p>二叉树、堆、图  </p>
-</blockquote>
-</li>
-</ol>
-<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a[i]_address &#x3D; base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
-<ol>
-<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
-<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
-<p>快速排序的思想</p>
-</blockquote>
-</li>
-<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
-<p>JVM标记清除垃圾回收算法的核心思想</p>
-</blockquote>
-</li>
-</ol>
-<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>数组</tag>
       </tags>
   </entry>
   <entry>
@@ -846,6 +846,33 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
+    <title>散列表应用</title>
+    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<p>散列表支持非常高效的数据插入、删除、查找操作，但是散列表中的数据都是通过散列函数打乱之后无规律的存储的，无法支持按照某种顺序快速地遍历数据。如果希望按照顺序遍历散列表中的数据，需要将散列表中的数据拷贝到数组中，然后排序再遍历。<br>散列表是动态数据结构，不停地有数据的插入、删除，每次希望按顺序遍历散列表中的数据的时候，都需要先排序，效率很低，为了解决这个问题，将散列表和链表（或者跳表）结合在一起使用。  </p>
+<h4 id="LRU缓存淘汰算法"><a href="#LRU缓存淘汰算法" class="headerlink" title="LRU缓存淘汰算法"></a>LRU缓存淘汰算法</h4><ul>
+<li><p>通过链表实现LRU缓存淘汰算法：维护一个按照访问时间从大到小有序排列的链表结构。因为缓存大小有限，当缓存空间不够，需要淘汰一个数据的时候，直接将链表头部的结点删除。<br>当要缓存某个数据的时候，先在链表中查找这个数据。如果没有找到，则直接将数据放到链表的尾部；如果找到了，就把它移动到链表的尾部。因为查找数据需要遍历链表，所以单纯使用链表实现的LRU缓存淘汰算法的时间复杂度很高为O(n)。  </p>
+</li>
+<li><p>将散列表和链表两种结构组合使用，可以将添加、删除、查找操作的时间复杂度都降低到O(1)。使用双向链表存储数据，链表中的每个节点除了存储数据data、前驱指针prev、后继指针next之外，还新增了一个特殊的字段hnext。这里的散列表通过链表法解决散列冲突，每个节点会在两条链中。一个链式双向链表，一个是散列表中的拉链。前驱和后继指针将结点串在双向链表中，hnext指针将结点串在散列表的拉链中。  </p>
+<blockquote>
+<ul>
+<li>查找数据，散列表中查找数据的时间复杂度为O(1)。找到数据之后将其移动到双向链表的尾部。  </li>
+<li>删除数据，散列表中在O(1)时间复杂度里找到要删除的结点，双向链表中通过前驱指针O(1)时间复杂度获取前驱结点。则删除结点的时间复杂度为O(1)。  </li>
+<li>添加数据，先判断数据是否已经在缓存中。如果存在，需要将其移动到双向链表的尾部；如果不存在，判断缓存是否已满，如果已满，则将双向链表头部的结点删除在将数据放到链表的尾部，如果未满，则直接将数据放到链表的尾部。<br>涉及查找操作都通过散列表来完成，其他删除、插入操作通过链表来完成，只需更改指针指向。时间复杂度都为O(1)。  </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h4 id="Redis有序集合"><a href="#Redis有序集合" class="headerlink" title="Redis有序集合"></a>Redis有序集合</h4><p>有序集合中，每个成员对象有两个重要的属性，键值key和分值score，可以通过score查找数据，也可以通过key来查找数据。<br>按照分值将对象组织成跳表的结构<br>按照键值构建一个散列表   </p>
+<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><p>通过散列表和双向链表组合实现。<br>不仅支持按照插入顺序遍历数据，还支持按照访问数据遍历数据。  </p>
+<figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 10是初始大小，0.75是装载因子，true是表示按照访问时间排序</span></span><br><span class="line">HashMap&lt;<span class="built_in">Integer</span>, <span class="built_in">Integer</span>&gt; m = <span class="literal">new</span> LinkedHashMap&lt;&gt;(<span class="number">10</span>, <span class="number">0.75</span>f, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>散列表</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>散列表</title>
     <url>/2020/05/01/%E6%95%A3%E5%88%97%E8%A1%A8/</url>
     <content><![CDATA[<h4 id="散列思想"><a href="#散列思想" class="headerlink" title="散列思想"></a>散列思想</h4><p>散列表用的数组支持按照下标随机访问数据的特性，是数组的一种扩展，由数组演化而来。没有数组，就没有散列表。   </p>
@@ -882,96 +909,6 @@ private int bserachInter(int[] a,int low,int high,int value) {
 <li><p>链表法<br>在散列表中，每个“桶”或者“槽”会对应一条链表，所有散列值相同的元素都放到相同槽位对应的链表中。<br>当插入的时候，只需要通过散列函数计算出对应的散列槽位，将其插入到对应链表中即可，所以插入的时间复杂度是O(1)。当查找/删除一个元素时，同样通过散列函数计算出对应的槽，然后遍历链表查找或者删除。查找、删除的时间复杂度跟链表的长度k成正比O(k)。对于散列比较均匀的散列函数来说，k=n/m，其中n表示散列中数据的个数，m表示散列表中“槽”的个数。  </p>
 </li>
 </ol>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>散列表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>散列表应用</title>
-    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<p>散列表支持非常高效的数据插入、删除、查找操作，但是散列表中的数据都是通过散列函数打乱之后无规律的存储的，无法支持按照某种顺序快速地遍历数据。如果希望按照顺序遍历散列表中的数据，需要将散列表中的数据拷贝到数组中，然后排序再遍历。<br>散列表是动态数据结构，不停地有数据的插入、删除，每次希望按顺序遍历散列表中的数据的时候，都需要先排序，效率很低，为了解决这个问题，将散列表和链表（或者跳表）结合在一起使用。  </p>
-<h4 id="LRU缓存淘汰算法"><a href="#LRU缓存淘汰算法" class="headerlink" title="LRU缓存淘汰算法"></a>LRU缓存淘汰算法</h4><ul>
-<li><p>通过链表实现LRU缓存淘汰算法：维护一个按照访问时间从大到小有序排列的链表结构。因为缓存大小有限，当缓存空间不够，需要淘汰一个数据的时候，直接将链表头部的结点删除。<br>当要缓存某个数据的时候，先在链表中查找这个数据。如果没有找到，则直接将数据放到链表的尾部；如果找到了，就把它移动到链表的尾部。因为查找数据需要遍历链表，所以单纯使用链表实现的LRU缓存淘汰算法的时间复杂度很高为O(n)。  </p>
-</li>
-<li><p>将散列表和链表两种结构组合使用，可以将添加、删除、查找操作的时间复杂度都降低到O(1)。使用双向链表存储数据，链表中的每个节点除了存储数据data、前驱指针prev、后继指针next之外，还新增了一个特殊的字段hnext。这里的散列表通过链表法解决散列冲突，每个节点会在两条链中。一个链式双向链表，一个是散列表中的拉链。前驱和后继指针将结点串在双向链表中，hnext指针将结点串在散列表的拉链中。  </p>
-<blockquote>
-<ul>
-<li>查找数据，散列表中查找数据的时间复杂度为O(1)。找到数据之后将其移动到双向链表的尾部。  </li>
-<li>删除数据，散列表中在O(1)时间复杂度里找到要删除的结点，双向链表中通过前驱指针O(1)时间复杂度获取前驱结点。则删除结点的时间复杂度为O(1)。  </li>
-<li>添加数据，先判断数据是否已经在缓存中。如果存在，需要将其移动到双向链表的尾部；如果不存在，判断缓存是否已满，如果已满，则将双向链表头部的结点删除在将数据放到链表的尾部，如果未满，则直接将数据放到链表的尾部。<br>涉及查找操作都通过散列表来完成，其他删除、插入操作通过链表来完成，只需更改指针指向。时间复杂度都为O(1)。  </li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h4 id="Redis有序集合"><a href="#Redis有序集合" class="headerlink" title="Redis有序集合"></a>Redis有序集合</h4><p>有序集合中，每个成员对象有两个重要的属性，键值key和分值score，可以通过score查找数据，也可以通过key来查找数据。<br>按照分值将对象组织成跳表的结构<br>按照键值构建一个散列表   </p>
-<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><p>通过散列表和双向链表组合实现。<br>不仅支持按照插入顺序遍历数据，还支持按照访问数据遍历数据。  </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 10是初始大小，0.75是装载因子，true是表示按照访问时间排序</span><br><span class="line">HashMap&lt;Integer, Integer&gt; m &#x3D; new LinkedHashMap&lt;&gt;(10, 0.75f, true);</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>散列表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>散列表扩展</title>
-    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E6%89%A9%E5%B1%95/</url>
-    <content><![CDATA[<p>散列函数、装载因子、散列冲突等都会影响散列表的查询效率。<br>极端情况，所有的数据经过散列函数之后，都散列到同一个槽里，如果使用基于链表的冲突解决方法，散列表就会退化为链表，查询的时间复杂度从O(1)急剧退化为O(n)。  </p>
-<h4 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h4><p>散列函数设计的好坏，决定了散列表冲突的概率大小，也直接决定了散列表的性能。  </p>
-<ul>
-<li>散列函数的设计不能太复杂<br>过于复杂的撒捏函数，会消耗很多计算时间，间接影响到散列表的性能。  </li>
-<li>散列函数生成的值要尽可能随机并且均匀分布<br>避免或者最小化散列冲突，即便出现冲突，散列到每个槽里的数据也会比较平均，不会出现某个槽内数据特别多的情况。  </li>
-<li>考虑关键字的长度、特点、分布、散列表的大小等其他因素  </li>
-</ul>
-<p>数据分析法<br>直接寻址法<br>平方取中法<br>折叠法<br>随机数法<br>。。。</p>
-<h4 id="装载因子"><a href="#装载因子" class="headerlink" title="装载因子"></a>装载因子</h4><p>装载因子越大说明散列表中的元素越多，空闲位置越少，散列冲突的概率就越大。插入数据的过程要多次寻址或者拉很长的链，查找的过程也会变得很慢。  </p>
-<ul>
-<li>静态数据<br>没有频繁的插入和删除的静态数据集合。  </li>
-<li>动态散列表<br>数据集合是频繁变动的，事先无法预估将要加入的数据个数，无法事先申请一个足够大的散列表。随着数据慢慢加入，装载因子就会慢慢变大。当装载因子过大时，需要进行动态扩容。<br>散列表的大小变了，数据的存储位置也变了，需要通过散列函数重新计算每个数据的存储位置。<br>插入一个数据，最好情况下不需要扩容，最好时间复杂度为O(1)；最坏情况下，散列表装载因子过高启动扩容，需要重新申请内存空间，重新计算哈希位置，并且搬移数据，时间复杂度为O(n)。用摊还分析法，均摊情况下，时间复杂度接近最好情况O(1)。<br>随着数据的删除，散列表中的数据会越来越少，空闲空间会越来越多。如果对空间消耗非常敏感，可以在装载因子小于某个值之后，启动动态缩容。<br>装载因子阈值的设置要权衡时间、空间复杂度。同事要避免数据的插入和删除导致频繁的扩容和缩容。  </li>
-</ul>
-<h4 id="动态扩容"><a href="#动态扩容" class="headerlink" title="动态扩容"></a>动态扩容</h4><p>大部分情况下，动态扩容的散列表插入一个数据都很快，当装载银子啊已经达到阈值，需要先进行扩容，再插入数据，插入数据就会变得很慢。<br>解决一次性扩容耗时过多的情况，可以将扩容操作穿插在插入操作的过程中，分批完成。当装载时因子触达阈值之后，只申请新空间，但并不将老的数据搬移到新散列表中。<br>当新数据要插入时，将新数据插入新散列表中，并从老散列表中拿出一个数据放入到新散列表。每次插入一个数据到散列表，重复上述过程，避免了集中一次性数据搬移。任何情况下，插入一个数据的时间复杂度都是O(1)。<br>查询操作，兼容新、老散列表的数据，先从新散列表中查找，如果没有找到，再去老散列表中查找。  </p>
-<h4 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h4><ul>
-<li><p>开放寻址法<br>数据量小、装载因子小。ThreadLocalMap  </p>
-<p>优点：<br>散列表的数据存储在数组中，可以有效利用CPU缓存加快查询速度，序列化起来比较简单。  </p>
-<p>缺点：<br>删除数据比较麻烦，需要特殊标记已经删掉的数据。所有的数据存储在一个数组中，冲突的代价高。装载因子的上限不能太大，浪费内存空间。  </p>
-</li>
-<li><p>链表法<br>大对象、大数据量。LinkedHashMap  </p>
-<p>优点：<br>内存利用率高。链表结点可以在需要的时候再创建，并不需要事先申请好。<br>对大装载因子的容忍度高。只要散列函数的值随机均匀，更大的装载因子也就是链表的长度变长了而已，虽然查找效率有所下降，但是比顺序查找快。  </p>
-<p>缺点：<br>链表要存储指针，对于比较小的对象的存储比较消耗内存。如果存储的是大对象，要存储的对象的大小远远大于一个指针的大小（4个字节或者8个字节），指针的内存消耗在大对象面前可以忽略。<br>链表中的结点是零散分布在内存中的，不是连续的，对CPU缓存是不友好的，对执行效率有一定影响。  </p>
-<p>将链表法中的链表改造为其他高效的动态数据结构：跳表、红黑树。极端情况下，所有的数据都散列到同一个桶内，查找的时间复杂度为O(logn)，能避免散列碰撞攻击。  </p>
-</li>
-</ul>
-<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><ul>
-<li><p>初始大小<br>默认初始大小16。  </p>
-</li>
-<li><p>装载因子&amp;动态扩容<br>默认0.75。当hashMap中元素个数超过0.75*capacity的时候，就会启动自动扩容，每次扩容都会扩容为原来的两倍大小。  </p>
-</li>
-<li><p>散列冲突<br>链表法。会出现拉链过长的情况，影响HashMap的性能。<br>JDK1.8中，引入了红黑树，当链表长度太长（TREEIFY_THRESHOLD超过8且数组长度-哈希表容量MIN_TREEIFY_CAPACITY大于64）时，链表就转换为红黑树。当红黑树的结点个数小于6时（UNTREEIFY_THRESHOLD），会将红黑树转化为链表。避免频繁插入/删除导致数据结构频繁转换发生抖动。    </p>
-</li>
-<li><p>散列函数   </p>
-<pre><code>
-int hash(Object key) {
-    int h = key.hashCode()；
-    return (h ^ (h &gt;&gt;&gt; 16)) &amp; (capicity -1); //capicity表示散列表的大小
-}
-
-public int hashCode() {
-  int var1 = this.hash;
-  if(var1 == 0 &amp;&amp; this.value.length &gt; 0) {
-    char[] var2 = this.value;
-    for(int var3 = 0; var3 &lt; this.value.length; ++var3) {
-      var1 = 31 * var1 + var2[var3];
-    }
-    this.hash = var1;
-  }
-  return var1;
-}</code></pre><p>hashcode是32位整型值，4294967296，获取对象的hashcode后，先进行移位运算，再和自己做异或运算=&gt;hashcode ^ (hashcode &gt;&gt;&gt; 16)，将高16位移到16位，混合原哈希码的高位和低位，计算出来的整型值具有高位和低位的性质，并加大了低位的随机性。<br>用hash表当前的容量减一，再和计算出来的整型值做位于运算A % B = A &amp; (B - 1)，当B是2的指数时等式成立。即(h ^ (h &gt;&gt;&gt; 16)) &amp; (capitity -1) = (h ^ (h &gt;&gt;&gt; 16)) % capitity，即除留余数法保证位置分布均匀。</p>
-</li>
-</ul>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
@@ -1060,6 +997,240 @@ void postOrder(Node* root) {
 
 <ul>
 <li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>散列表扩展</title>
+    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E6%89%A9%E5%B1%95/</url>
+    <content><![CDATA[<p>散列函数、装载因子、散列冲突等都会影响散列表的查询效率。<br>极端情况，所有的数据经过散列函数之后，都散列到同一个槽里，如果使用基于链表的冲突解决方法，散列表就会退化为链表，查询的时间复杂度从O(1)急剧退化为O(n)。  </p>
+<h4 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h4><p>散列函数设计的好坏，决定了散列表冲突的概率大小，也直接决定了散列表的性能。  </p>
+<ul>
+<li>散列函数的设计不能太复杂<br>过于复杂的撒捏函数，会消耗很多计算时间，间接影响到散列表的性能。  </li>
+<li>散列函数生成的值要尽可能随机并且均匀分布<br>避免或者最小化散列冲突，即便出现冲突，散列到每个槽里的数据也会比较平均，不会出现某个槽内数据特别多的情况。  </li>
+<li>考虑关键字的长度、特点、分布、散列表的大小等其他因素  </li>
+</ul>
+<p>数据分析法<br>直接寻址法<br>平方取中法<br>折叠法<br>随机数法<br>。。。</p>
+<h4 id="装载因子"><a href="#装载因子" class="headerlink" title="装载因子"></a>装载因子</h4><p>装载因子越大说明散列表中的元素越多，空闲位置越少，散列冲突的概率就越大。插入数据的过程要多次寻址或者拉很长的链，查找的过程也会变得很慢。  </p>
+<ul>
+<li>静态数据<br>没有频繁的插入和删除的静态数据集合。  </li>
+<li>动态散列表<br>数据集合是频繁变动的，事先无法预估将要加入的数据个数，无法事先申请一个足够大的散列表。随着数据慢慢加入，装载因子就会慢慢变大。当装载因子过大时，需要进行动态扩容。<br>散列表的大小变了，数据的存储位置也变了，需要通过散列函数重新计算每个数据的存储位置。<br>插入一个数据，最好情况下不需要扩容，最好时间复杂度为O(1)；最坏情况下，散列表装载因子过高启动扩容，需要重新申请内存空间，重新计算哈希位置，并且搬移数据，时间复杂度为O(n)。用摊还分析法，均摊情况下，时间复杂度接近最好情况O(1)。<br>随着数据的删除，散列表中的数据会越来越少，空闲空间会越来越多。如果对空间消耗非常敏感，可以在装载因子小于某个值之后，启动动态缩容。<br>装载因子阈值的设置要权衡时间、空间复杂度。同事要避免数据的插入和删除导致频繁的扩容和缩容。  </li>
+</ul>
+<h4 id="动态扩容"><a href="#动态扩容" class="headerlink" title="动态扩容"></a>动态扩容</h4><p>大部分情况下，动态扩容的散列表插入一个数据都很快，当装载银子啊已经达到阈值，需要先进行扩容，再插入数据，插入数据就会变得很慢。<br>解决一次性扩容耗时过多的情况，可以将扩容操作穿插在插入操作的过程中，分批完成。当装载时因子触达阈值之后，只申请新空间，但并不将老的数据搬移到新散列表中。<br>当新数据要插入时，将新数据插入新散列表中，并从老散列表中拿出一个数据放入到新散列表。每次插入一个数据到散列表，重复上述过程，避免了集中一次性数据搬移。任何情况下，插入一个数据的时间复杂度都是O(1)。<br>查询操作，兼容新、老散列表的数据，先从新散列表中查找，如果没有找到，再去老散列表中查找。  </p>
+<h4 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h4><ul>
+<li><p>开放寻址法<br>数据量小、装载因子小。ThreadLocalMap  </p>
+<p>优点：<br>散列表的数据存储在数组中，可以有效利用CPU缓存加快查询速度，序列化起来比较简单。  </p>
+<p>缺点：<br>删除数据比较麻烦，需要特殊标记已经删掉的数据。所有的数据存储在一个数组中，冲突的代价高。装载因子的上限不能太大，浪费内存空间。  </p>
+</li>
+<li><p>链表法<br>大对象、大数据量。LinkedHashMap  </p>
+<p>优点：<br>内存利用率高。链表结点可以在需要的时候再创建，并不需要事先申请好。<br>对大装载因子的容忍度高。只要散列函数的值随机均匀，更大的装载因子也就是链表的长度变长了而已，虽然查找效率有所下降，但是比顺序查找快。  </p>
+<p>缺点：<br>链表要存储指针，对于比较小的对象的存储比较消耗内存。如果存储的是大对象，要存储的对象的大小远远大于一个指针的大小（4个字节或者8个字节），指针的内存消耗在大对象面前可以忽略。<br>链表中的结点是零散分布在内存中的，不是连续的，对CPU缓存是不友好的，对执行效率有一定影响。  </p>
+<p>将链表法中的链表改造为其他高效的动态数据结构：跳表、红黑树。极端情况下，所有的数据都散列到同一个桶内，查找的时间复杂度为O(logn)，能避免散列碰撞攻击。  </p>
+</li>
+</ul>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><ul>
+<li><p>初始大小<br>默认初始大小16。  </p>
+</li>
+<li><p>装载因子&amp;动态扩容<br>默认0.75。当hashMap中元素个数超过0.75*capacity的时候，就会启动自动扩容，每次扩容都会扩容为原来的两倍大小。  </p>
+</li>
+<li><p>散列冲突<br>链表法。会出现拉链过长的情况，影响HashMap的性能。<br>JDK1.8中，引入了红黑树，当链表长度太长（TREEIFY_THRESHOLD超过8且数组长度-哈希表容量MIN_TREEIFY_CAPACITY大于64）时，链表就转换为红黑树。当红黑树的结点个数小于6时（UNTREEIFY_THRESHOLD），会将红黑树转化为链表。避免频繁插入/删除导致数据结构频繁转换发生抖动。    </p>
+</li>
+<li><p>散列函数   </p>
+<pre><code>
+int hash(Object key) {
+    int h = key.hashCode()；
+    return (h ^ (h &gt;&gt;&gt; 16)) &amp; (capicity -1); //capicity表示散列表的大小
+}
+
+public int hashCode() {
+  int var1 = this.hash;
+  if(var1 == 0 &amp;&amp; this.value.length &gt; 0) {
+    char[] var2 = this.value;
+    for(int var3 = 0; var3 &lt; this.value.length; ++var3) {
+      var1 = 31 * var1 + var2[var3];
+    }
+    this.hash = var1;
+  }
+  return var1;
+}</code></pre><p>hashcode是32位整型值，4294967296，获取对象的hashcode后，先进行移位运算，再和自己做异或运算=&gt;hashcode ^ (hashcode &gt;&gt;&gt; 16)，将高16位移到16位，混合原哈希码的高位和低位，计算出来的整型值具有高位和低位的性质，并加大了低位的随机性。<br>用hash表当前的容量减一，再和计算出来的整型值做位于运算A % B = A &amp; (B - 1)，当B是2的指数时等式成立。即(h ^ (h &gt;&gt;&gt; 16)) &amp; (capitity -1) = (h ^ (h &gt;&gt;&gt; 16)) % capitity，即除留余数法保证位置分布均匀。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>散列表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二叉查找树</title>
+    <url>/2020/05/07/%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
+    <content><![CDATA[<p>二叉查找树是二叉树中最常用的一种类型，也叫二叉查找树。<br>二叉查找树要求，在树中的任意一个节点，其左子树中的每个节点的值，都要小于这个节点的值，而右子树节点的值都大于这个节点的值。  </p>
+<h4 id="查找操作"><a href="#查找操作" class="headerlink" title="查找操作"></a>查找操作</h4><p>先取根节点，如果它等于要查找的数据，直接返回。<br>如果要查找的数据比根节点的值小，那就在左子树中递归查找；<br>如果要查找的数据比根节点的值大，那就在右子树中递归查找。  </p>
+<pre><code>public class BinarySearchTree {
+    private Node tree;
+
+    public Node select(int data) {
+        Node p = tree;
+        while(p != null) {
+            if(data &lt; p.data) 
+                p = p.left;
+            else if (data &gt; p.data)
+                p = p.right;
+            else
+                return p;
+        }
+        return null;
+    }
+
+    public class Node {
+        private int data;
+        private Node left;
+        private Node right;
+        public Node(int data) {
+            this.data = data;
+        }
+    }
+}</code></pre><h4 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h4><p>插入类似查找，新插入的数据一般都是在叶子节点上，只需要从根节点开始，依次比较要插入的数据和节点的大小关系。  </p>
+<p>如果要插入的数据比节点的数据大，并且节点的右子树为空，就将新数据直接插到右子节点的位置；<br>如果不为空，就在递归遍历右子树，查找插入位置。<br>同理，如果要插入的数据比节点数据小，并且节点的左子树为空，就将新数据插入到左子节点的位置；<br>如果不为空，就再递归遍历左子树，查找插入位置。  </p>
+<pre><code>public class BinarySearchTree {
+    private Node tree;
+
+    //不考虑插入节点与已有节点相同的情况
+    public void insert(int data) {
+        if(tree == null) {
+            tree = new Node(data);
+            return;
+        }
+
+        Node p = tree;
+        while (p != null) {
+            if(data &gt; p.data) {
+                if(p.right == null) {
+                    p.right = new Node(data);
+                    return;
+                }
+                p = p.right;
+            } else {//data &lt; p.data
+                if(p.left == null) {
+                    p.left = new Node(data);
+                    return;
+                }
+                p = p.left;
+            }
+        }
+    }
+
+    public class Node {
+        private int data;
+        private Node left;
+        private Node right;
+        public Node(int data) {
+            this.data = data;
+        }
+    }
+}</code></pre><h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>针对要删除节点的子节点个数的不同，需要分为三种情况处理：  </p>
+<ol>
+<li><p>要删除的节点没有子节点，只需要直接将父节点中，指向要删除节点的指针置为null。  </p>
+</li>
+<li><p>要删除的节点只有一个子节点(只有左子节点或者右子节点)，只需要更新父节点中，指向要删除节点的指针，让它指向要删除结点的子节点。  </p>
+</li>
+<li><p>要删除的节点有两个子节点。需要找到这个节点的右子树中的最小节点，把它替换到要删除的节点上，然后再删除掉这个最小节点，因为最小节点肯定没有左子节点(如果有左子节点，那就不是最小节点了)，所以可以应用这两条规则来删除这个最小节点。  </p>
+<pre><code>public class BinarySearchTree {
+ private Node tree;
+
+ public void delete(int data) {
+     //p指向要删除的节点，初始化指向根节点
+     Node p = tree;
+     //pp记录的是p的父节点
+     Node pp = null;
+     while(p != null &amp;&amp; p.data != data) {
+         //更新当前节点为父节点，进而遍历子节点、子子节点
+         pp = p;
+         if(data &gt; p.data)
+             p = p.right;
+         else //data &lt; p.data
+             p = p.left;
+     }
+     //没有找到
+     if(p == null)
+         return;
+
+     //要删除的节点有两个子节点
+     if(p.left != null &amp;&amp; p.right != null) {
+         //查找右子树中最小节点
+         Node minP = p.right;
+         //minPP表示minP的父节点
+         Node minPP = p;
+         while(minP.left != null) {
+             //更新当前最小节点为当前节点的左子节点
+             minPP = minP;
+             minP = minP.left;
+         }
+         //将minP的数据替换到p中，后续通过minPP(pp)删除原minP
+         p.data = minP.data;
+         p = minP;
+         pp = minPP;
+     }
+
+     //删除的节点是叶子节点或者仅有一个子节点
+     Node child;//p的子节点
+     if(p.left != null)
+         child = p.left;
+     else if(p.right != null)
+         child = p.right;
+     else
+         child = null;
+
+     //通过更新父节点的子节点来删除指定的p
+     if(pp == null) //删除的节点是根节点
+         tree = child;
+     else if(pp.left == p)
+         pp.left = child;
+     else //pp.right == p
+         pp.right = child;
+ }
+
+ public class Node {
+     private int data;
+     private Node left;
+     private Node right;
+     public Node(int data) {
+         this.data = data;
+     }
+ }
+}</code></pre></li>
+</ol>
+<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><p>快速的查找最大节点和最小节点、前驱节点和后继节点。  </p>
+<h4 id="重要特性"><a href="#重要特性" class="headerlink" title="重要特性"></a>重要特性</h4><p>中序遍历二叉查找树，可以输出有序的数据序列，时间复杂度是O(n)。  </p>
+<h4 id="重复数据"><a href="#重复数据" class="headerlink" title="重复数据"></a>重复数据</h4><p>实际开发中，二叉查找树中存储的是包含很多字段的对象，利用对象的某个字段作为键值来构建二叉查找树，对象中的其他字段叫做卫星数据。  </p>
+<p>键值相同的两个对象存储解决方案：   </p>
+<ol>
+<li><p>二叉查找树中每个节点不仅存储一个数据，通过链表和支持动态扩容的数组等数据结构，把值相同的数据都存储在同一个节点上。   </p>
+</li>
+<li><p>每个节点仍然只存储一个数据。在查找插入位置的过程冲，如果 碰到一个节点的值与要插入数据的值相同，把这个新插入的数据当做大于这个节点的值来处理，将新数据放到这个节点的右子树。  </p>
+<p>当要查找数据的时候，遇到值相同的节点，并不停止查找操作，而是继续在右子树中查找，直到遇到叶子节点才停止。这样可以把键值等于要查找值的所有节点都找出来。    </p>
+<p>对于删除操作，也需要先查找到每个要删除的节点，然后再按之前的删除操作的方法依次删除。   </p>
+</li>
+</ol>
+<h4 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p>二叉查找树的插入、删除、查找的时间复杂度都跟树的高度成正比，为O(height)。也就是求包含n个节点的完全二叉树的高度。树的高度等于最大层数减一。  </p>
+<p>最坏情况：二叉查找树退化为链表，查找的时间复杂度为O(n)。</p>
+<p>最好情况：二叉查找树为完全二叉查找树。<br>包含n个节点的完全二叉树，第一层包含1个节点，第二层包含2个节点，第三层包含4个节点，依次类推，下面一层节点个数是上一层的2倍，第k层包含的节点个数就是2<sup>K-1</sup>。<br>完全二叉树最后一层的节点个数在1个到2<sup>L-1</sup>之间(最大层数为L)。则  </p>
+<p>n &gt;= 1+2+4+8+…+2<sup>L-2</sup>+1<br>n &lt;= 1+2+4+8+…+2<sup>L-2</sup>+2<sup>L-1</sup></p>
+<p>等比数列求和公式，L的范围是[log<sub>2</sub>(n+1),log<sub>2</sub>n+1]。完全二叉树的层数小于log<sub>2</sub>n+1，完全二叉树的高度小于log<sub>2</sub>n。平衡二叉查找树的高度接近logn，插入、删除、查找操作的时间复杂度稳定为O(logn)。</p>
+<h4 id="对比散列表"><a href="#对比散列表" class="headerlink" title="对比散列表"></a>对比散列表</h4><ul>
+<li>散列表中的数据是无序存储的，如果要输出有序的数据，需要先进行排序。二叉查找树只需要中序遍历，就可以在O(n)的时间复杂度内输出有序的数据序列。  </li>
+<li>散列表扩容耗时多，遇到散列冲突时性能不稳定。二叉查找树的性能不稳定，但平衡二叉查找树的性能非常稳定，时间复杂度稳定在O(logn)。</li>
+<li>散列表的查找等操作的时间复杂度是常量级的，但是哈希冲突存在&amp;哈希函数耗时，不一定比平衡二叉查找树的效率高。</li>
+<li>散列表的构造比二叉查找树要复杂，需要考虑的额东西很多，散列函数、冲突解决、扩容、缩容等。平衡二叉查找树只需要考虑平衡性。  </li>
+<li>为了避免散列冲突，装载因子不能太大，基于开放寻址法解决冲突的散列表，会浪费一定的存储空间。</li>
 </ul>
 ]]></content>
       <categories>
