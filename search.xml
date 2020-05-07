@@ -63,6 +63,67 @@
       </tags>
   </entry>
   <entry>
+    <title>数组</title>
+    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
+<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
+<li>线性表<blockquote>
+<p>数组、链表、队列、栈  </p>
+</blockquote>
+</li>
+<li>非线性表<blockquote>
+<p>二叉树、堆、图  </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">a[i]_address</span> = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+<ol>
+<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
+<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
+<p>快速排序的思想</p>
+</blockquote>
+</li>
+<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
+<p>JVM标记清除垃圾回收算法的核心思想</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>栈</title>
+    <url>/2020/04/19/%E6%A0%88/</url>
+    <content><![CDATA[<p>从栈的操作特性上看，栈是一种”操作受限”的线性表，只允许在一端插入和删除数据。并且满足先进后出、后进先出的特性。</p>
+<h4 id="实现栈"><a href="#实现栈" class="headerlink" title="实现栈"></a>实现栈</h4><p>栈主要包含两个操作：入栈push()，在栈顶插入一个数据；出栈pop()，从栈顶删除一个数据。<br>用数组实现的栈-<strong>顺序栈</strong>。<br>用链表实现的栈-<strong>链式栈</strong>。<br>空间复杂度为O(1)<br>时间复杂度为O(1)<br>动态扩容的顺序栈的入栈操作的均摊时间复杂度为O(1)</p>
+<h4 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h4><ul>
+<li>函数调用栈<br>操作系统给每个线程分配了一块独立的内存空间，用来存储函数调用时的临时变量。每进入一个函数，就会将临时变量作为一个栈帧入栈，当被调用函数执行完成返回之后，将这个函数对应的栈帧出栈。  </li>
+<li>表达式求值<br>通过两个栈实现，其中一个保存操作数的栈，另一个是保存运算符的栈。从左向右遍历表达式，遇到数字就压入操作数栈；遇到操作符与运算符栈的栈顶元素进行比较，<br>比运算符栈顶元素的优先级高，将当前运算符压入栈；<br>比运算符栈顶元素的优先级低或者相同，从运算符中取栈顶运算符，从操作数栈顶取两个操作数，进行计算，把计算结果压入操作数栈。  </li>
+<li>匹配括号<br>用栈保存未匹配的左括号，从左到右依次扫描字符串。扫描到左括号压入栈；扫描到右括号，从栈顶取出一个左括号进行匹配。</li>
+<li>浏览器前进&amp;后退<br>两个栈实现，浏览页面依次压入栈X，后退时，从栈X中出栈，压入栈Y;前进时，从栈Y中出栈，压入栈X.</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>JVM内存管理中堆栈</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>链表</title>
     <url>/2020/04/18/%E9%93%BE%E8%A1%A8/</url>
     <content><![CDATA[<p>链表的内存结构是不连续的内存空间，将一组零散的内存块串联起来进行数据存储的数据结构。</p>
@@ -149,67 +210,6 @@
       </tags>
   </entry>
   <entry>
-    <title>栈</title>
-    <url>/2020/04/19/%E6%A0%88/</url>
-    <content><![CDATA[<p>从栈的操作特性上看，栈是一种”操作受限”的线性表，只允许在一端插入和删除数据。并且满足先进后出、后进先出的特性。</p>
-<h4 id="实现栈"><a href="#实现栈" class="headerlink" title="实现栈"></a>实现栈</h4><p>栈主要包含两个操作：入栈push()，在栈顶插入一个数据；出栈pop()，从栈顶删除一个数据。<br>用数组实现的栈-<strong>顺序栈</strong>。<br>用链表实现的栈-<strong>链式栈</strong>。<br>空间复杂度为O(1)<br>时间复杂度为O(1)<br>动态扩容的顺序栈的入栈操作的均摊时间复杂度为O(1)</p>
-<h4 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h4><ul>
-<li>函数调用栈<br>操作系统给每个线程分配了一块独立的内存空间，用来存储函数调用时的临时变量。每进入一个函数，就会将临时变量作为一个栈帧入栈，当被调用函数执行完成返回之后，将这个函数对应的栈帧出栈。  </li>
-<li>表达式求值<br>通过两个栈实现，其中一个保存操作数的栈，另一个是保存运算符的栈。从左向右遍历表达式，遇到数字就压入操作数栈；遇到操作符与运算符栈的栈顶元素进行比较，<br>比运算符栈顶元素的优先级高，将当前运算符压入栈；<br>比运算符栈顶元素的优先级低或者相同，从运算符中取栈顶运算符，从操作数栈顶取两个操作数，进行计算，把计算结果压入操作数栈。  </li>
-<li>匹配括号<br>用栈保存未匹配的左括号，从左到右依次扫描字符串。扫描到左括号压入栈；扫描到右括号，从栈顶取出一个左括号进行匹配。</li>
-<li>浏览器前进&amp;后退<br>两个栈实现，浏览页面依次压入栈X，后退时，从栈X中出栈，压入栈Y;前进时，从栈Y中出栈，压入栈X.</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>JVM内存管理中堆栈</p>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>栈</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数组</title>
-    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
-    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
-<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
-<li>线性表<blockquote>
-<p>数组、链表、队列、栈  </p>
-</blockquote>
-</li>
-<li>非线性表<blockquote>
-<p>二叉树、堆、图  </p>
-</blockquote>
-</li>
-</ol>
-<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">a[i]_address</span> = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
-<ol>
-<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
-<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
-<p>快速排序的思想</p>
-</blockquote>
-</li>
-<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
-<p>JVM标记清除垃圾回收算法的核心思想</p>
-</blockquote>
-</li>
-</ol>
-<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>数组</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>队列</title>
     <url>/2020/04/20/%E9%98%9F%E5%88%97/</url>
     <content><![CDATA[<p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
@@ -229,6 +229,46 @@
       </categories>
       <tags>
         <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>递归</title>
+    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
+    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
+<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
+<li>一个问题的解可以分解为几个子问题的解</li>
+<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
+<li>存在递归终止条件</li>
+</ul>
+<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
+<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
+<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
+<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
+<li>时间空间成本</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
+<blockquote>
+<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
+</blockquote>
+<p>递归代码的调试方法</p>
+<blockquote>
+<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
+</blockquote>
+<p>检测递归中环的存在</p>
+<blockquote>
+<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
+</blockquote>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -369,46 +409,6 @@
       </tags>
   </entry>
   <entry>
-    <title>递归</title>
-    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
-    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
-<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
-<li>一个问题的解可以分解为几个子问题的解</li>
-<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
-<li>存在递归终止条件</li>
-</ul>
-<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
-<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
-<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
-<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
-<li>时间空间成本</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
-<blockquote>
-<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
-</blockquote>
-<p>递归代码的调试方法</p>
-<blockquote>
-<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
-</blockquote>
-<p>检测递归中环的存在</p>
-<blockquote>
-<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
-</blockquote>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>递归</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>归并排序、快速排序</title>
     <url>/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<p>归并排序和快速排序的时间复杂度为O(nlogn)。利用分治思想将大问题分解成小问题解决；利用递归代码实现归并排序。  </p>
@@ -540,6 +540,44 @@ public int partition(int[] a,int start,int end) {
       </tags>
   </entry>
   <entry>
+    <title>线性排序</title>
+    <url>/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>时间复杂度为O(n)的线性排序算法：桶排序、计数排序、基数排序。<br>算法是非基于比较的排序算法（主排序是非比较的），不涉及元素之间的比较操作。对要排序的数据要求比较苛刻。  </p>
+<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><ul>
+<li><p>原理<br>核心思想是将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行排序。桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。</p>
+</li>
+<li><p>时间复杂度<br>如果要排序的数据有n个，把他们均匀的划分到m个桶内，每个桶有k=n/m个元素。每个桶内部使用快速排序，时间复杂度为O(k<em>logk)。m个桶排序的时间复杂度为O(m</em>k<em>logk)。因为k=n/m，所以整个桶排序的时间复杂度为O(n</em>log(n/m))。当桶的个数m接近数据个数n时，log(n/m)为一个非常小的常量，这时桶排序的时间复杂度接近O(n)。  </p>
+</li>
+<li><p>适用场景<br>排序的数据需要很容易就能划分为m个桶，桶与桶之间有着天然的大小顺序，每个桶内的数据都排序完成之后，桶与桶之间的数据不需要再进行排序。<br>数据再各个桶之间的分布是比较均匀的。如果数据经过桶的划分之后，有的桶数据非常多，有的非常少，那桶内数据排序的时间复杂度就不是常量级了。在极端情况下，如果数据都被划分到一个桶里，那就退化为O(nlogn)的排序算法了。  </p>
+<p>桶排序适合用在外部排序中。数据存储在外部磁盘中，数据量比较大，内存有限，无法将数据全部加载到内存中。  </p>
+</li>
+</ul>
+<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><ul>
+<li><p>时间复杂度<br>计数排序是桶排序的一种特殊情况。当要排序的n个数据，所处的范围并不大的时候，比如最大值为k，可以把数据划分成k个桶，每个桶内的数据值都是相同的，省去了桶内排序的时间。只涉及扫描遍历操作，时间复杂度为O(n)。  </p>
+</li>
+<li><p>原理<br>计数排序用一个数据范围大小的统计数组C[k+1]（原数组A中元素取值范围为0-k），下标k等于原数组A中元素的值，遍历原数组A将各个元素值出现的次数存储在统计数组C对应下标中c[k]（即C[k]存储的是原数组A等于k的元素的个数）。然后对统计数组C顺序求和，各个下标处C[k]存储的是小于等于k的元素个数。<br>扫描原数组A（从后面开始遍历-保证稳定性），依次取出元素的值如a作为统计数组C的下标得到统计数组C对应的值C[a]，说明到目前为止，原数组A中小于等于a的值还有C[a]个，元素a是排好序的新数组R中的第C[a]个元素(放在新数组R下标为C[a]-1的位置)，将其a放入新数组R后，原数组A小于等于a的元素剩下C[a]-1个，则统计数组C[a]=C[a]-1，类推取原数组A下一个元素值。（从后往前做减法，确定该值可以放的最大下标）</p>
+</li>
+<li><p>适用场景<br>计数排序只能用在数据范围不大的场景中，如果数据范围k比要排序的数据n大很多，就不适合用计数排序。而且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。  </p>
+</li>
+</ul>
+<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><ul>
+<li><p>原理<br>以11位手机号排序为例，如果前面几位中，其中一个数据已经比较大了，那么后几位就不用看了。先按照最后一位排序，再按照倒数第二位排序，以此类推，最后按照第一位排序，经过11次排序后，手机号有序。要求按照每位来排序的排序算法是稳定的。  </p>
+</li>
+<li><p>时间复杂度<br>根据每位来排序，可以用桶排序或者计数排序，时间复杂度可以做到O(n)。如果要排序的数据有k位，那么需要进行k次桶排序或者计数排序，总的时间复杂度是O(k*n)。当k不大时，基数排序的时间复杂度就近似于O(n)。  </p>
+</li>
+<li><p>适用场景<br>基数排序要求要排序的数据可以分割出独立的“位”来比较，而且位之间有递进关系-数据可以划分成高低位。比较两个数只需要比较高位，高位相同再比较低位。<br>每一位的数据范围不能太大，要借助线性排序算法-桶排序/计数排序来完成每一位的排序工作，否则计数排序的时间复杂度无法做到O(n)。  </p>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>桶排序：分桶-快排/归并<br>计数排序：分桶-计数-统计<br>基数排序：高位桶排序-低位桶排序</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>排序优化</title>
     <url>/2020/04/28/%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<table>
@@ -636,109 +674,6 @@ public int partition(int[] a,int start,int end) {
 </blockquote>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>二分查找</title>
-    <url>/2020/04/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>二分查找算法-折半查找算法  </p>
-<h4 id="二分思想"><a href="#二分思想" class="headerlink" title="二分思想"></a>二分思想</h4><p>二分查找针对的是一个有序的数据集合，查找思想类似分治思想。每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0。  </p>
-<h4 id="查找速度O-logn"><a href="#查找速度O-logn" class="headerlink" title="查找速度O(logn)"></a>查找速度O(logn)</h4><p><strong>数组：</strong><br>假设数据大小是n，每次查找后数据都会缩小为原来的一半，也就是除以2。最坏情况下，直到查找区间被缩小为空才停止。被查找区间的大小变化n,n/2,n/4,n/8,…,n/2<sup>k</sup>…为一个等比数列，当n/2<sup>k</sup>=1时，k的值就是总共缩小的次数。而每一次缩小操作只涉及两个数据的大小比较，所以经过了k次区间缩小操作，时间复杂度就是O(k)。通过n/2<sup>k</sup>，可以求得k=log<sub>2</sub>n，所以时间复杂度就是O(logn)。   </p>
-<p>对数时间复杂度是一直极其高效的时间复杂度，有的时候甚至常量级时间复杂度的算法还要高效。  </p>
-<p><strong>链表：</strong><br>假设链表长度为n，二分查找每次都要找到中间结点：<br>第一次查找中间结点需要移动指针n/2次;<br>第二次，需要移动n/4次；<br>第三次，需要n/8次；<br>。。。<br>以此类推，一直到1次为止。<br>指针一共移动次数k=n/2+n/4+n/8+…+1，等比数列求和为n-1。<br>时间复杂度为O(n)。与顺序查找时间复杂度相同。但二分查找需要进行多余的运算，比顺序查找慢。</p>
-<h4 id="递归与非递归实现"><a href="#递归与非递归实现" class="headerlink" title="递归与非递归实现"></a>递归与非递归实现</h4><p>最简单的情况就是有序数组中不存在重复元素，用二分查找值等于给定值的数据。  </p>
-<pre><code>//非递归
-public int bsearch(int[] a,int value) {
-    int low = 0;
-    int high = a.length-1;
-    while(low &lt;= high) {
-        int mid = (low+high) / 2;
-        if(a[mid] == value) {
-            return mid;
-        } else if(a[mid] &lt; value) {
-            low = mid + 1;
-        } else {
-            high = mid -1;
-        }
-    }
-    return -1;
-}</code></pre><blockquote>
-<p>low、high、mid都是指数组下标，low和high表示当前查找的区间范围，初始low=0,high=n-1。mid表示[low,high]的中间位置，通过a[mid]与value的大小，来更新接下来要查找的区间范围，直到找到或者区间缩小为0就退出。  </p>
-</blockquote>
-<ul>
-<li>循环退出条件<br>low&lt;=high  </li>
-<li>mid取值<br>mid=(low+high)/2。<br>low + (high - low) /2;避免low和high比较大时，两者和溢出。<br>将除以2转化成位运算low+((high-low)&gt;&gt;1)。注意位运算优先级  </li>
-<li>low和high的更新<br>low=mid+1&amp;high=mid-1。<br>low=mid|high=mid可能发生死循环。  </li>
-</ul>
-<pre><code>//递归
-public int bsearch(int[] a,int value) {
-    return bserachInter(a,0,a.length-1,value);
-}
-
-private int bserachInter(int[] a,int low,int high,int value) {
-    if(low &gt; high) return -1;
-    int mid = low + ((high-low)&gt;&gt;1);
-    if(a[mid] == value) {
-        return mid;
-    } else if(a[mid] &lt; value) {
-        return bserachInter(a,mid+1,high,value);
-    } else {
-        return bserachInter(a,low,high+1,value);
-    }
-}</code></pre><h4 id="应用场景局限性"><a href="#应用场景局限性" class="headerlink" title="应用场景局限性"></a>应用场景局限性</h4><ul>
-<li><p>二分查找依赖的是顺序表结构-数组<br>二分查找算法需要按照下标随机访问数组。数组按照下标随机访问数据的时间复杂度是O(1)，链表随机访问的时间复杂度是O(n)。如果数据使用链表存储，二分查找的时间复杂度会变得很高。<br>二分查找只能用在数据是通过顺序表来存储的数据结构上，如果数据是通过其他数据结构存储的，则无法使用二分查找。 </p>
-</li>
-<li><p>二分查找针对的是有序数据<br>数据必须是有序的。如果数据无序，需要先排序，排序的时间复杂度最低是O(nlogn)。如果针对的是一组静态的数据，没有频繁的插入、删除，可以进行一次排序、多次二分查找。这样排序的成本可被均摊，二分查找的边际成本就会比较低。<br>数据集合有频繁的插入和删除操作，要想用二分查找，要么每次插入、删除操作之后保证数据仍然有序，要么在每次二分查找之前都先进行排序。针对动态数据，无论什么方法，维护有序的成本都很高。(二叉树)  </p>
-</li>
-<li><p>数据量太小不适合二分查找<br>数据量很小，顺序便利足够。但是数据之间的比较操作非常耗时，不管数据量大小，都推荐二分查找，尽可能的减少比较次数，大大提高性能。  </p>
-</li>
-<li><p>数据量太大不适合二分查找<br>二分查找底层依赖数组这种数据结构，数组为了支持随机访问特性，要求内存空间连续，对内存的要求比较苛刻。即使拥有更多的内存空间剩余，如果是零散的不连续，依然无法申请相应大小的数组。  </p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二分查找</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>线性排序</title>
-    <url>/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>时间复杂度为O(n)的线性排序算法：桶排序、计数排序、基数排序。<br>算法是非基于比较的排序算法（主排序是非比较的），不涉及元素之间的比较操作。对要排序的数据要求比较苛刻。  </p>
-<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><ul>
-<li><p>原理<br>核心思想是将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行排序。桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。</p>
-</li>
-<li><p>时间复杂度<br>如果要排序的数据有n个，把他们均匀的划分到m个桶内，每个桶有k=n/m个元素。每个桶内部使用快速排序，时间复杂度为O(k<em>logk)。m个桶排序的时间复杂度为O(m</em>k<em>logk)。因为k=n/m，所以整个桶排序的时间复杂度为O(n</em>log(n/m))。当桶的个数m接近数据个数n时，log(n/m)为一个非常小的常量，这时桶排序的时间复杂度接近O(n)。  </p>
-</li>
-<li><p>适用场景<br>排序的数据需要很容易就能划分为m个桶，桶与桶之间有着天然的大小顺序，每个桶内的数据都排序完成之后，桶与桶之间的数据不需要再进行排序。<br>数据再各个桶之间的分布是比较均匀的。如果数据经过桶的划分之后，有的桶数据非常多，有的非常少，那桶内数据排序的时间复杂度就不是常量级了。在极端情况下，如果数据都被划分到一个桶里，那就退化为O(nlogn)的排序算法了。  </p>
-<p>桶排序适合用在外部排序中。数据存储在外部磁盘中，数据量比较大，内存有限，无法将数据全部加载到内存中。  </p>
-</li>
-</ul>
-<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><ul>
-<li><p>时间复杂度<br>计数排序是桶排序的一种特殊情况。当要排序的n个数据，所处的范围并不大的时候，比如最大值为k，可以把数据划分成k个桶，每个桶内的数据值都是相同的，省去了桶内排序的时间。只涉及扫描遍历操作，时间复杂度为O(n)。  </p>
-</li>
-<li><p>原理<br>计数排序用一个数据范围大小的统计数组C[k+1]（原数组A中元素取值范围为0-k），下标k等于原数组A中元素的值，遍历原数组A将各个元素值出现的次数存储在统计数组C对应下标中c[k]（即C[k]存储的是原数组A等于k的元素的个数）。然后对统计数组C顺序求和，各个下标处C[k]存储的是小于等于k的元素个数。<br>扫描原数组A（从后面开始遍历-保证稳定性），依次取出元素的值如a作为统计数组C的下标得到统计数组C对应的值C[a]，说明到目前为止，原数组A中小于等于a的值还有C[a]个，元素a是排好序的新数组R中的第C[a]个元素(放在新数组R下标为C[a]-1的位置)，将其a放入新数组R后，原数组A小于等于a的元素剩下C[a]-1个，则统计数组C[a]=C[a]-1，类推取原数组A下一个元素值。（从后往前做减法，确定该值可以放的最大下标）</p>
-</li>
-<li><p>适用场景<br>计数排序只能用在数据范围不大的场景中，如果数据范围k比要排序的数据n大很多，就不适合用计数排序。而且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。  </p>
-</li>
-</ul>
-<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><ul>
-<li><p>原理<br>以11位手机号排序为例，如果前面几位中，其中一个数据已经比较大了，那么后几位就不用看了。先按照最后一位排序，再按照倒数第二位排序，以此类推，最后按照第一位排序，经过11次排序后，手机号有序。要求按照每位来排序的排序算法是稳定的。  </p>
-</li>
-<li><p>时间复杂度<br>根据每位来排序，可以用桶排序或者计数排序，时间复杂度可以做到O(n)。如果要排序的数据有k位，那么需要进行k次桶排序或者计数排序，总的时间复杂度是O(k*n)。当k不大时，基数排序的时间复杂度就近似于O(n)。  </p>
-</li>
-<li><p>适用场景<br>基数排序要求要排序的数据可以分割出独立的“位”来比较，而且位之间有递进关系-数据可以划分成高低位。比较两个数只需要比较高位，高位相同再比较低位。<br>每一位的数据范围不能太大，要借助线性排序算法-桶排序/计数排序来完成每一位的排序工作，否则计数排序的时间复杂度无法做到O(n)。  </p>
-</li>
-</ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>桶排序：分桶-快排/归并<br>计数排序：分桶-计数-统计<br>基数排序：高位桶排序-低位桶排序</p>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
@@ -846,6 +781,71 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
+    <title>二分查找</title>
+    <url>/2020/04/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>二分查找算法-折半查找算法  </p>
+<h4 id="二分思想"><a href="#二分思想" class="headerlink" title="二分思想"></a>二分思想</h4><p>二分查找针对的是一个有序的数据集合，查找思想类似分治思想。每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0。  </p>
+<h4 id="查找速度O-logn"><a href="#查找速度O-logn" class="headerlink" title="查找速度O(logn)"></a>查找速度O(logn)</h4><p><strong>数组：</strong><br>假设数据大小是n，每次查找后数据都会缩小为原来的一半，也就是除以2。最坏情况下，直到查找区间被缩小为空才停止。被查找区间的大小变化n,n/2,n/4,n/8,…,n/2<sup>k</sup>…为一个等比数列，当n/2<sup>k</sup>=1时，k的值就是总共缩小的次数。而每一次缩小操作只涉及两个数据的大小比较，所以经过了k次区间缩小操作，时间复杂度就是O(k)。通过n/2<sup>k</sup>，可以求得k=log<sub>2</sub>n，所以时间复杂度就是O(logn)。   </p>
+<p>对数时间复杂度是一直极其高效的时间复杂度，有的时候甚至常量级时间复杂度的算法还要高效。  </p>
+<p><strong>链表：</strong><br>假设链表长度为n，二分查找每次都要找到中间结点：<br>第一次查找中间结点需要移动指针n/2次;<br>第二次，需要移动n/4次；<br>第三次，需要n/8次；<br>。。。<br>以此类推，一直到1次为止。<br>指针一共移动次数k=n/2+n/4+n/8+…+1，等比数列求和为n-1。<br>时间复杂度为O(n)。与顺序查找时间复杂度相同。但二分查找需要进行多余的运算，比顺序查找慢。</p>
+<h4 id="递归与非递归实现"><a href="#递归与非递归实现" class="headerlink" title="递归与非递归实现"></a>递归与非递归实现</h4><p>最简单的情况就是有序数组中不存在重复元素，用二分查找值等于给定值的数据。  </p>
+<pre><code>//非递归
+public int bsearch(int[] a,int value) {
+    int low = 0;
+    int high = a.length-1;
+    while(low &lt;= high) {
+        int mid = (low+high) / 2;
+        if(a[mid] == value) {
+            return mid;
+        } else if(a[mid] &lt; value) {
+            low = mid + 1;
+        } else {
+            high = mid -1;
+        }
+    }
+    return -1;
+}</code></pre><blockquote>
+<p>low、high、mid都是指数组下标，low和high表示当前查找的区间范围，初始low=0,high=n-1。mid表示[low,high]的中间位置，通过a[mid]与value的大小，来更新接下来要查找的区间范围，直到找到或者区间缩小为0就退出。  </p>
+</blockquote>
+<ul>
+<li>循环退出条件<br>low&lt;=high  </li>
+<li>mid取值<br>mid=(low+high)/2。<br>low + (high - low) /2;避免low和high比较大时，两者和溢出。<br>将除以2转化成位运算low+((high-low)&gt;&gt;1)。注意位运算优先级  </li>
+<li>low和high的更新<br>low=mid+1&amp;high=mid-1。<br>low=mid|high=mid可能发生死循环。  </li>
+</ul>
+<pre><code>//递归
+public int bsearch(int[] a,int value) {
+    return bserachInter(a,0,a.length-1,value);
+}
+
+private int bserachInter(int[] a,int low,int high,int value) {
+    if(low &gt; high) return -1;
+    int mid = low + ((high-low)&gt;&gt;1);
+    if(a[mid] == value) {
+        return mid;
+    } else if(a[mid] &lt; value) {
+        return bserachInter(a,mid+1,high,value);
+    } else {
+        return bserachInter(a,low,high+1,value);
+    }
+}</code></pre><h4 id="应用场景局限性"><a href="#应用场景局限性" class="headerlink" title="应用场景局限性"></a>应用场景局限性</h4><ul>
+<li><p>二分查找依赖的是顺序表结构-数组<br>二分查找算法需要按照下标随机访问数组。数组按照下标随机访问数据的时间复杂度是O(1)，链表随机访问的时间复杂度是O(n)。如果数据使用链表存储，二分查找的时间复杂度会变得很高。<br>二分查找只能用在数据是通过顺序表来存储的数据结构上，如果数据是通过其他数据结构存储的，则无法使用二分查找。 </p>
+</li>
+<li><p>二分查找针对的是有序数据<br>数据必须是有序的。如果数据无序，需要先排序，排序的时间复杂度最低是O(nlogn)。如果针对的是一组静态的数据，没有频繁的插入、删除，可以进行一次排序、多次二分查找。这样排序的成本可被均摊，二分查找的边际成本就会比较低。<br>数据集合有频繁的插入和删除操作，要想用二分查找，要么每次插入、删除操作之后保证数据仍然有序，要么在每次二分查找之前都先进行排序。针对动态数据，无论什么方法，维护有序的成本都很高。(二叉树)  </p>
+</li>
+<li><p>数据量太小不适合二分查找<br>数据量很小，顺序便利足够。但是数据之间的比较操作非常耗时，不管数据量大小，都推荐二分查找，尽可能的减少比较次数，大大提高性能。  </p>
+</li>
+<li><p>数据量太大不适合二分查找<br>二分查找底层依赖数组这种数据结构，数组为了支持随机访问特性，要求内存空间连续，对内存的要求比较苛刻。即使拥有更多的内存空间剩余，如果是零散的不连续，依然无法申请相应大小的数组。  </p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二分查找</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>散列表</title>
     <url>/2020/05/01/%E6%95%A3%E5%88%97%E8%A1%A8/</url>
     <content><![CDATA[<h4 id="散列思想"><a href="#散列思想" class="headerlink" title="散列思想"></a>散列思想</h4><p>散列表用的数组支持按照下标随机访问数据的特性，是数组的一种扩展，由数组演化而来。没有数组，就没有散列表。   </p>
@@ -888,95 +888,6 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </categories>
       <tags>
         <tag>散列表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>二叉树</title>
-    <url>/2020/05/06/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
-    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
-<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
-<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
-<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
-<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
-<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
-</ol>
-<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
-<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
-</li>
-<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
-</li>
-<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
-<p> 递推公式：  </p>
-<pre><code>前序遍历  
-preOrder(r) = print r -&gt; preOrder(r-&gt;left) -&gt; preOrder(r-&gt;right)  
-中序遍历  
-inOrder(r) = inOrder(r-&gt;left) -&gt; print r -&gt; inOrder(r-&gt;right)  
-后序遍历  
-postOrder(r) = postOrder(r-&gt;left) -&gt; postOrder(r-&gt;right) -&gt; print r  </code></pre><p> 伪代码：  </p>
-<pre><code>//前序遍历
-void preOrder(Node* root) {
-    if(root == null) return;
-    print root;
-    preOrder(root -&gt; left);
-    preOrder(root -&gt; right);
-}
-//中序遍历
-void inOrder(Node* root) {
-    if(root == null) return;
-    inOrder(root -&gt; left);
-    print root;
-    inOrder(root -&gt; right);
-}
-//后序遍历
-void postOrder(Node* root) {
-    if(root == null) return;
-    postOrder(root -&gt; left);
-    postOrder(root -&gt; right);
-    print root;
-}</code></pre></li>
-<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
-<pre><code>public class TreeNode&lt;T&gt; {
-     T val;
-     TreeNode left;
-     TreeNode right;
-     TreeNode(T x) {
-         val = x;
-     }
- }
-
- private List&lt;TreeNode&gt; floorlevelOrder(TreeNode root) {
-     List&lt;TreeNode&gt; result = new ArrayList&lt;&gt;();
-     //利用队列先进先出的特点实现按层遍历
-     Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
-     //根及得按入队
-     queue.add(root);
-     //从队列中弹出各结点数据，直到队列为空，遍历完毕
-     while(!queue.isEmpty()) {
-         //弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环
-         TreeNode node = queue.poll();
-         result.add(node);
-         if(node.left != null) {
-             queue.add(node.left);
-         }
-         if(node.right != null) {
-             queue.add(node.right);
-         }
-     }
-     return result;
- }</code></pre></li>
-</ol>
-<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二叉树</tag>
       </tags>
   </entry>
   <entry>
@@ -1070,144 +981,65 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
+    <title>二叉树</title>
+    <url>/2020/05/06/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
+<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
+<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
+<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
+<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
+<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
+</ol>
+<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
+<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
+</li>
+<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
+</li>
+<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
+<p> 递推公式：  </p>
+ <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">前序遍历  </span><br><span class="line">preOrder<span class="function"><span class="params">(r)</span> = <span class="title">print</span> <span class="title">r</span> -&gt;</span> preOrder<span class="function"><span class="params">(r-&gt;left)</span> -&gt;</span> preOrder(r-&gt;right)  </span><br><span class="line">中序遍历  </span><br><span class="line">inOrder<span class="function"><span class="params">(r)</span> = <span class="title">inOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> <span class="built_in">print</span> r<span class="function"> -&gt;</span> inOrder(r-&gt;right)  </span><br><span class="line">后序遍历  </span><br><span class="line">postOrder<span class="function"><span class="params">(r)</span> = <span class="title">postOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> postOrder<span class="function"><span class="params">(r-&gt;right)</span> -&gt;</span> <span class="built_in">print</span> r</span><br></pre></td></tr></table></figure>
+
+<p> 伪代码：  </p>
+ <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前序遍历</span></span><br><span class="line">void pre<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    print root;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//中序遍历</span></span><br><span class="line">void <span class="keyword">in</span><span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//后序遍历</span></span><br><span class="line">void post<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
+ <figure class="highlight java"><figcaption><span>按层遍历</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(T x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;TreeNode&gt; <span class="title">floorlevelOrder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;TreeNode&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//利用队列先进先出的特点实现按层遍历</span></span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//根节点入队</span></span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="comment">//从队列中弹出各结点数据，直到队列为空，遍历完毕</span></span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环</span></span><br><span class="line">        TreeNode node = queue.poll();</span><br><span class="line">        result.add(node);</span><br><span class="line">        <span class="keyword">if</span>(node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>二叉查找树</title>
     <url>/2020/05/07/%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
     <content><![CDATA[<p>二叉查找树是二叉树中最常用的一种类型，也叫二叉查找树。<br>二叉查找树要求，在树中的任意一个节点，其左子树中的每个节点的值，都要小于这个节点的值，而右子树节点的值都大于这个节点的值。  </p>
 <h4 id="查找操作"><a href="#查找操作" class="headerlink" title="查找操作"></a>查找操作</h4><p>先取根节点，如果它等于要查找的数据，直接返回。<br>如果要查找的数据比根节点的值小，那就在左子树中递归查找；<br>如果要查找的数据比根节点的值大，那就在右子树中递归查找。  </p>
-<pre><code>public class BinarySearchTree {
-    private Node tree;
+<figure class="highlight java"><figcaption><span>查找</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearchTree</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Node tree;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">select</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">        Node p = tree;</span><br><span class="line">        <span class="keyword">while</span>(p != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(data &lt; p.data) </span><br><span class="line">                p = p.left;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (data &gt; p.data)</span><br><span class="line">                p = p.right;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> data;</span><br><span class="line">        <span class="keyword">private</span> Node left;</span><br><span class="line">        <span class="keyword">private</span> Node right;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.data = data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    public Node select(int data) {
-        Node p = tree;
-        while(p != null) {
-            if(data &lt; p.data) 
-                p = p.left;
-            else if (data &gt; p.data)
-                p = p.right;
-            else
-                return p;
-        }
-        return null;
-    }
-
-    public class Node {
-        private int data;
-        private Node left;
-        private Node right;
-        public Node(int data) {
-            this.data = data;
-        }
-    }
-}</code></pre><h4 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h4><p>插入类似查找，新插入的数据一般都是在叶子节点上，只需要从根节点开始，依次比较要插入的数据和节点的大小关系。  </p>
+<h4 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h4><p>插入类似查找，新插入的数据一般都是在叶子节点上，只需要从根节点开始，依次比较要插入的数据和节点的大小关系。  </p>
 <p>如果要插入的数据比节点的数据大，并且节点的右子树为空，就将新数据直接插到右子节点的位置；<br>如果不为空，就在递归遍历右子树，查找插入位置。<br>同理，如果要插入的数据比节点数据小，并且节点的左子树为空，就将新数据插入到左子节点的位置；<br>如果不为空，就再递归遍历左子树，查找插入位置。  </p>
-<pre><code>public class BinarySearchTree {
-    private Node tree;
+<figure class="highlight java"><figcaption><span>插入</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearchTree</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Node tree;</span><br><span class="line">    <span class="comment">//不考虑插入节点与已有节点相同的情况</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(tree == <span class="keyword">null</span>) &#123;</span><br><span class="line">            tree = <span class="keyword">new</span> Node(data);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Node p = tree;</span><br><span class="line">        <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(data &gt; p.data) &#123;</span><br><span class="line">                <span class="keyword">if</span>(p.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.right = <span class="keyword">new</span> Node(data);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                p = p.right;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;<span class="comment">//data &lt; p.data</span></span><br><span class="line">                <span class="keyword">if</span>(p.left == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.left = <span class="keyword">new</span> Node(data);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                p = p.left;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> data;</span><br><span class="line">        <span class="keyword">private</span> Node left;</span><br><span class="line">        <span class="keyword">private</span> Node right;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.data = data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    //不考虑插入节点与已有节点相同的情况
-    public void insert(int data) {
-        if(tree == null) {
-            tree = new Node(data);
-            return;
-        }
-
-        Node p = tree;
-        while (p != null) {
-            if(data &gt; p.data) {
-                if(p.right == null) {
-                    p.right = new Node(data);
-                    return;
-                }
-                p = p.right;
-            } else {//data &lt; p.data
-                if(p.left == null) {
-                    p.left = new Node(data);
-                    return;
-                }
-                p = p.left;
-            }
-        }
-    }
-
-    public class Node {
-        private int data;
-        private Node left;
-        private Node right;
-        public Node(int data) {
-            this.data = data;
-        }
-    }
-}</code></pre><h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>针对要删除节点的子节点个数的不同，需要分为三种情况处理：  </p>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>针对要删除节点的子节点个数的不同，需要分为三种情况处理：  </p>
 <ol>
-<li><p>要删除的节点没有子节点，只需要直接将父节点中，指向要删除节点的指针置为null。  </p>
-</li>
-<li><p>要删除的节点只有一个子节点(只有左子节点或者右子节点)，只需要更新父节点中，指向要删除节点的指针，让它指向要删除结点的子节点。  </p>
-</li>
-<li><p>要删除的节点有两个子节点。需要找到这个节点的右子树中的最小节点，把它替换到要删除的节点上，然后再删除掉这个最小节点，因为最小节点肯定没有左子节点(如果有左子节点，那就不是最小节点了)，所以可以应用这两条规则来删除这个最小节点。  </p>
-<pre><code>public class BinarySearchTree {
- private Node tree;
-
- public void delete(int data) {
-     //p指向要删除的节点，初始化指向根节点
-     Node p = tree;
-     //pp记录的是p的父节点
-     Node pp = null;
-     while(p != null &amp;&amp; p.data != data) {
-         //更新当前节点为父节点，进而遍历子节点、子子节点
-         pp = p;
-         if(data &gt; p.data)
-             p = p.right;
-         else //data &lt; p.data
-             p = p.left;
-     }
-     //没有找到
-     if(p == null)
-         return;
-
-     //要删除的节点有两个子节点
-     if(p.left != null &amp;&amp; p.right != null) {
-         //查找右子树中最小节点
-         Node minP = p.right;
-         //minPP表示minP的父节点
-         Node minPP = p;
-         while(minP.left != null) {
-             //更新当前最小节点为当前节点的左子节点
-             minPP = minP;
-             minP = minP.left;
-         }
-         //将minP的数据替换到p中，后续通过minPP(pp)删除原minP
-         p.data = minP.data;
-         p = minP;
-         pp = minPP;
-     }
-
-     //删除的节点是叶子节点或者仅有一个子节点
-     Node child;//p的子节点
-     if(p.left != null)
-         child = p.left;
-     else if(p.right != null)
-         child = p.right;
-     else
-         child = null;
-
-     //通过更新父节点的子节点来删除指定的p
-     if(pp == null) //删除的节点是根节点
-         tree = child;
-     else if(pp.left == p)
-         pp.left = child;
-     else //pp.right == p
-         pp.right = child;
- }
-
- public class Node {
-     private int data;
-     private Node left;
-     private Node right;
-     public Node(int data) {
-         this.data = data;
-     }
- }
-}</code></pre></li>
+<li>要删除的节点没有子节点，只需要直接将父节点中，指向要删除节点的指针置为null。  </li>
+<li>要删除的节点只有一个子节点(只有左子节点或者右子节点)，只需要更新父节点中，指向要删除节点的指针，让它指向要删除结点的子节点。  </li>
+<li>要删除的节点有两个子节点。需要找到这个节点的右子树中的最小节点，把它替换到要删除的节点上，然后再删除掉这个最小节点，因为最小节点肯定没有左子节点(如果有左子节点，那就不是最小节点了)，所以可以应用这两条规则来删除这个最小节点。  </li>
 </ol>
+<figure class="highlight java"><figcaption><span>删除</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearchTree</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Node tree;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//p指向要删除的节点，初始化指向根节点</span></span><br><span class="line">        Node p = tree;</span><br><span class="line">        <span class="comment">//pp记录的是p的父节点</span></span><br><span class="line">        Node pp = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">while</span>(p != <span class="keyword">null</span> &amp;&amp; p.data != data) &#123;</span><br><span class="line">            <span class="comment">//更新当前节点为父节点，进而遍历子节点、子子节点</span></span><br><span class="line">            pp = p;</span><br><span class="line">            <span class="keyword">if</span>(data &gt; p.data)</span><br><span class="line">                p = p.right;</span><br><span class="line">            <span class="keyword">else</span> <span class="comment">//data &lt; p.data</span></span><br><span class="line">                p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//没有找到</span></span><br><span class="line">        <span class="keyword">if</span>(p == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//要删除的节点有两个子节点</span></span><br><span class="line">        <span class="keyword">if</span>(p.left != <span class="keyword">null</span> &amp;&amp; p.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//查找右子树中最小节点</span></span><br><span class="line">            Node minP = p.right;</span><br><span class="line">            <span class="comment">//minPP表示minP的父节点</span></span><br><span class="line">            Node minPP = p;</span><br><span class="line">            <span class="keyword">while</span>(minP.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">//更新当前最小节点为当前节点的左子节点</span></span><br><span class="line">                minPP = minP;</span><br><span class="line">                minP = minP.left;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//将minP的数据替换到p中，后续通过minPP(pp)删除原minP</span></span><br><span class="line">            p.data = minP.data;</span><br><span class="line">            p = minP;</span><br><span class="line">            pp = minPP;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//删除的节点是叶子节点或者仅有一个子节点</span></span><br><span class="line">        Node child;<span class="comment">//p的子节点</span></span><br><span class="line">        <span class="keyword">if</span>(p.left != <span class="keyword">null</span>)</span><br><span class="line">            child = p.left;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(p.right != <span class="keyword">null</span>)</span><br><span class="line">            child = p.right;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            child = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//通过更新父节点的子节点来删除指定的p</span></span><br><span class="line">        <span class="keyword">if</span>(pp == <span class="keyword">null</span>) <span class="comment">//删除的节点是根节点</span></span><br><span class="line">            tree = child;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(pp.left == p)</span><br><span class="line">            pp.left = child;</span><br><span class="line">        <span class="keyword">else</span> <span class="comment">//pp.right == p</span></span><br><span class="line">            pp.right = child;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> data;</span><br><span class="line">        <span class="keyword">private</span> Node left;</span><br><span class="line">        <span class="keyword">private</span> Node right;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.data = data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><p>快速的查找最大节点和最小节点、前驱节点和后继节点。  </p>
 <h4 id="重要特性"><a href="#重要特性" class="headerlink" title="重要特性"></a>重要特性</h4><p>中序遍历二叉查找树，可以输出有序的数据序列，时间复杂度是O(n)。  </p>
 <h4 id="重复数据"><a href="#重复数据" class="headerlink" title="重复数据"></a>重复数据</h4><p>实际开发中，二叉查找树中存储的是包含很多字段的对象，利用对象的某个字段作为键值来构建二叉查找树，对象中的其他字段叫做卫星数据。  </p>
