@@ -1270,7 +1270,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ad8c8f;
+  background: #06aa73;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2749,12 +2749,6 @@ ul.breadcrumb li + li:last-child {
   .pagination {
     margin: 8px 0 0;
   }
-}
-body {
-  background-image: url("https://source.unsplash.com/random/1600x900?wallpapers");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
 }
 .header-inner {
   opacity: 0.9;
