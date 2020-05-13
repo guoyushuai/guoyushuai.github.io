@@ -18,20 +18,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="冒泡排序、插入排序、选择排序">
+  <meta name="description" content="MapReduce的本质是分治算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="冒泡排序、插入排序、选择排序">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/04/23/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%E3%80%81%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E3%80%81%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/index.html">
+<meta property="og:title" content="分治算法">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/05/13/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="冒泡排序、插入排序、选择排序">
+<meta property="og:description" content="MapReduce的本质是分治算法">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-22T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-26T09:52:54.288Z">
+<meta property="article:published_time" content="2020-05-13T03:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-13T08:07:50.469Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="排序">
+<meta property="article:tag" content="分治算法">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/04/23/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%E3%80%81%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E3%80%81%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/05/13/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -44,7 +44,7 @@
   };
 </script>
 
-  <title>冒泡排序、插入排序、选择排序 | Notes</title>
+  <title>分治算法 | Notes</title>
   
 
 
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/04/23/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%E3%80%81%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E3%80%81%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/13/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          冒泡排序、插入排序、选择排序
+          分治算法
         </h1>
 
         <div class="post-meta">
@@ -223,16 +223,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-04-23 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-23T00:00:00+08:00">2020-04-23</time>
+              <time title="创建时间：2020-05-13 11:00:00 / 修改时间：16:07:50" itemprop="dateCreated datePublished" datetime="2020-05-13T11:00:00+08:00">2020-05-13</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-26 17:52:54" itemprop="dateModified" datetime="2020-04-26T17:52:54+08:00">2020-04-26</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -256,16 +250,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.1k</span>
+              <span>2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>3 分钟</span>
             </span>
-            <div class="post-description">冒泡排序、插入排序、选择排序</div>
+            <div class="post-description">MapReduce的本质是分治算法</div>
 
         </div>
       </header>
@@ -276,133 +270,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="排序算法分析方法"><a href="#排序算法分析方法" class="headerlink" title="排序算法分析方法"></a>排序算法分析方法</h4><ol>
-<li>分析排序算法的执行效率  <ul>
-<li>最好情况、最坏情况、平均情况时间复杂度以及原始数据的有序度(有序度不同对排序的执行时间有影响)</li>
-<li>时间复杂度反应的是大规模数据的增长趋势，实际中规模小需要考虑系数、常数、低阶</li>
-<li>元素比较次数和交换/移动次数（基于比较的排序算法）  </li>
-</ul>
-</li>
-<li>排序算法的内存消耗（空间复杂度）  <ul>
-<li><strong>原地排序</strong>算法：空间复杂度为O(1)的排序算法。</li>
-</ul>
-</li>
-<li>排序算法的稳定性    <ul>
-<li>稳定性：如果待排序的序列中存在值相等的元素，经过排序之后，相等元素之间原有的先后顺序不变。稳定的排序算法||不稳定的排序算法  </li>
-</ul>
-</li>
-</ol>
-<p>插入排序和冒泡排序的时间复杂度相同，都是O(n<sup>2</sup>)</p>
-<a id="more"></a>
-
-<h4 id="冒泡排序-1"><a href="#冒泡排序-1" class="headerlink" title="冒泡排序 1"></a>冒泡排序 <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>冒泡排序只会操作相邻的两个数据。每次冒泡操作都会对相邻的两个元素进行比较，看是否满足大小关系要求，如果不满足就让它俩互换。一次冒泡会让至少一个元素移动到它应该在的位置，重复n次，就完成了n个数据的排序工作。<br>优化：当某次冒泡操作已经没有数据交换时，说明已经达到完全有序，不用再继续执行后续的冒泡操作。  </p>
-<ol>
-<li><p>冒泡过程只涉及相邻数据的交换操作，只需要常量级的临时空间，空间复杂度为O(1)，属于<strong>原地排序算法</strong>。</p>
-</li>
-<li><p>冒泡排序中只有交换才改变两个元素的前后顺序。为了保证冒泡排序算法的稳定性，当有相邻的两个元素大小相等的时候，不做交换，相同大小的数据在排序前后不会改变顺序，属于<strong>稳定的排序算法</strong>。</p>
-</li>
-<li><p>时间复杂度  </p>
+        <p>MapReduce、GFS(Google File System)、Bigtable是谷歌大数据处理的三驾马车。<br>MapReduce在倒排索引、PageRank计算、网页分析等搜索引擎相关的技术中有大量的应用。  </p>
+<h3 id="分治算法理解"><a href="#分治算法理解" class="headerlink" title="分治算法理解"></a>分治算法理解</h3><p>分治算法的核心思想：分而治之。<br>将原问题划分成n个规模较小，并且结构与原问题相似的子问题，递归地解决这些子问题，然后在合并其结果，得到原问题的解。  </p>
+<p>分治算法是一种处理问题的思想，递归是一种编程技巧。分治算法一般都比较适合用递归来实现。  </p>
 <ul>
-<li><strong>最好情况时间复杂度是O(n)</strong>，数据有序，进行一次冒泡操作;</li>
-<li><strong>最坏情况时间复杂度O(n<sup>2</sup>)</strong>，数据倒序，进行n次冒泡操作。</li>
-<li><strong>平均时间复杂度</strong>：对于包含n个数据的数组，这n个数据有n!种排序方式。不同的排列方式，冒泡排序执行的时间不同。用概率论方法定量分析平均时间复杂度较复杂。  </li>
+<li>分解：将原问题分解成一系列子问题；  </li>
+<li>解决：递归地求解各个子问题，若子问题足够小，则直接求解；  </li>
+<li>合并：将子问题的结果合并成原问题。  </li>
 </ul>
-<p><strong>有序度</strong>：数组中具有有序关系的元素对的个数。有序元素对：a[i] &lt;= a[j];i&lt;j。<br>倒序排列的数组，有序度为0;<br>完全有序的数组，有序度n<em>(n-1)/2. 满有序度。<br>*</em>逆序度**。逆序元素对：a[i] &gt; a[j];i&lt;j。<br>逆序度 = 满有序度 - 有序度。排序的过程就是一种增加有序度，减少逆序度的过程，最后达到满有序度。  </p>
-<p>冒泡排序包含两个操作原子，<strong>比较&amp;交换</strong>。每交换一次，有序度加1，交换次数是确定的，为逆序度：n<em>(n-1)/2 - 初始有序度。<br>对于包含n个数据的数组进行冒泡排序，最坏情况下，初始状态的有序度是0，要进行n</em>(n-1)/2次交换；最好情况下，初始状态的有序度是n<em>(n-1)/2，不需要进行交换。取中间值n</em>(n-1)/4来表示初始有序度。平均情况下要进行n<em>(n-1)/4次交换操作，比较操作比交换操作多，复杂度的上限是O(n<sup>2</sup>)，所以*</em>平均情况下的时间复杂度是O(n<sup>2</sup>)**。</p>
-</li>
-</ol>
-<h4 id="插入排序-2"><a href="#插入排序-2" class="headerlink" title="插入排序 2"></a>插入排序 <a href="#refer-anchor-2"><sup>2</sup></a></h4><p>动态的往有序集合中添加数据，遍历数组找到数据应该插入的位置进行插入，保持集合中的数据一直有序。  </p>
-<p>将数组中的数据分为两个区间：<strong>已排序区间&amp;未排序区间</strong>。初始已排序区间只有一个元素-数组的第一个元素。插入排序的核心思想是取未排序区间中的元素，在已排序区间中找到合适的插入位置将其插入，并保证已排序区间数据一直有序。重复这个过程，直到未排序区间中元素为空，算法结束。  </p>
-<p>插入排序包含两种操作：<strong>元素的比较</strong>，<strong>元素的移动</strong>。将一个数据a插入到已排序区间时，需要拿a与已排序区间的元素一次比较大小，找到合适的插入位置。找到插入点之后，需要将插入点之后的元素往后移动一位，腾出位置给元素a插入。 不同的查找插入点方法（从头到尾、从尾到头），元素的比较次数是有区别的，但对于一个给定的初始序列，移动操作的次数是固定等于逆序度。  </p>
-<ol>
-<li>插入排序算法的运行并不需要额外的存储空间，空间复杂度是O(1)，属于<strong>原地排序算法</strong>。</li>
-<li>在插入排序中，对值相同的元素，可以选择将后面出现的元素，插入到前面出现元素的后面，这样可以保证原有的前后顺序不变，插入排序是<strong>稳定的排序算法</strong>。</li>
-<li>时间复杂度<ul>
-<li><strong>最好时间复杂度O(n)</strong>，数据有序，不需要搬移任何数据。如果从尾到头在有序数组里面查找插入位置，每次只需要比较一个数据（当前元素与其前一个元素比较，当前大不小于不用动）就能确定插入的位置。（内层循环只执行一次就break）</li>
-<li><strong>最坏时间复杂度O(n<sup>2</sup>)</strong>，数据倒序，每次插入都相当于在数据的第一个位置插入新的数据，需要移动大量的数据。</li>
-<li><strong>平均时间复杂度</strong>：在数组中插入一个数据的平均时间复杂度是O(n)（详见数组篇）。对于插入排序，每次插入操作都相当于在数组中插入一个数据，循环执行n次插入操作，<strong>平均时间复杂度为O(n<sup>2</sup>)</strong>。  </li>
+<p>前提条件：  </p>
+<ul>
+<li>原问题与分解成的小问题具有相同的模式；  </li>
+<li>原问题分解成的子问题可以独立求解，子问题之间没有相关性；（分治算法与动态规划的区别）  </li>
+<li>具有分解终止条件，当问题足够小时，可以直接求解；  </li>
+<li>可以将子问题合并成原问题，合并操作的复杂度不高。  </li>
 </ul>
+<h3 id="分治算法编程应用"><a href="#分治算法编程应用" class="headerlink" title="分治算法编程应用"></a>分治算法编程应用</h3><p>排序中应用<br>有序度表示一组数据的有序程度，逆序度表示一组数据的无序程度。<br>n个数据从小到大排列，完全有序的数据（等差数列求和）的有序度就是n(n-1)/2，逆序度等于0；倒序排列的数据的有序度是0，逆序度是n(n-1)/2。<br>其余通过计算有序对/逆序对的个数，表示数据的有序度或逆序度。  </p>
+<ul>
+<li><p>拿每个数字跟它后面的数据比较，看有几个比它小的，把比它小的数字个数记作k，依次类推，对每个数字对应的k值求和，最后得到的总和就是逆序对个数。时间复杂度是O(n<sup>2</sup>)。  </p>
 </li>
-</ol>
-<h4 id="选择排序-3"><a href="#选择排序-3" class="headerlink" title="选择排序  3"></a>选择排序  <a href="#refer-anchor-3"><sup>3</sup></a></h4><p>选择排序类似插入排序，分为已排序区间&amp;未排序区间。选择排序每次会从未排序区间中找到最小的元素，将其放到已排序区间的末尾。  </p>
-<ol>
-<li>空间复杂度为O(1)，<strong>原地排序算法</strong>。</li>
-<li>时间复杂度：<strong>最好、最坏、平均时间复杂度都为O(n<sup>2</sup>)</strong>。</li>
-<li>选择排序是一种<strong>不稳定的排序算法</strong>。选择排序每次都要找到剩余未排序元素中的最小值，并和前面的元素交换位置，这样破坏了稳定性。  </li>
-</ol>
-<h4 id="插入与冒泡对比"><a href="#插入与冒泡对比" class="headerlink" title="插入与冒泡对比"></a>插入与冒泡对比</h4><p>冒泡跟插入不管怎么优化，元素移动的次数是一个固定值，等于原始数据的逆序度。<br>冒泡的数据交换要比插入的数据移动复杂，3个赋值操作&gt;1个赋值操作。</p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-- [1] 冒泡排序：  
+<li><p>套用分治的思想求数组的逆序对个数，将数组分成前后两半A1和A2，分别计算A1和A2的逆序对个数K1和K2，然后再计算A1与A2之间的逆序对个数K3。数组A的逆序对个数为K1+K2+K3。  </p>
+<p>借助归并排序算法，将两个有序的小数组合并成一个有序的数组的过程中，每次合并操作都计算逆序对个数，把计算出来的逆序对个数求和，就是这个数组的逆序对个数。  </p>
+  <div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        图
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//全局变量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    num = <span class="number">0</span>;</span><br><span class="line">    mergeSortCounting(a,<span class="number">0</span>,n-<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">mergeSortCounting</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (start &gt;= end) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//中点</span></span><br><span class="line">    <span class="keyword">int</span> mid = (start+r=end)/<span class="number">2</span>;</span><br><span class="line">    mergeSortCounting(a,start,mid);</span><br><span class="line">    mergeSortCounting(a,mid+<span class="number">1</span>,end);</span><br><span class="line">    <span class="comment">//合并函数</span></span><br><span class="line">    mergeSort(a,start,mid,end);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> left, <span class="keyword">int</span> mid, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//临时数组，大小为当前分区的大小</span></span><br><span class="line">    <span class="keyword">int</span>[] tmp = <span class="keyword">new</span> <span class="keyword">int</span>[right-left+<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = left;<span class="comment">//左边起始下标</span></span><br><span class="line">    <span class="keyword">int</span> j = mid+<span class="number">1</span>;<span class="comment">//右边起始下标</span></span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid &amp;&amp; j &lt;= right) &#123;</span><br><span class="line">        <span class="comment">//取左右区间中元素最小值放入当前位置</span></span><br><span class="line">        <span class="keyword">if</span>(a[i] &lt;= a[j]) &#123;</span><br><span class="line">            tmp[k++] = a[i++]</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//统计左区间left-mid之间，比右区间当前元素a[j]大的元素个数</span></span><br><span class="line">            num += (mid-i+<span class="number">1</span>);</span><br><span class="line">            tmp[k++] = a[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理左区间剩下的</span></span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid) &#123;</span><br><span class="line">        tmp[k++] = a[i++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理右区间剩下的</span></span><br><span class="line">    <span class="keyword">while</span>(j &lt;= right) &#123;</span><br><span class="line">        tmp[k++] = a[j++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//从tmp拷贝回原数组a对应区间</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= right-left+<span class="number">1</span>; i++) &#123;</span><br><span class="line">        a[left+i] = tmp[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
 
-<pre><code>public void bubbleSort(int[] a) {
-    int n = a.length;
-    if(n &lt;= 1) return;
-    //未排序区间+已排序区间
-    for (int i = 0; i &lt; n; i++) {
-        boolean flag = false;
-        //从第一个元素开始进行比较，选出前面剩余未排序区间（n-i-1）元素的最大值
-        for(int j = 0; j &lt; n - i -1; j++) {
-            //当前元素大于下一个元素值，交换两个元素位置
-            if(a[j] &gt; a[j+1]) {
-                int temp = a[j];
-                a[j] = a[j+1];
-                a[j+1] = temp;
-                //有数据交换交换需要继续进行
-                flag = true;
-            }
-        }
-        if(!flag) break;
-    }
-    for (int i : a)
-        System.out.print(i);
-}  </code></pre><div id="refer-anchor-2"></div>  
-- [2]插入排序：  
-
-<pre><code>public void insertionSort(int[] a) {
-    int n = a.length;
-    if(n &lt;= 1) return;
-    //已排序区间+未排序区间
-    for (int i = 1; i &lt; n; i++) {
-        //当前要排序（插入）的元素值
-        int temp = a[i];
-        //从已排序区间(i-1)元素最大下标，倒着一一进行比较
-        int j = i - 1;
-        for (; j &gt;= 0; j--) {
-            if (a[j] &gt; temp) {
-                //已排序区间目前元素值大于当前元素值，则交换位置，继续与前一个元素值比较
-                a[j+1] = a[j];
-            } else {
-                break;
-            }
-        }
-        //for循环中与j--之后的元素比较后break，最终移入的下标应为j++
-        a[j+1] = temp;
-    }
-    for (int i : a)
-        System.out.println(i);
-}  </code></pre><div id="refer-anchor-3"></div>  
-- [3]选择排序：
-
-<pre><code>public void selectSort(int[] a) {
-    int n = a.length;
-    if(n &lt;= 1) return;
-    //已排序区间+未排序区间
-    for(int i=0;i&lt;n;i++){
-         int min=i;
-         //查找未排序区间最小元素的下标值
-         for(int j=i+1;j&lt;n;j++){
-              if(a[j] &lt; a[min]) min=j;
-         }
-         //将最小元素放到当前已排序区间的最后一位
-         if(min != i){
-              int temp=a[i];
-              a[i]=a[min];
-              a[min]=temp;
-         }
-    }
-    for (int i : a)
-        System.out.println(i);
-}</code></pre><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+</li>
+</ul>
+<h3 id="分治算法处理海量数据"><a href="#分治算法处理海量数据" class="headerlink" title="分治算法处理海量数据"></a>分治算法处理海量数据</h3><p>利用分治的思想解决数据量大到内存装不下的问题。  </p>
+<p>将海量数据集合根据某种方法，划分为几个小的数据集合，每个小的数据集合单独加载到内存来解决，然后再将小数据集合合并成大数据集合。  </p>
+<p>利用这种分治的处理思路，能克服内存的限制，还能利用多线程或者多机处理，加快处理的速度。  </p>
+<p>MapReduce框架只是一个任务调度器，底层依赖GFS来存储数据，依赖Borg管理及其。从GFS中拿数据，交给Borg中的机器执行，时刻监控机器执行状态并调度。<br>可以处理数据与数据之间存在关系的任务-统计文件中单词出现频率<br>可以处理数据与数据之间没有关系的任务-网页分析、分词  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
     
@@ -412,7 +316,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"><i class="fa fa-tag"></i> 排序</a>
+              <a href="/tags/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 分治算法</a>
           </div>
 
         
@@ -421,13 +325,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/21/%E9%80%92%E5%BD%92/" rel="prev" title="递归">
-      <i class="fa fa-chevron-left"></i> 递归
+    <a href="/2020/05/12/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" rel="prev" title="贪心算法">
+      <i class="fa fa-chevron-left"></i> 贪心算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="next" title="归并排序、快速排序">
-      归并排序、快速排序 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -486,7 +387,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#排序算法分析方法"><span class="nav-number">1.</span> <span class="nav-text">排序算法分析方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#冒泡排序-1"><span class="nav-number">2.</span> <span class="nav-text">冒泡排序 1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插入排序-2"><span class="nav-number">3.</span> <span class="nav-text">插入排序 2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择排序-3"><span class="nav-number">4.</span> <span class="nav-text">选择排序  3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插入与冒泡对比"><span class="nav-number">5.</span> <span class="nav-text">插入与冒泡对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考-amp-扩展"><span class="nav-number">6.</span> <span class="nav-text">参考&amp;扩展</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#分治算法理解"><span class="nav-number">1.</span> <span class="nav-text">分治算法理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分治算法编程应用"><span class="nav-number">2.</span> <span class="nav-text">分治算法编程应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分治算法处理海量数据"><span class="nav-number">3.</span> <span class="nav-text">分治算法处理海量数据</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
