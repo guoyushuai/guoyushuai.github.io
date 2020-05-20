@@ -169,6 +169,46 @@
       </tags>
   </entry>
   <entry>
+    <title>递归</title>
+    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
+    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
+<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
+<li>一个问题的解可以分解为几个子问题的解</li>
+<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
+<li>存在递归终止条件</li>
+</ul>
+<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
+<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
+<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
+<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
+<li>时间空间成本</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
+<blockquote>
+<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
+</blockquote>
+<p>递归代码的调试方法</p>
+<blockquote>
+<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
+</blockquote>
+<p>检测递归中环的存在</p>
+<blockquote>
+<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
+</blockquote>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>递归</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数组</title>
     <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
     <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
@@ -210,129 +250,103 @@
       </tags>
   </entry>
   <entry>
-    <title>归并排序、快速排序</title>
-    <url>/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>归并排序和快速排序的时间复杂度为O(nlogn)。利用分治思想将大问题分解成小问题解决；利用递归代码实现归并排序。  </p>
-<h4 id="归并排序1"><a href="#归并排序1" class="headerlink" title="归并排序1"></a>归并排序<a href="#refer-anchor-1"><sup>1</sup></a></h4><p>先把数组从中间分成前后两部分，然后对前后两部分分别排序，再将排好序的两部分合并在一起。  </p>
+    <title>排序优化</title>
+    <url>/2020/04/28/%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>时间复杂度</th>
+<th>稳定</th>
+<th>原地</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>冒泡</td>
+<td>O(n<sup>2</sup>)</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>插入</td>
+<td>O(n<sup>2</sup>)</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>选择</td>
+<td>O(n<sup>2</sup>)</td>
+<td>N</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>归并</td>
+<td>O(nlogn)</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>快速</td>
+<td>O(nlogn)</td>
+<td>N</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>桶</td>
+<td>O(n)</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>计数</td>
+<td>O(n+k) k是数据范围</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>基数</td>
+<td>O(dn) d是维度</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+</tbody></table>
+<h4 id="优化快排"><a href="#优化快排" class="headerlink" title="优化快排"></a>优化快排</h4><p>最坏情况下快排的时间复杂度是O(n<sup>2</sup>)，如果数据本来就是有序的或者接近有序的，每次分区点都选择最后一个数据，那快速排序算法的时间复杂度就会退化为O(n<sup>2</sup>)。主要愿意是分区点选的不够合理。  </p>
+<p>最理想的分区点是：被分区点分开的两个分区中，数据的数量差不多。</p>
 <ul>
-<li>递推公式:<br>merge_sort(p…r) = merge(merge_sort(p…q),merge_sort(q+1…r))  </li>
-<li>终止条件：<br>p = r 不用再继续分解  <blockquote>
-<p>merge_sort(p…r)表示给下标从p到r之间的数组排序。将此问题转化为了两个子问题：merge(merge_sort(p…q),merge_sort(q+1…r))，其中下标q等于p和r的中间位置(p+r)/2。当下标从p到q和从q+1到r这两个子数组都排好序之后，再将两个有序的子数组合并在一起，那么下标从p到r之间的数据也就排好序了。<br>合并函数merge([p…r],[p…q],[q+1…r])，申请一个临时数组temp,大小与数组[p…r]相同。用两个游标i和j，分别指向[p…q]和[q+1…r]的第一个元素。比较这两个元素[i]、[j]的大小，将较小的元素放入到临时数组temp中，并将相应的游标后移一位。  </p>
+<li>三数取中法<br>从区间的首、尾、中间分别取出一个数，然后对比大小，取这3个数的中间值作为分区点。如果要排序的数组比较大，可以使用五数取中、十数取中。  </li>
+<li>随机法<br>每次从要排序的区间中，随机选择一个元素作为分区点。不能保证每次分区点都选择的比较好，但是从概率的角度来看，也不大可能出现每次分区点都选的很差的情况，平均情况下，这样选的分区点是比较好的。  </li>
+</ul>
+<p>快排是用递归来实现的，递归要警惕堆栈溢出。避免递归过深而堆栈过小，导致堆栈溢出。  </p>
+<ul>
+<li>限制递归深度，一旦递归过深，超过了设定的阈值就停止递归。  </li>
+<li>在堆上模拟实现一个函数调用栈，手动模拟递归压栈、出栈的过程，这样就没有了系统栈大小的限制。(将递归调用改写为循环非递归方式)  </li>
+</ul>
+<p>时间复杂度代表的是一个增长趋势。大O复杂度表示法中，会省略低阶、系数、常数。在小规模数据面前，O(n<sup>2</sup>)时间复杂度的算法并不一定比O(nlogn)的算法执行时间长。</p>
+<h4 id="排序函数"><a href="#排序函数" class="headerlink" title="排序函数"></a>排序函数</h4><p>Java<br>基础数据类型：<br>Arrays.sort() -&gt; DualPivotQuicksort.sort()  </p>
+<ul>
+<li>元素个数&lt;47，插入排序</li>
+<li>元素个数47-286，快速排序</li>
+<li>元素个数&gt;286，归并排序（类似TimSort）  </li>
+</ul>
+<p>对象类型：<br>Collections.sort() -&gt; Arrays.sort() -&gt; TimSort  </p>
+<ul>
+<li><p>元素个数&lt;32，采用二分查找插入排序Binary Sort；  </p>
+</li>
+<li><p>元素个数&gt;=32，采用归并排序，归并的核心是分区Run;  </p>
+</li>
+<li><p>找连续升或者降的序列作为分区，分区最终被调整为升序后压入栈；  </p>
+</li>
+<li><p>如果分区长度太小，通过二分插入排序扩充分区长度到分区最小阈值minrun；  </p>
+</li>
+<li><p>每次压入栈，都要检查栈内已存在的分区是否满足合并条件，满足则进行合并；  </p>
+</li>
+<li><p>最终栈内分区被全部合并，得到一个排序好的数组。  </p>
+<blockquote>
+<p>TimSort合并：<br>  找出左分区最后一个元素在右分区的位置；<br>  找出右分区第一个元素在左分区的位置；<br>  仅对这两个位置之间的元素进行合并，之外的元素本身就是有序的。  </p>
 </blockquote>
 </li>
 </ul>
-<ol>
-<li><p>归并排序是一个<strong>稳定的排序算法</strong>，合并数组时，遇到值相同的元素，现将[p…q]区间的元素放入到临时数组temp中，保证值相同的元素在合并前后的先后顺序不变。  </p>
-</li>
-<li><p>最好、最坏、平均情况时间复杂度都是<strong>O(nlogn)</strong>。  </p>
-<figure class="highlight excel"><table><tr><td class="code"><pre><span class="line"><span class="built_in">T</span>(<span class="number">1</span>) = C；   <span class="built_in">n</span>=<span class="number">1</span>时，只需要常量级的执行时间，所以表示为C。</span><br><span class="line"><span class="built_in">T</span>(<span class="built_in">n</span>) = <span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">2</span>) + <span class="built_in">n</span>； <span class="built_in">n</span>&gt;<span class="number">1</span></span><br><span class="line">     = <span class="number">2</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">4</span>) + <span class="built_in">n</span>/<span class="number">2</span>) + <span class="built_in">n</span> = <span class="number">4</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">4</span>) + <span class="number">2</span>*<span class="built_in">n</span></span><br><span class="line">     = <span class="number">4</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">8</span>) + <span class="built_in">n</span>/<span class="number">4</span>) + <span class="number">2</span>*<span class="built_in">n</span> = <span class="number">8</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">8</span>) + <span class="number">3</span>*<span class="built_in">n</span></span><br><span class="line">     = <span class="number">8</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">16</span>) + <span class="built_in">n</span>/<span class="number">8</span>) + <span class="number">3</span>*<span class="built_in">n</span> = <span class="number">16</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">16</span>) + <span class="number">4</span>*<span class="built_in">n</span></span><br><span class="line">     ......</span><br><span class="line">     = <span class="number">2</span>^k * <span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">2</span>^k) + k * <span class="built_in">n</span></span><br><span class="line">     ......</span><br></pre></td></tr></table></figure>
-<p>当T(n/2^k)=T(1)时，k=log<sub>2</sub>n，T(n)=Cn+nlog<sub>2</sub>n  </p>
-</li>
-<li><p>归并排序<strong>不是原地排序算法</strong>。<br>归并排序在合并两个有序数组为一个有序数组时，需要借助额外的存储空间。每次合并操作都需要申请额外的内存空间，但在合并完成之后，临时开辟的内存空间就被释放掉了。在任意时刻，CPU只会有一个函数在执行，也就只会有一个临时的内存空间在使用。临时内存空间最大也不会超过n个数据的大小，<strong>空间复杂度是O(n)</strong>。  </p>
-</li>
-</ol>
-<h4 id="快速排序2"><a href="#快速排序2" class="headerlink" title="快速排序2"></a>快速排序<a href="#refer-anchor-2"><sup>2</sup></a></h4><p>如果要排序数组中下标从p到r之间的一组数据，选择p到r之间的任意一个数据作为分区点(pivot)。遍历p到r之间的数据，将小于pivot的放到左边，将大于pivot的放到右边，将pivot放到中间。这样数组p到r之间的数据被分成了三个部分，前面p到q-1之间都是小于pivot的，中间是pivot，后面的q+1到r之间是大于pivot的。<br>根据分治、递归的处理思想，可以用递归排序下标从p到q-1之间的数据和下标从q+1到r之间的数据，直到区间缩小为1，就说明所有的数据都有序了。  </p>
-<ul>
-<li>递推公式：<br>quick_sort(p…r) = quick_sort(p…q-1) + quick_sort(q+1…r)  </li>
-<li>终止条件：<br>p = r  <blockquote>
-<p>快速排序中的分区函数partition()，随机选择一个元素作为分区点pivot，一般情况下可以选择p到r区间的最后一个元素，对数组进行分区，函数返回分区点pivot的下标。  </p>
-</blockquote>
-</li>
-</ul>
-<ol>
-<li><p>空间复杂度</p>
-<ul>
-<li>不考虑空间消耗可以申请两个临时数组X和Y，遍历数组，将小于分区点的元素拷贝到临时数组X，大于分区点的元素拷贝到临时数组Y，最后将数组X、Y中的数据顺序拷贝到原数组中。   </li>
-<li>原地分区操作，类似选择排序<br>通过游标i将数组[p…r-1]分成两部分，已处理区间[p…i-1]和未处理区间[i…r-1]，每次从未处理区间中取出一个元素[j]和分区点对比，如果小于，则将其加入到已处理区间的尾部[i]的位置。优化：不搬移数据，交换操作，将a[i]与a[j]交换。</li>
-</ul>
-</li>
-<li><p>涉及交换操作，属于<strong>不稳定的排序算法</strong>。  </p>
-</li>
-<li><p>时间复杂度<br>分区极其均衡，每次分区操作都能正好把数组分成大小接近相等的两个小区间，<strong>最好时间复杂度为O(nlogn)</strong>。<br>分区极其不均衡，数组正序，需要n次分区操作，每次分区平均要扫描n、2个元素，<strong>最坏时间复杂度为O(n<sup>2</sup>)</strong>。<br>大部分情况下的时间复杂度都可以做到O(nlogn)，只有在极端情况下，才会退化到O(n<sup>2</sup>)。<strong>平均时间复杂度O(nlogn)</strong>。   </p>
-</li>
-</ol>
-<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p>归并排序的处理过程是由下到上的，先处理子问题，然后再合并。<br>快速排序的处理过程是由上到下的，先分区，然后再处理子问题。</p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>  
-[1] 归并排序  
-
-<pre><code>//归并排序
-public void mergeSort(int[] a) {
-    mergeSortInter(a,0,a.length-1);
-}
-public void mergeSortInter(int[] a,int start,int end) {
-    //终止条件
-    if(start==end) return;
-
-    //中间结点
-    int mid = (start+end)/2;
-
-    mergeSortInter(a,start,mid);
-    mergeSortInter(a,mid+1,end);
-
-    //合并函数
-    merge(a,start,mid,end);
-}
-public void merge(int[] a,int left,int mid,int right) {
-    //临时数组，大小为当前分区的大小
-    int[] temp = new int[right - left + 1];
-
-    int m = 0, i = left, j = mid + 1;
-    while (i &lt;= mid &amp;&amp; j &lt;= right) {
-        //取左右区间中元素最小值放入当前位置
-        temp[m++] = a[i] &lt;= a[j] ? a[i++] : a[j++];
-    }
-    //拷贝剩余数据到临时数组
-    while (i &lt;= mid)
-        temp[m++] = a[i++];
-    while (j &lt;= right)
-        temp[m++] = a[j++];
-
-    //拷贝临时数据到原数组对应区间
-    for (int k=0;k &lt;= right-left;k++)
-        a[left+k] = temp[k];
-}</code></pre><div id="refer-anchor-2"></div>  
-[2] 快速排序  
-
-<pre><code>//快速排序
-public void quickSort(int[] a) {
-    quickSortInter(a,0,a.length-1);
-}
-
-public void quickSortInter(int[] a,int start,int end) {
-    //终止条件  start 可能大于end
-    if(start&gt;=end) return;
-
-    //分区函数获取分区点
-    int p = partition(a,start,end);
-
-    quickSortInter(a,start,p-1);
-    quickSortInter(a,p+1,end);
-}
-
-public int partition(int[] a,int start,int end) {
-    //取当前分区最后一个元素做分区点
-    int pivot = a[end];
-    //记录下一个小于分区点元素值的元素应放置的下标
-    int i = start;
-    for(int j = start; j &lt; end; j++) {
-        //当前元素与分区点元素值比较，小于则当前元素与上一个小于分区点元素的后一个元素进行交换
-        if(a[j] &lt; pivot) {
-            if(i != j) {
-                int temp = a[i];
-                a[i] = a[j];
-                a[j] = temp;
-            }
-            i++;
-        }
-    }
-
-    //分区点元素值与最后一个小于分区点元素的后一个元素进行交换
-    int temp = a[i];
-    a[i] =a[end];
-    a[end] = temp;
-
-    return i;
-}</code></pre><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
@@ -341,43 +355,188 @@ public int partition(int[] a,int start,int end) {
       </tags>
   </entry>
   <entry>
-    <title>递归</title>
-    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
-    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
-<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
-<li>一个问题的解可以分解为几个子问题的解</li>
-<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
-<li>存在递归终止条件</li>
+    <title>队列</title>
+    <url>/2020/04/20/%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
+<h4 id="实现队列"><a href="#实现队列" class="headerlink" title="实现队列"></a>实现队列</h4><p>队列主要包含两个操作：入队enqueue(),放一个数据到队列尾部；出队dequeue(),从队列头部取一个元素。<br>用数组实现的队列-<strong>顺序队列</strong>，多为有界队列。<br>队列需要两个指针：1指向队头的head指针；2指向队尾的tail指针。<br>顺序队列实现优化，出队时不搬移数据，入队时如果没有空闲空间集中触发一次数据的搬移操作。更进一步，循环队列可以避免数据搬移操作。<br>用链表实现的队列-<strong>链式队列</strong>，多为无界队列。<br>入队：tail-&gt;next=new_node,tail=tail-&gt;next(tail=new_node);<br>出队：head=head-&gt;next.</p>
+<h4 id="特殊队列"><a href="#特殊队列" class="headerlink" title="特殊队列"></a>特殊队列</h4><ul>
+<li>循环队列(基于数组)<br>与普通队列的区别关键在于队空和队满的判定条件<br>普通队列：队空<strong>head==tail</strong>,队满<strong>tail==n</strong>;<br>循环队列：队空<strong>head==tail</strong>,队满<strong>(tail+1)%n==head</strong>.  <blockquote>
+<p>tail指向的位置没有存储数据，循环队列会浪费一个数组的存储空间。为了区分队空和队满。<br>普通队列队满的时候tail指向n，而不是n-1，不会浪费空间，数组中所有的位置都有数据。  </p>
+</blockquote>
+</li>
+<li>阻塞队列（生产者-消费者模型）<br>在队列的基础上增加了阻塞操作：在队列为空的时候，从对头取数据会被阻塞；如果队列已满，插入数组的操作会被阻塞。  </li>
+<li>并发队列<br>线程安全的队列<br>在入队、出队操作方法上加锁，锁粒度大并发度低。<br>基于数组的循环队列，利用CAS原子操作实现高效的并发队列。  </li>
 </ul>
-<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
-<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
-<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
-<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
-<li>时间空间成本</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
-<blockquote>
-<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
-</blockquote>
-<p>递归代码的调试方法</p>
-<blockquote>
-<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
-</blockquote>
-<p>检测递归中环的存在</p>
-<blockquote>
-<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
-</blockquote>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
-
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>资源有限场景中，没有空闲资源时，通过队列来实现请求排队。<br>线程池、数据库连接池等</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>变体二分查找</title>
+    <url>/2020/04/30/%E5%8F%98%E4%BD%93%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<h4 id="查找第一个值等于给定值的元素"><a href="#查找第一个值等于给定值的元素" class="headerlink" title="查找第一个值等于给定值的元素"></a>查找第一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
+    int low = 0;
+    int hight = a.length - 1;
+    while(low &lt;= high) {
+        int mid = low + ((high - low) &gt;&gt; 1);
+        if(a[mid] &gt; value) {
+            high = mid + 1;
+        }else if(a[mid] &lt; value) {
+            low = mid + 1;
+        } else {
+            if((mid == 0) || (a[mid - 1] != value)) {
+                return mid;
+            } else {
+                high = mid -1;
+            }
+        }
+    }
+    return -1;
+}</code></pre><p>a[mid]跟目标value的大小关系有三种情况：大于、小于、等于。  </p>
 <ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
+<li>对于a[mid] &gt; value的情况，需要更新high=mid-1；  </li>
+<li>对于a[mid] &lt; value的情况。需要更新low=mid+1；  </li>
+<li>当a[mid] = value时：如果查找的是任意一个值等于给定值的元素，a[mid]就是要找的元素。如果查找的是第一个值等于给定值的元素，需要进一步确认：代码中如果mid=0，那么这个元素已经是数组的第一个元素，那它肯定是要找的元素；如果mid!=0，但a[mid]的前一个元素a[mid-1]!=value，那么a[mid]就是要找的元素；如果经过检查后发现a[mid-1]=value，则a[mid]肯定不是要找的第一个值等于给定值的元素，需要更新high=mid-1，要找的元素肯定出现在[low,mid-1]之间。  </li>
+</ul>
+<h4 id="查找最后一个值等于给定值的元素"><a href="#查找最后一个值等于给定值的元素" class="headerlink" title="查找最后一个值等于给定值的元素"></a>查找最后一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
+    int low = 0;
+    int high = a.length - 1;
+    while(low &lt;= high) {
+        int mid = low + ((high -low) &gt;&gt; 1);
+        if(a[mid] &gt; value) {
+            high = mid - 1;
+        } else if(a[mid] &lt; value) {
+            low = mid + 1;
+        } else {
+            if((mid == a.length -1) || (a[mid + 1] != value)) {
+                return mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+    }
+    return -1;
+}  </code></pre><ul>
+<li>当a[mid] = value时：如果mid=0，a[mid]已经是数组中最后一个元素，那它肯定是要找的元素；如果a[mid]的后一个元素a[mid+1]!=value，那么a[mid]是要找的元素；如果经过检查后发现a[mid+1]=value，那a[mid]不是最后一个值等于给定值的元素，需要更新low=mid+1，要找的元素肯定出现在[mid+1,high]之间。  </li>
+</ul>
+<h4 id="查找第一个大于等于给定值的元素"><a href="#查找第一个大于等于给定值的元素" class="headerlink" title="查找第一个大于等于给定值的元素"></a>查找第一个大于等于给定值的元素</h4><pre><code>public int bsearch(int a[],int value) {
+    int low = 0;
+    int high = a.length -1;
+    while(low &lt;= high) {
+        int mid = low + ((high -low) &gt;&gt; 1);
+        if(a[mid] &gt;= value) {
+            if((mid == 0) || (a[mid - 1] &lt; value)) {
+                return mid;
+            } else {
+                high = mid - 1;
+            }
+        } else {
+            low = mid + 1;
+        }
+    }
+    return -1;
+}</code></pre><ul>
+<li>如果a[mid] &lt; value，那要找的值肯定在[mid+1,high]之间，所以更新low=mid+1；  </li>
+<li>对于a[mid] &gt;= value的情况，首先判断a[mid]是不是要找的第一个值大于等于给定值的元素。如果mid=0,a[mid]前面已经没有元素就是第一个元素，那么a[mid]就是要找的元素；或者a[mid]前面的一个元素a[mid-1]小于指定值value，那么a[mid]就是要找的元素。如果a[mid-1]&gt;=value，那么说明要找的元素在[low,mid-1]之间。  </li>
+</ul>
+<h4 id="查找最后一个小于等于给定值的元素"><a href="#查找最后一个小于等于给定值的元素" class="headerlink" title="查找最后一个小于等于给定值的元素"></a>查找最后一个小于等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
+    int low = 0;
+    int high = a.length -1;
+    while(low &lt;= high) {
+        int mid = low + ((high -low) &gt;&gt; 1);
+        if(a[mid] &gt; value) {
+            high = mid -1;
+        } else {
+            if((mid == a.length -1) || (a[mid +1] &gt; value)) {
+                return mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+    }
+    return -1;
+}</code></pre><h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>凡是用二分查找能解决的，绝大部分更倾向于用散列表或者二叉查找树。二分查找更适合用在“近似”查找问题，用其他数据结构比较难实现。<br>变体二分查找实现注意细节问题：</p>
+<ul>
+<li>终止条件  </li>
+<li>区间上下界更新方法  </li>
+<li>返回值选择  </li>
 </ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>递归</tag>
+        <tag>二分查找</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二分查找</title>
+    <url>/2020/04/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>二分查找算法-折半查找算法  </p>
+<h4 id="二分思想"><a href="#二分思想" class="headerlink" title="二分思想"></a>二分思想</h4><p>二分查找针对的是一个有序的数据集合，查找思想类似分治思想。每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0。  </p>
+<h4 id="查找速度O-logn"><a href="#查找速度O-logn" class="headerlink" title="查找速度O(logn)"></a>查找速度O(logn)</h4><p><strong>数组：</strong><br>假设数据大小是n，每次查找后数据都会缩小为原来的一半，也就是除以2。最坏情况下，直到查找区间被缩小为空才停止。被查找区间的大小变化n,n/2,n/4,n/8,…,n/2<sup>k</sup>…为一个等比数列，当n/2<sup>k</sup>=1时，k的值就是总共缩小的次数。而每一次缩小操作只涉及两个数据的大小比较，所以经过了k次区间缩小操作，时间复杂度就是O(k)。通过n/2<sup>k</sup>，可以求得k=log<sub>2</sub>n，所以时间复杂度就是O(logn)。   </p>
+<p>对数时间复杂度是一直极其高效的时间复杂度，有的时候甚至常量级时间复杂度的算法还要高效。  </p>
+<p><strong>链表：</strong><br>假设链表长度为n，二分查找每次都要找到中间结点：<br>第一次查找中间结点需要移动指针n/2次;<br>第二次，需要移动n/4次；<br>第三次，需要n/8次；<br>。。。<br>以此类推，一直到1次为止。<br>指针一共移动次数k=n/2+n/4+n/8+…+1，等比数列求和为n-1。<br>时间复杂度为O(n)。与顺序查找时间复杂度相同。但二分查找需要进行多余的运算，比顺序查找慢。</p>
+<h4 id="递归与非递归实现"><a href="#递归与非递归实现" class="headerlink" title="递归与非递归实现"></a>递归与非递归实现</h4><p>最简单的情况就是有序数组中不存在重复元素，用二分查找值等于给定值的数据。  </p>
+<pre><code>//非递归
+public int bsearch(int[] a,int value) {
+    int low = 0;
+    int high = a.length-1;
+    while(low &lt;= high) {
+        int mid = (low+high) / 2;
+        if(a[mid] == value) {
+            return mid;
+        } else if(a[mid] &lt; value) {
+            low = mid + 1;
+        } else {
+            high = mid -1;
+        }
+    }
+    return -1;
+}</code></pre><blockquote>
+<p>low、high、mid都是指数组下标，low和high表示当前查找的区间范围，初始low=0,high=n-1。mid表示[low,high]的中间位置，通过a[mid]与value的大小，来更新接下来要查找的区间范围，直到找到或者区间缩小为0就退出。  </p>
+</blockquote>
+<ul>
+<li>循环退出条件<br>low&lt;=high  </li>
+<li>mid取值<br>mid=(low+high)/2。<br>low + (high - low) /2;避免low和high比较大时，两者和溢出。<br>将除以2转化成位运算low+((high-low)&gt;&gt;1)。注意位运算优先级  </li>
+<li>low和high的更新<br>low=mid+1&amp;high=mid-1。<br>low=mid|high=mid可能发生死循环。  </li>
+</ul>
+<pre><code>//递归
+public int bsearch(int[] a,int value) {
+    return bserachInter(a,0,a.length-1,value);
+}
+
+private int bserachInter(int[] a,int low,int high,int value) {
+    if(low &gt; high) return -1;
+    int mid = low + ((high-low)&gt;&gt;1);
+    if(a[mid] == value) {
+        return mid;
+    } else if(a[mid] &lt; value) {
+        return bserachInter(a,mid+1,high,value);
+    } else {
+        return bserachInter(a,low,high+1,value);
+    }
+}</code></pre><h4 id="应用场景局限性"><a href="#应用场景局限性" class="headerlink" title="应用场景局限性"></a>应用场景局限性</h4><ul>
+<li><p>二分查找依赖的是顺序表结构-数组<br>二分查找算法需要按照下标随机访问数组。数组按照下标随机访问数据的时间复杂度是O(1)，链表随机访问的时间复杂度是O(n)。如果数据使用链表存储，二分查找的时间复杂度会变得很高。<br>二分查找只能用在数据是通过顺序表来存储的数据结构上，如果数据是通过其他数据结构存储的，则无法使用二分查找。 </p>
+</li>
+<li><p>二分查找针对的是有序数据<br>数据必须是有序的。如果数据无序，需要先排序，排序的时间复杂度最低是O(nlogn)。如果针对的是一组静态的数据，没有频繁的插入、删除，可以进行一次排序、多次二分查找。这样排序的成本可被均摊，二分查找的边际成本就会比较低。<br>数据集合有频繁的插入和删除操作，要想用二分查找，要么每次插入、删除操作之后保证数据仍然有序，要么在每次二分查找之前都先进行排序。针对动态数据，无论什么方法，维护有序的成本都很高。(二叉树)  </p>
+</li>
+<li><p>数据量太小不适合二分查找<br>数据量很小，顺序便利足够。但是数据之间的比较操作非常耗时，不管数据量大小，都推荐二分查找，尽可能的减少比较次数，大大提高性能。  </p>
+</li>
+<li><p>数据量太大不适合二分查找<br>二分查找底层依赖数组这种数据结构，数组为了支持随机访问特性，要求内存空间连续，对内存的要求比较苛刻。即使拥有更多的内存空间剩余，如果是零散的不连续，依然无法申请相应大小的数组。  </p>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二分查找</tag>
       </tags>
   </entry>
   <entry>
@@ -518,331 +677,75 @@ public int partition(int[] a,int start,int end) {
       </tags>
   </entry>
   <entry>
-    <title>排序优化</title>
-    <url>/2020/04/28/%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>算法</th>
-<th>时间复杂度</th>
-<th>稳定</th>
-<th>原地</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>冒泡</td>
-<td>O(n<sup>2</sup>)</td>
-<td>Y</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>插入</td>
-<td>O(n<sup>2</sup>)</td>
-<td>Y</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>选择</td>
-<td>O(n<sup>2</sup>)</td>
-<td>N</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>归并</td>
-<td>O(nlogn)</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-<tr>
-<td>快速</td>
-<td>O(nlogn)</td>
-<td>N</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>桶</td>
-<td>O(n)</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-<tr>
-<td>计数</td>
-<td>O(n+k) k是数据范围</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-<tr>
-<td>基数</td>
-<td>O(dn) d是维度</td>
-<td>Y</td>
-<td>N</td>
-</tr>
-</tbody></table>
-<h4 id="优化快排"><a href="#优化快排" class="headerlink" title="优化快排"></a>优化快排</h4><p>最坏情况下快排的时间复杂度是O(n<sup>2</sup>)，如果数据本来就是有序的或者接近有序的，每次分区点都选择最后一个数据，那快速排序算法的时间复杂度就会退化为O(n<sup>2</sup>)。主要愿意是分区点选的不够合理。  </p>
-<p>最理想的分区点是：被分区点分开的两个分区中，数据的数量差不多。</p>
+    <title>散列表</title>
+    <url>/2020/05/01/%E6%95%A3%E5%88%97%E8%A1%A8/</url>
+    <content><![CDATA[<h4 id="散列思想"><a href="#散列思想" class="headerlink" title="散列思想"></a>散列思想</h4><p>散列表用的数组支持按照下标随机访问数据的特性，是数组的一种扩展，由数组演化而来。没有数组，就没有散列表。   </p>
+<p>键/key/关键字–标识唯一数据<br>散列函数/Hash函数/哈希函数–将键转化为数组下标的映射方法<br>散列值/Hash值/哈希值–散列函数计算得到的值    </p>
+<p>通过散列函数把元素的键值映射为下标（取模），然后将数据存储在数组中对应下标的位置。按照键值查询元素时，用同样的散列函数，将键值转化为数组下标，从对应的数组下标的位置取数据。  </p>
+<h4 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h4><p>散列函数–<strong>hash(key)</strong>，其中key表示元素的键值，hash(key)的值表示经过散列函数计算得到的散列值。  </p>
+<p>散列函数设计的基本要求：  </p>
 <ul>
-<li>三数取中法<br>从区间的首、尾、中间分别取出一个数，然后对比大小，取这3个数的中间值作为分区点。如果要排序的数组比较大，可以使用五数取中、十数取中。  </li>
-<li>随机法<br>每次从要排序的区间中，随机选择一个元素作为分区点。不能保证每次分区点都选择的比较好，但是从概率的角度来看，也不大可能出现每次分区点都选的很差的情况，平均情况下，这样选的分区点是比较好的。  </li>
+<li>散列函数计算得到的散列值是一个非负整数；</li>
+<li>如果key1=key2，那hash(key1) == hash(key2)；</li>
+<li>如果key1!=key2，那hash(key1) != hash(key2)；<blockquote>
+<p>数组的存储空间有限，找到一个不同的key对应的散列值都不一样的散列函数，几乎是不可能的。必然存在散列冲突。   </p>
+</blockquote>
+</li>
 </ul>
-<p>快排是用递归来实现的，递归要警惕堆栈溢出。避免递归过深而堆栈过小，导致堆栈溢出。  </p>
+<h4 id="散列冲突"><a href="#散列冲突" class="headerlink" title="散列冲突"></a>散列冲突</h4><p>再好的散列函数也无法避免散列冲突，常用的散列冲突解决方法有两类：开放寻址法、链表法。  </p>
+<ol>
+<li><p>开放寻址法<br>如果出现散列冲突，就重新探测一个空闲位置，将其插入。  </p>
 <ul>
-<li>限制递归深度，一旦递归过深，超过了设定的阈值就停止递归。  </li>
-<li>在堆上模拟实现一个函数调用栈，手动模拟递归压栈、出栈的过程，这样就没有了系统栈大小的限制。(将递归调用改写为循环非递归方式)  </li>
+<li><p>线性探测<br>往散列表中<strong>插入</strong>数据时，如果某个数据经过散列函数散列之后，存储位置已经被占用了，就从当前位置开始，依次往后查找，看是否有空闲位置，直到找到为止。<br>在散列表中<strong>查找</strong>元素的过程类似插入过程。通过散列函数求出要查找元素的键值对应的散列值，然后比较数组中下标为散列值的元素和要查找的元素。如果相等，则说明就是我们要找的元素；否则就顺序往后依次查找。如果遍历到数组中的空闲位置，还没有找到，就说明要查找的元素并没有在散列表中。<br>使用线性探测法解决冲突的散列表，不能单纯的把要<strong>删除</strong>的元素设置为空。在查找的时候，一旦通过线性探测方法，找到一个空闲位置，可以认定散列表中不存在这个数据。但是如果这个空闲位置是我们后来删除的，就会导致原来的查找算法失效。本来存在的数据会被认定为不存在。解决方案，将删除的元素特殊标记为deleted，当线性探测查找的时候，遇到标记为deleted的空间，并不是停下来，而是继续往下探测。  </p>
+<p>缺陷：当散列表中插入的数据越来越多时，散列冲突发生的可能性会越来越大，空闲位置会越来越少，线性探测的时间会越来越久，极端情况下，可能需要探测整个散列表，所以最坏情况下的时间复杂度为O(n)。在删除和查找时也可能会探测整张散列表，才只能找到要查找或者删除的数据。  </p>
+</li>
+<li><p>二次探测<br>类似线性探测，线性探测每次探测的步长是1，探测的下标序列是hash(key)+0,hash(key)+1,hash(key)+2…二次探测的步长变成了原来的“二次方”，探测的下标序列是hash(key)+0,hash(key)+1<sup>2</sup>,hash(key)+2<sup>2</sup>…  </p>
+</li>
+<li><p>双重散列<br>不仅仅使用一个散列函数。使用一组散列函数hash1(key),hash2(key),hash3(key)…先用第一个散列函数，如果计算得到的存储位置已经被占用，再用第二个散列函数，依次类推，直到找到空闲的存储位置。  </p>
+</li>
 </ul>
-<p>时间复杂度代表的是一个增长趋势。大O复杂度表示法中，会省略低阶、系数、常数。在小规模数据面前，O(n<sup>2</sup>)时间复杂度的算法并不一定比O(nlogn)的算法执行时间长。</p>
-<h4 id="排序函数"><a href="#排序函数" class="headerlink" title="排序函数"></a>排序函数</h4><p>Java<br>基础数据类型：<br>Arrays.sort() -&gt; DualPivotQuicksort.sort()  </p>
-<ul>
-<li>元素个数&lt;47，插入排序</li>
-<li>元素个数47-286，快速排序</li>
-<li>元素个数&gt;286，归并排序（类似TimSort）  </li>
-</ul>
-<p>对象类型：<br>Collections.sort() -&gt; Arrays.sort() -&gt; TimSort  </p>
-<ul>
-<li><p>元素个数&lt;32，采用二分查找插入排序Binary Sort；  </p>
-</li>
-<li><p>元素个数&gt;=32，采用归并排序，归并的核心是分区Run;  </p>
-</li>
-<li><p>找连续升或者降的序列作为分区，分区最终被调整为升序后压入栈；  </p>
-</li>
-<li><p>如果分区长度太小，通过二分插入排序扩充分区长度到分区最小阈值minrun；  </p>
-</li>
-<li><p>每次压入栈，都要检查栈内已存在的分区是否满足合并条件，满足则进行合并；  </p>
-</li>
-<li><p>最终栈内分区被全部合并，得到一个排序好的数组。  </p>
+<p>不管采用哪种探测方法，当散列表中空闲位置不多的时候，散列冲突的概率就会大大提高。为了尽可能保证散列表的操作效率，一般情况下，尽可能保证散列表中有一定比列的空槽位置。用<strong>装载因子</strong>来表示空位的多少。<br>计算公式：  </p>
 <blockquote>
-<p>TimSort合并：<br>  找出左分区最后一个元素在右分区的位置；<br>  找出右分区第一个元素在左分区的位置；<br>  仅对这两个位置之间的元素进行合并，之外的元素本身就是有序的。  </p>
+<p>散列表的装载因子=填入表中的元素个数/散列表的长度   </p>
+</blockquote>
+<p>装载因子越大，说明空闲位置越少，冲突越多，散列表的性能会下降。  </p>
+</li>
+<li><p>链表法<br>在散列表中，每个“桶”或者“槽”会对应一条链表，所有散列值相同的元素都放到相同槽位对应的链表中。<br>当插入的时候，只需要通过散列函数计算出对应的散列槽位，将其插入到对应链表中即可，所以插入的时间复杂度是O(1)。当查找/删除一个元素时，同样通过散列函数计算出对应的槽，然后遍历链表查找或者删除。查找、删除的时间复杂度跟链表的长度k成正比O(k)。对于散列比较均匀的散列函数来说，k=n/m，其中n表示散列中数据的个数，m表示散列表中“槽”的个数。  </p>
+</li>
+</ol>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>散列表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>散列表应用</title>
+    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<p>散列表支持非常高效的数据插入、删除、查找操作，但是散列表中的数据都是通过散列函数打乱之后无规律的存储的，无法支持按照某种顺序快速地遍历数据。如果希望按照顺序遍历散列表中的数据，需要将散列表中的数据拷贝到数组中，然后排序再遍历。<br>散列表是动态数据结构，不停地有数据的插入、删除，每次希望按顺序遍历散列表中的数据的时候，都需要先排序，效率很低，为了解决这个问题，将散列表和链表（或者跳表）结合在一起使用。  </p>
+<h4 id="LRU缓存淘汰算法"><a href="#LRU缓存淘汰算法" class="headerlink" title="LRU缓存淘汰算法"></a>LRU缓存淘汰算法</h4><ul>
+<li><p>通过链表实现LRU缓存淘汰算法：维护一个按照访问时间从大到小有序排列的链表结构。因为缓存大小有限，当缓存空间不够，需要淘汰一个数据的时候，直接将链表头部的结点删除。<br>当要缓存某个数据的时候，先在链表中查找这个数据。如果没有找到，则直接将数据放到链表的尾部；如果找到了，就把它移动到链表的尾部。因为查找数据需要遍历链表，所以单纯使用链表实现的LRU缓存淘汰算法的时间复杂度很高为O(n)。  </p>
+</li>
+<li><p>将散列表和链表两种结构组合使用，可以将添加、删除、查找操作的时间复杂度都降低到O(1)。使用双向链表存储数据，链表中的每个节点除了存储数据data、前驱指针prev、后继指针next之外，还新增了一个特殊的字段hnext。这里的散列表通过链表法解决散列冲突，每个节点会在两条链中。一个链式双向链表，一个是散列表中的拉链。前驱和后继指针将结点串在双向链表中，hnext指针将结点串在散列表的拉链中。  </p>
+<blockquote>
+<ul>
+<li>查找数据，散列表中查找数据的时间复杂度为O(1)。找到数据之后将其移动到双向链表的尾部。  </li>
+<li>删除数据，散列表中在O(1)时间复杂度里找到要删除的结点，双向链表中通过前驱指针O(1)时间复杂度获取前驱结点。则删除结点的时间复杂度为O(1)。  </li>
+<li>添加数据，先判断数据是否已经在缓存中。如果存在，需要将其移动到双向链表的尾部；如果不存在，判断缓存是否已满，如果已满，则将双向链表头部的结点删除在将数据放到链表的尾部，如果未满，则直接将数据放到链表的尾部。<br>涉及查找操作都通过散列表来完成，其他删除、插入操作通过链表来完成，只需更改指针指向。时间复杂度都为O(1)。  </li>
+</ul>
 </blockquote>
 </li>
 </ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+<h4 id="Redis有序集合"><a href="#Redis有序集合" class="headerlink" title="Redis有序集合"></a>Redis有序集合</h4><p>有序集合中，每个成员对象有两个重要的属性，键值key和分值score，可以通过score查找数据，也可以通过key来查找数据。<br>按照分值将对象组织成跳表的结构<br>按照键值构建一个散列表   </p>
+<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><p>通过散列表和双向链表组合实现。<br>不仅支持按照插入顺序遍历数据，还支持按照访问数据遍历数据。  </p>
+<figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 10是初始大小，0.75是装载因子，true是表示按照访问时间排序</span></span><br><span class="line">HashMap&lt;<span class="built_in">Integer</span>, <span class="built_in">Integer</span>&gt; m = <span class="literal">new</span> LinkedHashMap&lt;&gt;(<span class="number">10</span>, <span class="number">0.75</span>f, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>二分查找</title>
-    <url>/2020/04/29/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>二分查找算法-折半查找算法  </p>
-<h4 id="二分思想"><a href="#二分思想" class="headerlink" title="二分思想"></a>二分思想</h4><p>二分查找针对的是一个有序的数据集合，查找思想类似分治思想。每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0。  </p>
-<h4 id="查找速度O-logn"><a href="#查找速度O-logn" class="headerlink" title="查找速度O(logn)"></a>查找速度O(logn)</h4><p><strong>数组：</strong><br>假设数据大小是n，每次查找后数据都会缩小为原来的一半，也就是除以2。最坏情况下，直到查找区间被缩小为空才停止。被查找区间的大小变化n,n/2,n/4,n/8,…,n/2<sup>k</sup>…为一个等比数列，当n/2<sup>k</sup>=1时，k的值就是总共缩小的次数。而每一次缩小操作只涉及两个数据的大小比较，所以经过了k次区间缩小操作，时间复杂度就是O(k)。通过n/2<sup>k</sup>，可以求得k=log<sub>2</sub>n，所以时间复杂度就是O(logn)。   </p>
-<p>对数时间复杂度是一直极其高效的时间复杂度，有的时候甚至常量级时间复杂度的算法还要高效。  </p>
-<p><strong>链表：</strong><br>假设链表长度为n，二分查找每次都要找到中间结点：<br>第一次查找中间结点需要移动指针n/2次;<br>第二次，需要移动n/4次；<br>第三次，需要n/8次；<br>。。。<br>以此类推，一直到1次为止。<br>指针一共移动次数k=n/2+n/4+n/8+…+1，等比数列求和为n-1。<br>时间复杂度为O(n)。与顺序查找时间复杂度相同。但二分查找需要进行多余的运算，比顺序查找慢。</p>
-<h4 id="递归与非递归实现"><a href="#递归与非递归实现" class="headerlink" title="递归与非递归实现"></a>递归与非递归实现</h4><p>最简单的情况就是有序数组中不存在重复元素，用二分查找值等于给定值的数据。  </p>
-<pre><code>//非递归
-public int bsearch(int[] a,int value) {
-    int low = 0;
-    int high = a.length-1;
-    while(low &lt;= high) {
-        int mid = (low+high) / 2;
-        if(a[mid] == value) {
-            return mid;
-        } else if(a[mid] &lt; value) {
-            low = mid + 1;
-        } else {
-            high = mid -1;
-        }
-    }
-    return -1;
-}</code></pre><blockquote>
-<p>low、high、mid都是指数组下标，low和high表示当前查找的区间范围，初始low=0,high=n-1。mid表示[low,high]的中间位置，通过a[mid]与value的大小，来更新接下来要查找的区间范围，直到找到或者区间缩小为0就退出。  </p>
-</blockquote>
-<ul>
-<li>循环退出条件<br>low&lt;=high  </li>
-<li>mid取值<br>mid=(low+high)/2。<br>low + (high - low) /2;避免low和high比较大时，两者和溢出。<br>将除以2转化成位运算low+((high-low)&gt;&gt;1)。注意位运算优先级  </li>
-<li>low和high的更新<br>low=mid+1&amp;high=mid-1。<br>low=mid|high=mid可能发生死循环。  </li>
-</ul>
-<pre><code>//递归
-public int bsearch(int[] a,int value) {
-    return bserachInter(a,0,a.length-1,value);
-}
-
-private int bserachInter(int[] a,int low,int high,int value) {
-    if(low &gt; high) return -1;
-    int mid = low + ((high-low)&gt;&gt;1);
-    if(a[mid] == value) {
-        return mid;
-    } else if(a[mid] &lt; value) {
-        return bserachInter(a,mid+1,high,value);
-    } else {
-        return bserachInter(a,low,high+1,value);
-    }
-}</code></pre><h4 id="应用场景局限性"><a href="#应用场景局限性" class="headerlink" title="应用场景局限性"></a>应用场景局限性</h4><ul>
-<li><p>二分查找依赖的是顺序表结构-数组<br>二分查找算法需要按照下标随机访问数组。数组按照下标随机访问数据的时间复杂度是O(1)，链表随机访问的时间复杂度是O(n)。如果数据使用链表存储，二分查找的时间复杂度会变得很高。<br>二分查找只能用在数据是通过顺序表来存储的数据结构上，如果数据是通过其他数据结构存储的，则无法使用二分查找。 </p>
-</li>
-<li><p>二分查找针对的是有序数据<br>数据必须是有序的。如果数据无序，需要先排序，排序的时间复杂度最低是O(nlogn)。如果针对的是一组静态的数据，没有频繁的插入、删除，可以进行一次排序、多次二分查找。这样排序的成本可被均摊，二分查找的边际成本就会比较低。<br>数据集合有频繁的插入和删除操作，要想用二分查找，要么每次插入、删除操作之后保证数据仍然有序，要么在每次二分查找之前都先进行排序。针对动态数据，无论什么方法，维护有序的成本都很高。(二叉树)  </p>
-</li>
-<li><p>数据量太小不适合二分查找<br>数据量很小，顺序便利足够。但是数据之间的比较操作非常耗时，不管数据量大小，都推荐二分查找，尽可能的减少比较次数，大大提高性能。  </p>
-</li>
-<li><p>数据量太大不适合二分查找<br>二分查找底层依赖数组这种数据结构，数组为了支持随机访问特性，要求内存空间连续，对内存的要求比较苛刻。即使拥有更多的内存空间剩余，如果是零散的不连续，依然无法申请相应大小的数组。  </p>
-</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二分查找</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>队列</title>
-    <url>/2020/04/20/%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
-<h4 id="实现队列"><a href="#实现队列" class="headerlink" title="实现队列"></a>实现队列</h4><p>队列主要包含两个操作：入队enqueue(),放一个数据到队列尾部；出队dequeue(),从队列头部取一个元素。<br>用数组实现的队列-<strong>顺序队列</strong>，多为有界队列。<br>队列需要两个指针：1指向队头的head指针；2指向队尾的tail指针。<br>顺序队列实现优化，出队时不搬移数据，入队时如果没有空闲空间集中触发一次数据的搬移操作。更进一步，循环队列可以避免数据搬移操作。<br>用链表实现的队列-<strong>链式队列</strong>，多为无界队列。<br>入队：tail-&gt;next=new_node,tail=tail-&gt;next(tail=new_node);<br>出队：head=head-&gt;next.</p>
-<h4 id="特殊队列"><a href="#特殊队列" class="headerlink" title="特殊队列"></a>特殊队列</h4><ul>
-<li>循环队列(基于数组)<br>与普通队列的区别关键在于队空和队满的判定条件<br>普通队列：队空<strong>head==tail</strong>,队满<strong>tail==n</strong>;<br>循环队列：队空<strong>head==tail</strong>,队满<strong>(tail+1)%n==head</strong>.  <blockquote>
-<p>tail指向的位置没有存储数据，循环队列会浪费一个数组的存储空间。为了区分队空和队满。<br>普通队列队满的时候tail指向n，而不是n-1，不会浪费空间，数组中所有的位置都有数据。  </p>
-</blockquote>
-</li>
-<li>阻塞队列（生产者-消费者模型）<br>在队列的基础上增加了阻塞操作：在队列为空的时候，从对头取数据会被阻塞；如果队列已满，插入数组的操作会被阻塞。  </li>
-<li>并发队列<br>线程安全的队列<br>在入队、出队操作方法上加锁，锁粒度大并发度低。<br>基于数组的循环队列，利用CAS原子操作实现高效的并发队列。  </li>
-</ul>
-<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>资源有限场景中，没有空闲资源时，通过队列来实现请求排队。<br>线程池、数据库连接池等</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>队列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>变体二分查找</title>
-    <url>/2020/04/30/%E5%8F%98%E4%BD%93%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<h4 id="查找第一个值等于给定值的元素"><a href="#查找第一个值等于给定值的元素" class="headerlink" title="查找第一个值等于给定值的元素"></a>查找第一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
-    int low = 0;
-    int hight = a.length - 1;
-    while(low &lt;= high) {
-        int mid = low + ((high - low) &gt;&gt; 1);
-        if(a[mid] &gt; value) {
-            high = mid + 1;
-        }else if(a[mid] &lt; value) {
-            low = mid + 1;
-        } else {
-            if((mid == 0) || (a[mid - 1] != value)) {
-                return mid;
-            } else {
-                high = mid -1;
-            }
-        }
-    }
-    return -1;
-}</code></pre><p>a[mid]跟目标value的大小关系有三种情况：大于、小于、等于。  </p>
-<ul>
-<li>对于a[mid] &gt; value的情况，需要更新high=mid-1；  </li>
-<li>对于a[mid] &lt; value的情况。需要更新low=mid+1；  </li>
-<li>当a[mid] = value时：如果查找的是任意一个值等于给定值的元素，a[mid]就是要找的元素。如果查找的是第一个值等于给定值的元素，需要进一步确认：代码中如果mid=0，那么这个元素已经是数组的第一个元素，那它肯定是要找的元素；如果mid!=0，但a[mid]的前一个元素a[mid-1]!=value，那么a[mid]就是要找的元素；如果经过检查后发现a[mid-1]=value，则a[mid]肯定不是要找的第一个值等于给定值的元素，需要更新high=mid-1，要找的元素肯定出现在[low,mid-1]之间。  </li>
-</ul>
-<h4 id="查找最后一个值等于给定值的元素"><a href="#查找最后一个值等于给定值的元素" class="headerlink" title="查找最后一个值等于给定值的元素"></a>查找最后一个值等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
-    int low = 0;
-    int high = a.length - 1;
-    while(low &lt;= high) {
-        int mid = low + ((high -low) &gt;&gt; 1);
-        if(a[mid] &gt; value) {
-            high = mid - 1;
-        } else if(a[mid] &lt; value) {
-            low = mid + 1;
-        } else {
-            if((mid == a.length -1) || (a[mid + 1] != value)) {
-                return mid;
-            } else {
-                low = mid + 1;
-            }
-        }
-    }
-    return -1;
-}  </code></pre><ul>
-<li>当a[mid] = value时：如果mid=0，a[mid]已经是数组中最后一个元素，那它肯定是要找的元素；如果a[mid]的后一个元素a[mid+1]!=value，那么a[mid]是要找的元素；如果经过检查后发现a[mid+1]=value，那a[mid]不是最后一个值等于给定值的元素，需要更新low=mid+1，要找的元素肯定出现在[mid+1,high]之间。  </li>
-</ul>
-<h4 id="查找第一个大于等于给定值的元素"><a href="#查找第一个大于等于给定值的元素" class="headerlink" title="查找第一个大于等于给定值的元素"></a>查找第一个大于等于给定值的元素</h4><pre><code>public int bsearch(int a[],int value) {
-    int low = 0;
-    int high = a.length -1;
-    while(low &lt;= high) {
-        int mid = low + ((high -low) &gt;&gt; 1);
-        if(a[mid] &gt;= value) {
-            if((mid == 0) || (a[mid - 1] &lt; value)) {
-                return mid;
-            } else {
-                high = mid - 1;
-            }
-        } else {
-            low = mid + 1;
-        }
-    }
-    return -1;
-}</code></pre><ul>
-<li>如果a[mid] &lt; value，那要找的值肯定在[mid+1,high]之间，所以更新low=mid+1；  </li>
-<li>对于a[mid] &gt;= value的情况，首先判断a[mid]是不是要找的第一个值大于等于给定值的元素。如果mid=0,a[mid]前面已经没有元素就是第一个元素，那么a[mid]就是要找的元素；或者a[mid]前面的一个元素a[mid-1]小于指定值value，那么a[mid]就是要找的元素。如果a[mid-1]&gt;=value，那么说明要找的元素在[low,mid-1]之间。  </li>
-</ul>
-<h4 id="查找最后一个小于等于给定值的元素"><a href="#查找最后一个小于等于给定值的元素" class="headerlink" title="查找最后一个小于等于给定值的元素"></a>查找最后一个小于等于给定值的元素</h4><pre><code>public int bsearch(int[] a,int value) {
-    int low = 0;
-    int high = a.length -1;
-    while(low &lt;= high) {
-        int mid = low + ((high -low) &gt;&gt; 1);
-        if(a[mid] &gt; value) {
-            high = mid -1;
-        } else {
-            if((mid == a.length -1) || (a[mid +1] &gt; value)) {
-                return mid;
-            } else {
-                low = mid + 1;
-            }
-        }
-    }
-    return -1;
-}</code></pre><h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>凡是用二分查找能解决的，绝大部分更倾向于用散列表或者二叉查找树。二分查找更适合用在“近似”查找问题，用其他数据结构比较难实现。<br>变体二分查找实现注意细节问题：</p>
-<ul>
-<li>终止条件  </li>
-<li>区间上下界更新方法  </li>
-<li>返回值选择  </li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二分查找</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>线性排序</title>
-    <url>/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>时间复杂度为O(n)的线性排序算法：桶排序、计数排序、基数排序。<br>算法是非基于比较的排序算法（主排序是非比较的），不涉及元素之间的比较操作。对要排序的数据要求比较苛刻。  </p>
-<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><ul>
-<li><p>原理<br>核心思想是将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行排序。桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。</p>
-</li>
-<li><p>时间复杂度<br>如果要排序的数据有n个，把他们均匀的划分到m个桶内，每个桶有k=n/m个元素。每个桶内部使用快速排序，时间复杂度为O(k<em>logk)。m个桶排序的时间复杂度为O(m</em>k<em>logk)。因为k=n/m，所以整个桶排序的时间复杂度为O(n</em>log(n/m))。当桶的个数m接近数据个数n时，log(n/m)为一个非常小的常量，这时桶排序的时间复杂度接近O(n)。  </p>
-</li>
-<li><p>适用场景<br>排序的数据需要很容易就能划分为m个桶，桶与桶之间有着天然的大小顺序，每个桶内的数据都排序完成之后，桶与桶之间的数据不需要再进行排序。<br>数据再各个桶之间的分布是比较均匀的。如果数据经过桶的划分之后，有的桶数据非常多，有的非常少，那桶内数据排序的时间复杂度就不是常量级了。在极端情况下，如果数据都被划分到一个桶里，那就退化为O(nlogn)的排序算法了。  </p>
-<p>桶排序适合用在外部排序中。数据存储在外部磁盘中，数据量比较大，内存有限，无法将数据全部加载到内存中。  </p>
-</li>
-</ul>
-<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><ul>
-<li><p>时间复杂度<br>计数排序是桶排序的一种特殊情况。当要排序的n个数据，所处的范围并不大的时候，比如最大值为k，可以把数据划分成k个桶，每个桶内的数据值都是相同的，省去了桶内排序的时间。只涉及扫描遍历操作，时间复杂度为O(n)。  </p>
-</li>
-<li><p>原理<br>计数排序用一个数据范围大小的统计数组C[k+1]（原数组A中元素取值范围为0-k），下标k等于原数组A中元素的值，遍历原数组A将各个元素值出现的次数存储在统计数组C对应下标中c[k]（即C[k]存储的是原数组A等于k的元素的个数）。然后对统计数组C顺序求和，各个下标处C[k]存储的是小于等于k的元素个数。<br>扫描原数组A（从后面开始遍历-保证稳定性），依次取出元素的值如a作为统计数组C的下标得到统计数组C对应的值C[a]，说明到目前为止，原数组A中小于等于a的值还有C[a]个，元素a是排好序的新数组R中的第C[a]个元素(放在新数组R下标为C[a]-1的位置)，将其a放入新数组R后，原数组A小于等于a的元素剩下C[a]-1个，则统计数组C[a]=C[a]-1，类推取原数组A下一个元素值。（从后往前做减法，确定该值可以放的最大下标）</p>
-</li>
-<li><p>适用场景<br>计数排序只能用在数据范围不大的场景中，如果数据范围k比要排序的数据n大很多，就不适合用计数排序。而且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。  </p>
-</li>
-</ul>
-<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><ul>
-<li><p>原理<br>以11位手机号排序为例，如果前面几位中，其中一个数据已经比较大了，那么后几位就不用看了。先按照最后一位排序，再按照倒数第二位排序，以此类推，最后按照第一位排序，经过11次排序后，手机号有序。要求按照每位来排序的排序算法是稳定的。  </p>
-</li>
-<li><p>时间复杂度<br>根据每位来排序，可以用桶排序或者计数排序，时间复杂度可以做到O(n)。如果要排序的数据有k位，那么需要进行k次桶排序或者计数排序，总的时间复杂度是O(k*n)。当k不大时，基数排序的时间复杂度就近似于O(n)。  </p>
-</li>
-<li><p>适用场景<br>基数排序要求要排序的数据可以分割出独立的“位”来比较，而且位之间有递进关系-数据可以划分成高低位。比较两个数只需要比较高位，高位相同再比较低位。<br>每一位的数据范围不能太大，要借助线性排序算法-桶排序/计数排序来完成每一位的排序工作，否则计数排序的时间复杂度无法做到O(n)。  </p>
-</li>
-</ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>桶排序：分桶-快排/归并<br>计数排序：分桶-计数-统计<br>基数排序：高位桶排序-低位桶排序</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>排序</tag>
+        <tag>散列表</tag>
       </tags>
   </entry>
   <entry>
@@ -918,48 +821,218 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
-    <title>散列表</title>
-    <url>/2020/05/01/%E6%95%A3%E5%88%97%E8%A1%A8/</url>
-    <content><![CDATA[<h4 id="散列思想"><a href="#散列思想" class="headerlink" title="散列思想"></a>散列思想</h4><p>散列表用的数组支持按照下标随机访问数据的特性，是数组的一种扩展，由数组演化而来。没有数组，就没有散列表。   </p>
-<p>键/key/关键字–标识唯一数据<br>散列函数/Hash函数/哈希函数–将键转化为数组下标的映射方法<br>散列值/Hash值/哈希值–散列函数计算得到的值    </p>
-<p>通过散列函数把元素的键值映射为下标（取模），然后将数据存储在数组中对应下标的位置。按照键值查询元素时，用同样的散列函数，将键值转化为数组下标，从对应的数组下标的位置取数据。  </p>
-<h4 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h4><p>散列函数–<strong>hash(key)</strong>，其中key表示元素的键值，hash(key)的值表示经过散列函数计算得到的散列值。  </p>
-<p>散列函数设计的基本要求：  </p>
+    <title>归并排序、快速排序</title>
+    <url>/2020/04/24/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E3%80%81%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>归并排序和快速排序的时间复杂度为O(nlogn)。利用分治思想将大问题分解成小问题解决；利用递归代码实现归并排序。  </p>
+<h4 id="归并排序1"><a href="#归并排序1" class="headerlink" title="归并排序1"></a>归并排序<a href="#refer-anchor-1"><sup>1</sup></a></h4><p>先把数组从中间分成前后两部分，然后对前后两部分分别排序，再将排好序的两部分合并在一起。  </p>
 <ul>
-<li>散列函数计算得到的散列值是一个非负整数；</li>
-<li>如果key1=key2，那hash(key1) == hash(key2)；</li>
-<li>如果key1!=key2，那hash(key1) != hash(key2)；<blockquote>
-<p>数组的存储空间有限，找到一个不同的key对应的散列值都不一样的散列函数，几乎是不可能的。必然存在散列冲突。   </p>
+<li>递推公式:<br>merge_sort(p…r) = merge(merge_sort(p…q),merge_sort(q+1…r))  </li>
+<li>终止条件：<br>p = r 不用再继续分解  <blockquote>
+<p>merge_sort(p…r)表示给下标从p到r之间的数组排序。将此问题转化为了两个子问题：merge(merge_sort(p…q),merge_sort(q+1…r))，其中下标q等于p和r的中间位置(p+r)/2。当下标从p到q和从q+1到r这两个子数组都排好序之后，再将两个有序的子数组合并在一起，那么下标从p到r之间的数据也就排好序了。<br>合并函数merge([p…r],[p…q],[q+1…r])，申请一个临时数组temp,大小与数组[p…r]相同。用两个游标i和j，分别指向[p…q]和[q+1…r]的第一个元素。比较这两个元素[i]、[j]的大小，将较小的元素放入到临时数组temp中，并将相应的游标后移一位。  </p>
 </blockquote>
 </li>
 </ul>
-<h4 id="散列冲突"><a href="#散列冲突" class="headerlink" title="散列冲突"></a>散列冲突</h4><p>再好的散列函数也无法避免散列冲突，常用的散列冲突解决方法有两类：开放寻址法、链表法。  </p>
 <ol>
-<li><p>开放寻址法<br>如果出现散列冲突，就重新探测一个空闲位置，将其插入。  </p>
-<ul>
-<li><p>线性探测<br>往散列表中<strong>插入</strong>数据时，如果某个数据经过散列函数散列之后，存储位置已经被占用了，就从当前位置开始，依次往后查找，看是否有空闲位置，直到找到为止。<br>在散列表中<strong>查找</strong>元素的过程类似插入过程。通过散列函数求出要查找元素的键值对应的散列值，然后比较数组中下标为散列值的元素和要查找的元素。如果相等，则说明就是我们要找的元素；否则就顺序往后依次查找。如果遍历到数组中的空闲位置，还没有找到，就说明要查找的元素并没有在散列表中。<br>使用线性探测法解决冲突的散列表，不能单纯的把要<strong>删除</strong>的元素设置为空。在查找的时候，一旦通过线性探测方法，找到一个空闲位置，可以认定散列表中不存在这个数据。但是如果这个空闲位置是我们后来删除的，就会导致原来的查找算法失效。本来存在的数据会被认定为不存在。解决方案，将删除的元素特殊标记为deleted，当线性探测查找的时候，遇到标记为deleted的空间，并不是停下来，而是继续往下探测。  </p>
-<p>缺陷：当散列表中插入的数据越来越多时，散列冲突发生的可能性会越来越大，空闲位置会越来越少，线性探测的时间会越来越久，极端情况下，可能需要探测整个散列表，所以最坏情况下的时间复杂度为O(n)。在删除和查找时也可能会探测整张散列表，才只能找到要查找或者删除的数据。  </p>
+<li><p>归并排序是一个<strong>稳定的排序算法</strong>，合并数组时，遇到值相同的元素，现将[p…q]区间的元素放入到临时数组temp中，保证值相同的元素在合并前后的先后顺序不变。  </p>
 </li>
-<li><p>二次探测<br>类似线性探测，线性探测每次探测的步长是1，探测的下标序列是hash(key)+0,hash(key)+1,hash(key)+2…二次探测的步长变成了原来的“二次方”，探测的下标序列是hash(key)+0,hash(key)+1<sup>2</sup>,hash(key)+2<sup>2</sup>…  </p>
+<li><p>最好、最坏、平均情况时间复杂度都是<strong>O(nlogn)</strong>。  </p>
+<figure class="highlight excel"><table><tr><td class="code"><pre><span class="line"><span class="built_in">T</span>(<span class="number">1</span>) = C；   <span class="built_in">n</span>=<span class="number">1</span>时，只需要常量级的执行时间，所以表示为C。</span><br><span class="line"><span class="built_in">T</span>(<span class="built_in">n</span>) = <span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">2</span>) + <span class="built_in">n</span>； <span class="built_in">n</span>&gt;<span class="number">1</span></span><br><span class="line">     = <span class="number">2</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">4</span>) + <span class="built_in">n</span>/<span class="number">2</span>) + <span class="built_in">n</span> = <span class="number">4</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">4</span>) + <span class="number">2</span>*<span class="built_in">n</span></span><br><span class="line">     = <span class="number">4</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">8</span>) + <span class="built_in">n</span>/<span class="number">4</span>) + <span class="number">2</span>*<span class="built_in">n</span> = <span class="number">8</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">8</span>) + <span class="number">3</span>*<span class="built_in">n</span></span><br><span class="line">     = <span class="number">8</span>*(<span class="number">2</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">16</span>) + <span class="built_in">n</span>/<span class="number">8</span>) + <span class="number">3</span>*<span class="built_in">n</span> = <span class="number">16</span>*<span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">16</span>) + <span class="number">4</span>*<span class="built_in">n</span></span><br><span class="line">     ......</span><br><span class="line">     = <span class="number">2</span>^k * <span class="built_in">T</span>(<span class="built_in">n</span>/<span class="number">2</span>^k) + k * <span class="built_in">n</span></span><br><span class="line">     ......</span><br></pre></td></tr></table></figure>
+<p>当T(n/2^k)=T(1)时，k=log<sub>2</sub>n，T(n)=Cn+nlog<sub>2</sub>n  </p>
 </li>
-<li><p>双重散列<br>不仅仅使用一个散列函数。使用一组散列函数hash1(key),hash2(key),hash3(key)…先用第一个散列函数，如果计算得到的存储位置已经被占用，再用第二个散列函数，依次类推，直到找到空闲的存储位置。  </p>
-</li>
-</ul>
-<p>不管采用哪种探测方法，当散列表中空闲位置不多的时候，散列冲突的概率就会大大提高。为了尽可能保证散列表的操作效率，一般情况下，尽可能保证散列表中有一定比列的空槽位置。用<strong>装载因子</strong>来表示空位的多少。<br>计算公式：  </p>
-<blockquote>
-<p>散列表的装载因子=填入表中的元素个数/散列表的长度   </p>
-</blockquote>
-<p>装载因子越大，说明空闲位置越少，冲突越多，散列表的性能会下降。  </p>
-</li>
-<li><p>链表法<br>在散列表中，每个“桶”或者“槽”会对应一条链表，所有散列值相同的元素都放到相同槽位对应的链表中。<br>当插入的时候，只需要通过散列函数计算出对应的散列槽位，将其插入到对应链表中即可，所以插入的时间复杂度是O(1)。当查找/删除一个元素时，同样通过散列函数计算出对应的槽，然后遍历链表查找或者删除。查找、删除的时间复杂度跟链表的长度k成正比O(k)。对于散列比较均匀的散列函数来说，k=n/m，其中n表示散列中数据的个数，m表示散列表中“槽”的个数。  </p>
+<li><p>归并排序<strong>不是原地排序算法</strong>。<br>归并排序在合并两个有序数组为一个有序数组时，需要借助额外的存储空间。每次合并操作都需要申请额外的内存空间，但在合并完成之后，临时开辟的内存空间就被释放掉了。在任意时刻，CPU只会有一个函数在执行，也就只会有一个临时的内存空间在使用。临时内存空间最大也不会超过n个数据的大小，<strong>空间复杂度是O(n)</strong>。  </p>
 </li>
 </ol>
+<h4 id="快速排序2"><a href="#快速排序2" class="headerlink" title="快速排序2"></a>快速排序<a href="#refer-anchor-2"><sup>2</sup></a></h4><p>如果要排序数组中下标从p到r之间的一组数据，选择p到r之间的任意一个数据作为分区点(pivot)。遍历p到r之间的数据，将小于pivot的放到左边，将大于pivot的放到右边，将pivot放到中间。这样数组p到r之间的数据被分成了三个部分，前面p到q-1之间都是小于pivot的，中间是pivot，后面的q+1到r之间是大于pivot的。<br>根据分治、递归的处理思想，可以用递归排序下标从p到q-1之间的数据和下标从q+1到r之间的数据，直到区间缩小为1，就说明所有的数据都有序了。  </p>
+<ul>
+<li>递推公式：<br>quick_sort(p…r) = quick_sort(p…q-1) + quick_sort(q+1…r)  </li>
+<li>终止条件：<br>p = r  <blockquote>
+<p>快速排序中的分区函数partition()，随机选择一个元素作为分区点pivot，一般情况下可以选择p到r区间的最后一个元素，对数组进行分区，函数返回分区点pivot的下标。  </p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><p>空间复杂度</p>
+<ul>
+<li>不考虑空间消耗可以申请两个临时数组X和Y，遍历数组，将小于分区点的元素拷贝到临时数组X，大于分区点的元素拷贝到临时数组Y，最后将数组X、Y中的数据顺序拷贝到原数组中。   </li>
+<li>原地分区操作，类似选择排序<br>通过游标i将数组[p…r-1]分成两部分，已处理区间[p…i-1]和未处理区间[i…r-1]，每次从未处理区间中取出一个元素[j]和分区点对比，如果小于，则将其加入到已处理区间的尾部[i]的位置。优化：不搬移数据，交换操作，将a[i]与a[j]交换。</li>
+</ul>
+</li>
+<li><p>涉及交换操作，属于<strong>不稳定的排序算法</strong>。  </p>
+</li>
+<li><p>时间复杂度<br>分区极其均衡，每次分区操作都能正好把数组分成大小接近相等的两个小区间，<strong>最好时间复杂度为O(nlogn)</strong>。<br>分区极其不均衡，数组正序，需要n次分区操作，每次分区平均要扫描n、2个元素，<strong>最坏时间复杂度为O(n<sup>2</sup>)</strong>。<br>大部分情况下的时间复杂度都可以做到O(nlogn)，只有在极端情况下，才会退化到O(n<sup>2</sup>)。<strong>平均时间复杂度O(nlogn)</strong>。   </p>
+</li>
+</ol>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p>归并排序的处理过程是由下到上的，先处理子问题，然后再合并。<br>快速排序的处理过程是由上到下的，先分区，然后再处理子问题。</p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>  
+[1] 归并排序  
+
+<pre><code>//归并排序
+public void mergeSort(int[] a) {
+    mergeSortInter(a,0,a.length-1);
+}
+public void mergeSortInter(int[] a,int start,int end) {
+    //终止条件
+    if(start==end) return;
+
+    //中间结点
+    int mid = (start+end)/2;
+
+    mergeSortInter(a,start,mid);
+    mergeSortInter(a,mid+1,end);
+
+    //合并函数
+    merge(a,start,mid,end);
+}
+public void merge(int[] a,int left,int mid,int right) {
+    //临时数组，大小为当前分区的大小
+    int[] temp = new int[right - left + 1];
+
+    int m = 0, i = left, j = mid + 1;
+    while (i &lt;= mid &amp;&amp; j &lt;= right) {
+        //取左右区间中元素最小值放入当前位置
+        temp[m++] = a[i] &lt;= a[j] ? a[i++] : a[j++];
+    }
+    //拷贝剩余数据到临时数组
+    while (i &lt;= mid)
+        temp[m++] = a[i++];
+    while (j &lt;= right)
+        temp[m++] = a[j++];
+
+    //拷贝临时数据到原数组对应区间
+    for (int k=0;k &lt;= right-left;k++)
+        a[left+k] = temp[k];
+}</code></pre><div id="refer-anchor-2"></div>  
+[2] 快速排序  
+
+<pre><code>//快速排序
+public void quickSort(int[] a) {
+    quickSortInter(a,0,a.length-1);
+}
+
+public void quickSortInter(int[] a,int start,int end) {
+    //终止条件  start 可能大于end
+    if(start&gt;=end) return;
+
+    //分区函数获取分区点
+    int p = partition(a,start,end);
+
+    quickSortInter(a,start,p-1);
+    quickSortInter(a,p+1,end);
+}
+
+public int partition(int[] a,int start,int end) {
+    //取当前分区最后一个元素做分区点
+    int pivot = a[end];
+    //记录下一个小于分区点元素值的元素应放置的下标
+    int i = start;
+    for(int j = start; j &lt; end; j++) {
+        //当前元素与分区点元素值比较，小于则当前元素与上一个小于分区点元素的后一个元素进行交换
+        if(a[j] &lt; pivot) {
+            if(i != j) {
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+            }
+            i++;
+        }
+    }
+
+    //分区点元素值与最后一个小于分区点元素的后一个元素进行交换
+    int temp = a[i];
+    a[i] =a[end];
+    a[end] = temp;
+
+    return i;
+}</code></pre><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>线性排序</title>
+    <url>/2020/04/26/%E7%BA%BF%E6%80%A7%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>时间复杂度为O(n)的线性排序算法：桶排序、计数排序、基数排序。<br>算法是非基于比较的排序算法（主排序是非比较的），不涉及元素之间的比较操作。对要排序的数据要求比较苛刻。  </p>
+<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><ul>
+<li><p>原理<br>核心思想是将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行排序。桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。</p>
+</li>
+<li><p>时间复杂度<br>如果要排序的数据有n个，把他们均匀的划分到m个桶内，每个桶有k=n/m个元素。每个桶内部使用快速排序，时间复杂度为O(k<em>logk)。m个桶排序的时间复杂度为O(m</em>k<em>logk)。因为k=n/m，所以整个桶排序的时间复杂度为O(n</em>log(n/m))。当桶的个数m接近数据个数n时，log(n/m)为一个非常小的常量，这时桶排序的时间复杂度接近O(n)。  </p>
+</li>
+<li><p>适用场景<br>排序的数据需要很容易就能划分为m个桶，桶与桶之间有着天然的大小顺序，每个桶内的数据都排序完成之后，桶与桶之间的数据不需要再进行排序。<br>数据再各个桶之间的分布是比较均匀的。如果数据经过桶的划分之后，有的桶数据非常多，有的非常少，那桶内数据排序的时间复杂度就不是常量级了。在极端情况下，如果数据都被划分到一个桶里，那就退化为O(nlogn)的排序算法了。  </p>
+<p>桶排序适合用在外部排序中。数据存储在外部磁盘中，数据量比较大，内存有限，无法将数据全部加载到内存中。  </p>
+</li>
+</ul>
+<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><ul>
+<li><p>时间复杂度<br>计数排序是桶排序的一种特殊情况。当要排序的n个数据，所处的范围并不大的时候，比如最大值为k，可以把数据划分成k个桶，每个桶内的数据值都是相同的，省去了桶内排序的时间。只涉及扫描遍历操作，时间复杂度为O(n)。  </p>
+</li>
+<li><p>原理<br>计数排序用一个数据范围大小的统计数组C[k+1]（原数组A中元素取值范围为0-k），下标k等于原数组A中元素的值，遍历原数组A将各个元素值出现的次数存储在统计数组C对应下标中c[k]（即C[k]存储的是原数组A等于k的元素的个数）。然后对统计数组C顺序求和，各个下标处C[k]存储的是小于等于k的元素个数。<br>扫描原数组A（从后面开始遍历-保证稳定性），依次取出元素的值如a作为统计数组C的下标得到统计数组C对应的值C[a]，说明到目前为止，原数组A中小于等于a的值还有C[a]个，元素a是排好序的新数组R中的第C[a]个元素(放在新数组R下标为C[a]-1的位置)，将其a放入新数组R后，原数组A小于等于a的元素剩下C[a]-1个，则统计数组C[a]=C[a]-1，类推取原数组A下一个元素值。（从后往前做减法，确定该值可以放的最大下标）</p>
+</li>
+<li><p>适用场景<br>计数排序只能用在数据范围不大的场景中，如果数据范围k比要排序的数据n大很多，就不适合用计数排序。而且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。  </p>
+</li>
+</ul>
+<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><ul>
+<li><p>原理<br>以11位手机号排序为例，如果前面几位中，其中一个数据已经比较大了，那么后几位就不用看了。先按照最后一位排序，再按照倒数第二位排序，以此类推，最后按照第一位排序，经过11次排序后，手机号有序。要求按照每位来排序的排序算法是稳定的。  </p>
+</li>
+<li><p>时间复杂度<br>根据每位来排序，可以用桶排序或者计数排序，时间复杂度可以做到O(n)。如果要排序的数据有k位，那么需要进行k次桶排序或者计数排序，总的时间复杂度是O(k*n)。当k不大时，基数排序的时间复杂度就近似于O(n)。  </p>
+</li>
+<li><p>适用场景<br>基数排序要求要排序的数据可以分割出独立的“位”来比较，而且位之间有递进关系-数据可以划分成高低位。比较两个数只需要比较高位，高位相同再比较低位。<br>每一位的数据范围不能太大，要借助线性排序算法-桶排序/计数排序来完成每一位的排序工作，否则计数排序的时间复杂度无法做到O(n)。  </p>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>桶排序：分桶-快排/归并<br>计数排序：分桶-计数-统计<br>基数排序：高位桶排序-低位桶排序</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>散列表</tag>
+        <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Trie树</title>
+    <url>/2020/05/10/Trie%E6%A0%91/</url>
+    <content><![CDATA[<h3 id="Trie树定义"><a href="#Trie树定义" class="headerlink" title="Trie树定义"></a>Trie树定义</h3><p>Tire树-字典树。一个树形结构，专门处理字符串匹配的数据结构，用来解决在一组字符串集合中快速查找某个字符串的问题。  </p>
+<p>Trie树的本质，利用字符串之间的公共前缀，将重复的前缀合并在一起。<br>根节点不包含任何信息，每个节点表示一个字符串中的字符，从根节点到各个“结尾节点”（不一定都是叶子节点）的一条路径表示一个字符串。  </p>
+<p>Trie树的构造过程的每一步都相当于往Trie树中插入一个字符串，当所有字符串都插入完成之后，Trie树就构造好了。<br>在Trie树中查找一个字符串的时候，将要查找的字符串分割成单个的字符，然后从Trie树的根节点开始匹配。  </p>
+<h3 id="实现Trie树"><a href="#实现Trie树" class="headerlink" title="实现Trie树"></a>实现Trie树</h3><ol>
+<li>将字符串集合构造成Trie树（将字符串插入到Trie树）。<br>Trie树是一个多叉树，借助散列表的思想，通过一个下标与字符一一映射的数组，来存储子节点的指针。<br>假设字符串中只有从a-z这26个小写字母，在数据中下标为0的位置，存储指向子节点a的指针，下标为1的位置存储指向子节点b的指针，以此类推，下标为25的位置，存储的是指向子节点z的指针，如果某个字符的子节点不存在，在对应下标的位置存储null。</li>
+<li>在Trie树中查询一个字符串<br>在trie树中查找字符串的时候，通过字符的ASCII码减去“a”的ASCII码，迅速找到匹配的字节点的指针。  </li>
+</ol>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        BF算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> data;</span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isEndingChar = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root = <span class="keyword">new</span> TrieNode(<span class="string">'/'</span>);</span><br><span class="line">    <span class="comment">//往Trie树中插入一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">char</span>[] text)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; text.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = text[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                TrieNode newNode =<span class="keyword">new</span> TrieNode(text[i]);</span><br><span class="line">                p.children[index] = newNode;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        p.isEndingChar = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在Trie树中查找一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">select</span><span class="params">(<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pattern.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = pattern[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p.isEndingChar == <span class="keyword">false</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+
+<p>构建Trie树的过程要扫描所有字符串，时间复杂度为O(n)，n表示虽有字符串的长度和。<br>构建好Trie树后，在其中查找字符串的时间复杂度为O(k)，k表示要查找的字符串的长度。  </p>
+<h3 id="Trie树缺点及优化"><a href="#Trie树缺点及优化" class="headerlink" title="Trie树缺点及优化"></a>Trie树缺点及优化</h3><p>用数组存储一个节点的字节点的指针，如果字符串中包含从a到z这26个字符，那每个节点都要存储一个长度为26的数组，并且数组每个元素要存储一个8或者4字节指针。浪费内存。  </p>
+<p><strong>优化</strong>：将每个节点的数组换成其他数据结构，来存储一个节点的子节点指针，有序数组、跳表、散列表、红黑树。<br>有序数组中的指针按照所指向的子节点中的字符的大小顺序排列。查询的时候，通过二分查找的方法，快速查找到某个字符应该匹配的子节点的指针。但是在往Trie树中插入一个字符串的时候，需要维护数组中数据的有序性。  </p>
+<p><strong>变体</strong>：缩点优化，对于只有一个子节点的节点，而且此节点不是一个串的结束节点，可以将此节点与子节点合并。节省空间增加编码难度。  </p>
+<p><strong>扩展</strong>：后缀树、DAT（双数组trie树）。  </p>
+<h3 id="Trie树的使用场景"><a href="#Trie树的使用场景" class="headerlink" title="Trie树的使用场景"></a>Trie树的使用场景</h3><p>动态数据高效操作的数据结构：散列表、红黑树、跳表  </p>
+<ul>
+<li>字符串中包含的字符集不能太大。浪费存储空间。  </li>
+<li>字符串的前缀重合比较多。  </li>
+<li>需要从零开始实现一个Trie树。  </li>
+<li>用到了指针，数据块不连续，堆缓存不友好。  </li>
+</ul>
+<p>Trie树不适合精确匹配查找（散列表、红黑树），比较适合查找前缀匹配的字符串。搜索引擎提示关键词、输入法自动补全、IDE代码编辑器自动补全、浏览器啊网址输入自动补全、屏蔽字/敏感词检测。  </p>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><ul>
+<li>复杂中文实现  </li>
+<li>前缀匹配过多，选择展示  </li>
+<li>拼写错误，校正提示  </li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>Apache Commons<br>PatriciaTrie<br>AbstractPatriciaTrie  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>Trie</tag>
       </tags>
   </entry>
   <entry>
@@ -1061,88 +1134,58 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
-    <title>堆的应用</title>
-    <url>/2020/05/08/%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<h4 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h4><p>在优先级队列中，数据的出队顺序不是先进先出，而是按照优先级来，优先级高的，最先出队。  </p>
-<p><strong>一个堆可以看做一个优先级队列</strong>，往优先级队列中插入一个元素，就相当于往堆中插入一个元素；从优先级队列中取出优先级最高的元素，相当于取出堆顶元素。  </p>
-<ul>
-<li><p>合并有序小文件<br>小文件中存储的都是有序的字符串。从各个小文件中各取出一个字符串，放入到与文件个数等长的小顶堆中，堆顶的元素就是优先级队列队首的元素-最小的字符串。<br>将这个字符串放入到大文件中，并将其从堆中删除。然后再从对应的小文件中取出下一个字符串，放入到堆中。循环。  </p>
-<p>删除堆顶数据和往堆中插入数据的时间复杂度都是O(logn)，n表示堆中的数据个数。  </p>
-</li>
-<li><p>高性能定时器<br>按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（小顶堆的堆顶）存储的是最先执行的任务。<br>拿队首任务的执行时间点，与当前时间点相减，得到时间间隔T。表示从当前时间开始，等待多久才会有第一个任务需要被执行。这样定时器就可以设定在T秒之后再来执行任务，从当前时间点到（T-1）秒这段时间里，定时器不需要做任何事情。<br>当T秒过去后，定时器取优先级队列中队首的任务执行。然后再计算新的队首任务的执行时间点与当前时间点的差值，该值是定时器执行下一个任务需要等待的时间。</p>
-<p>避免了普通定时器频繁轮训和遍历整个任务列表。  </p>
-</li>
-</ul>
-<h4 id="利用堆求TopK"><a href="#利用堆求TopK" class="headerlink" title="利用堆求TopK"></a>利用堆求TopK</h4><ul>
-<li><p>静态数据集合<br>针对包含n个数据的数组，查找前K大元素。先顺序取出数组中前k个元素，维护成一个大小为K的小顶堆，再顺序遍历数组，从数组中取出数据与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如果比堆顶元素小，则不处理。数组中护具都遍历完之后，堆中的数据就是前K大数据。  </p>
-<p>遍历数组时间复杂度为O(n)，一次堆化操作时间复杂度为O(logK)，最坏情况下，n个元素都入堆一次，时间复杂度为O(nlogK)。</p>
-</li>
-<li><p>动态数据集合<br>如果每次询问前K大数据，都基于当前的数据重新计算的话，时间复杂度为O(nlogK)，n表示当前的数据的大小。  </p>
-<p>维护一个K大小的小顶堆，当有数据被添加进集合中时，与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如多比堆顶元素小，就不做处理。无论任何时候需要查询当前的前K大数据，都可以立刻返回。  </p>
-</li>
-</ul>
-<h4 id="利用堆求中位数"><a href="#利用堆求中位数" class="headerlink" title="利用堆求中位数"></a>利用堆求中位数</h4><p>中位数，处在中间位置的那个数。如果数据的个数是奇数，把数据从小到大排列，第n/2 + 1个数就是中位数（数据从0开始编号）；如果数据的个数是偶数，处于中间位置的数据有两个，第n/2个和第n/2 + 1个，可以随意取一个作为中位数。  </p>
-<ul>
-<li><p>静态数据<br>中位数固定，可以先排序，第n/2个数据就是中位数。每次询问中位数直接返回固定值。  </p>
-</li>
-<li><p>动态数据<br>中位数在不停的变动，不能每次都先排序。  </p>
-<p>维护两个堆，一个大顶堆，一个小顶堆。大顶堆存储前半部分数据，小顶堆存储后半部分数据，而且小顶堆中的数据都大于大顶堆中的数据。<br>如果新加入的数据小于等于大顶堆的堆顶元素，就将新数据插入到大顶堆；否则将新数据插入到小顶堆。插入后两个堆中的数据个数不符合约定情况时，从一个堆中将堆顶元素移动到另一个堆。  </p>
-<p>插入数据因为需要涉及堆化，时间复杂度为O(logn)，求中位数只需要返回大顶堆的堆顶元素，时间复杂度是O(1)。  </p>
-<p>中位数相当于50%，可以扩展到任意百分位数。  </p>
-</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>堆</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Trie树</title>
-    <url>/2020/05/10/Trie%E6%A0%91/</url>
-    <content><![CDATA[<h3 id="Trie树定义"><a href="#Trie树定义" class="headerlink" title="Trie树定义"></a>Trie树定义</h3><p>Tire树-字典树。一个树形结构，专门处理字符串匹配的数据结构，用来解决在一组字符串集合中快速查找某个字符串的问题。  </p>
-<p>Trie树的本质，利用字符串之间的公共前缀，将重复的前缀合并在一起。<br>根节点不包含任何信息，每个节点表示一个字符串中的字符，从根节点到各个“结尾节点”（不一定都是叶子节点）的一条路径表示一个字符串。  </p>
-<p>Trie树的构造过程的每一步都相当于往Trie树中插入一个字符串，当所有字符串都插入完成之后，Trie树就构造好了。<br>在Trie树中查找一个字符串的时候，将要查找的字符串分割成单个的字符，然后从Trie树的根节点开始匹配。  </p>
-<h3 id="实现Trie树"><a href="#实现Trie树" class="headerlink" title="实现Trie树"></a>实现Trie树</h3><ol>
-<li>将字符串集合构造成Trie树（将字符串插入到Trie树）。<br>Trie树是一个多叉树，借助散列表的思想，通过一个下标与字符一一映射的数组，来存储子节点的指针。<br>假设字符串中只有从a-z这26个小写字母，在数据中下标为0的位置，存储指向子节点a的指针，下标为1的位置存储指向子节点b的指针，以此类推，下标为25的位置，存储的是指向子节点z的指针，如果某个字符的子节点不存在，在对应下标的位置存储null。</li>
-<li>在Trie树中查询一个字符串<br>在trie树中查找字符串的时候，通过字符的ASCII码减去“a”的ASCII码，迅速找到匹配的字节点的指针。  </li>
-</ol>
+    <title>字符串匹配：BF&amp;RK</title>
+    <url>/2020/05/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABF&amp;RK/</url>
+    <content><![CDATA[<h3 id="BF算法"><a href="#BF算法" class="headerlink" title="BF算法"></a>BF算法</h3><p>Brute Force算法，暴力匹配算法，也叫朴素匹配算法。  </p>
+<p>在字符串A中查找字符串B，字符串A为<strong>主串</strong>，字符串B为<strong>模式串</strong>。主串的长度记为n，模式串的长度记作m，主串中查找模式串，n&gt;m。  </p>
+<p><strong>算法思想：</strong><br>在主串中，检查起始位置分别是0、1、2…n-m且长度为m的n-m+1个子串，看有没有跟模式串匹配的。  </p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
         BF算法
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> data;</span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isEndingChar = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root = <span class="keyword">new</span> TrieNode(<span class="string">'/'</span>);</span><br><span class="line">    <span class="comment">//往Trie树中插入一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">char</span>[] text)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; text.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = text[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                TrieNode newNode =<span class="keyword">new</span> TrieNode(text[i]);</span><br><span class="line">                p.children[index] = newNode;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        p.isEndingChar = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在Trie树中查找一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">select</span><span class="params">(<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pattern.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = pattern[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p.isEndingChar == <span class="keyword">false</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> main 主串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> pattern 模式串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 匹配下标的起始值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexBf</span><span class="params">(<span class="keyword">char</span>[] main,<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//最大的首个字符的索引</span></span><br><span class="line">    <span class="keyword">int</span> maxFirst = main.length -pattern.length;</span><br><span class="line">    <span class="keyword">char</span> first = pattern[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= maxFirst; i++) &#123;</span><br><span class="line">        <span class="comment">//第一个匹配的字符</span></span><br><span class="line">        <span class="keyword">while</span>(first != main[i]) &#123;</span><br><span class="line">            <span class="keyword">if</span>(++i &gt; maxFirst) </span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//子串匹配</span></span><br><span class="line">        <span class="keyword">int</span> m = i+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; pattern.length; j++,m++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(main[m] != pattern[j])</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//匹配成功</span></span><br><span class="line">        <span class="keyword">if</span>(m -i == pattern.length)</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">    retuen -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 </div>
 
-<p>构建Trie树的过程要扫描所有字符串，时间复杂度为O(n)，n表示虽有字符串的长度和。<br>构建好Trie树后，在其中查找字符串的时间复杂度为O(k)，k表示要查找的字符串的长度。  </p>
-<h3 id="Trie树缺点及优化"><a href="#Trie树缺点及优化" class="headerlink" title="Trie树缺点及优化"></a>Trie树缺点及优化</h3><p>用数组存储一个节点的字节点的指针，如果字符串中包含从a到z这26个字符，那每个节点都要存储一个长度为26的数组，并且数组每个元素要存储一个8或者4字节指针。浪费内存。  </p>
-<p><strong>优化</strong>：将每个节点的数组换成其他数据结构，来存储一个节点的子节点指针，有序数组、跳表、散列表、红黑树。<br>有序数组中的指针按照所指向的子节点中的字符的大小顺序排列。查询的时候，通过二分查找的方法，快速查找到某个字符应该匹配的子节点的指针。但是在往Trie树中插入一个字符串的时候，需要维护数组中数据的有序性。  </p>
-<p><strong>变体</strong>：缩点优化，对于只有一个子节点的节点，而且此节点不是一个串的结束节点，可以将此节点与子节点合并。节省空间增加编码难度。  </p>
-<p><strong>扩展</strong>：后缀树、DAT（双数组trie树）。  </p>
-<h3 id="Trie树的使用场景"><a href="#Trie树的使用场景" class="headerlink" title="Trie树的使用场景"></a>Trie树的使用场景</h3><p>动态数据高效操作的数据结构：散列表、红黑树、跳表  </p>
-<ul>
-<li>字符串中包含的字符集不能太大。浪费存储空间。  </li>
-<li>字符串的前缀重合比较多。  </li>
-<li>需要从零开始实现一个Trie树。  </li>
-<li>用到了指针，数据块不连续，堆缓存不友好。  </li>
-</ul>
-<p>Trie树不适合精确匹配查找（散列表、红黑树），比较适合查找前缀匹配的字符串。搜索引擎提示关键词、输入法自动补全、IDE代码编辑器自动补全、浏览器啊网址输入自动补全、屏蔽字/敏感词检测。  </p>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><ul>
-<li>复杂中文实现  </li>
-<li>前缀匹配过多，选择展示  </li>
-<li>拼写错误，校正提示  </li>
-</ul>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>Apache Commons<br>PatriciaTrie<br>AbstractPatriciaTrie  </p>
+<p><strong>时间复杂度：</strong><br>极端情况下，在“aaaa…aaaa”中查找“aaaab”。每次都对比m个字符，要对比n-m+1次，最坏情况时间复杂度是O(n*m)。  </p>
+<ol>
+<li>实际软件开发中，模式串和主串长度不会太长，每次模式串与主串中的子串匹配时，中途遇到不能匹配的字符的时候就可以停止，不需要把每个字符都比对一下。  </li>
+<li>算法思想简单，代码实现简单，不容易出错，有bug容易暴露和修复。KISS原则。</li>
+</ol>
+<h3 id="RK算法"><a href="#RK算法" class="headerlink" title="RK算法"></a>RK算法</h3><p>Rabin-Karp算法，BF算法升级版。<br>BF算法中，每次检查主串与子串是否匹配，需要依次对比每个字符，BF算法的时间复杂度比较高为O(n*m)。对其稍加改造，引入哈希算法，时间复杂度立刻降低。  </p>
+<p><strong>算法思想：</strong><br>通过哈希算法对主串中的n-m+1个子串分别求哈希值，然后逐个与模式串的哈希值比较大小。如果某个子串的哈希值与模式串相等，说明对应的子串和模式串匹配(暂时忽略哈希冲突)。哈希值是一个数字，数字之间比较是否相等非常快速。<br>计算子串的哈希值时，依然需要遍历子串中的每个字符，模式串与子串的比较效率提高，算法整体的效率并未提高。  </p>
+<p>哈希算法设计技巧，假设主串的字符集中只包含K个字符，可用一个K进制数来表示一个子串，这个K进制数转化成十进制数，作为子串的哈希值。<br>比如要处理的字符串只包含a~z这26个小写字符，可以用二十六进制来表示一个字符串。把a~z这26个字符映射到0~25这26个数字，a表示0，b表示1，以此类推，z表示25。一个包含a到z这26个字符的字符串，计算哈希；<br>“cba”=’c’*26<sup>2</sup> + ‘b’*26<sup>1</sup> + ‘a’*26<sup>0</sup><br>=2*26<sup>2</sup> + 1*26<sup>1</sup> + 0*26<sup>0</sup><br>=1353  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        RK算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> main 主串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> pattern 模式串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 匹配下标的起始值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexRk</span><span class="params">(<span class="keyword">char</span>[] main,<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> mLen = main.length;</span><br><span class="line">    <span class="keyword">int</span> pLen = pattern.length;</span><br><span class="line">    <span class="keyword">int</span> pHash = hash(pattern,<span class="number">0</span>,pLen);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mLen - pLen +<span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(pHash == hash(main, i, pLen))</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 使用[a-z] 对应[0-25] 26进制计算hash值</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> chars 字符数组</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> start 起始下标</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> len 长度</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 匹配下标的起始值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(<span class="keyword">char</span>[] chars, <span class="keyword">int</span> start, <span class="keyword">int</span> len)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> hash = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = start; i &lt; start + len; i++,x++) &#123;</span><br><span class="line">        hash += Math.pow(<span class="number">26</span>, len - x - <span class="number">1</span>) * (chars[i] - <span class="string">"a"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+
+<p>哈希算法特点，在主串中，相邻两个子串的哈希值的计算公式有一定关系：相邻连个子串s[i-1,i+m-2]和s[i,i+m-1] (i表示子串在主串中的其实位置，子串的长度都为m)，对应哈希值计算公式有交集，可以使用s[i-1]的哈希值快速计算出s[i]的哈希值：<br>h[i-1]=26<sup>m-1</sup>*(s[i-1]-‘a’) + 26<sup>m-2</sup>*(s[i]-‘a’)  + 26<sup>0</sup>*(s[i+m-2]-‘a’)<br>h[i]=26<sup>m-1</sup>*(s[i]-‘a’)+   + 26<sup>1</sup>*(s[i+m-2]-‘a’)+ 26<sup>0</sup>*(s[i+m-1]-‘a’)  </p>
+<p>B=A<em>26;<br>h[i]=(h[i-1]-26<sup>m-1</sup>\</em>(s[i-1]-‘a’))*26 + 26<sup>0</sup>*(s[i+m-1]-‘a’)  </p>
+<p>26<sup>m-1</sup>可以进一步通过查表提高计算效率，事先计算好26<sup>0</sup>、26<sup>1</sup>、26<sup>2</sup>…26<sup>m-1</sup>，并存储在一个长度为m的数组中，公式中的次方就对应数组的下标，需要计算26的x次方的时候，可以直接从数组的下标为x的位置取值，节省重复计算时间。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        RK算法优化
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * rk字符串匹配</span></span><br><span class="line"><span class="comment">     * 改良：</span></span><br><span class="line"><span class="comment">     * 1、可以为所有字符串</span></span><br><span class="line"><span class="comment">     * 2、解决存在hash冲突</span></span><br><span class="line"><span class="comment">     * 3、优化hash函数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexRk2</span><span class="params">(<span class="keyword">char</span>[] main, <span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> mLen = main.length;</span><br><span class="line">        <span class="keyword">int</span> pLen = pattern.length;</span><br><span class="line">        <span class="keyword">int</span> pHash = hashPrime(pattern, <span class="number">0</span>, pLen);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mLen - pLen + <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pHash == hashPrime(main, i, pLen)) &#123;</span><br><span class="line">                <span class="keyword">int</span> j = <span class="number">0</span>, k = i;</span><br><span class="line">                <span class="keyword">while</span> (main[k++] != pattern[j++] || j &gt; pLen) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 0-255下所有的质数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">char</span>[] PRIME_NUMBERS = &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>, <span class="number">29</span>, <span class="number">31</span>, <span class="number">37</span>, <span class="number">41</span>, <span class="number">53</span>, <span class="number">59</span>, <span class="number">61</span>, <span class="number">67</span>, <span class="number">71</span>, <span class="number">73</span>, <span class="number">79</span>, <span class="number">83</span>, <span class="number">89</span>, <span class="number">97</span>,</span><br><span class="line">            <span class="number">101</span>, <span class="number">103</span>, <span class="number">107</span>, <span class="number">109</span>, <span class="number">113</span>,</span><br><span class="line">            <span class="number">127</span>, <span class="number">131</span>, <span class="number">137</span>, <span class="number">139</span>, <span class="number">149</span>, <span class="number">151</span>, <span class="number">157</span>, <span class="number">163</span>, <span class="number">167</span>, <span class="number">173</span>,</span><br><span class="line">            <span class="number">179</span>, <span class="number">181</span>, <span class="number">191</span>, <span class="number">193</span>, <span class="number">197</span>, <span class="number">199</span>, <span class="number">211</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用0-255下所有的质数计算hash值</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> chars 字符数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> start 起始下标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> len   长度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashPrime</span><span class="params">(<span class="keyword">char</span>[] chars, <span class="keyword">int</span> start, <span class="keyword">int</span> len)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hash = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> primeLen = PRIME_NUMBERS.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; start + len; i++) &#123;</span><br><span class="line">            hash += PRIME_NUMBERS[Objects.hashCode(chars[i]) % primeLen];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> hash;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+
+<p><strong>时间复杂度：</strong><br>整个RK算法包含两个部分，计算子串哈希值和模式串哈希值与子串哈希值之间的比较。<br>第一部分通过设计特殊的哈希算法，只需要扫描一遍主串就能计算所有子串的哈希值，时间复杂度为O(n)。<br>第二部分，与每个子串哈希值比较的时间复杂度为O(1)，总共需要比较n-m+1个子串的哈希值，时间复杂度是O(n)<br>RK算法整体的时间复杂度为O(n)。  </p>
+<p>其他哈希算法有散列冲突时，再对比一下子串和模式串本身。极端情况下，每次都要再对比子串和模式串本身，时间复杂度退化成O(n*m)。  </p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>一维字符串-&gt;二位字符串矩阵  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>Trie</tag>
+        <tag>字符串匹配</tag>
       </tags>
   </entry>
   <entry>
@@ -1209,85 +1252,42 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
-    <title>字符串匹配：BF&amp;RK</title>
-    <url>/2020/05/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABF&amp;RK/</url>
-    <content><![CDATA[<h3 id="BF算法"><a href="#BF算法" class="headerlink" title="BF算法"></a>BF算法</h3><p>Brute Force算法，暴力匹配算法，也叫朴素匹配算法。  </p>
-<p>在字符串A中查找字符串B，字符串A为<strong>主串</strong>，字符串B为<strong>模式串</strong>。主串的长度记为n，模式串的长度记作m，主串中查找模式串，n&gt;m。  </p>
-<p><strong>算法思想：</strong><br>在主串中，检查起始位置分别是0、1、2…n-m且长度为m的n-m+1个子串，看有没有跟模式串匹配的。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        BF算法
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> main 主串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> pattern 模式串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 匹配下标的起始值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexBf</span><span class="params">(<span class="keyword">char</span>[] main,<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//最大的首个字符的索引</span></span><br><span class="line">    <span class="keyword">int</span> maxFirst = main.length -pattern.length;</span><br><span class="line">    <span class="keyword">char</span> first = pattern[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= maxFirst; i++) &#123;</span><br><span class="line">        <span class="comment">//第一个匹配的字符</span></span><br><span class="line">        <span class="keyword">while</span>(first != main[i]) &#123;</span><br><span class="line">            <span class="keyword">if</span>(++i &gt; maxFirst) </span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//子串匹配</span></span><br><span class="line">        <span class="keyword">int</span> m = i+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; pattern.length; j++,m++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(main[m] != pattern[j])</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//匹配成功</span></span><br><span class="line">        <span class="keyword">if</span>(m -i == pattern.length)</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">    retuen -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>
-
-<p><strong>时间复杂度：</strong><br>极端情况下，在“aaaa…aaaa”中查找“aaaab”。每次都对比m个字符，要对比n-m+1次，最坏情况时间复杂度是O(n*m)。  </p>
-<ol>
-<li>实际软件开发中，模式串和主串长度不会太长，每次模式串与主串中的子串匹配时，中途遇到不能匹配的字符的时候就可以停止，不需要把每个字符都比对一下。  </li>
-<li>算法思想简单，代码实现简单，不容易出错，有bug容易暴露和修复。KISS原则。</li>
-</ol>
-<h3 id="RK算法"><a href="#RK算法" class="headerlink" title="RK算法"></a>RK算法</h3><p>Rabin-Karp算法，BF算法升级版。<br>BF算法中，每次检查主串与子串是否匹配，需要依次对比每个字符，BF算法的时间复杂度比较高为O(n*m)。对其稍加改造，引入哈希算法，时间复杂度立刻降低。  </p>
-<p><strong>算法思想：</strong><br>通过哈希算法对主串中的n-m+1个子串分别求哈希值，然后逐个与模式串的哈希值比较大小。如果某个子串的哈希值与模式串相等，说明对应的子串和模式串匹配(暂时忽略哈希冲突)。哈希值是一个数字，数字之间比较是否相等非常快速。<br>计算子串的哈希值时，依然需要遍历子串中的每个字符，模式串与子串的比较效率提高，算法整体的效率并未提高。  </p>
-<p>哈希算法设计技巧，假设主串的字符集中只包含K个字符，可用一个K进制数来表示一个子串，这个K进制数转化成十进制数，作为子串的哈希值。<br>比如要处理的字符串只包含a~z这26个小写字符，可以用二十六进制来表示一个字符串。把a~z这26个字符映射到0~25这26个数字，a表示0，b表示1，以此类推，z表示25。一个包含a到z这26个字符的字符串，计算哈希；<br>“cba”=’c’*26<sup>2</sup> + ‘b’*26<sup>1</sup> + ‘a’*26<sup>0</sup><br>=2*26<sup>2</sup> + 1*26<sup>1</sup> + 0*26<sup>0</sup><br>=1353  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        RK算法
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> main 主串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> pattern 模式串</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 匹配下标的起始值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexRk</span><span class="params">(<span class="keyword">char</span>[] main,<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> mLen = main.length;</span><br><span class="line">    <span class="keyword">int</span> pLen = pattern.length;</span><br><span class="line">    <span class="keyword">int</span> pHash = hash(pattern,<span class="number">0</span>,pLen);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mLen - pLen +<span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(pHash == hash(main, i, pLen))</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 使用[a-z] 对应[0-25] 26进制计算hash值</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> chars 字符数组</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> start 起始下标</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> len 长度</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> 匹配下标的起始值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(<span class="keyword">char</span>[] chars, <span class="keyword">int</span> start, <span class="keyword">int</span> len)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> hash = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = start; i &lt; start + len; i++,x++) &#123;</span><br><span class="line">        hash += Math.pow(<span class="number">26</span>, len - x - <span class="number">1</span>) * (chars[i] - <span class="string">"a"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>
-
-<p>哈希算法特点，在主串中，相邻两个子串的哈希值的计算公式有一定关系：相邻连个子串s[i-1,i+m-2]和s[i,i+m-1] (i表示子串在主串中的其实位置，子串的长度都为m)，对应哈希值计算公式有交集，可以使用s[i-1]的哈希值快速计算出s[i]的哈希值：<br>h[i-1]=26<sup>m-1</sup>*(s[i-1]-‘a’) + 26<sup>m-2</sup>*(s[i]-‘a’)  + 26<sup>0</sup>*(s[i+m-2]-‘a’)<br>h[i]=26<sup>m-1</sup>*(s[i]-‘a’)+   + 26<sup>1</sup>*(s[i+m-2]-‘a’)+ 26<sup>0</sup>*(s[i+m-1]-‘a’)  </p>
-<p>B=A<em>26;<br>h[i]=(h[i-1]-26<sup>m-1</sup>\</em>(s[i-1]-‘a’))*26 + 26<sup>0</sup>*(s[i+m-1]-‘a’)  </p>
-<p>26<sup>m-1</sup>可以进一步通过查表提高计算效率，事先计算好26<sup>0</sup>、26<sup>1</sup>、26<sup>2</sup>…26<sup>m-1</sup>，并存储在一个长度为m的数组中，公式中的次方就对应数组的下标，需要计算26的x次方的时候，可以直接从数组的下标为x的位置取值，节省重复计算时间。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        RK算法优化
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * rk字符串匹配</span></span><br><span class="line"><span class="comment">     * 改良：</span></span><br><span class="line"><span class="comment">     * 1、可以为所有字符串</span></span><br><span class="line"><span class="comment">     * 2、解决存在hash冲突</span></span><br><span class="line"><span class="comment">     * 3、优化hash函数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexRk2</span><span class="params">(<span class="keyword">char</span>[] main, <span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> mLen = main.length;</span><br><span class="line">        <span class="keyword">int</span> pLen = pattern.length;</span><br><span class="line">        <span class="keyword">int</span> pHash = hashPrime(pattern, <span class="number">0</span>, pLen);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mLen - pLen + <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pHash == hashPrime(main, i, pLen)) &#123;</span><br><span class="line">                <span class="keyword">int</span> j = <span class="number">0</span>, k = i;</span><br><span class="line">                <span class="keyword">while</span> (main[k++] != pattern[j++] || j &gt; pLen) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 0-255下所有的质数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">char</span>[] PRIME_NUMBERS = &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>, <span class="number">29</span>, <span class="number">31</span>, <span class="number">37</span>, <span class="number">41</span>, <span class="number">53</span>, <span class="number">59</span>, <span class="number">61</span>, <span class="number">67</span>, <span class="number">71</span>, <span class="number">73</span>, <span class="number">79</span>, <span class="number">83</span>, <span class="number">89</span>, <span class="number">97</span>,</span><br><span class="line">            <span class="number">101</span>, <span class="number">103</span>, <span class="number">107</span>, <span class="number">109</span>, <span class="number">113</span>,</span><br><span class="line">            <span class="number">127</span>, <span class="number">131</span>, <span class="number">137</span>, <span class="number">139</span>, <span class="number">149</span>, <span class="number">151</span>, <span class="number">157</span>, <span class="number">163</span>, <span class="number">167</span>, <span class="number">173</span>,</span><br><span class="line">            <span class="number">179</span>, <span class="number">181</span>, <span class="number">191</span>, <span class="number">193</span>, <span class="number">197</span>, <span class="number">199</span>, <span class="number">211</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用0-255下所有的质数计算hash值</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> chars 字符数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> start 起始下标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> len   长度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashPrime</span><span class="params">(<span class="keyword">char</span>[] chars, <span class="keyword">int</span> start, <span class="keyword">int</span> len)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hash = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> primeLen = PRIME_NUMBERS.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; start + len; i++) &#123;</span><br><span class="line">            hash += PRIME_NUMBERS[Objects.hashCode(chars[i]) % primeLen];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> hash;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>
-
-<p><strong>时间复杂度：</strong><br>整个RK算法包含两个部分，计算子串哈希值和模式串哈希值与子串哈希值之间的比较。<br>第一部分通过设计特殊的哈希算法，只需要扫描一遍主串就能计算所有子串的哈希值，时间复杂度为O(n)。<br>第二部分，与每个子串哈希值比较的时间复杂度为O(1)，总共需要比较n-m+1个子串的哈希值，时间复杂度是O(n)<br>RK算法整体的时间复杂度为O(n)。  </p>
-<p>其他哈希算法有散列冲突时，再对比一下子串和模式串本身。极端情况下，每次都要再对比子串和模式串本身，时间复杂度退化成O(n*m)。  </p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>一维字符串-&gt;二位字符串矩阵  </p>
+    <title>堆的应用</title>
+    <url>/2020/05/08/%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<h4 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h4><p>在优先级队列中，数据的出队顺序不是先进先出，而是按照优先级来，优先级高的，最先出队。  </p>
+<p><strong>一个堆可以看做一个优先级队列</strong>，往优先级队列中插入一个元素，就相当于往堆中插入一个元素；从优先级队列中取出优先级最高的元素，相当于取出堆顶元素。  </p>
+<ul>
+<li><p>合并有序小文件<br>小文件中存储的都是有序的字符串。从各个小文件中各取出一个字符串，放入到与文件个数等长的小顶堆中，堆顶的元素就是优先级队列队首的元素-最小的字符串。<br>将这个字符串放入到大文件中，并将其从堆中删除。然后再从对应的小文件中取出下一个字符串，放入到堆中。循环。  </p>
+<p>删除堆顶数据和往堆中插入数据的时间复杂度都是O(logn)，n表示堆中的数据个数。  </p>
+</li>
+<li><p>高性能定时器<br>按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（小顶堆的堆顶）存储的是最先执行的任务。<br>拿队首任务的执行时间点，与当前时间点相减，得到时间间隔T。表示从当前时间开始，等待多久才会有第一个任务需要被执行。这样定时器就可以设定在T秒之后再来执行任务，从当前时间点到（T-1）秒这段时间里，定时器不需要做任何事情。<br>当T秒过去后，定时器取优先级队列中队首的任务执行。然后再计算新的队首任务的执行时间点与当前时间点的差值，该值是定时器执行下一个任务需要等待的时间。</p>
+<p>避免了普通定时器频繁轮训和遍历整个任务列表。  </p>
+</li>
+</ul>
+<h4 id="利用堆求TopK"><a href="#利用堆求TopK" class="headerlink" title="利用堆求TopK"></a>利用堆求TopK</h4><ul>
+<li><p>静态数据集合<br>针对包含n个数据的数组，查找前K大元素。先顺序取出数组中前k个元素，维护成一个大小为K的小顶堆，再顺序遍历数组，从数组中取出数据与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如果比堆顶元素小，则不处理。数组中护具都遍历完之后，堆中的数据就是前K大数据。  </p>
+<p>遍历数组时间复杂度为O(n)，一次堆化操作时间复杂度为O(logK)，最坏情况下，n个元素都入堆一次，时间复杂度为O(nlogK)。</p>
+</li>
+<li><p>动态数据集合<br>如果每次询问前K大数据，都基于当前的数据重新计算的话，时间复杂度为O(nlogK)，n表示当前的数据的大小。  </p>
+<p>维护一个K大小的小顶堆，当有数据被添加进集合中时，与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如多比堆顶元素小，就不做处理。无论任何时候需要查询当前的前K大数据，都可以立刻返回。  </p>
+</li>
+</ul>
+<h4 id="利用堆求中位数"><a href="#利用堆求中位数" class="headerlink" title="利用堆求中位数"></a>利用堆求中位数</h4><p>中位数，处在中间位置的那个数。如果数据的个数是奇数，把数据从小到大排列，第n/2 + 1个数就是中位数（数据从0开始编号）；如果数据的个数是偶数，处于中间位置的数据有两个，第n/2个和第n/2 + 1个，可以随意取一个作为中位数。  </p>
+<ul>
+<li><p>静态数据<br>中位数固定，可以先排序，第n/2个数据就是中位数。每次询问中位数直接返回固定值。  </p>
+</li>
+<li><p>动态数据<br>中位数在不停的变动，不能每次都先排序。  </p>
+<p>维护两个堆，一个大顶堆，一个小顶堆。大顶堆存储前半部分数据，小顶堆存储后半部分数据，而且小顶堆中的数据都大于大顶堆中的数据。<br>如果新加入的数据小于等于大顶堆的堆顶元素，就将新数据插入到大顶堆；否则将新数据插入到小顶堆。插入后两个堆中的数据个数不符合约定情况时，从一个堆中将堆顶元素移动到另一个堆。  </p>
+<p>插入数据因为需要涉及堆化，时间复杂度为O(logn)，求中位数只需要返回大顶堆的堆顶元素，时间复杂度是O(1)。  </p>
+<p>中位数相当于50%，可以扩展到任意百分位数。  </p>
+</li>
+</ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>字符串匹配</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>散列表应用</title>
-    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<p>散列表支持非常高效的数据插入、删除、查找操作，但是散列表中的数据都是通过散列函数打乱之后无规律的存储的，无法支持按照某种顺序快速地遍历数据。如果希望按照顺序遍历散列表中的数据，需要将散列表中的数据拷贝到数组中，然后排序再遍历。<br>散列表是动态数据结构，不停地有数据的插入、删除，每次希望按顺序遍历散列表中的数据的时候，都需要先排序，效率很低，为了解决这个问题，将散列表和链表（或者跳表）结合在一起使用。  </p>
-<h4 id="LRU缓存淘汰算法"><a href="#LRU缓存淘汰算法" class="headerlink" title="LRU缓存淘汰算法"></a>LRU缓存淘汰算法</h4><ul>
-<li><p>通过链表实现LRU缓存淘汰算法：维护一个按照访问时间从大到小有序排列的链表结构。因为缓存大小有限，当缓存空间不够，需要淘汰一个数据的时候，直接将链表头部的结点删除。<br>当要缓存某个数据的时候，先在链表中查找这个数据。如果没有找到，则直接将数据放到链表的尾部；如果找到了，就把它移动到链表的尾部。因为查找数据需要遍历链表，所以单纯使用链表实现的LRU缓存淘汰算法的时间复杂度很高为O(n)。  </p>
-</li>
-<li><p>将散列表和链表两种结构组合使用，可以将添加、删除、查找操作的时间复杂度都降低到O(1)。使用双向链表存储数据，链表中的每个节点除了存储数据data、前驱指针prev、后继指针next之外，还新增了一个特殊的字段hnext。这里的散列表通过链表法解决散列冲突，每个节点会在两条链中。一个链式双向链表，一个是散列表中的拉链。前驱和后继指针将结点串在双向链表中，hnext指针将结点串在散列表的拉链中。  </p>
-<blockquote>
-<ul>
-<li>查找数据，散列表中查找数据的时间复杂度为O(1)。找到数据之后将其移动到双向链表的尾部。  </li>
-<li>删除数据，散列表中在O(1)时间复杂度里找到要删除的结点，双向链表中通过前驱指针O(1)时间复杂度获取前驱结点。则删除结点的时间复杂度为O(1)。  </li>
-<li>添加数据，先判断数据是否已经在缓存中。如果存在，需要将其移动到双向链表的尾部；如果不存在，判断缓存是否已满，如果已满，则将双向链表头部的结点删除在将数据放到链表的尾部，如果未满，则直接将数据放到链表的尾部。<br>涉及查找操作都通过散列表来完成，其他删除、插入操作通过链表来完成，只需更改指针指向。时间复杂度都为O(1)。  </li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h4 id="Redis有序集合"><a href="#Redis有序集合" class="headerlink" title="Redis有序集合"></a>Redis有序集合</h4><p>有序集合中，每个成员对象有两个重要的属性，键值key和分值score，可以通过score查找数据，也可以通过key来查找数据。<br>按照分值将对象组织成跳表的结构<br>按照键值构建一个散列表   </p>
-<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><p>通过散列表和双向链表组合实现。<br>不仅支持按照插入顺序遍历数据，还支持按照访问数据遍历数据。  </p>
-<figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 10是初始大小，0.75是装载因子，true是表示按照访问时间排序</span></span><br><span class="line">HashMap&lt;<span class="built_in">Integer</span>, <span class="built_in">Integer</span>&gt; m = <span class="literal">new</span> LinkedHashMap&lt;&gt;(<span class="number">10</span>, <span class="number">0.75</span>f, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>散列表</tag>
+        <tag>堆</tag>
       </tags>
   </entry>
   <entry>
@@ -1336,6 +1336,297 @@ public int hashCode() {
       <tags>
         <tag>贪心算法</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>二叉树</title>
+    <url>/2020/05/06/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
+<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
+<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
+<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
+<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
+<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
+</ol>
+<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
+<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
+</li>
+<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
+</li>
+<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
+<p> 递推公式：  </p>
+ <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">前序遍历  </span><br><span class="line">preOrder<span class="function"><span class="params">(r)</span> = <span class="title">print</span> <span class="title">r</span> -&gt;</span> preOrder<span class="function"><span class="params">(r-&gt;left)</span> -&gt;</span> preOrder(r-&gt;right)  </span><br><span class="line">中序遍历  </span><br><span class="line">inOrder<span class="function"><span class="params">(r)</span> = <span class="title">inOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> <span class="built_in">print</span> r<span class="function"> -&gt;</span> inOrder(r-&gt;right)  </span><br><span class="line">后序遍历  </span><br><span class="line">postOrder<span class="function"><span class="params">(r)</span> = <span class="title">postOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> postOrder<span class="function"><span class="params">(r-&gt;right)</span> -&gt;</span> <span class="built_in">print</span> r</span><br></pre></td></tr></table></figure>
+
+<p> 伪代码：  </p>
+ <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前序遍历</span></span><br><span class="line">void pre<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    print root;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//中序遍历</span></span><br><span class="line">void <span class="keyword">in</span><span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//后序遍历</span></span><br><span class="line">void post<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        按层遍历
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(T x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;TreeNode&gt; <span class="title">floorlevelOrder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;TreeNode&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//利用队列先进先出的特点实现按层遍历</span></span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//根节点入队</span></span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="comment">//从队列中弹出各结点数据，直到队列为空，遍历完毕</span></span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环</span></span><br><span class="line">        TreeNode node = queue.poll();</span><br><span class="line">        result.add(node);</span><br><span class="line">        <span class="keyword">if</span>(node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+</div>  
+
+</li>
+</ol>
+<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图</title>
+    <url>/2020/05/11/%E5%9B%BE/</url>
+    <content><![CDATA[<h3 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h3><p>图是比树更加复杂的非线性表结构。适合存储微博、微信等社交网络中的好友关系。<br><strong>顶点</strong>：图中的元素；用户<br><strong>边</strong>：顶点与任意其它顶点之间的连接关系；好友关系<br><strong>度</strong>：顶点相连接的边的条数；好友个数<br><strong>有向图</strong>：带箭头的边，表示边的方向，有方向的图；关注关系<br><strong>无向图</strong>：边没有方向的图；好友关系<br><strong>度</strong>：无向图中表示一个顶点有多少条边；好友个数<br><strong>入度</strong>：有向图中，表示有多少条边指向这个顶点；粉丝个数<br><strong>出度</strong>：有向图中，表示有多少条边是以这个顶点为起点指向其他顶点；关注人数<br><strong>带权图</strong>：每条边都有一个权重。亲密度  </p>
+<h3 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h3><ul>
+<li><p>邻接矩阵<br>邻接矩阵-二维数组。<br>无向图，如果顶点i与顶点j之间有边，就将A[i][j]和A[j][i]标记为1；浪费一半的存储空间；<br>有向图，如果顶点i到j之间，有一条箭头从顶点i指向顶点j的边，就将A[i][j]标记为1。如果有一条箭头从顶点j指向顶点i的边，就将A[j][i]标记为1。<br>带权图，数组中就存储相应的权重。<br>稀疏图，顶点很多，但每个顶点的边不多，邻接矩阵的存储方法更加浪费。</p>
+<p>优点：<br>存储方式简单、直接，获取顶点关系高效，图计算-矩阵计算方便。</p>
+</li>
+<li><p>邻接表<br>邻接表-散列表<br>无向图每个顶点对应一条链表，链表中存储的是与这个顶点相连接的其他顶点。<br>有向图，每个顶点对应的链表里，存储其指向的顶点。  </p>
+<p>优化；<br>顶点中的链表转换成平衡二叉查找树、红黑树、跳表、散列表、有序动态数组(二分查找)。  </p>
+</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><ol>
+<li><p>微博-有向图<br>微博操作：  </p>
+<ul>
+<li>判断用户A是否关注用户B  </li>
+<li>判断用户A是否被用户B的关注  </li>
+<li>用户A关注用户B  </li>
+<li>用户A取消关注用户B  </li>
+<li>根据用户名称的首字母排序，分页获取用户的粉丝列表  </li>
+<li>根据用户名称的首字母排序，分页获取用户的关注列表  </li>
+</ul>
+<p>社交关系存储：  </p>
+<ul>
+<li>内存（数据量大用哈希算法将数据分片）<br>邻接表，存储用户关注了哪些用户；每个顶点的链表中，存储这个顶点指向的顶点。<br>逆邻接表，存储用户被哪些用户关注；每个顶点的链表中，存储指向这个顶点的顶点。  </li>
+<li>硬盘<br>两列表。一列用户id，一列关注id。分别建立索引。  </li>
+</ul>
+</li>
+<li><p>微信-无向图<br>微信操作：  </p>
+<ul>
+<li>判断A、B是否为好友关系  </li>
+<li>A删除B，断开与B的好友关系  </li>
+<li>展示出A的好友列表，并按名称首字母排序  </li>
+</ul>
+<p>社交关系存储：  </p>
+<ul>
+<li>邻接表存储每个人对应的好友列表，好友列表可用红黑树/跳表存储</li>
+</ul>
+</li>
+</ol>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>动态规划理论</title>
+    <url>/2020/05/16/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%90%86%E8%AE%BA/</url>
+    <content><![CDATA[<h3 id="一个模型三个特征"><a href="#一个模型三个特征" class="headerlink" title="一个模型三个特征"></a>一个模型三个特征</h3><ul>
+<li><p><strong>多阶段决策最优解模型</strong><br>一般用动态规划解决最优问题。解决问题的过程需要经历多个决策阶段，每个决策阶段都对应着一组状态。寻找一组决策序列，经过这组决策序列，能够产生最终期望求解的最优值。  </p>
+</li>
+<li><p><strong>最优子结构</strong><br>问题的最优解包含子问题的最优解。同样，可以通过子问题的最优解，推导出问题的最优解。对应动态规划问题模型，后面阶段的装填可以通过前面阶段状的状态推导出来。  </p>
+</li>
+<li><p><strong>无后效性</strong><br>两层含义，第一层含义是，在推倒后面阶段的状态的时候，只关心前面阶段的状态值，不关心这个状态是怎么一步一步推导出来的。第二层含义是，某阶段状态一旦确定，就不受之后阶段的决策影响。  </p>
+</li>
+<li><p><strong>重复子问题</strong><br>不同的决策序列，到达某个相同的阶段时，可能会产生重复的状态。  </p>
+</li>
+</ul>
+<p>实例解析：<br>一个n乘以n的矩阵w[n][n]。矩阵存储的都是正整数，棋子起始位置在左上角，终止位置在右下角。将棋子从左上角移动到右下角。每次只能向右或者向下移动一位。从左上角到右下角，会有很多不同的路径可以走。把每条路径经过的数字加起来看做路径的长度。求从左上角移动到右下角的最短路径长度。  </p>
+<p>从(0,0)走到(n-1.n-1),总共需要走2*(n-1)步，也就对应着2*(n-1)个阶段。每个阶段都有向右走或者向下走两种决策，并且每个阶段都会对应一个状态集合。把状态定义为min_dist(i,j)，其中i表示行，j表示列。min_dist表达式的值表示从(0,0)到达(i,j)的最短路径长度。这个问题是一个多阶段决策最优解问题，符合“动态规划的模型”。  </p>
+<p>可以用回溯算法解决问题。递归树中有重复的节点，重复的节点表示，从左上角到节点对应的位置，有多种路线，说明这个问题存在“重复子问题”。  </p>
+<p>走到(i,j)这个位置，只能通过(i-1,j)，(i,j-1)这两个位置移动过来。所以计算(i,j)位置对应的状态，只需要关心(i-1,j)，(i,j-1)两个位置对应的状态，并不关心棋子是通过什么样的路线到达这两个位置的。而且，仅仅允许往下和往右移动，不允许后退，前面阶段的状态确定之后，不会被后面阶段的决策所改变，符合“无后效性”。  </p>
+<p>定义状态的时候，把从起始位置(0,0)到(i,j)的最小路径，记作min_dist(i,j)。因为只能往右或往下移动，所以只有可能从(i-1,j)或者(i,j-1)两个位置到达(i,j)。到达(i,j)的最短路径肯定包含到达这两个位置的最短路径之一。min_dist(i,j)可以通过min_dist(i,j-1)和min_dist(i-1,j)这两个状态推导出来，这个问题符合“最优子结构”。</p>
+<blockquote>
+<p>min_dist(i,j) = w[i][j] + min(min_dist(i,j-1),min(i-1,j))</p>
+</blockquote>
+<h3 id="动态规划解题思路"><a href="#动态规划解题思路" class="headerlink" title="动态规划解题思路"></a>动态规划解题思路</h3><p>状态转移表法&amp;状态转移方程法  </p>
+<ol>
+<li><p>状态转移表法<br>思路：回溯算法实现-定义状态-画递归树-找重复子问题-画状态转移表-根据递推关系填表-将填表过程翻译成代码  </p>
+<p>一般能用动态规划解决的问题，都可以使用回溯算法的暴力搜索解决。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矩阵最短路径 回溯算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> minDist = Integer.MAX_VALUE;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">minDistBT</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> dist, <span class="keyword">int</span>[][] w, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//到达(n-1,n-1)这个位置</span></span><br><span class="line">    <span class="keyword">if</span>(i == n &amp;&amp; j == n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(dist &lt; minDist) midDist = dist;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(i &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往下走，更新i=i+1,j=j</span></span><br><span class="line">        minDistBT(i+<span class="number">1</span>, j, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往右走，更新i=i,j=j+1</span></span><br><span class="line">        minDistBT(i, j+<span class="number">1</span>, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>先用简单的回溯算法解决，然后定义状态，每个状态表示一个节点，然后对应画出递归树。从递归树中，可以看出来是否存才重复子问题，以及重复子问题是如何产生的。以此来寻找规律，看是够能用动态规划解决。<br>找到重复子问题之后，一种是直接使用<strong>回溯加备忘录</strong>的方法，来避免重复子问题，提高执行效率。一种是使用动态规划的解决方法，<strong>状态转移表法</strong>。  </p>
+<p>先画出一个状态表，状态表一般是二维的，类似二维数组。其中每个状态包含三个变量，行、列、数组值。根据决策的先后过程，从前往后，根据递推关系，分阶段填充状态表中的每个状态。最后将这个递推填表的过程，翻译成代码，就是动态规划代码。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矩阵最短路径 状态转移表
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDistDP</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] states = <span class="keyword">new</span> <span class="keyword">int</span>[n][n];</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一行数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">        sum += matrix[<span class="number">0</span>][j];</span><br><span class="line">        states[<span class="number">0</span>][j] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一列数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        sum += matrix[i][<span class="number">0</span>];</span><br><span class="line">        states[i][<span class="number">0</span>] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            states[i][j] + Math.min(states[i][j-<span class="number">1</span>], states[i-<span class="number">1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> states[n-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>大部分状态表都是二维的，如果状态比较复杂，需要很多变量来表示，那对应的状态表可能是高维的，不适合用状态转移表法解决，  </p>
+</li>
+<li><p>状态转移方程法<br>思路：找最优子结构-写状态转移方程-将状态转移方程翻译成代码  </p>
+<p>状态转移方程法类似递归的解题思路。分析某个问题如何通过子问题来递归求解，即最优子结构。根据最优子结构，写出递归公式，即状态转移方程。状态转移方程式解决动态规划的关键。<br>有了状态转移方程，一种是<strong>递归加备忘录</strong>，一种是<strong>迭代递推</strong>。  </p>
+ <div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矩阵最短路径 回溯算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] matrix = &#123;&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">9</span>&#125;,&#123;<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>&#125;,&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">7</span>&#125;,&#123;<span class="number">6</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">3</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> n = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] mem = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>][<span class="number">4</span>];</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDist</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(men[i][j] &gt; <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> minLeft = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(j-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minLeft = minDeft(i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> minUp = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(i-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minUp = minDist(i-<span class="number">1</span>,j);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> currMinDist = matrix[i][j] + Math.min(minLeft, minUp);</span><br><span class="line">    mem[i][j] = currMinDist;</span><br><span class="line">    <span class="keyword">return</span> currMinDist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+</li>
+</ol>
+<h3 id="贪心、分治、回溯、动态规划对比"><a href="#贪心、分治、回溯、动态规划对比" class="headerlink" title="贪心、分治、回溯、动态规划对比"></a>贪心、分治、回溯、动态规划对比</h3><p>贪心、回溯、动态规划可以归为一类，解决问题的模型都可以抽象成多阶段决策最优解模型；<strong>分治算法</strong>解决问题大部分是最优解问题，但是大部分都不能抽象成多阶段决策模型。  </p>
+<p><strong>回溯算法</strong>是个万金油。基本上能用动态规划、贪心算法解决的问题，都可以用回溯算法解决。回溯算法相当于穷举搜索，穷举所有的情况，然后对比得到最优解。回溯算法的时间复杂度 非常高，是指数级别的，只能用来解决小规模数据的问题。  </p>
+<p>尽管<strong>动态规划</strong>比回溯算法高效，但是并不是所有问题都可以用动态规划来解决。能用动态规划解决的问题，需要满足三个特征，最优子结构、无后效性、重复子问题。<br>在重复子问题上，动态规划和分治算法的区分非常明显。分治算法要求分割成的子问题，不能有重复子问题，而动态规划正好相反，动态规划之所以高效，就是因为回溯算法实现中存在大量的重复子问题。  </p>
+<p><strong>贪心算法</strong>实际上是动态规划算法的一种特殊情况。它解决问题起来更加高效，代码实现也更加简洁，可以解决的问题也更加有限。它能解决的问题需要满足三个条件，最优子结构、无后效性、贪心选择性（不强调重复子问题）。<br>贪心选择性指，通过局部最优的选择，能产生全局的最优选择。每一个阶段，都选择当前看起来最优的决策，所有阶段的决策完成之后，最终由这些局部最优解构成全局最优解。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>动态规划实战</title>
+    <url>/2020/05/18/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%AE%9E%E6%88%98/</url>
+    <content><![CDATA[<p>量化两个字符串之间的相似程度-编辑距离(Edit Distance)<br>编辑距离指的是，将一个字符串转化成另一个字符串，需要的最少编辑操作次数（增加一个字符、删除一个字符、替换一个字符）。编辑距离越大说明两个字符串的相似程度越小；相反编辑距离越小，说明两个字符串的相似程度越大。对于两个完全相同的字符串来说，编辑距离就是0。  </p>
+<p>根据所包含的编辑操作种类的不同，编辑距离有多种不同的计算方式：<br><strong>莱文斯坦距离</strong>，允许增加、删除、替换字符，表示两个字符串差异的大小；<br><strong>最长公共子串长度</strong>，允许增加、删除字符，表示两个字符串相似程度的大小。  </p>
+<h3 id="莱文斯坦距离"><a href="#莱文斯坦距离" class="headerlink" title="莱文斯坦距离"></a>莱文斯坦距离</h3><p>把一个字符串变成另一个字符串，需要的最少编辑次数。<br>整个求解过程，涉及多个决策阶段，需要依次考察一个字符串中的每个字符，跟另一个字符串中的字符是否匹配，匹配与不匹配分别对应不同的处理方式。符合多阶段决策最优解模型（贪心、回溯、动态规划）。  </p>
+<ol>
+<li><p>回溯算法-递归处理<br>如果a[i]与b[j]匹配，递归考察a[i+1]和b[j+1]。<br>如果a[i]与b[j]不匹配：  </p>
+<ul>
+<li>删除a[i]，递归考察a[i+1]和b[j]；</li>
+<li>删除b[j]，递归考察a[i]和b[j+1]；</li>
+<li>在a[i]前面添加一个跟b[j]相同的字符，然后递归考察a[i]和b[j+1]；</li>
+<li>在b[j]前面添加一个跟a[i]相同的字符，然后递归考察a[i+1]和b[j]；</li>
+<li>将a[i]替换成b[j]，或者将b[j]替换成a[i]，然后递归考察a[i+1]和b[j+1]。  </li>
+</ul>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        莱文斯坦距离 回溯算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">char</span>[] a = <span class="string">"mitcmu"</span>.toCharArray();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">char</span>[] b = <span class="string">"mtacnu"</span>.toCharArray();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> n = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> m = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> minDist = Integer.MAX_VALUE;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">lwstBT</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> edist)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i == n || j == m) &#123;</span><br><span class="line">        <span class="keyword">if</span>(i &lt; n) edist += (n-i);</span><br><span class="line">        <span class="keyword">if</span>(j &lt; m) edist += (m-j);</span><br><span class="line">        <span class="keyword">if</span>(edist &lt; minDist) minDist = edist;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(a[i] == b[j]) &#123;<span class="comment">//两个字符匹配</span></span><br><span class="line">        lwstBT(i+<span class="number">1</span>, j+<span class="number">1</span>, edist);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;<span class="comment">//两个字符不匹配</span></span><br><span class="line">        lwstBT(i+<span class="number">1</span>, j, edist+<span class="number">1</span>);<span class="comment">//删除a[i]或者b[j]前添加一个字符</span></span><br><span class="line">        lwstBT(i, j+<span class="number">1</span>, edist+<span class="number">1</span>);<span class="comment">//删除b[j]或者a[i]前添加一个字符</span></span><br><span class="line">        lwstBT(i+<span class="number">1</span>, j+<span class="number">1</span>, edist+<span class="number">1</span>);<span class="comment">//将a[i]和b[j]替换为相同字符</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+</li>
+<li><p>根据回溯算法的代码实现，可以画出递归树，看是否存在重复子问题。<br>如果存在重复子问题，可以考虑是否用动态规划来解决；<br>如果不存在重复子问题，那回溯算法就是最好的解决方法。<br>在递归树中，每个节点代表一个状态，状态包含三个变量(i,j,edist)，其中edist表示处理a[i]和b[j]时，已经执行的编辑操作的次数。  </p>
+</li>
+<li><p>在递归树中，(i,j)两个变量重复的节点很多。<br>对于(i,j)相同的节点， 只需要保留edist最小的，继续递归处理就可以了，剩下的节点都可以舍弃。所以状态就从(i,j,edist)变成了(i,j,min_edist)，其中min_edist表示处理到a[i]和b[j]已经执行的最小编辑次数。<br>状态(i,j)可能从(i-1,j)、(i,j-1)，(i-1,j-1)三个状态中的任意一个转移过来。  </p>
+</li>
+<li><p>尝试将状态转移的过程用公式写出来-状态转移方程  </p>
+<blockquote>
+<p>如果:a[i]!=b[j],那么:min_edist(i,j)就等于:<br>min(min_edist(i-1,j)+1,min_edist(i,j-1)+1,min_edist(i-1,j-1)+1)  </p>
+</blockquote>
+<blockquote>
+<p>如果:a[i]=b[j],那么:min_edist(i,j)就等于:<br>min(min_edist(i-1,j)+1,min_edist(i,j-1)+1,min_edist(i-1,j-1))<br>min表示求三数中的最小值</p>
+</blockquote>
+</li>
+<li><p>了解状态与状态之间的递推关系，画出一个二维状态表，按行依次来填充状态表中的每个值。  </p>
+</li>
+<li><p>根据状态转移方程和填表过程，翻译成代码：  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        莱文斯坦距离 动态规划
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lwstDP</span><span class="params">(<span class="keyword">char</span>[] a, <span class="keyword">int</span> n, <span class="keyword">char</span>[] b, <span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] minDist = <span class="keyword">new</span> <span class="keyword">int</span>[n][m];</span><br><span class="line">    <span class="comment">//初始化第0行：a[0...0]与b[0...j]的编辑距离</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;m; ++j) &#123;</span><br><span class="line">        <span class="keyword">if</span>(a[<span class="number">0</span>] == b[j]) minDist[<span class="number">0</span>][j] = j;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(j != <span class="number">0</span>) minDist[<span class="number">0</span>][j] = minDist[<span class="number">0</span>][j-<span class="number">1</span>] +<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> minDist[<span class="number">0</span>][j] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//初始化第0列：a[0...i]与b[0...0]的编辑距离</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span>(a[i] == b[<span class="number">0</span>]) minDist[i][<span class="number">0</span>] = i;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(i != <span class="number">0</span>) minDist[i][<span class="number">0</span>] = minDist[i-<span class="number">1</span>][<span class="number">0</span>] + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> minDist[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//按行填表</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; m; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span>(a[i] == b[j]) minDist[i][j] = min(minDist[i-<span class="number">1</span>][j] + <span class="number">1</span>, minDist[i][j-<span class="number">1</span>] + <span class="number">1</span>, minDist[i-<span class="number">1</span>][j-<span class="number">1</span>]);</span><br><span class="line">            <span class="keyword">else</span> minDist[i][j] = min(minDist[i-<span class="number">1</span>][j]+<span class="number">1</span>, minDist[i][j-<span class="number">1</span>]+<span class="number">1</span>, minDist[i-<span class="number">1</span>][j-<span class="number">1</span>]+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> minDist[n-<span class="number">1</span>][m-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">min</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> minv = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; minv) minv = x;</span><br><span class="line">    <span class="keyword">if</span>(y &lt; minv) minv = y;</span><br><span class="line">    <span class="keyword">if</span>(z &lt; minv) minv = z;</span><br><span class="line">    <span class="keyword">return</span> minv;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+</li>
+</ol>
+<h3 id="最长公共子串长度"><a href="#最长公共子串长度" class="headerlink" title="最长公共子串长度"></a>最长公共子串长度</h3><p>解决思路类似莱文斯坦距离<br>每个状态包括三个变量(i,j,max_lcs)，max_lcs表示a[0…i]和b[0…j]的最长公共子串长度。<br>从a[0]和b[0]开始，依次考察两个字符串中的字符是否匹配。  </p>
+<ul>
+<li>如果a[i]与b[j]互相匹配，将最大公共子串长度加一，并且继续考察a[i+1]和b[j+1]。  </li>
+<li>如果a[i]和b[j]不匹配，最长公共子串长度不变，解决思路：<blockquote>
+<ul>
+<li>删除a[i]，或者在b[j]前面加上一个字符a[i]，然后继续考察a[i+1]和b[j]；  </li>
+<li>删除b[j]，或者在a[i]前面加上一个字符b[j]，然后继续考察a[i]和b[j+1]。  </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>求a[0…i]和b[0…j]的最长公共长度max_lcs[i,j]，只能通过下边三个状态转移过来：  </p>
+<ul>
+<li>(i-1, j-1, max_lcs)，其中max_lcs表示a[0…i-1]和b[0…j-1]的最长公共子串长度；</li>
+<li>(i-1, j, max_lcs)，其中max_lcs表示a[0…i-1]和b[0…j]的最长公共子串长度；  </li>
+<li>(i, j-1, max_lcs)，其中max_lcs表示a[0…i]和b[0…j-1]的最长公共子串长度。  </li>
+</ul>
+<p>状态转移方程：  </p>
+<blockquote>
+<p>如果：a[i]==b[j]，那么：max_lcs(i,j)就等于：<br>max(max_lcs(i-1,j-1)+1, max_lcs(i-1, j), max_lcs(i, j-1));<br>aba与a的最长公共子串是1不是2；max_lcs(i-1, j)与max_lcs(i, j-1)不需要+1。  </p>
+</blockquote>
+<blockquote>
+<p>如果：a[i]!=b{j}，那么：max_lcs(i,j)就等于：<br>max(max_lcs(i-1,j-1), max_lcs(i-1, j), max(i, j-1));<br>max表示求三个数中的最大值；  </p>
+</blockquote>
+<p>代码实现：  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        最长公共子串长度 动态规划
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lcs</span><span class="params">(<span class="keyword">char</span>[] a, <span class="keyword">int</span> n ,<span class="keyword">char</span>[] b, <span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] maxlcs = <span class="keyword">new</span> <span class="keyword">int</span>[n][m];  </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; ++j) &#123;</span><br><span class="line">        <span class="keyword">if</span>(a[<span class="number">0</span>] == b[j]) maxlcs[<span class="number">0</span>][j] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(j != <span class="number">0</span>) maxlcs[<span class="number">0</span>][j] = maxlcs[<span class="number">0</span>][j-<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">else</span> maxlcs[<span class="number">0</span>][j] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span>(a[i] == b[<span class="number">0</span>]) maxlcs[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(i != <span class="number">0</span>) maxlcs[i][<span class="number">0</span>] = maxlcs[i-<span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">else</span> maxlcs[i][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; m; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span>(a[i] == b[j])</span><br><span class="line">                maxlcs[i][j] = max(maxlcs[i-<span class="number">1</span>][j], maxlcs[i][j-<span class="number">1</span>], maxlcs[i-<span class="number">1</span>][j-<span class="number">1</span>]+<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                maxlcs[i][j] = max(maxlcs[i-<span class="number">1</span>][j], maxlcs[i][j-<span class="number">1</span>], maxlcs[i-<span class="number">1</span>][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> maxlcs[n-<span class="number">1</span>][m-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> maxv = Integer.MIN_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(x &gt; maxv) maxv = x;</span><br><span class="line">    <span class="keyword">if</span>(y &gt; maxv) maxv = y;</span><br><span class="line">    <span class="keyword">if</span>(z &gt; maxv) maxv = z;</span><br><span class="line">    <span class="keyword">return</span> maxv; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<h3 id="搜索引擎纠错优化"><a href="#搜索引擎纠错优化" class="headerlink" title="搜索引擎纠错优化"></a>搜索引擎纠错优化</h3><p>纠错效果优化：  </p>
+<ul>
+<li>取编辑距离最小的TOP10，加上其他参数（如搜索热门程度），决策选择哪个单词作为拼写纠错单词。。  </li>
+<li>多种编辑距离计算方法，求交集，用交集的结果继续优化处理。  </li>
+<li>统计用户的搜索日志，得到最常被拼错的单词列表，以及对应的拼写正确的单词。搜索引擎找到对应直接返回。  </li>
+<li>引入个性化因素，针对每个用户，维护其特有的搜索喜好-常用搜索关键词，当用户输入错误的单词的时候，首先在该用户常用的搜索关键词中，计算编辑距离，查找编辑距离最小的单词。  </li>
+</ul>
+<p>纠错性能优化：  </p>
+<ul>
+<li>针对纠错功能的TPS不高，可部署多台机器，每台机器运行一个独立的纠错功能。当有一个纠错请求的时候，通过负载均衡，分配到其中一台机器，开计算编辑距离，得到纠错单词。  </li>
+<li>针对纠错系统的响应时间太长，可将纠错的词库分割到多台机器。当有一个纠错请求的时候，将拼写错误的单词同时发送到多台机器上并行处理，分别得到编辑距离最小的单词，然后再对比合并，最终决定一个最优的纠错单词。  </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/04/15/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
   </entry>
   <entry>
     <title>深度优先&amp;广度优先</title>
@@ -1387,52 +1678,78 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
-    <title>二叉树</title>
-    <url>/2020/05/06/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
-    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
-<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
-<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
-<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
-<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
-<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
-</ol>
-<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
-<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
-</li>
-<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
-</li>
-<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
-<p> 递推公式：  </p>
- <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">前序遍历  </span><br><span class="line">preOrder<span class="function"><span class="params">(r)</span> = <span class="title">print</span> <span class="title">r</span> -&gt;</span> preOrder<span class="function"><span class="params">(r-&gt;left)</span> -&gt;</span> preOrder(r-&gt;right)  </span><br><span class="line">中序遍历  </span><br><span class="line">inOrder<span class="function"><span class="params">(r)</span> = <span class="title">inOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> <span class="built_in">print</span> r<span class="function"> -&gt;</span> inOrder(r-&gt;right)  </span><br><span class="line">后序遍历  </span><br><span class="line">postOrder<span class="function"><span class="params">(r)</span> = <span class="title">postOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> postOrder<span class="function"><span class="params">(r-&gt;right)</span> -&gt;</span> <span class="built_in">print</span> r</span><br></pre></td></tr></table></figure>
-
-<p> 伪代码：  </p>
- <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前序遍历</span></span><br><span class="line">void pre<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    print root;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//中序遍历</span></span><br><span class="line">void <span class="keyword">in</span><span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//后序遍历</span></span><br><span class="line">void post<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        按层遍历
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(T x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;TreeNode&gt; <span class="title">floorlevelOrder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;TreeNode&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//利用队列先进先出的特点实现按层遍历</span></span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//根节点入队</span></span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="comment">//从队列中弹出各结点数据，直到队列为空，遍历完毕</span></span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环</span></span><br><span class="line">        TreeNode node = queue.poll();</span><br><span class="line">        result.add(node);</span><br><span class="line">        <span class="keyword">if</span>(node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-    </div>
-</div>  
-
-</li>
-</ol>
-<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
-</ul>
+    <title>跳表</title>
+    <url>/2020/05/19/%E8%B7%B3%E8%A1%A8/</url>
+    <content><![CDATA[<p>二分查找底层依赖的是数组随机访问的特性。  </p>
+<p>跳表是一种各方面性能都比较优秀的<strong>动态数据结构</strong>，可以支持快速的插入、删除、查找操作。  </p>
+<h3 id="理解跳表"><a href="#理解跳表" class="headerlink" title="理解跳表"></a>理解跳表</h3><p>对于一个单链表来讲，即使链表中存储的数据是有序的，如果想在其中查找某个数据，也只能从头到尾遍历链表。查找效率低，时间复杂度高，O(n)。  </p>
+<p>对链表建立一级“索引”，提高查找效率。每两个结点提取一个结点到上一级，把抽出来的那一级叫作索引或索引层，down指针指向下一级结点。<br>查找某个结点时，可以先在索引层遍历，当遍历到索引层中目标结点附近，通过索引层结点的down指针，下降到原始链表这一层，继续遍历，找到目标值的结点。<br>加一层索引之后，查找一个结点需要遍历的结点个数减少了，查找次数减少了、效率提高了。<br>类似的，可以在第一级索引的基础之上，每两个结点就抽出一个结点到第二级索引，查询效率进一步提升。  </p>
+<p><strong>链表加多级索引的结构，就是跳表</strong>。  </p>
+<h3 id="跳表查询时间"><a href="#跳表查询时间" class="headerlink" title="跳表查询时间"></a>跳表查询时间</h3><p>查询数据的时间复杂度推算：</p>
+<p>每两个结点抽出一个结点作为上一级索引的结点，第一级索引的结点个数大约为n/2，第二级索引的结点个数大约为n/4，第三极结点个数大约为n/8，以此类推，第k级索引的结点个数是第k-1级索引的结点个数的1/2，第k级索引结点的个数就是n/(2<sup>k</sup>)。  </p>
+<p>假设索引有h级，最高级的索引有2个结点。通过公式，可以得到n/(2<sup>h</sup>)=2，求得h=log<sub>2</sub>n-1。如果包含原始链表这一层，整个跳表的高度就是log<sub>2</sub>n。<br>在跳表中查询某个数据的时候，如果每一层都要遍历m个结点，那么在跳表中查询一个数据的时间复杂度为O(m*logn)。  </p>
+<p>每一级索引最多只需要遍历m个结点，在跳表中查询任意数据的时间复杂度是O(logn)。与二分查找的时间复杂度相同，等同于基于单链表实现了二分查找。  </p>
+<h3 id="跳表空间占用"><a href="#跳表空间占用" class="headerlink" title="跳表空间占用"></a>跳表空间占用</h3><p>比起单纯的单链表，跳表需要存储多级索引，肯定要消耗更多的存储空间。<br>假设原始链表大小为n，每2个结点抽一个作为上一级索引的结点。每上升一级索引，结点个数就减少一半，知道剩下2个结点。每层索引的结点数就是一个等比数列，索引结点总和就是n/2+n/4+n/8+…+4+2=n-1。所以跳表的空间复杂度为O(n)。<br>如果将包含n个结点的单链表构造成跳表，需要额外再用接近n个结点的存储空间。<br>每三个结点抽一个，总的索引结点大约是n/3+n/9+n/27+…+9+3+1=n/2。类推可以减少索引节点存储空间。  </p>
+<p>实际开发中，原始链表中存储的可能是很大的对象，索引结点只需要存储关键值和几个指针，并不需要存储对象，所以当对象比索引结点大很多时，索引所占用的额外空间可以忽略。  </p>
+<h3 id="跳表插入和删除"><a href="#跳表插入和删除" class="headerlink" title="跳表插入和删除"></a>跳表插入和删除</h3><p>跳表插入、删除操作的时间复杂度为O(logn)。  </p>
+<p>在单链表中，一旦定位好要插入的位置，插入结点的时间复杂度是很低的为O(1)。但为了保证原始链表中数据的有序性，需要先查找到要插入的位置，这个查找操作比较耗时。<br>对于纯粹的单链表，需要遍历每个节点来查找到插入的位置。但是对于跳表来说，查找到某个结点的时间复杂度为O(logn)，查找到某个数据应该插入的位置的时间复杂度就为O(logn)。</p>
+<p>删除操作，如果要删除的结点在索引中也有出现，除了要删除原始链表中的结点，还要删除索引中的。<br>单链表中的删除操作需要拿到要删除结点的前驱节点，然后通过指针操作完成删除，在查找要删除的结点的时候，要获取前驱节点。双向链表不需要。  </p>
+<h3 id="跳表索引动态更新"><a href="#跳表索引动态更新" class="headerlink" title="跳表索引动态更新"></a>跳表索引动态更新</h3><p>当不停的往跳表中插入数据时，如果不更新索引，有可能出现某2个索引结点之间数据非常多的情况。极端情况下，跳表会退化成单链表。  </p>
+<p>跳表通过随机函数来维护平衡性。<br>往跳表中插入数据的时候，可以选择同时将数据插入到部分索引层中。<br>如随机函数生成了值K，就将这个结点添加到第一级到第K级这K级索引中。  </p>
+<h3 id="跳表与红黑树对比"><a href="#跳表与红黑树对比" class="headerlink" title="跳表与红黑树对比"></a>跳表与红黑树对比</h3><p>插入、删除、查找、迭代输出有序序列的操作，跳表与红黑树的时间复杂度相同。<br>按照区间查找数据操作，红黑树的效率没有跳表高。跳表可以做到O(logn)的时间复杂度定位区间的起点，然后在原始链表中顺序往后遍历就可以，非常高效。<br>红黑树在编程语言中一般有现成的实现；跳表没有，需要自己实现再使用。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>
       </categories>
       <tags>
-        <tag>二叉树</tag>
+        <tag>跳表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>分治算法</title>
+    <url>/2020/05/13/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>MapReduce、GFS(Google File System)、Bigtable是谷歌大数据处理的三驾马车。<br>MapReduce在倒排索引、PageRank计算、网页分析等搜索引擎相关的技术中有大量的应用。  </p>
+<h3 id="分治算法理解"><a href="#分治算法理解" class="headerlink" title="分治算法理解"></a>分治算法理解</h3><p>分治算法的核心思想：分而治之。<br>将原问题划分成n个规模较小，并且结构与原问题相似的子问题，递归地解决这些子问题，然后在合并其结果，得到原问题的解。  </p>
+<p>分治算法是一种处理问题的思想，递归是一种编程技巧。分治算法一般都比较适合用递归来实现。  </p>
+<ul>
+<li>分解：将原问题分解成一系列子问题；  </li>
+<li>解决：递归地求解各个子问题，若子问题足够小，则直接求解；  </li>
+<li>合并：将子问题的结果合并成原问题。  </li>
+</ul>
+<p>前提条件：  </p>
+<ul>
+<li>原问题与分解成的小问题具有相同的模式；  </li>
+<li>原问题分解成的子问题可以独立求解，子问题之间没有相关性；（分治算法与动态规划的区别）  </li>
+<li>具有分解终止条件，当问题足够小时，可以直接求解；  </li>
+<li>可以将子问题合并成原问题，合并操作的复杂度不高。  </li>
+</ul>
+<h3 id="分治算法编程应用"><a href="#分治算法编程应用" class="headerlink" title="分治算法编程应用"></a>分治算法编程应用</h3><p>排序中应用<br>有序度表示一组数据的有序程度，逆序度表示一组数据的无序程度。<br>n个数据从小到大排列，完全有序的数据（等差数列求和）的有序度就是n(n-1)/2，逆序度等于0；倒序排列的数据的有序度是0，逆序度是n(n-1)/2。<br>其余通过计算有序对/逆序对的个数，表示数据的有序度或逆序度。  </p>
+<ul>
+<li><p>拿每个数字跟它后面的数据比较，看有几个比它小的，把比它小的数字个数记作k，依次类推，对每个数字对应的k值求和，最后得到的总和就是逆序对个数。时间复杂度是O(n<sup>2</sup>)。  </p>
+</li>
+<li><p>套用分治的思想求数组的逆序对个数，将数组分成前后两半A1和A2，分别计算A1和A2的逆序对个数K1和K2，然后再计算A1与A2之间的逆序对个数K3。数组A的逆序对个数为K1+K2+K3。  </p>
+<p>借助归并排序算法，将两个有序的小数组合并成一个有序的数组的过程中，每次合并操作都计算逆序对个数，把计算出来的逆序对个数求和，就是这个数组的逆序对个数。  </p>
+  <div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        逆序度
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//全局变量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    num = <span class="number">0</span>;</span><br><span class="line">    mergeSortCounting(a,<span class="number">0</span>,n-<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">mergeSortCounting</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (start &gt;= end) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//中点</span></span><br><span class="line">    <span class="keyword">int</span> mid = (start+r=end)/<span class="number">2</span>;</span><br><span class="line">    mergeSortCounting(a,start,mid);</span><br><span class="line">    mergeSortCounting(a,mid+<span class="number">1</span>,end);</span><br><span class="line">    <span class="comment">//合并函数</span></span><br><span class="line">    mergeSort(a,start,mid,end);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> left, <span class="keyword">int</span> mid, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//临时数组，大小为当前分区的大小</span></span><br><span class="line">    <span class="keyword">int</span>[] tmp = <span class="keyword">new</span> <span class="keyword">int</span>[right-left+<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = left;<span class="comment">//左边起始下标</span></span><br><span class="line">    <span class="keyword">int</span> j = mid+<span class="number">1</span>;<span class="comment">//右边起始下标</span></span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid &amp;&amp; j &lt;= right) &#123;</span><br><span class="line">        <span class="comment">//取左右区间中元素最小值放入当前位置</span></span><br><span class="line">        <span class="keyword">if</span>(a[i] &lt;= a[j]) &#123;</span><br><span class="line">            tmp[k++] = a[i++]</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//统计左区间left-mid之间，比右区间当前元素a[j]大的元素个数</span></span><br><span class="line">            num += (mid-i+<span class="number">1</span>);</span><br><span class="line">            tmp[k++] = a[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理左区间剩下的</span></span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid) &#123;</span><br><span class="line">        tmp[k++] = a[i++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理右区间剩下的</span></span><br><span class="line">    <span class="keyword">while</span>(j &lt;= right) &#123;</span><br><span class="line">        tmp[k++] = a[j++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//从tmp拷贝回原数组a对应区间</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= right-left+<span class="number">1</span>; i++) &#123;</span><br><span class="line">        a[left+i] = tmp[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+
+</li>
+</ul>
+<h3 id="分治算法处理海量数据"><a href="#分治算法处理海量数据" class="headerlink" title="分治算法处理海量数据"></a>分治算法处理海量数据</h3><p>利用分治的思想解决数据量大到内存装不下的问题。  </p>
+<p>将海量数据集合根据某种方法，划分为几个小的数据集合，每个小的数据集合单独加载到内存来解决，然后再将小数据集合合并成大数据集合。  </p>
+<p>利用这种分治的处理思路，能克服内存的限制，还能利用多线程或者多机处理，加快处理的速度。  </p>
+<p>MapReduce框架只是一个任务调度器，底层依赖GFS来存储数据，依赖Borg管理及其。从GFS中拿数据，交给Borg中的机器执行，时刻监控机器执行状态并调度。<br>可以处理数据与数据之间存在关系的任务-统计文件中单词出现频率<br>可以处理数据与数据之间没有关系的任务-网页分析、分词  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>分治算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1532,96 +1849,6 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
-    <title>动态规划理论</title>
-    <url>/2020/05/16/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%90%86%E8%AE%BA/</url>
-    <content><![CDATA[<h3 id="一个模型三个特征"><a href="#一个模型三个特征" class="headerlink" title="一个模型三个特征"></a>一个模型三个特征</h3><ul>
-<li><p><strong>多阶段决策最优解模型</strong><br>一般用动态规划解决最优问题。解决问题的过程需要经历多个决策阶段，每个决策阶段都对应着一组状态。寻找一组决策序列，经过这组决策序列，能够产生最终期望求解的最优值。  </p>
-</li>
-<li><p><strong>最优子结构</strong><br>问题的最优解包含子问题的最优解。同样，可以通过子问题的最优解，推导出问题的最优解。对应动态规划问题模型，后面阶段的装填可以通过前面阶段状的状态推导出来。  </p>
-</li>
-<li><p><strong>无后效性</strong><br>两层含义，第一层含义是，在推倒后面阶段的状态的时候，只关心前面阶段的状态值，不关心这个状态是怎么一步一步推导出来的。第二层含义是，某阶段状态一旦确定，就不受之后阶段的决策影响。  </p>
-</li>
-<li><p><strong>重复子问题</strong><br>不同的决策序列，到达某个相同的阶段时，可能会产生重复的状态。  </p>
-</li>
-</ul>
-<p>实例解析：<br>一个n乘以n的矩阵w[n][n]。矩阵存储的都是正整数，棋子起始位置在左上角，终止位置在右下角。将棋子从左上角移动到右下角。每次只能向右或者向下移动一位。从左上角到右下角，会有很多不同的路径可以走。把每条路径经过的数字加起来看做路径的长度。求从左上角移动到右下角的最短路径长度。  </p>
-<p>从(0,0)走到(n-1.n-1),总共需要走2*(n-1)步，也就对应着2*(n-1)个阶段。每个阶段都有向右走或者向下走两种决策，并且每个阶段都会对应一个状态集合。把状态定义为min_dist(i,j)，其中i表示行，j表示列。min_dist表达式的值表示从(0,0)到达(i,j)的最短路径长度。这个问题是一个多阶段决策最优解问题，符合“动态规划的模型”。  </p>
-<p>可以用回溯算法解决问题。递归树中有重复的节点，重复的节点表示，从左上角到节点对应的位置，有多种路线，说明这个问题存在“重复子问题”。  </p>
-<p>走到(i,j)这个位置，只能通过(i-1,j)，(i,j-1)这两个位置移动过来。所以计算(i,j)位置对应的状态，只需要关心(i-1,j)，(i,j-1)两个位置对应的状态，并不关心棋子是通过什么样的路线到达这两个位置的。而且，仅仅允许往下和往右移动，不允许后退，前面阶段的状态确定之后，不会被后面阶段的决策所改变，符合“无后效性”。  </p>
-<p>定义状态的时候，把从起始位置(0,0)到(i,j)的最小路径，记作min_dist(i,j)。因为只能往右或往下移动，所以只有可能从(i-1,j)或者(i,j-1)两个位置到达(i,j)。到达(i,j)的最短路径肯定包含到达这两个位置的最短路径之一。min_dist(i,j)可以通过min_dist(i,j-1)和min_dist(i-1,j)这两个状态推导出来，这个问题符合“最优子结构”。</p>
-<blockquote>
-<p>min_dist(i,j) = w[i][j] + min(min_dist(i,j-1),min(i-1,j))</p>
-</blockquote>
-<h3 id="动态规划解题思路"><a href="#动态规划解题思路" class="headerlink" title="动态规划解题思路"></a>动态规划解题思路</h3><p>状态转移表法&amp;状态转移方程法  </p>
-<ol>
-<li><p>状态转移表法<br>思路：回溯算法实现-定义状态-画递归树-找重复子问题-画状态转移表-根据递推关系填表-将填表过程翻译成代码  </p>
-<p>一般能用动态规划解决的问题，都可以使用回溯算法的暴力搜索解决。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矩阵最短路径 回溯算法
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> minDist = Integer.MAX_VALUE;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">minDistBT</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> dist, <span class="keyword">int</span>[][] w, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//到达(n-1,n-1)这个位置</span></span><br><span class="line">    <span class="keyword">if</span>(i == n &amp;&amp; j == n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(dist &lt; minDist) midDist = dist;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(i &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往下走，更新i=i+1,j=j</span></span><br><span class="line">        minDistBT(i+<span class="number">1</span>, j, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往右走，更新i=i,j=j+1</span></span><br><span class="line">        minDistBT(i, j+<span class="number">1</span>, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-<p>先用简单的回溯算法解决，然后定义状态，每个状态表示一个节点，然后对应画出递归树。从递归树中，可以看出来是否存才重复子问题，以及重复子问题是如何产生的。以此来寻找规律，看是够能用动态规划解决。<br>找到重复子问题之后，一种是直接使用<strong>回溯加备忘录</strong>的方法，来避免重复子问题，提高执行效率。一种是使用动态规划的解决方法，<strong>状态转移表法</strong>。  </p>
-<p>先画出一个状态表，状态表一般是二维的，类似二维数组。其中每个状态包含三个变量，行、列、数组值。根据决策的先后过程，从前往后，根据递推关系，分阶段填充状态表中的每个状态。最后将这个递推填表的过程，翻译成代码，就是动态规划代码。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矩阵最短路径 状态转移表
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDistDP</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] states = <span class="keyword">new</span> <span class="keyword">int</span>[n][n];</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一行数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">        sum += matrix[<span class="number">0</span>][j];</span><br><span class="line">        states[<span class="number">0</span>][j] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一列数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        sum += matrix[i][<span class="number">0</span>];</span><br><span class="line">        states[i][<span class="number">0</span>] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            states[i][j] + Math.min(states[i][j-<span class="number">1</span>], states[i-<span class="number">1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> states[n-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-<p>大部分状态表都是二维的，如果状态比较复杂，需要很多变量来表示，那对应的状态表可能是高维的，不适合用状态转移表法解决，  </p>
-</li>
-<li><p>状态转移方程法<br>思路：找最优子结构-写状态转移方程-将状态转移方程翻译成代码  </p>
-<p>状态转移方程法类似递归的解题思路。分析某个问题如何通过子问题来递归求解，即最优子结构。根据最优子结构，写出递归公式，即状态转移方程。状态转移方程式解决动态规划的关键。<br>有了状态转移方程，一种是<strong>递归加备忘录</strong>，一种是<strong>迭代递推</strong>。  </p>
- <div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矩阵最短路径 回溯算法
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] matrix = &#123;&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">9</span>&#125;,&#123;<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>&#125;,&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">7</span>&#125;,&#123;<span class="number">6</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">3</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> n = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] mem = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>][<span class="number">4</span>];</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDist</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(men[i][j] &gt; <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> minLeft = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(j-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minLeft = minDeft(i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> minUp = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(i-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minUp = minDist(i-<span class="number">1</span>,j);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> currMinDist = matrix[i][j] + Math.min(minLeft, minUp);</span><br><span class="line">    mem[i][j] = currMinDist;</span><br><span class="line">    <span class="keyword">return</span> currMinDist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-</li>
-</ol>
-<h3 id="贪心、分治、回溯、动态规划对比"><a href="#贪心、分治、回溯、动态规划对比" class="headerlink" title="贪心、分治、回溯、动态规划对比"></a>贪心、分治、回溯、动态规划对比</h3><p>贪心、回溯、动态规划可以归为一类，解决问题的模型都可以抽象成多阶段决策最优解模型；<strong>分治算法</strong>解决问题大部分是最优解问题，但是大部分都不能抽象成多阶段决策模型。  </p>
-<p><strong>回溯算法</strong>是个万金油。基本上能用动态规划、贪心算法解决的问题，都可以用回溯算法解决。回溯算法相当于穷举搜索，穷举所有的情况，然后对比得到最优解。回溯算法的时间复杂度 非常高，是指数级别的，只能用来解决小规模数据的问题。  </p>
-<p>尽管<strong>动态规划</strong>比回溯算法高效，但是并不是所有问题都可以用动态规划来解决。能用动态规划解决的问题，需要满足三个特征，最优子结构、无后效性、重复子问题。<br>在重复子问题上，动态规划和分治算法的区分非常明显。分治算法要求分割成的子问题，不能有重复子问题，而动态规划正好相反，动态规划之所以高效，就是因为回溯算法实现中存在大量的重复子问题。  </p>
-<p><strong>贪心算法</strong>实际上是动态规划算法的一种特殊情况。它解决问题起来更加高效，代码实现也更加简洁，可以解决的问题也更加有限。它能解决的问题需要满足三个条件，最优子结构、无后效性、贪心选择性（不强调重复子问题）。<br>贪心选择性指，通过局部最优的选择，能产生全局的最优选择。每一个阶段，都选择当前看起来最优的决策，所有阶段的决策完成之后，最终由这些局部最优解构成全局最优解。  </p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>动态规划</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/04/15/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-  </entry>
-  <entry>
     <title>回溯算法</title>
     <url>/2020/05/13/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<p>回溯算法大部分情况下都是用来解决广义的搜索问题：从一组可能的解中，选出一个满足要求的解。<br>回溯算法非常适合用递归来实现，在实现的过程中，剪枝操作是提高回溯效率的一种技巧，利用剪枝，并不需要穷举搜索所有的情况，从未提高搜索效率。  </p>
@@ -1677,101 +1904,6 @@ public int hashCode() {
       </categories>
       <tags>
         <tag>回溯算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>分治算法</title>
-    <url>/2020/05/13/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<p>MapReduce、GFS(Google File System)、Bigtable是谷歌大数据处理的三驾马车。<br>MapReduce在倒排索引、PageRank计算、网页分析等搜索引擎相关的技术中有大量的应用。  </p>
-<h3 id="分治算法理解"><a href="#分治算法理解" class="headerlink" title="分治算法理解"></a>分治算法理解</h3><p>分治算法的核心思想：分而治之。<br>将原问题划分成n个规模较小，并且结构与原问题相似的子问题，递归地解决这些子问题，然后在合并其结果，得到原问题的解。  </p>
-<p>分治算法是一种处理问题的思想，递归是一种编程技巧。分治算法一般都比较适合用递归来实现。  </p>
-<ul>
-<li>分解：将原问题分解成一系列子问题；  </li>
-<li>解决：递归地求解各个子问题，若子问题足够小，则直接求解；  </li>
-<li>合并：将子问题的结果合并成原问题。  </li>
-</ul>
-<p>前提条件：  </p>
-<ul>
-<li>原问题与分解成的小问题具有相同的模式；  </li>
-<li>原问题分解成的子问题可以独立求解，子问题之间没有相关性；（分治算法与动态规划的区别）  </li>
-<li>具有分解终止条件，当问题足够小时，可以直接求解；  </li>
-<li>可以将子问题合并成原问题，合并操作的复杂度不高。  </li>
-</ul>
-<h3 id="分治算法编程应用"><a href="#分治算法编程应用" class="headerlink" title="分治算法编程应用"></a>分治算法编程应用</h3><p>排序中应用<br>有序度表示一组数据的有序程度，逆序度表示一组数据的无序程度。<br>n个数据从小到大排列，完全有序的数据（等差数列求和）的有序度就是n(n-1)/2，逆序度等于0；倒序排列的数据的有序度是0，逆序度是n(n-1)/2。<br>其余通过计算有序对/逆序对的个数，表示数据的有序度或逆序度。  </p>
-<ul>
-<li><p>拿每个数字跟它后面的数据比较，看有几个比它小的，把比它小的数字个数记作k，依次类推，对每个数字对应的k值求和，最后得到的总和就是逆序对个数。时间复杂度是O(n<sup>2</sup>)。  </p>
-</li>
-<li><p>套用分治的思想求数组的逆序对个数，将数组分成前后两半A1和A2，分别计算A1和A2的逆序对个数K1和K2，然后再计算A1与A2之间的逆序对个数K3。数组A的逆序对个数为K1+K2+K3。  </p>
-<p>借助归并排序算法，将两个有序的小数组合并成一个有序的数组的过程中，每次合并操作都计算逆序对个数，把计算出来的逆序对个数求和，就是这个数组的逆序对个数。  </p>
-  <div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        逆序度
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//全局变量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    num = <span class="number">0</span>;</span><br><span class="line">    mergeSortCounting(a,<span class="number">0</span>,n-<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">mergeSortCounting</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (start &gt;= end) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//中点</span></span><br><span class="line">    <span class="keyword">int</span> mid = (start+r=end)/<span class="number">2</span>;</span><br><span class="line">    mergeSortCounting(a,start,mid);</span><br><span class="line">    mergeSortCounting(a,mid+<span class="number">1</span>,end);</span><br><span class="line">    <span class="comment">//合并函数</span></span><br><span class="line">    mergeSort(a,start,mid,end);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> left, <span class="keyword">int</span> mid, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//临时数组，大小为当前分区的大小</span></span><br><span class="line">    <span class="keyword">int</span>[] tmp = <span class="keyword">new</span> <span class="keyword">int</span>[right-left+<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = left;<span class="comment">//左边起始下标</span></span><br><span class="line">    <span class="keyword">int</span> j = mid+<span class="number">1</span>;<span class="comment">//右边起始下标</span></span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid &amp;&amp; j &lt;= right) &#123;</span><br><span class="line">        <span class="comment">//取左右区间中元素最小值放入当前位置</span></span><br><span class="line">        <span class="keyword">if</span>(a[i] &lt;= a[j]) &#123;</span><br><span class="line">            tmp[k++] = a[i++]</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//统计左区间left-mid之间，比右区间当前元素a[j]大的元素个数</span></span><br><span class="line">            num += (mid-i+<span class="number">1</span>);</span><br><span class="line">            tmp[k++] = a[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理左区间剩下的</span></span><br><span class="line">    <span class="keyword">while</span>(i &lt;= mid) &#123;</span><br><span class="line">        tmp[k++] = a[i++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理右区间剩下的</span></span><br><span class="line">    <span class="keyword">while</span>(j &lt;= right) &#123;</span><br><span class="line">        tmp[k++] = a[j++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//从tmp拷贝回原数组a对应区间</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= right-left+<span class="number">1</span>; i++) &#123;</span><br><span class="line">        a[left+i] = tmp[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>
-
-</li>
-</ul>
-<h3 id="分治算法处理海量数据"><a href="#分治算法处理海量数据" class="headerlink" title="分治算法处理海量数据"></a>分治算法处理海量数据</h3><p>利用分治的思想解决数据量大到内存装不下的问题。  </p>
-<p>将海量数据集合根据某种方法，划分为几个小的数据集合，每个小的数据集合单独加载到内存来解决，然后再将小数据集合合并成大数据集合。  </p>
-<p>利用这种分治的处理思路，能克服内存的限制，还能利用多线程或者多机处理，加快处理的速度。  </p>
-<p>MapReduce框架只是一个任务调度器，底层依赖GFS来存储数据，依赖Borg管理及其。从GFS中拿数据，交给Borg中的机器执行，时刻监控机器执行状态并调度。<br>可以处理数据与数据之间存在关系的任务-统计文件中单词出现频率<br>可以处理数据与数据之间没有关系的任务-网页分析、分词  </p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>分治算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>图</title>
-    <url>/2020/05/11/%E5%9B%BE/</url>
-    <content><![CDATA[<h3 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h3><p>图是比树更加复杂的非线性表结构。适合存储微博、微信等社交网络中的好友关系。<br><strong>顶点</strong>：图中的元素；用户<br><strong>边</strong>：顶点与任意其它顶点之间的连接关系；好友关系<br><strong>度</strong>：顶点相连接的边的条数；好友个数<br><strong>有向图</strong>：带箭头的边，表示边的方向，有方向的图；关注关系<br><strong>无向图</strong>：边没有方向的图；好友关系<br><strong>度</strong>：无向图中表示一个顶点有多少条边；好友个数<br><strong>入度</strong>：有向图中，表示有多少条边指向这个顶点；粉丝个数<br><strong>出度</strong>：有向图中，表示有多少条边是以这个顶点为起点指向其他顶点；关注人数<br><strong>带权图</strong>：每条边都有一个权重。亲密度  </p>
-<h3 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h3><ul>
-<li><p>邻接矩阵<br>邻接矩阵-二维数组。<br>无向图，如果顶点i与顶点j之间有边，就将A[i][j]和A[j][i]标记为1；浪费一半的存储空间；<br>有向图，如果顶点i到j之间，有一条箭头从顶点i指向顶点j的边，就将A[i][j]标记为1。如果有一条箭头从顶点j指向顶点i的边，就将A[j][i]标记为1。<br>带权图，数组中就存储相应的权重。<br>稀疏图，顶点很多，但每个顶点的边不多，邻接矩阵的存储方法更加浪费。</p>
-<p>优点：<br>存储方式简单、直接，获取顶点关系高效，图计算-矩阵计算方便。</p>
-</li>
-<li><p>邻接表<br>邻接表-散列表<br>无向图每个顶点对应一条链表，链表中存储的是与这个顶点相连接的其他顶点。<br>有向图，每个顶点对应的链表里，存储其指向的顶点。  </p>
-<p>优化；<br>顶点中的链表转换成平衡二叉查找树、红黑树、跳表、散列表、有序动态数组(二分查找)。  </p>
-</li>
-</ul>
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><ol>
-<li><p>微博-有向图<br>微博操作：  </p>
-<ul>
-<li>判断用户A是否关注用户B  </li>
-<li>判断用户A是否被用户B的关注  </li>
-<li>用户A关注用户B  </li>
-<li>用户A取消关注用户B  </li>
-<li>根据用户名称的首字母排序，分页获取用户的粉丝列表  </li>
-<li>根据用户名称的首字母排序，分页获取用户的关注列表  </li>
-</ul>
-<p>社交关系存储：  </p>
-<ul>
-<li>内存（数据量大用哈希算法将数据分片）<br>邻接表，存储用户关注了哪些用户；每个顶点的链表中，存储这个顶点指向的顶点。<br>逆邻接表，存储用户被哪些用户关注；每个顶点的链表中，存储指向这个顶点的顶点。  </li>
-<li>硬盘<br>两列表。一列用户id，一列关注id。分别建立索引。  </li>
-</ul>
-</li>
-<li><p>微信-无向图<br>微信操作：  </p>
-<ul>
-<li>判断A、B是否为好友关系  </li>
-<li>A删除B，断开与B的好友关系  </li>
-<li>展示出A的好友列表，并按名称首字母排序  </li>
-</ul>
-<p>社交关系存储：  </p>
-<ul>
-<li>邻接表存储每个人对应的好友列表，好友列表可用红黑树/跳表存储</li>
-</ul>
-</li>
-</ol>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>图</tag>
       </tags>
   </entry>
 </search>
