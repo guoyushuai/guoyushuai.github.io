@@ -18,20 +18,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="方法或者函数调用自身的方式称为递归调用">
+  <meta name="description" content="数据库索引是用B+树实现的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="递归">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/04/21/%E9%80%92%E5%BD%92/index.html">
+<meta property="og:title" content="B+树">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/05/23/B+%E6%A0%91/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="方法或者函数调用自身的方式称为递归调用">
+<meta property="og:description" content="数据库索引是用B+树实现的">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-05T15:35:56.903Z">
+<meta property="article:published_time" content="2020-05-23T11:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-24T10:20:48.720Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="递归">
+<meta property="article:tag" content="B+树">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/04/21/%E9%80%92%E5%BD%92/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/05/23/B+%E6%A0%91/">
 
 
 <script id="page-configurations">
@@ -44,7 +44,7 @@
   };
 </script>
 
-  <title>递归 | Notes</title>
+  <title>B+树 | Notes</title>
   
 
 
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/04/21/%E9%80%92%E5%BD%92/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/23/B+%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          递归
+          B+树
         </h1>
 
         <div class="post-meta">
@@ -224,14 +224,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-04-21 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-21T00:00:00+08:00">2020-04-21</time>
+              <time title="创建时间：2020-05-23 19:00:00" itemprop="dateCreated datePublished" datetime="2020-05-23T19:00:00+08:00">2020-05-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-05 23:35:56" itemprop="dateModified" datetime="2020-05-05T23:35:56+08:00">2020-05-05</time>
+                <time title="修改时间：2020-05-24 18:20:48" itemprop="dateModified" datetime="2020-05-24T18:20:48+08:00">2020-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,16 +256,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>646</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>4 分钟</span>
             </span>
-            <div class="post-description">方法或者函数调用自身的方式称为递归调用</div>
+            <div class="post-description">数据库索引是用B+树实现的</div>
 
         </div>
       </header>
@@ -276,34 +276,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
-<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
-<li>一个问题的解可以分解为几个子问题的解</li>
-<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
-<li>存在递归终止条件</li>
-</ul>
-<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
-<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
-<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
-<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
-<li>时间空间成本</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
-<blockquote>
-<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
-</blockquote>
-<p>递归代码的调试方法</p>
-<blockquote>
-<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
-</blockquote>
-<p>检测递归中环的存在</p>
-<blockquote>
-<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
-</blockquote>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
+        <h3 id="支持快速查询、插入等操作的数据结构"><a href="#支持快速查询、插入等操作的数据结构" class="headerlink" title="支持快速查询、插入等操作的数据结构"></a>支持快速查询、插入等操作的数据结构</h3><p><strong>散列表</strong><br>散列表的查询性能很好，时间复杂度是O(1)。散列表不能支持按照区间快速查找数据。  </p>
+<p><strong>平衡二叉查找树</strong><br>平衡二叉查找树的性能很好，时间复杂度是O(logn)。对树进行中序遍历，可以得到一个从小到大的有序的数据序列，但不足以支持按照区间快速查找数据。  </p>
+<p><strong>跳表</strong><br>跳表是在链表之上加上多层索引构成的，支持快速的插入、查找、删除数据，时间复杂度为O(logn)。跳表也支持按照区间快速的查找数据，只需要定位到区间起点值对应在链表中的结点，然后从这个结点开始，顺序遍历链表，直到区间终点对应的结点为止，这期间遍历得到的数据就是满足区间值的数据。  </p>
+<p><strong>二叉查找树改造—&gt;B+树</strong><br>解决<strong>区间查找</strong>问题，树中的节点并不存储数据本身，而是只是作为索引。把每个叶子节点串在一条链表上，链表中的数据是从小到大有序的。<br>改造之后，如果要求某个区间的数据，只需要拿区间的起始值，在树中进行查找，当查找到某个叶子节点之后，再顺着链表往后遍历，直到链表中的结点数据值大于区间的终点值位置。所遍历到的数据，就是符合区间值的所有数据。  </p>
+<p>解决<strong>内存占用</strong>问题，借助时间换空间的思路，把索引存储在硬盘中。<br>比起内存读写操作，磁盘IO操作非常耗时，尽量减少磁盘IO操作—降低树的高度。构建m叉树。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        m叉树实现B+树索引
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 非叶子节点</span></span><br><span class="line"><span class="comment">* </span></span><br><span class="line"><span class="comment">* 假设keywords=[3,5,8,10]</span></span><br><span class="line"><span class="comment">* 4个键值将数据分为5个区间：(-INF,3),[3,5),[5,8),[8,10),[10,inf)</span></span><br><span class="line"><span class="comment">* 5个区间分别对应：children[0]...children[4]</span></span><br><span class="line"><span class="comment">* </span></span><br><span class="line"><span class="comment">* m值是事先计算得到的，计算的依据是让所有信息的大小正好等于页的大小：</span></span><br><span class="line"><span class="comment">* PAGE_SIZE = (m-1)*4[keywords大小] + m*8[children大小]</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BPlusTreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> m = <span class="number">5</span>;<span class="comment">//5叉树</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] keywords = <span class="keyword">new</span> <span class="keyword">int</span>[m-<span class="number">1</span>];<span class="comment">//键值，用来划分数据区间</span></span><br><span class="line">    <span class="keyword">public</span> BPlusTressNode[] children = <span class="keyword">new</span> BPlusTreeNode[m];<span class="comment">//保存子节点指针</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 叶子节点</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* 叶子节点存储的是值，而非区间</span></span><br><span class="line"><span class="comment">* 每个叶子节点存储3个数据行的键值及地址信息</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* k值是事先计算得到的，计算的依据是让所有信息的大小正好等于页的大小：</span></span><br><span class="line"><span class="comment">* PAGE_SIZE = k*4[keywords大小]+k*8[dataAddress大小]+8[prev大小]+8[next大小]</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BPlusTreeLeafNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> k = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] keywords = <span class="keyword">new</span> <span class="keyword">int</span>[k];<span class="comment">//数据的键值</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">long</span>[] dataAddress = <span class="keyword">new</span> <span class="keyword">long</span>[k];<span class="comment">//数据地址</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> BPlusTreeLeafNode prev;<span class="comment">//这个结点在链表中的前驱结点</span></span><br><span class="line">    <span class="keyword">public</span> BPlusTreeLeafNode next;<span class="comment">//这个结点在链表中的后继结点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
 
+<p>对于相同个数的数据构建m叉树索引，m叉树中的m越大，树的高度就越小。<br>内存中的数据，以及磁盘中的数据，操作系统都是按页（一页大小通常是4KB，这个值可以通过getconfig PAGE_SIZE命令查看）来读取的，一次会读取一页的数据。如果要读取的数据超过一页的大小，就会触发多次IO操作。所以选择m大小的时候，尽量让每个节点的大小等于一个页的大小。读取一个节点，只需要一次磁盘IO操作。  </p>
 <ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
+<li><p>写入数据效率下降<br>  数据的写入过程，会涉及索引的更新，这是索引导致写入变慢的主要原因。  </p>
+<p>  对于一个B+树来说，m值是根据页的大小事先计算好的，每个节点最多只能有m个子节点。在往数据库中写入数据的过程中，可能使索引中某些节点的子节点个数超过m，这个节点的大小超过了一个页的大小，读取这样一个节点，就会导致多次IO操作。  </p>
+<p>  需要将这个节点分裂成两个节点。节点分裂之后，其上层父节点的子节点个数有可能超过m个。可以用同样的方法，将父节点也分裂成两个节点。这种级联反应会从下往上，一直影响到根节点。  </p>
+</li>
+<li><p>删除数据效率下降<br>  删除某个数据的时候，也要对应的更新索引节点。处理思路类似跳表中删除数据的处理思路。频繁的数据删除，就会导致某些节点中，子节点的个数变得非常少，长此以往，如果某个节点的子节点都比较少，势必会影响索引的效率。  </p>
+<p>  设置一个阈值，在B+树中，这个阈值等于m/2，如果摸一个节点的子节点个数小于m/2，就将它跟相邻的兄弟节点合并。合并之后的子节点个数有可能会超过m。针对这种情况，可以借助插入数据的时候的处理方法，再分裂节点。  </p>
+</li>
+</ul>
+<p>理论上，对跳表稍加改造也可以替代B+树，作为数据库的索引实现。  </p>
+<h3 id="B-树特点"><a href="#B-树特点" class="headerlink" title="B+树特点"></a>B+树特点</h3><ul>
+<li>每个节点中子节点的个数不能超过m，也不能小于m/2；</li>
+<li>根节点的子节点个数可以不超过m/2，这是一个例外；</li>
+<li>m叉树只存储索引，并不真正存储数据，这个类似跳表；</li>
+<li>通过链表将叶子节点串联在一起，可以方便按区间查找；</li>
+<li>一般情况，根节点会被存储在内存中，其他节点存储在磁盘中。</li>
+</ul>
+<p>B-树就是B树  </p>
+<ul>
+<li>B+树中的节点不存储数据，只是索引，而B树中的节点存储数据；</li>
+<li>B树中的叶子节点并不需要链表来串联。</li>
+<li>B树只是一个每个节点的子节点个数不能小于m/2的m叉树。</li>
 </ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
@@ -315,7 +324,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E9%80%92%E5%BD%92/" rel="tag"><i class="fa fa-tag"></i> 递归</a>
+              <a href="/tags/B-%E6%A0%91/" rel="tag"><i class="fa fa-tag"></i> B+树</a>
           </div>
 
         
@@ -324,13 +333,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/20/%E9%98%9F%E5%88%97/" rel="prev" title="队列">
-      <i class="fa fa-chevron-left"></i> 队列
+    <a href="/2020/05/22/A-%E6%90%9C%E7%B4%A2/" rel="prev" title="A*搜索">
+      <i class="fa fa-chevron-left"></i> A*搜索
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/23/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%E3%80%81%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E3%80%81%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" rel="next" title="冒泡排序、插入排序、选择排序">
-      冒泡排序、插入排序、选择排序 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -389,7 +395,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#递归特点"><span class="nav-number">1.</span> <span class="nav-text">递归特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#递归问题"><span class="nav-number">2.</span> <span class="nav-text">递归问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展"><span class="nav-number">3.</span> <span class="nav-text">扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#支持快速查询、插入等操作的数据结构"><span class="nav-number">1.</span> <span class="nav-text">支持快速查询、插入等操作的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-树特点"><span class="nav-number">2.</span> <span class="nav-text">B+树特点</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
