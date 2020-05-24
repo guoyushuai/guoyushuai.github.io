@@ -18,17 +18,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="尺有所短，寸有所长。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Notes">
-<meta property="og:url" content="https://guoyushuai.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/page/2/index.html">
+  <meta name="description" content="索引提高数据增删改查的执行效率">
+<meta property="og:type" content="article">
+<meta property="og:title" content="索引">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/05/24/%E7%B4%A2%E5%BC%95/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="尺有所短，寸有所长。">
+<meta property="og:description" content="索引提高数据增删改查的执行效率">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-24T13:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-24T15:47:19.179Z">
 <meta property="article:author" content="Magic Candy">
+<meta property="article:tag" content="索引">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/page/2/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/05/24/%E7%B4%A2%E5%BC%95/">
 
 
 <script id="page-configurations">
@@ -36,12 +39,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>分类: 数据结构与算法 | Notes</title>
+  <title>索引 | Notes</title>
   
 
 
@@ -191,235 +194,131 @@
         <div class="content-wrap">
           
 
-          <div class="content category">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">数据结构与算法
-          <small>分类</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/24/%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          索引
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-24 21:00:00 / 修改时间：23:47:19" itemprop="dateCreated datePublished" datetime="2020-05-24T21:00:00+08:00">2020-05-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+            <div class="post-description">索引提高数据增删改查的执行效率</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <h3 id="索引定义"><a href="#索引定义" class="headerlink" title="索引定义"></a>索引定义</h3><p>类比书籍的目录。通过目录，可以快速定位相关知识点的页数，查找的速度有质的提高。  </p>
+<h3 id="索引的需求定义"><a href="#索引的需求定义" class="headerlink" title="索引的需求定义"></a>索引的需求定义</h3><ol>
+<li><p>功能性需求<br><strong>数据是格式化数据还是非格式化数据</strong>。结构化数据，MySQL中的数据；非结构化数据，搜索引擎中网页。非机构化数据需要做预处理，提取出查询关键词，对关键词构建索引。  </p>
+<p><strong>数据是静态数据还是动态数据</strong>。静态数据，不会有数据的增加、删除、更新操作，构建索引时只需奥考虑查询效率。动态数据，在原始数据更新的同时，还需要动态的更新索引。  </p>
+<p><strong>索引存储在内存还是硬盘</strong>。存储在内存，查询速度高。原始数据量大，索引很大，内存有限，需要将索引存储在磁盘。一部分存储在内存，一部分存储在磁盘，可以兼顾内存消耗和查询效率。  </p>
+<p><strong>单值查找还是区间查找</strong>。单值查找，根据查询关键词等于某个值的数据。区间查找，查找关键词处于某个区间值的所有数据。  </p>
+<p><strong>单关键词查找还是多关键词组合查找</strong>。多关键词查询：结构化数据，针对多个关键词的组合建立索引；非结构化数据，针对单个关键词构建索引，然后通过集合操作（并集、交集），计算出多个关键词组合的查询结果。</p>
+</li>
+<li><p>非功能性需求<br><strong>不管是存储在内存中还是磁盘中，索引对存储空间的消耗不能过大</strong>。索引对存储空间的消耗可能会超过原始数据。  </p>
+<p><strong>在考虑索引查询效率的同时，还要考虑索引的维护成本</strong>。在原始数据动态增删改的同时，也需要动态的更新索引，索引的更新势必会影响到增删改操作的性能。  </p>
+</li>
+</ol>
+<h3 id="构建索引常用的数据结构"><a href="#构建索引常用的数据结构" class="headerlink" title="构建索引常用的数据结构"></a>构建索引常用的数据结构</h3><p>散列表、红黑树、跳表、B+树，可以作为动态数据集合的索引，位图、布隆过滤器可作为辅助索引，有序数组可以用来对静态数据构建索引。  </p>
+<p><strong>散列表</strong>增删改查的时间复杂度为O(1)，一般构建在内存中。如键值数据库（Redis、Memcache）的索引。  </p>
+<p><strong>红黑树</strong>数据插入、删除、查找的时间复杂度为O(logn)，适合构建内存索引。如Ext文件系统中，对磁盘块的索引。  </p>
+<p><strong>B+树</strong>相比红黑树，更适合构建存储在磁盘中的索引，需要的磁盘IO次数更少。如关系型数据库MySQL、Oracle的索引。  </p>
+<p><strong>跳表</strong>支持快速添加、删除、查找数据，通过灵活调整索引结点个数和数据个数之间的比例，可以很好的平衡索引堆内存的消耗及其查询效率。如Redis中的有序集合的索引。  </p>
+<p><strong>位图和布隆过滤器</strong>，辅助存储在磁盘中的索引，加速数据查找的效率。<br>布隆过滤器有一定的判错率。对于判定存在的数据，可能并不存在；对于判定不存在的数据，则肯定不存在。但内存占用非常少。<br>针对数据，构建一个布隆过滤器，存储在内存中，当要查询数据的时候，可以先通过布隆过滤器，判定是否存在。若不存在，则没有必要读磁盘中的索引，对于数据不存在的情况，数据查询更加快速。  </p>
+<p><strong>有序数组</strong>。静态数据，没有插入、删除、更新操作，可以把数据查询用的关键词抽取出来，组织成有序数据，然后利用二分查找算法来快速查找数据。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-13T11:00:00+08:00"
-              content="2020-05-13">
-          05-13
-        </time>
-      </div>
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag"><i class="fa fa-tag"></i> 索引</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/13/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/" itemprop="url">
-            <span itemprop="name">分治算法</span>
-          </a>
-      </div>
+        
 
-    </header>
-  </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-12T19:00:00+08:00"
-              content="2020-05-12">
-          05-12
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/12/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" itemprop="url">
-            <span itemprop="name">贪心算法</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-12T00:00:00+08:00"
-              content="2020-05-12">
-          05-12
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/12/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88&%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88/" itemprop="url">
-            <span itemprop="name">深度优先&广度优先</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-11T00:00:00+08:00"
-              content="2020-05-11">
-          05-11
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/11/%E5%9B%BE/" itemprop="url">
-            <span itemprop="name">图</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-10T00:00:00+08:00"
-              content="2020-05-10">
-          05-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/10/Trie%E6%A0%91/" itemprop="url">
-            <span itemprop="name">Trie树</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-09T00:00:00+08:00"
-              content="2020-05-09">
-          05-09
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABF&RK/" itemprop="url">
-            <span itemprop="name">字符串匹配：BF&RK</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-08T00:00:00+08:00"
-              content="2020-05-08">
-          05-08
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/08/%E5%A0%86&%E5%A0%86%E6%8E%92%E5%BA%8F/" itemprop="url">
-            <span itemprop="name">堆&堆排序</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-08T00:00:00+08:00"
-              content="2020-05-08">
-          05-08
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/08/%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8/" itemprop="url">
-            <span itemprop="name">堆的应用</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-07T00:00:00+08:00"
-              content="2020-05-07">
-          05-07
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/07/%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91/" itemprop="url">
-            <span itemprop="name">二叉查找树</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-06T00:00:00+08:00"
-              content="2020-05-06">
-          05-06
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/05/06/%E4%BA%8C%E5%8F%89%E6%A0%91/" itemprop="url">
-            <span itemprop="name">二叉树</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/23/B+%E6%A0%91/" rel="prev" title="B+树">
+      <i class="fa fa-chevron-left"></i> B+树
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-  </div>
+      </footer>
+    
+  </article>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">1</a><span class="page-number current">2</span><a class="page-number" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/page/3/">3</a><a class="page-number" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/page/4/">4</a><a class="extend next" rel="next" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
@@ -471,6 +370,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引定义"><span class="nav-number">1.</span> <span class="nav-text">索引定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引的需求定义"><span class="nav-number">2.</span> <span class="nav-text">索引的需求定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建索引常用的数据结构"><span class="nav-number">3.</span> <span class="nav-text">构建索引常用的数据结构</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
