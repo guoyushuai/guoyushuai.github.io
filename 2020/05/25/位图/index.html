@@ -18,20 +18,21 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="先进者先出">
+  <meta name="description" content="实现网页爬虫中的URL去重功能">
 <meta property="og:type" content="article">
-<meta property="og:title" content="队列">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/04/20/%E9%98%9F%E5%88%97/index.html">
+<meta property="og:title" content="位图">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/05/25/%E4%BD%8D%E5%9B%BE/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="先进者先出">
+<meta property="og:description" content="实现网页爬虫中的URL去重功能">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-05T15:36:13.899Z">
+<meta property="article:published_time" content="2020-05-25T02:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-25T10:00:36.257Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="队列">
+<meta property="article:tag" content="位图">
+<meta property="article:tag" content="布隆过滤器">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/04/20/%E9%98%9F%E5%88%97/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/05/25/%E4%BD%8D%E5%9B%BE/">
 
 
 <script id="page-configurations">
@@ -44,7 +45,7 @@
   };
 </script>
 
-  <title>队列 | Notes</title>
+  <title>位图 | Notes</title>
   
 
 
@@ -201,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/04/20/%E9%98%9F%E5%88%97/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/25/%E4%BD%8D%E5%9B%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          队列
+          位图
         </h1>
 
         <div class="post-meta">
@@ -223,16 +224,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-04-20 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-20T00:00:00+08:00">2020-04-20</time>
+              <time title="创建时间：2020-05-25 10:00:00 / 修改时间：18:00:36" itemprop="dateCreated datePublished" datetime="2020-05-25T10:00:00+08:00">2020-05-25</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-05 23:36:13" itemprop="dateModified" datetime="2020-05-05T23:36:13+08:00">2020-05-05</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -256,16 +251,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>674</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
-            <div class="post-description">先进者先出</div>
+            <div class="post-description">实现网页爬虫中的URL去重功能</div>
 
         </div>
       </header>
@@ -276,17 +271,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
-<h4 id="实现队列"><a href="#实现队列" class="headerlink" title="实现队列"></a>实现队列</h4><p>队列主要包含两个操作：入队enqueue(),放一个数据到队列尾部；出队dequeue(),从队列头部取一个元素。<br>用数组实现的队列-<strong>顺序队列</strong>，多为有界队列。<br>队列需要两个指针：1指向队头的head指针；2指向队尾的tail指针。<br>顺序队列实现优化，出队时不搬移数据，入队时如果没有空闲空间集中触发一次数据的搬移操作。更进一步，循环队列可以避免数据搬移操作。<br>用链表实现的队列-<strong>链式队列</strong>，多为无界队列。<br>入队：tail-&gt;next=new_node,tail=tail-&gt;next(tail=new_node);<br>出队：head=head-&gt;next.</p>
-<h4 id="特殊队列"><a href="#特殊队列" class="headerlink" title="特殊队列"></a>特殊队列</h4><ul>
-<li>循环队列(基于数组)<br>与普通队列的区别关键在于队空和队满的判定条件<br>普通队列：队空<strong>head==tail</strong>,队满<strong>tail==n</strong>;<br>循环队列：队空<strong>head==tail</strong>,队满<strong>(tail+1)%n==head</strong>.  <blockquote>
-<p>tail指向的位置没有存储数据，循环队列会浪费一个数组的存储空间。为了区分队空和队满。<br>普通队列队满的时候tail指向n，而不是n-1，不会浪费空间，数组中所有的位置都有数据。  </p>
+        <h3 id="散列表-分治"><a href="#散列表-分治" class="headerlink" title="散列表+分治"></a>散列表+分治</h3><p>将网页链接存储在散列表中。散列表需维持较小的装载因子，保证不会出现过多的散列冲突，导致操作的性能下降。需要的内存空间过大时，采用分治的思想，用多台机器进行存储。  </p>
+<h3 id="位图"><a href="#位图" class="headerlink" title="位图"></a>位图</h3><p>有1千万个整数，整数的范围在1到1亿之间。快速查找某个整数是否在这1千万个整数中。  </p>
+<p>申请一个大小为1亿、数据类型为布尔类型(true/false)的数组。将这1千万个整数作为数组下标，将对应的数组设置成true。<br>当查询某个整数K是否在这1千万个整数中的时候，只需要将对应的数组值array[K]取出来，看是否等于true。如果等于true，说明1千万整数中包含这个整数K；相反，就表示不包含这个整数K。  </p>
+<p>布尔类型大小是1个字节，只需要一个二进制位(bit)就可以表示true和false两个值。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        位图-借助char类型通过位运算实现
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java中char类型占16bit，也就是2个字节（1字节8bit）</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BitMap</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">char</span>[] bytes;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> nbits;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BitMap</span><span class="params">(<span class="keyword">int</span> nbits)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.nbits = nbits;</span><br><span class="line">        <span class="keyword">this</span>.bytes = <span class="keyword">new</span> <span class="keyword">char</span>[nbits/<span class="number">16</span>+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(k &gt; nbits) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">int</span> byteIndex = k/<span class="number">16</span>;</span><br><span class="line">        <span class="keyword">int</span> bitIndex = k%<span class="number">16</span>;</span><br><span class="line">        bytes[byteIndex] |= (<span class="number">1</span> &lt;&lt; bitIndex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(k &gt; nbits) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">int</span> byteIndex = k/<span class="number">16</span>;</span><br><span class="line">        <span class="keyword">int</span> bitIndex = k%<span class="number">16</span>;</span><br><span class="line">        <span class="keyword">return</span> (bytes[byteIndex] &amp; (<span class="number">1</span> &lt;&lt; bitIndex)) != <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<blockquote>
+<p>将数字A的第K位设置为1：A = A|(1 &lt;&lt; (k-1));<br>将数字A的第K位设置为0：A = A&amp;~(1 &lt;&lt; (k-1));<br>检测数字A的第k位：A&amp;(1 &lt;&lt; (k-1)) != 0;</p>
 </blockquote>
-</li>
-<li>阻塞队列（生产者-消费者模型）<br>在队列的基础上增加了阻塞操作：在队列为空的时候，从对头取数据会被阻塞；如果队列已满，插入数组的操作会被阻塞。  </li>
-<li>并发队列<br>线程安全的队列<br>在入队、出队操作方法上加锁，锁粒度大并发度低。<br>基于数组的循环队列，利用CAS原子操作实现高效的并发队列。  </li>
-</ul>
-<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>资源有限场景中，没有空闲资源时，通过队列来实现请求排队。<br>线程池、数据库连接池等</p>
+<p>位图通过数组下标来定位数据，访问效率非常高。每个数字用一个二进制位来表示，在数字范围不大的情况下，所需要的内存空间非常节省。  </p>
+<h3 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h3><p>布隆过滤器是对位图的一种改进，针对数据范围较大的数据。  </p>
+<p>数据个数是1千万，数据的范围是1到10亿。仍然使用一个1亿个二进制大小的位图，然后通过哈希函数，对数字进行处理，让它落在这1到1亿范围内。  </p>
+<p>一个哈希函数可能会存在冲突，用多个哈希函数一块定位一个数据。<br>使用K个哈希函数，对同一个数字进行求哈希值，会得到K个不同的哈希值，分别记作X<sub>1</sub>,X<sub>2</sub>,X<sub>3</sub>,…,X<sub>k</sub>。把k个数字作为位图中的下标，将对应的BitMap[X<sub>1</sub>],BitMap[X<sub>2</sub>],BitMap[X<sub>3</sub>],…,BitMap[X<sub>k</sub>]都设置成true，也就是用k个二进制位，来表示一个数字的存在。  </p>
+<p>当要查询某个数字是否存在的时候，用同样的K个哈希函数，对这个数字求哈希值，分别得到Y<sub>1</sub>,Y<sub>2</sub>,Y<sub>3</sub>,…,Y<sub>k</sub>。看这k个哈希值，对应位图中的数值是否都为true，如果都是true，则说明，这个数字存在，如果有其中任意一个不为true，那就说明这个数字不存在。  </p>
+<p>对于两个不同的数字来说，经过一个哈希函数处理之后，可能会产生相同的哈希值。但是经过K个哈希函数处理之后，k个哈希值都相同的概率就非常低了。尽管采用k个哈希函数之后，两个数字哈希冲突的概率降低了，但是这种处理方式又带来了新的问题，容易误判。  </p>
+<p>布隆过滤器只会对存在的情况有误判。如果某个数字经过布隆过滤器判断不存在，那就说明这个数字真的不存在，不会发生误判；如果某个数字经过布隆过滤器判断存在，可能误判，有可能并不存在。  </p>
+<p>布隆过滤器用多个哈希函数对同一个网页链接进行处理，CPU只需要将网页链接从内存中读取一次，进行多次哈希计算，理论上讲这组操作是CPU密集型的。<br>而在散列表的处理方式中，需要读取散列值相同（散列冲突）的多个网页链接，分别跟判重的网页链接，进行字符串匹配，这个操作涉及很多内存数据的读取，是内存密集型的。<br>CPU计算比内存访问更快。  </p>
+<p>当布隆过滤器中，数据个数与位图大小的比例超过某个阈值的时候，就重新申请一个新的位图。后面来的新数据，会被放置到新的位图中。如果要判断某个数据是否在布隆过滤器中已经存在，需要查看多个位图。  </p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>Java-BitSet<br>Redis-BitMap<br>Google-Guava-BloomFilter  </p>
+<p>[1] <a href="https://mp.weixin.qq.com/s/xxauNrJY9HlVNvLrL5j2hg" target="_blank" rel="noopener">漫画：Bitmap算法 整合版</a> </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -297,7 +308,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E9%98%9F%E5%88%97/" rel="tag"><i class="fa fa-tag"></i> 队列</a>
+              <a href="/tags/%E4%BD%8D%E5%9B%BE/" rel="tag"><i class="fa fa-tag"></i> 位图</a>
+              <a href="/tags/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 布隆过滤器</a>
           </div>
 
         
@@ -306,13 +318,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/19/%E6%A0%88/" rel="prev" title="栈">
-      <i class="fa fa-chevron-left"></i> 栈
+    <a href="/2020/05/24/%E7%B4%A2%E5%BC%95/" rel="prev" title="索引">
+      <i class="fa fa-chevron-left"></i> 索引
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/21/%E9%80%92%E5%BD%92/" rel="next" title="递归">
-      递归 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -371,7 +380,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现队列"><span class="nav-number">1.</span> <span class="nav-text">实现队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特殊队列"><span class="nav-number">2.</span> <span class="nav-text">特殊队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用"><span class="nav-number">3.</span> <span class="nav-text">应用</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列表-分治"><span class="nav-number">1.</span> <span class="nav-text">散列表+分治</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位图"><span class="nav-number">2.</span> <span class="nav-text">位图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#布隆过滤器"><span class="nav-number">3.</span> <span class="nav-text">布隆过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展"><span class="nav-number">4.</span> <span class="nav-text">扩展</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
