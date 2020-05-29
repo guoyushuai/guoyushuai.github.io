@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数组</title>
+    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
+<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
+<li>线性表<blockquote>
+<p>数组、链表、队列、栈  </p>
+</blockquote>
+</li>
+<li>非线性表<blockquote>
+<p>二叉树、堆、图  </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">a[i]_address</span> = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+<ol>
+<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
+<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
+<p>快速排序的思想</p>
+</blockquote>
+</li>
+<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
+<p>JVM标记清除垃圾回收算法的核心思想</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>复杂度分析</title>
     <url>/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h2 id="时间复杂度与空间复杂度"><a href="#时间复杂度与空间复杂度" class="headerlink" title="时间复杂度与空间复杂度"></a>时间复杂度与空间复杂度</h2><p>复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系。  </p>
@@ -60,89 +101,6 @@
       <tags>
         <tag>时间复杂度</tag>
         <tag>空间复杂度</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数组</title>
-    <url>/2020/04/17/%E6%95%B0%E7%BB%84/</url>
-    <content><![CDATA[<p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
-<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
-<li>线性表<blockquote>
-<p>数组、链表、队列、栈  </p>
-</blockquote>
-</li>
-<li>非线性表<blockquote>
-<p>二叉树、堆、图  </p>
-</blockquote>
-</li>
-</ol>
-<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">a[i]_address</span> = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
-<ol>
-<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
-<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
-<p>快速排序的思想</p>
-</blockquote>
-</li>
-<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
-<p>JVM标记清除垃圾回收算法的核心思想</p>
-</blockquote>
-</li>
-</ol>
-<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>数组</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>队列</title>
-    <url>/2020/04/20/%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
-<h4 id="实现队列"><a href="#实现队列" class="headerlink" title="实现队列"></a>实现队列</h4><p>队列主要包含两个操作：入队enqueue(),放一个数据到队列尾部；出队dequeue(),从队列头部取一个元素。<br>用数组实现的队列-<strong>顺序队列</strong>，多为有界队列。<br>队列需要两个指针：1指向队头的head指针；2指向队尾的tail指针。<br>顺序队列实现优化，出队时不搬移数据，入队时如果没有空闲空间集中触发一次数据的搬移操作。更进一步，循环队列可以避免数据搬移操作。<br>用链表实现的队列-<strong>链式队列</strong>，多为无界队列。<br>入队：tail-&gt;next=new_node,tail=tail-&gt;next(tail=new_node);<br>出队：head=head-&gt;next.</p>
-<h4 id="特殊队列"><a href="#特殊队列" class="headerlink" title="特殊队列"></a>特殊队列</h4><ul>
-<li>循环队列(基于数组)<br>与普通队列的区别关键在于队空和队满的判定条件<br>普通队列：队空<strong>head==tail</strong>,队满<strong>tail==n</strong>;<br>循环队列：队空<strong>head==tail</strong>,队满<strong>(tail+1)%n==head</strong>.  <blockquote>
-<p>tail指向的位置没有存储数据，循环队列会浪费一个数组的存储空间。为了区分队空和队满。<br>普通队列队满的时候tail指向n，而不是n-1，不会浪费空间，数组中所有的位置都有数据。  </p>
-</blockquote>
-</li>
-<li>阻塞队列（生产者-消费者模型）<br>在队列的基础上增加了阻塞操作：在队列为空的时候，从对头取数据会被阻塞；如果队列已满，插入数组的操作会被阻塞。  </li>
-<li>并发队列<br>线程安全的队列<br>在入队、出队操作方法上加锁，锁粒度大并发度低。<br>基于数组的循环队列，利用CAS原子操作实现高效的并发队列。  </li>
-</ul>
-<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>资源有限场景中，没有空闲资源时，通过队列来实现请求排队。<br>线程池、数据库连接池等</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>队列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>栈</title>
-    <url>/2020/04/19/%E6%A0%88/</url>
-    <content><![CDATA[<p>从栈的操作特性上看，栈是一种”操作受限”的线性表，只允许在一端插入和删除数据。并且满足先进后出、后进先出的特性。</p>
-<h4 id="实现栈"><a href="#实现栈" class="headerlink" title="实现栈"></a>实现栈</h4><p>栈主要包含两个操作：入栈push()，在栈顶插入一个数据；出栈pop()，从栈顶删除一个数据。<br>用数组实现的栈-<strong>顺序栈</strong>。<br>用链表实现的栈-<strong>链式栈</strong>。<br>空间复杂度为O(1)<br>时间复杂度为O(1)<br>动态扩容的顺序栈的入栈操作的均摊时间复杂度为O(1)</p>
-<h4 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h4><ul>
-<li>函数调用栈<br>操作系统给每个线程分配了一块独立的内存空间，用来存储函数调用时的临时变量。每进入一个函数，就会将临时变量作为一个栈帧入栈，当被调用函数执行完成返回之后，将这个函数对应的栈帧出栈。  </li>
-<li>表达式求值<br>通过两个栈实现，其中一个保存操作数的栈，另一个是保存运算符的栈。从左向右遍历表达式，遇到数字就压入操作数栈；遇到操作符与运算符栈的栈顶元素进行比较，<br>比运算符栈顶元素的优先级高，将当前运算符压入栈；<br>比运算符栈顶元素的优先级低或者相同，从运算符中取栈顶运算符，从操作数栈顶取两个操作数，进行计算，把计算结果压入操作数栈。  </li>
-<li>匹配括号<br>用栈保存未匹配的左括号，从左到右依次扫描字符串。扫描到左括号压入栈；扫描到右括号，从栈顶取出一个左括号进行匹配。</li>
-<li>浏览器前进&amp;后退<br>两个栈实现，浏览页面依次压入栈X，后退时，从栈X中出栈，压入栈Y;前进时，从栈Y中出栈，压入栈X.</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>JVM内存管理中堆栈</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>栈</tag>
       </tags>
   </entry>
   <entry>
@@ -229,6 +187,88 @@
       </categories>
       <tags>
         <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>队列</title>
+    <url>/2020/04/20/%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
+<h4 id="实现队列"><a href="#实现队列" class="headerlink" title="实现队列"></a>实现队列</h4><p>队列主要包含两个操作：入队enqueue(),放一个数据到队列尾部；出队dequeue(),从队列头部取一个元素。<br>用数组实现的队列-<strong>顺序队列</strong>，多为有界队列。<br>队列需要两个指针：1指向队头的head指针；2指向队尾的tail指针。<br>顺序队列实现优化，出队时不搬移数据，入队时如果没有空闲空间集中触发一次数据的搬移操作。更进一步，循环队列可以避免数据搬移操作。<br>用链表实现的队列-<strong>链式队列</strong>，多为无界队列。<br>入队：tail-&gt;next=new_node,tail=tail-&gt;next(tail=new_node);<br>出队：head=head-&gt;next.</p>
+<h4 id="特殊队列"><a href="#特殊队列" class="headerlink" title="特殊队列"></a>特殊队列</h4><ul>
+<li>循环队列(基于数组)<br>与普通队列的区别关键在于队空和队满的判定条件<br>普通队列：队空<strong>head==tail</strong>,队满<strong>tail==n</strong>;<br>循环队列：队空<strong>head==tail</strong>,队满<strong>(tail+1)%n==head</strong>.  <blockquote>
+<p>tail指向的位置没有存储数据，循环队列会浪费一个数组的存储空间。为了区分队空和队满。<br>普通队列队满的时候tail指向n，而不是n-1，不会浪费空间，数组中所有的位置都有数据。  </p>
+</blockquote>
+</li>
+<li>阻塞队列（生产者-消费者模型）<br>在队列的基础上增加了阻塞操作：在队列为空的时候，从对头取数据会被阻塞；如果队列已满，插入数组的操作会被阻塞。  </li>
+<li>并发队列<br>线程安全的队列<br>在入队、出队操作方法上加锁，锁粒度大并发度低。<br>基于数组的循环队列，利用CAS原子操作实现高效的并发队列。  </li>
+</ul>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>资源有限场景中，没有空闲资源时，通过队列来实现请求排队。<br>线程池、数据库连接池等</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>栈</title>
+    <url>/2020/04/19/%E6%A0%88/</url>
+    <content><![CDATA[<p>从栈的操作特性上看，栈是一种”操作受限”的线性表，只允许在一端插入和删除数据。并且满足先进后出、后进先出的特性。</p>
+<h4 id="实现栈"><a href="#实现栈" class="headerlink" title="实现栈"></a>实现栈</h4><p>栈主要包含两个操作：入栈push()，在栈顶插入一个数据；出栈pop()，从栈顶删除一个数据。<br>用数组实现的栈-<strong>顺序栈</strong>。<br>用链表实现的栈-<strong>链式栈</strong>。<br>空间复杂度为O(1)<br>时间复杂度为O(1)<br>动态扩容的顺序栈的入栈操作的均摊时间复杂度为O(1)</p>
+<h4 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h4><ul>
+<li>函数调用栈<br>操作系统给每个线程分配了一块独立的内存空间，用来存储函数调用时的临时变量。每进入一个函数，就会将临时变量作为一个栈帧入栈，当被调用函数执行完成返回之后，将这个函数对应的栈帧出栈。  </li>
+<li>表达式求值<br>通过两个栈实现，其中一个保存操作数的栈，另一个是保存运算符的栈。从左向右遍历表达式，遇到数字就压入操作数栈；遇到操作符与运算符栈的栈顶元素进行比较，<br>比运算符栈顶元素的优先级高，将当前运算符压入栈；<br>比运算符栈顶元素的优先级低或者相同，从运算符中取栈顶运算符，从操作数栈顶取两个操作数，进行计算，把计算结果压入操作数栈。  </li>
+<li>匹配括号<br>用栈保存未匹配的左括号，从左到右依次扫描字符串。扫描到左括号压入栈；扫描到右括号，从栈顶取出一个左括号进行匹配。</li>
+<li>浏览器前进&amp;后退<br>两个栈实现，浏览页面依次压入栈X，后退时，从栈X中出栈，压入栈Y;前进时，从栈Y中出栈，压入栈X.</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>JVM内存管理中堆栈</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>递归</title>
+    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
+    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
+<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
+<li>一个问题的解可以分解为几个子问题的解</li>
+<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
+<li>存在递归终止条件</li>
+</ul>
+<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
+<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
+<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
+<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
+<li>时间空间成本</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
+<blockquote>
+<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
+</blockquote>
+<p>递归代码的调试方法</p>
+<blockquote>
+<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
+</blockquote>
+<p>检测递归中环的存在</p>
+<blockquote>
+<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
+</blockquote>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -806,6 +846,33 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </tags>
   </entry>
   <entry>
+    <title>散列表应用</title>
+    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<p>散列表支持非常高效的数据插入、删除、查找操作，但是散列表中的数据都是通过散列函数打乱之后无规律的存储的，无法支持按照某种顺序快速地遍历数据。如果希望按照顺序遍历散列表中的数据，需要将散列表中的数据拷贝到数组中，然后排序再遍历。<br>散列表是动态数据结构，不停地有数据的插入、删除，每次希望按顺序遍历散列表中的数据的时候，都需要先排序，效率很低，为了解决这个问题，将散列表和链表（或者跳表）结合在一起使用。  </p>
+<h4 id="LRU缓存淘汰算法"><a href="#LRU缓存淘汰算法" class="headerlink" title="LRU缓存淘汰算法"></a>LRU缓存淘汰算法</h4><ul>
+<li><p>通过链表实现LRU缓存淘汰算法：维护一个按照访问时间从大到小有序排列的链表结构。因为缓存大小有限，当缓存空间不够，需要淘汰一个数据的时候，直接将链表头部的结点删除。<br>当要缓存某个数据的时候，先在链表中查找这个数据。如果没有找到，则直接将数据放到链表的尾部；如果找到了，就把它移动到链表的尾部。因为查找数据需要遍历链表，所以单纯使用链表实现的LRU缓存淘汰算法的时间复杂度很高为O(n)。  </p>
+</li>
+<li><p>将散列表和链表两种结构组合使用，可以将添加、删除、查找操作的时间复杂度都降低到O(1)。使用双向链表存储数据，链表中的每个节点除了存储数据data、前驱指针prev、后继指针next之外，还新增了一个特殊的字段hnext。这里的散列表通过链表法解决散列冲突，每个节点会在两条链中。一个链式双向链表，一个是散列表中的拉链。前驱和后继指针将结点串在双向链表中，hnext指针将结点串在散列表的拉链中。  </p>
+<blockquote>
+<ul>
+<li>查找数据，散列表中查找数据的时间复杂度为O(1)。找到数据之后将其移动到双向链表的尾部。  </li>
+<li>删除数据，散列表中在O(1)时间复杂度里找到要删除的结点，双向链表中通过前驱指针O(1)时间复杂度获取前驱结点。则删除结点的时间复杂度为O(1)。  </li>
+<li>添加数据，先判断数据是否已经在缓存中。如果存在，需要将其移动到双向链表的尾部；如果不存在，判断缓存是否已满，如果已满，则将双向链表头部的结点删除在将数据放到链表的尾部，如果未满，则直接将数据放到链表的尾部。<br>涉及查找操作都通过散列表来完成，其他删除、插入操作通过链表来完成，只需更改指针指向。时间复杂度都为O(1)。  </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h4 id="Redis有序集合"><a href="#Redis有序集合" class="headerlink" title="Redis有序集合"></a>Redis有序集合</h4><p>有序集合中，每个成员对象有两个重要的属性，键值key和分值score，可以通过score查找数据，也可以通过key来查找数据。<br>按照分值将对象组织成跳表的结构<br>按照键值构建一个散列表   </p>
+<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><p>通过散列表和双向链表组合实现。Linked指的是双向链表，并非指用链表法解决散列冲突。<br>不仅支持按照插入顺序遍历数据，还支持按照访问数据遍历数据。  </p>
+<figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 10是初始大小，0.75是装载因子，true是表示按照访问时间排序</span></span><br><span class="line">HashMap&lt;<span class="built_in">Integer</span>, <span class="built_in">Integer</span>&gt; m = <span class="literal">new</span> LinkedHashMap&lt;&gt;(<span class="number">10</span>, <span class="number">0.75</span>f, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>散列表</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>散列表</title>
     <url>/2020/05/01/%E6%95%A3%E5%88%97%E8%A1%A8/</url>
     <content><![CDATA[<h4 id="散列思想"><a href="#散列思想" class="headerlink" title="散列思想"></a>散列思想</h4><p>散列表用的数组支持按照下标随机访问数据的特性，是数组的一种扩展，由数组演化而来。没有数组，就没有散列表。   </p>
@@ -848,82 +915,6 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </categories>
       <tags>
         <tag>散列表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>散列表应用</title>
-    <url>/2020/05/05/%E6%95%A3%E5%88%97%E8%A1%A8%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<p>散列表支持非常高效的数据插入、删除、查找操作，但是散列表中的数据都是通过散列函数打乱之后无规律的存储的，无法支持按照某种顺序快速地遍历数据。如果希望按照顺序遍历散列表中的数据，需要将散列表中的数据拷贝到数组中，然后排序再遍历。<br>散列表是动态数据结构，不停地有数据的插入、删除，每次希望按顺序遍历散列表中的数据的时候，都需要先排序，效率很低，为了解决这个问题，将散列表和链表（或者跳表）结合在一起使用。  </p>
-<h4 id="LRU缓存淘汰算法"><a href="#LRU缓存淘汰算法" class="headerlink" title="LRU缓存淘汰算法"></a>LRU缓存淘汰算法</h4><ul>
-<li><p>通过链表实现LRU缓存淘汰算法：维护一个按照访问时间从大到小有序排列的链表结构。因为缓存大小有限，当缓存空间不够，需要淘汰一个数据的时候，直接将链表头部的结点删除。<br>当要缓存某个数据的时候，先在链表中查找这个数据。如果没有找到，则直接将数据放到链表的尾部；如果找到了，就把它移动到链表的尾部。因为查找数据需要遍历链表，所以单纯使用链表实现的LRU缓存淘汰算法的时间复杂度很高为O(n)。  </p>
-</li>
-<li><p>将散列表和链表两种结构组合使用，可以将添加、删除、查找操作的时间复杂度都降低到O(1)。使用双向链表存储数据，链表中的每个节点除了存储数据data、前驱指针prev、后继指针next之外，还新增了一个特殊的字段hnext。这里的散列表通过链表法解决散列冲突，每个节点会在两条链中。一个链式双向链表，一个是散列表中的拉链。前驱和后继指针将结点串在双向链表中，hnext指针将结点串在散列表的拉链中。  </p>
-<blockquote>
-<ul>
-<li>查找数据，散列表中查找数据的时间复杂度为O(1)。找到数据之后将其移动到双向链表的尾部。  </li>
-<li>删除数据，散列表中在O(1)时间复杂度里找到要删除的结点，双向链表中通过前驱指针O(1)时间复杂度获取前驱结点。则删除结点的时间复杂度为O(1)。  </li>
-<li>添加数据，先判断数据是否已经在缓存中。如果存在，需要将其移动到双向链表的尾部；如果不存在，判断缓存是否已满，如果已满，则将双向链表头部的结点删除在将数据放到链表的尾部，如果未满，则直接将数据放到链表的尾部。<br>涉及查找操作都通过散列表来完成，其他删除、插入操作通过链表来完成，只需更改指针指向。时间复杂度都为O(1)。  </li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h4 id="Redis有序集合"><a href="#Redis有序集合" class="headerlink" title="Redis有序集合"></a>Redis有序集合</h4><p>有序集合中，每个成员对象有两个重要的属性，键值key和分值score，可以通过score查找数据，也可以通过key来查找数据。<br>按照分值将对象组织成跳表的结构<br>按照键值构建一个散列表   </p>
-<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><p>通过散列表和双向链表组合实现。Linked指的是双向链表，并非指用链表法解决散列冲突。<br>不仅支持按照插入顺序遍历数据，还支持按照访问数据遍历数据。  </p>
-<figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 10是初始大小，0.75是装载因子，true是表示按照访问时间排序</span></span><br><span class="line">HashMap&lt;<span class="built_in">Integer</span>, <span class="built_in">Integer</span>&gt; m = <span class="literal">new</span> LinkedHashMap&lt;&gt;(<span class="number">10</span>, <span class="number">0.75</span>f, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>散列表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>二叉树</title>
-    <url>/2020/05/06/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
-    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
-<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
-<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
-<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
-<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
-<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
-</ol>
-<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
-<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
-</li>
-<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
-</li>
-<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
-<p> 递推公式：  </p>
- <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">前序遍历  </span><br><span class="line">preOrder<span class="function"><span class="params">(r)</span> = <span class="title">print</span> <span class="title">r</span> -&gt;</span> preOrder<span class="function"><span class="params">(r-&gt;left)</span> -&gt;</span> preOrder(r-&gt;right)  </span><br><span class="line">中序遍历  </span><br><span class="line">inOrder<span class="function"><span class="params">(r)</span> = <span class="title">inOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> <span class="built_in">print</span> r<span class="function"> -&gt;</span> inOrder(r-&gt;right)  </span><br><span class="line">后序遍历  </span><br><span class="line">postOrder<span class="function"><span class="params">(r)</span> = <span class="title">postOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> postOrder<span class="function"><span class="params">(r-&gt;right)</span> -&gt;</span> <span class="built_in">print</span> r</span><br></pre></td></tr></table></figure>
-
-<p> 伪代码：  </p>
- <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前序遍历</span></span><br><span class="line">void pre<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    print root;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//中序遍历</span></span><br><span class="line">void <span class="keyword">in</span><span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//后序遍历</span></span><br><span class="line">void post<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        按层遍历
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(T x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;TreeNode&gt; <span class="title">floorlevelOrder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;TreeNode&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//利用队列先进先出的特点实现按层遍历</span></span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//根节点入队</span></span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="comment">//从队列中弹出各结点数据，直到队列为空，遍历完毕</span></span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环</span></span><br><span class="line">        TreeNode node = queue.poll();</span><br><span class="line">        result.add(node);</span><br><span class="line">        <span class="keyword">if</span>(node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-    </div>
-</div>  
-
-</li>
-</ol>
-<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二叉树</tag>
       </tags>
   </entry>
   <entry>
@@ -987,6 +978,55 @@ public int hashCode() {
       </categories>
       <tags>
         <tag>散列表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二叉树</title>
+    <url>/2020/05/06/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
+<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
+<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
+<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
+<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
+<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
+</ol>
+<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
+<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
+</li>
+<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
+</li>
+<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
+<p> 递推公式：  </p>
+ <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">前序遍历  </span><br><span class="line">preOrder<span class="function"><span class="params">(r)</span> = <span class="title">print</span> <span class="title">r</span> -&gt;</span> preOrder<span class="function"><span class="params">(r-&gt;left)</span> -&gt;</span> preOrder(r-&gt;right)  </span><br><span class="line">中序遍历  </span><br><span class="line">inOrder<span class="function"><span class="params">(r)</span> = <span class="title">inOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> <span class="built_in">print</span> r<span class="function"> -&gt;</span> inOrder(r-&gt;right)  </span><br><span class="line">后序遍历  </span><br><span class="line">postOrder<span class="function"><span class="params">(r)</span> = <span class="title">postOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> postOrder<span class="function"><span class="params">(r-&gt;right)</span> -&gt;</span> <span class="built_in">print</span> r</span><br></pre></td></tr></table></figure>
+
+<p> 伪代码：  </p>
+ <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前序遍历</span></span><br><span class="line">void pre<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    print root;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//中序遍历</span></span><br><span class="line">void <span class="keyword">in</span><span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//后序遍历</span></span><br><span class="line">void post<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        按层遍历
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(T x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;TreeNode&gt; <span class="title">floorlevelOrder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;TreeNode&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//利用队列先进先出的特点实现按层遍历</span></span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//根节点入队</span></span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="comment">//从队列中弹出各结点数据，直到队列为空，遍历完毕</span></span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环</span></span><br><span class="line">        TreeNode node = queue.poll();</span><br><span class="line">        result.add(node);</span><br><span class="line">        <span class="keyword">if</span>(node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+</div>  
+
+</li>
+</ol>
+<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
       </tags>
   </entry>
   <entry>
@@ -1160,45 +1200,6 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
-    <title>堆的应用</title>
-    <url>/2020/05/08/%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<h4 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h4><p>在优先级队列中，数据的出队顺序不是先进先出，而是按照优先级来，优先级高的，最先出队。  </p>
-<p>优先级队列实现方法有很多，用堆来实现是最直接、最高效的。<strong>一个堆可以看做一个优先级队列</strong>，往优先级队列中插入一个元素，就相当于往堆中插入一个元素；从优先级队列中取出优先级最高的元素，相当于取出堆顶元素。<br>霍夫曼编码、图的最短路径、最小生成树算法。  </p>
-<ul>
-<li><p>合并有序小文件<br>小文件中存储的都是有序的字符串。从各个小文件中各取出一个字符串，放入到与文件个数等长的小顶堆中，堆顶的元素就是优先级队列队首的元素-最小的字符串。<br>将这个字符串放入到大文件中，并将其从堆中删除。然后再从对应的小文件中取出下一个字符串，放入到堆中。循环。  </p>
-<p>删除堆顶数据和往堆中插入数据的时间复杂度都是O(logn)，n表示堆中的数据个数。  </p>
-</li>
-<li><p>高性能定时器<br>按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（小顶堆的堆顶）存储的是最先执行的任务。<br>拿队首任务的执行时间点，与当前时间点相减，得到时间间隔T。表示从当前时间开始，等待多久才会有第一个任务需要被执行。这样定时器就可以设定在T秒之后再来执行任务，从当前时间点到（T-1）秒这段时间里，定时器不需要做任何事情。<br>当T秒过去后，定时器取优先级队列中队首的任务执行。然后再计算新的队首任务的执行时间点与当前时间点的差值，该值是定时器执行下一个任务需要等待的时间。</p>
-<p>避免了普通定时器频繁轮训和遍历整个任务列表。  </p>
-</li>
-</ul>
-<h4 id="利用堆求TopK"><a href="#利用堆求TopK" class="headerlink" title="利用堆求TopK"></a>利用堆求TopK</h4><ul>
-<li><p>静态数据集合<br>针对包含n个数据的数组，查找前K大元素。先顺序取出数组中前k个元素，维护成一个大小为K的小顶堆，再顺序遍历数组，从数组中取出数据与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如果比堆顶元素小，则不处理。数组中护具都遍历完之后，堆中的数据就是前K大数据。  </p>
-<p>遍历数组时间复杂度为O(n)，一次堆化操作时间复杂度为O(logK)，最坏情况下，n个元素都入堆一次，时间复杂度为O(nlogK)。</p>
-</li>
-<li><p>动态数据集合<br>如果每次询问前K大数据，都基于当前的数据重新计算的话，时间复杂度为O(nlogK)，n表示当前的数据的大小。  </p>
-<p>维护一个K大小的小顶堆，当有数据被添加进集合中时，与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如多比堆顶元素小，就不做处理。无论任何时候需要查询当前的前K大数据，都可以立刻返回。  </p>
-</li>
-</ul>
-<h4 id="利用堆求中位数"><a href="#利用堆求中位数" class="headerlink" title="利用堆求中位数"></a>利用堆求中位数</h4><p>中位数，处在中间位置的那个数。如果数据的个数是奇数，把数据从小到大排列，第n/2 + 1个数就是中位数（数据从0开始编号）；如果数据的个数是偶数，处于中间位置的数据有两个，第n/2个和第n/2 + 1个，可以随意取一个作为中位数。  </p>
-<ul>
-<li><p>静态数据<br>中位数固定，可以先排序，第n/2个数据就是中位数。每次询问中位数直接返回固定值。  </p>
-</li>
-<li><p>动态数据<br>中位数在不停的变动，不能每次都先排序。  </p>
-<p>维护两个堆，一个大顶堆，一个小顶堆。大顶堆存储前半部分数据，小顶堆存储后半部分数据，而且小顶堆中的数据都大于大顶堆中的数据。<br>如果新加入的数据小于等于大顶堆的堆顶元素，就将新数据插入到大顶堆；否则将新数据插入到小顶堆。插入后两个堆中的数据个数不符合约定情况时，从一个堆中将堆顶元素移动到另一个堆。  </p>
-<p>插入数据因为需要涉及堆化，时间复杂度为O(logn)，求中位数只需要返回大顶堆的堆顶元素，时间复杂度是O(1)。  </p>
-<p>中位数相当于50%，可以扩展到任意百分位数。  </p>
-</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>堆</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>字符串匹配：BF&amp;RK</title>
     <url>/2020/05/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABF&amp;RK/</url>
     <content><![CDATA[<h3 id="BF算法"><a href="#BF算法" class="headerlink" title="BF算法"></a>BF算法</h3><p>Brute Force算法，暴力匹配算法，也叫朴素匹配算法。  </p>
@@ -1251,54 +1252,6 @@ public int hashCode() {
       </categories>
       <tags>
         <tag>字符串匹配</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>图</title>
-    <url>/2020/05/11/%E5%9B%BE/</url>
-    <content><![CDATA[<h3 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h3><p>图是比树更加复杂的非线性表结构。适合存储微博、微信等社交网络中的好友关系。<br><strong>顶点</strong>：图中的元素；用户<br><strong>边</strong>：顶点与任意其它顶点之间的连接关系；好友关系<br><strong>度</strong>：顶点相连接的边的条数；好友个数<br><strong>有向图</strong>：带箭头的边，表示边的方向，有方向的图；关注关系<br><strong>无向图</strong>：边没有方向的图；好友关系<br><strong>度</strong>：无向图中表示一个顶点有多少条边；好友个数<br><strong>入度</strong>：有向图中，表示有多少条边指向这个顶点；粉丝个数<br><strong>出度</strong>：有向图中，表示有多少条边是以这个顶点为起点指向其他顶点；关注人数<br><strong>带权图</strong>：每条边都有一个权重。亲密度  </p>
-<h3 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h3><ul>
-<li><p>邻接矩阵<br>邻接矩阵-二维数组。<br>无向图，如果顶点i与顶点j之间有边，就将A[i][j]和A[j][i]标记为1；浪费一半的存储空间；<br>有向图，如果顶点i到j之间，有一条箭头从顶点i指向顶点j的边，就将A[i][j]标记为1。如果有一条箭头从顶点j指向顶点i的边，就将A[j][i]标记为1。<br>带权图，数组中就存储相应的权重。<br>稀疏图，顶点很多，但每个顶点的边不多，邻接矩阵的存储方法更加浪费。</p>
-<p>优点：<br>存储方式简单、直接，获取顶点关系高效，图计算-矩阵计算方便。</p>
-</li>
-<li><p>邻接表<br>邻接表-散列表<br>无向图每个顶点对应一条链表，链表中存储的是与这个顶点相连接的其他顶点。<br>有向图，每个顶点对应的链表里，存储其指向的顶点。  </p>
-<p>优化；<br>顶点中的链表转换成平衡二叉查找树、红黑树、跳表、散列表、有序动态数组(二分查找)。  </p>
-</li>
-</ul>
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><ol>
-<li><p>微博-有向图<br>微博操作：  </p>
-<ul>
-<li>判断用户A是否关注用户B  </li>
-<li>判断用户A是否被用户B的关注  </li>
-<li>用户A关注用户B  </li>
-<li>用户A取消关注用户B  </li>
-<li>根据用户名称的首字母排序，分页获取用户的粉丝列表  </li>
-<li>根据用户名称的首字母排序，分页获取用户的关注列表  </li>
-</ul>
-<p>社交关系存储：  </p>
-<ul>
-<li>内存（数据量大用哈希算法将数据分片）<br>邻接表，存储用户关注了哪些用户；每个顶点的链表中，存储这个顶点指向的顶点。<br>逆邻接表，存储用户被哪些用户关注；每个顶点的链表中，存储指向这个顶点的顶点。  </li>
-<li>硬盘<br>两列表。一列用户id，一列关注id。分别建立索引。  </li>
-</ul>
-</li>
-<li><p>微信-无向图<br>微信操作：  </p>
-<ul>
-<li>判断A、B是否为好友关系  </li>
-<li>A删除B，断开与B的好友关系  </li>
-<li>展示出A的好友列表，并按名称首字母排序  </li>
-</ul>
-<p>社交关系存储：  </p>
-<ul>
-<li>邻接表存储每个人对应的好友列表，好友列表可用红黑树/跳表存储</li>
-</ul>
-</li>
-</ol>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>图</tag>
       </tags>
   </entry>
   <entry>
@@ -1395,6 +1348,140 @@ public int hashCode() {
       <tags>
         <tag>图</tag>
         <tag>图的搜索</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图</title>
+    <url>/2020/05/11/%E5%9B%BE/</url>
+    <content><![CDATA[<h3 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h3><p>图是比树更加复杂的非线性表结构。适合存储微博、微信等社交网络中的好友关系。<br><strong>顶点</strong>：图中的元素；用户<br><strong>边</strong>：顶点与任意其它顶点之间的连接关系；好友关系<br><strong>度</strong>：顶点相连接的边的条数；好友个数<br><strong>有向图</strong>：带箭头的边，表示边的方向，有方向的图；关注关系<br><strong>无向图</strong>：边没有方向的图；好友关系<br><strong>度</strong>：无向图中表示一个顶点有多少条边；好友个数<br><strong>入度</strong>：有向图中，表示有多少条边指向这个顶点；粉丝个数<br><strong>出度</strong>：有向图中，表示有多少条边是以这个顶点为起点指向其他顶点；关注人数<br><strong>带权图</strong>：每条边都有一个权重。亲密度  </p>
+<h3 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h3><ul>
+<li><p>邻接矩阵<br>邻接矩阵-二维数组。<br>无向图，如果顶点i与顶点j之间有边，就将A[i][j]和A[j][i]标记为1；浪费一半的存储空间；<br>有向图，如果顶点i到j之间，有一条箭头从顶点i指向顶点j的边，就将A[i][j]标记为1。如果有一条箭头从顶点j指向顶点i的边，就将A[j][i]标记为1。<br>带权图，数组中就存储相应的权重。<br>稀疏图，顶点很多，但每个顶点的边不多，邻接矩阵的存储方法更加浪费。</p>
+<p>优点：<br>存储方式简单、直接，获取顶点关系高效，图计算-矩阵计算方便。</p>
+</li>
+<li><p>邻接表<br>邻接表-散列表<br>无向图每个顶点对应一条链表，链表中存储的是与这个顶点相连接的其他顶点。<br>有向图，每个顶点对应的链表里，存储其指向的顶点。  </p>
+<p>优化；<br>顶点中的链表转换成平衡二叉查找树、红黑树、跳表、散列表、有序动态数组(二分查找)。  </p>
+</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><ol>
+<li><p>微博-有向图<br>微博操作：  </p>
+<ul>
+<li>判断用户A是否关注用户B  </li>
+<li>判断用户A是否被用户B的关注  </li>
+<li>用户A关注用户B  </li>
+<li>用户A取消关注用户B  </li>
+<li>根据用户名称的首字母排序，分页获取用户的粉丝列表  </li>
+<li>根据用户名称的首字母排序，分页获取用户的关注列表  </li>
+</ul>
+<p>社交关系存储：  </p>
+<ul>
+<li>内存（数据量大用哈希算法将数据分片）<br>邻接表，存储用户关注了哪些用户；每个顶点的链表中，存储这个顶点指向的顶点。<br>逆邻接表，存储用户被哪些用户关注；每个顶点的链表中，存储指向这个顶点的顶点。  </li>
+<li>硬盘<br>两列表。一列用户id，一列关注id。分别建立索引。  </li>
+</ul>
+</li>
+<li><p>微信-无向图<br>微信操作：  </p>
+<ul>
+<li>判断A、B是否为好友关系  </li>
+<li>A删除B，断开与B的好友关系  </li>
+<li>展示出A的好友列表，并按名称首字母排序  </li>
+</ul>
+<p>社交关系存储：  </p>
+<ul>
+<li>邻接表存储每个人对应的好友列表，好友列表可用红黑树/跳表存储</li>
+</ul>
+</li>
+</ol>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>堆的应用</title>
+    <url>/2020/05/08/%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<h4 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h4><p>在优先级队列中，数据的出队顺序不是先进先出，而是按照优先级来，优先级高的，最先出队。  </p>
+<p>优先级队列实现方法有很多，用堆来实现是最直接、最高效的。<strong>一个堆可以看做一个优先级队列</strong>，往优先级队列中插入一个元素，就相当于往堆中插入一个元素；从优先级队列中取出优先级最高的元素，相当于取出堆顶元素。<br>霍夫曼编码、图的最短路径、最小生成树算法。  </p>
+<ul>
+<li><p>合并有序小文件<br>小文件中存储的都是有序的字符串。从各个小文件中各取出一个字符串，放入到与文件个数等长的小顶堆中，堆顶的元素就是优先级队列队首的元素-最小的字符串。<br>将这个字符串放入到大文件中，并将其从堆中删除。然后再从对应的小文件中取出下一个字符串，放入到堆中。循环。  </p>
+<p>删除堆顶数据和往堆中插入数据的时间复杂度都是O(logn)，n表示堆中的数据个数。  </p>
+</li>
+<li><p>高性能定时器<br>按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（小顶堆的堆顶）存储的是最先执行的任务。<br>拿队首任务的执行时间点，与当前时间点相减，得到时间间隔T。表示从当前时间开始，等待多久才会有第一个任务需要被执行。这样定时器就可以设定在T秒之后再来执行任务，从当前时间点到（T-1）秒这段时间里，定时器不需要做任何事情。<br>当T秒过去后，定时器取优先级队列中队首的任务执行。然后再计算新的队首任务的执行时间点与当前时间点的差值，该值是定时器执行下一个任务需要等待的时间。</p>
+<p>避免了普通定时器频繁轮训和遍历整个任务列表。  </p>
+</li>
+</ul>
+<h4 id="利用堆求TopK"><a href="#利用堆求TopK" class="headerlink" title="利用堆求TopK"></a>利用堆求TopK</h4><ul>
+<li><p>静态数据集合<br>针对包含n个数据的数组，查找前K大元素。先顺序取出数组中前k个元素，维护成一个大小为K的小顶堆，再顺序遍历数组，从数组中取出数据与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如果比堆顶元素小，则不处理。数组中护具都遍历完之后，堆中的数据就是前K大数据。  </p>
+<p>遍历数组时间复杂度为O(n)，一次堆化操作时间复杂度为O(logK)，最坏情况下，n个元素都入堆一次，时间复杂度为O(nlogK)。</p>
+</li>
+<li><p>动态数据集合<br>如果每次询问前K大数据，都基于当前的数据重新计算的话，时间复杂度为O(nlogK)，n表示当前的数据的大小。  </p>
+<p>维护一个K大小的小顶堆，当有数据被添加进集合中时，与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如多比堆顶元素小，就不做处理。无论任何时候需要查询当前的前K大数据，都可以立刻返回。  </p>
+</li>
+</ul>
+<h4 id="利用堆求中位数"><a href="#利用堆求中位数" class="headerlink" title="利用堆求中位数"></a>利用堆求中位数</h4><p>中位数，处在中间位置的那个数。如果数据的个数是奇数，把数据从小到大排列，第n/2 + 1个数就是中位数（数据从0开始编号）；如果数据的个数是偶数，处于中间位置的数据有两个，第n/2个和第n/2 + 1个，可以随意取一个作为中位数。  </p>
+<ul>
+<li><p>静态数据<br>中位数固定，可以先排序，第n/2个数据就是中位数。每次询问中位数直接返回固定值。  </p>
+</li>
+<li><p>动态数据<br>中位数在不停的变动，不能每次都先排序。  </p>
+<p>维护两个堆，一个大顶堆，一个小顶堆。大顶堆存储前半部分数据，小顶堆存储后半部分数据，而且小顶堆中的数据都大于大顶堆中的数据。<br>如果新加入的数据小于等于大顶堆的堆顶元素，就将新数据插入到大顶堆；否则将新数据插入到小顶堆。插入后两个堆中的数据个数不符合约定情况时，从一个堆中将堆顶元素移动到另一个堆。  </p>
+<p>插入数据因为需要涉及堆化，时间复杂度为O(logn)，求中位数只需要返回大顶堆的堆顶元素，时间复杂度是O(1)。  </p>
+<p>中位数相当于50%，可以扩展到任意百分位数。  </p>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>堆</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>贪心算法</title>
+    <url>/2020/05/12/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="贪心算法理解"><a href="#贪心算法理解" class="headerlink" title="贪心算法理解"></a>贪心算法理解</h3><ul>
+<li>针对一组数据，定义了限制值和期望值，希望从中选出几个数据，在满足限制值的情况下，期望值最大。这类问题首先要联想到贪心算法。  </li>
+<li>每次选择当前情况下，在对限制值同等共享量的情况下，对期望值贡献最大的数据。这种问题可以用贪心算法解决。  </li>
+<li>举例验证贪心算法产生的结果是否是最优的。  </li>
+</ul>
+<p>用贪心算法解决问题的思路，并不总能给出最优解。  </p>
+<p>在一个有权图中，从顶点S开始，找一条到顶点T的最短路径（路径中边的权值和最小）。<br>贪心算法的解决思路是，每次都选择一条跟当前顶点相连的权最小的边，直到找到顶点T。前面的选择，会影响到后面的选择。即便第一步选择最优的走法（边最短），但有可能因为这一步选择，导致后面每一步的选择都很糟糕，最终也就无缘全局最优解了。  </p>
+<h3 id="贪心算法实战"><a href="#贪心算法实战" class="headerlink" title="贪心算法实战"></a>贪心算法实战</h3><ol>
+<li><p>分糖果<br>m个糖果分给n个孩子，m&lt;n。每个糖果的大小不等，每个孩子对糖果大小的需求也不一样，糖果大小需要&gt;=孩子对糖果大小的需求，最多能满足多少个孩子。  </p>
+<p>从需求小的孩子开始分配糖果，然后每次从剩下的孩子中，找出对糖果大小需求最小的，然后发给他剩下的糖果中能满足他的最小的糖果，这样的分配方案是能满足的孩子个数最多的方案。  </p>
+</li>
+<li><p>钱币找零<br>不同面值的钱币，不同的张数，支付K元，最少需要多少张纸币。  </p>
+<p>先用面值最大的来支付，如果不够，就继续用更小一点面值的，以此类推。  </p>
+</li>
+<li><p>区间覆盖<br>有n个区间，区间的起始端点和结束端点各不相同。从这n个区间中选出一部分区间，这部分区间满足两两不相交。最多能选出多少个区间。（任务调度、教师排课）  </p>
+<p>每次选择的时候，左端点跟前面的已经覆盖的区间不重合的，右端点尽量小的，可以让剩下的未覆盖区间尽可能的打，就可以放置更多的区间。  </p>
+</li>
+</ol>
+<h3 id="实现霍夫曼编码"><a href="#实现霍夫曼编码" class="headerlink" title="实现霍夫曼编码"></a>实现霍夫曼编码</h3><p>一个包含1000个字符的文件，每个字符占1个byte(1byte=8bits)，存储这个文件需要8000bits。  </p>
+<p>1000个字符中质保函6中不同的字符，分别是a、b、c、d、e、f。三个二进制位（bit）就可以表示8个不同的字符，为了尽量减少存储空间，每个字符用3个二进制位来表示，存储这个文件只需要3000bits。  </p>
+<blockquote>
+<p>a(000)、b(001)、c(010)、d(011)、e(100)、f(101)  </p>
+</blockquote>
+<p><strong>霍夫曼编码思想</strong>：  </p>
+<ul>
+<li>霍夫曼编码不仅考察文本中有多少个不同字符，还会考察每个字符出现的频率，根据频率的不同选择不同长度的编码。霍夫曼编码用这种<strong>不等长的编码方法</strong>，来进一步增加压缩的效率。  </li>
+<li>根据贪心的思想，可以把出现频率比较多的字符，用稍微短一些的编码；出现评率比较少的字符，用稍微长一些的编码。  </li>
+<li>为了避免解压缩过程中的歧义，霍夫曼编码要求各个字符的编码之间，不会出现某个编码是另一个编码前缀的情况。在解压缩的时候，每次读取尽可能长的可解压的二进制串。  </li>
+</ul>
+<p><strong>霍夫曼编码实现：</strong>：</p>
+<ul>
+<li><p>把每个字符看做一个节点，并且辅带着把频率放到优先级队列中。从队列中取出频率最小的两个节点A、B，然后新建一个节点C，把频率设置为两个节点的频率之和，并把新节点C作为A、B的父节点，再把C节点翻入到优先级队列中，重复这个过程，直到队列中没有数据。<br>（构造的优先级队列根据频率的不同，各不相同，极端退化成近似链表的结构，除了最后一层都走一个叉，1、01、001、0001、00001、00000）  </p>
+</li>
+<li><p>给每一条边加上一个权值，指向左子节点的边标记为0，指向右子节点的边，标记为1，从根节点到叶子节点就是叶子节点对应字符的霍夫曼编码。<br>（最理想情况，完全二叉树00、01、10、11）</p>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>贪心算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1599,6 +1686,78 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
+    <title>动态规划理论</title>
+    <url>/2020/05/16/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%90%86%E8%AE%BA/</url>
+    <content><![CDATA[<h3 id="一个模型三个特征"><a href="#一个模型三个特征" class="headerlink" title="一个模型三个特征"></a>一个模型三个特征</h3><ul>
+<li><p><strong>多阶段决策最优解模型</strong><br>一般用动态规划解决最优问题。解决问题的过程需要经历多个决策阶段，每个决策阶段都对应着一组状态。寻找一组决策序列，经过这组决策序列，能够产生最终期望求解的最优值。  </p>
+</li>
+<li><p><strong>最优子结构</strong><br>问题的最优解包含子问题的最优解。同样，可以通过子问题的最优解，推导出问题的最优解。对应动态规划问题模型，后面阶段的装填可以通过前面阶段状的状态推导出来。  </p>
+</li>
+<li><p><strong>无后效性</strong><br>两层含义，第一层含义是，在推倒后面阶段的状态的时候，只关心前面阶段的状态值，不关心这个状态是怎么一步一步推导出来的。第二层含义是，某阶段状态一旦确定，就不受之后阶段的决策影响。  </p>
+</li>
+<li><p><strong>重复子问题</strong><br>不同的决策序列，到达某个相同的阶段时，可能会产生重复的状态。  </p>
+</li>
+</ul>
+<p>实例解析：<br>一个n乘以n的矩阵w[n][n]。矩阵存储的都是正整数，棋子起始位置在左上角，终止位置在右下角。将棋子从左上角移动到右下角。每次只能向右或者向下移动一位。从左上角到右下角，会有很多不同的路径可以走。把每条路径经过的数字加起来看做路径的长度。求从左上角移动到右下角的最短路径长度。  </p>
+<p>从(0,0)走到(n-1.n-1),总共需要走2*(n-1)步，也就对应着2*(n-1)个阶段。每个阶段都有向右走或者向下走两种决策，并且每个阶段都会对应一个状态集合。把状态定义为min_dist(i,j)，其中i表示行，j表示列。min_dist表达式的值表示从(0,0)到达(i,j)的最短路径长度。这个问题是一个多阶段决策最优解问题，符合“动态规划的模型”。  </p>
+<p>可以用回溯算法解决问题。递归树中有重复的节点，重复的节点表示，从左上角到节点对应的位置，有多种路线，说明这个问题存在“重复子问题”。  </p>
+<p>走到(i,j)这个位置，只能通过(i-1,j)，(i,j-1)这两个位置移动过来。所以计算(i,j)位置对应的状态，只需要关心(i-1,j)，(i,j-1)两个位置对应的状态，并不关心棋子是通过什么样的路线到达这两个位置的。而且，仅仅允许往下和往右移动，不允许后退，前面阶段的状态确定之后，不会被后面阶段的决策所改变，符合“无后效性”。  </p>
+<p>定义状态的时候，把从起始位置(0,0)到(i,j)的最小路径，记作min_dist(i,j)。因为只能往右或往下移动，所以只有可能从(i-1,j)或者(i,j-1)两个位置到达(i,j)。到达(i,j)的最短路径肯定包含到达这两个位置的最短路径之一。min_dist(i,j)可以通过min_dist(i,j-1)和min_dist(i-1,j)这两个状态推导出来，这个问题符合“最优子结构”。</p>
+<blockquote>
+<p>min_dist(i,j) = w[i][j] + min(min_dist(i,j-1),min(i-1,j))</p>
+</blockquote>
+<h3 id="动态规划解题思路"><a href="#动态规划解题思路" class="headerlink" title="动态规划解题思路"></a>动态规划解题思路</h3><p>状态转移表法&amp;状态转移方程法  </p>
+<ol>
+<li><p>状态转移表法<br>思路：回溯算法实现-定义状态-画递归树-找重复子问题-画状态转移表-根据递推关系填表-将填表过程翻译成代码  </p>
+<p>一般能用动态规划解决的问题，都可以使用回溯算法的暴力搜索解决。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矩阵最短路径 回溯算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> minDist = Integer.MAX_VALUE;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">minDistBT</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> dist, <span class="keyword">int</span>[][] w, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//到达(n-1,n-1)这个位置</span></span><br><span class="line">    <span class="keyword">if</span>(i == n &amp;&amp; j == n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(dist &lt; minDist) midDist = dist;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(i &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往下走，更新i=i+1,j=j</span></span><br><span class="line">        minDistBT(i+<span class="number">1</span>, j, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往右走，更新i=i,j=j+1</span></span><br><span class="line">        minDistBT(i, j+<span class="number">1</span>, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>先用简单的回溯算法解决，然后定义状态，每个状态表示一个节点，然后对应画出递归树。从递归树中，可以看出来是否存才重复子问题，以及重复子问题是如何产生的。以此来寻找规律，看是够能用动态规划解决。<br>找到重复子问题之后，一种是直接使用<strong>回溯加备忘录</strong>的方法，来避免重复子问题，提高执行效率。一种是使用动态规划的解决方法，<strong>状态转移表法</strong>。  </p>
+<p>先画出一个状态表，状态表一般是二维的，类似二维数组。其中每个状态包含三个变量，行、列、数组值。根据决策的先后过程，从前往后，根据递推关系，分阶段填充状态表中的每个状态。最后将这个递推填表的过程，翻译成代码，就是动态规划代码。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矩阵最短路径 状态转移表
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDistDP</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] states = <span class="keyword">new</span> <span class="keyword">int</span>[n][n];</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一行数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">        sum += matrix[<span class="number">0</span>][j];</span><br><span class="line">        states[<span class="number">0</span>][j] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一列数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        sum += matrix[i][<span class="number">0</span>];</span><br><span class="line">        states[i][<span class="number">0</span>] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            states[i][j] + Math.min(states[i][j-<span class="number">1</span>], states[i-<span class="number">1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> states[n-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>大部分状态表都是二维的，如果状态比较复杂，需要很多变量来表示，那对应的状态表可能是高维的，不适合用状态转移表法解决，  </p>
+</li>
+<li><p>状态转移方程法<br>思路：找最优子结构-写状态转移方程-将状态转移方程翻译成代码  </p>
+<p>状态转移方程法类似递归的解题思路。分析某个问题如何通过子问题来递归求解，即最优子结构。根据最优子结构，写出递归公式，即状态转移方程。状态转移方程式解决动态规划的关键。<br>有了状态转移方程，一种是<strong>递归加备忘录</strong>，一种是<strong>迭代递推</strong>。  </p>
+ <div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矩阵最短路径 回溯算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] matrix = &#123;&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">9</span>&#125;,&#123;<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>&#125;,&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">7</span>&#125;,&#123;<span class="number">6</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">3</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> n = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] mem = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>][<span class="number">4</span>];</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDist</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(men[i][j] &gt; <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> minLeft = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(j-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minLeft = minDeft(i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> minUp = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(i-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minUp = minDist(i-<span class="number">1</span>,j);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> currMinDist = matrix[i][j] + Math.min(minLeft, minUp);</span><br><span class="line">    mem[i][j] = currMinDist;</span><br><span class="line">    <span class="keyword">return</span> currMinDist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+</li>
+</ol>
+<h3 id="贪心、分治、回溯、动态规划对比"><a href="#贪心、分治、回溯、动态规划对比" class="headerlink" title="贪心、分治、回溯、动态规划对比"></a>贪心、分治、回溯、动态规划对比</h3><p>贪心、回溯、动态规划可以归为一类，解决问题的模型都可以抽象成多阶段决策最优解模型；<strong>分治算法</strong>解决问题大部分是最优解问题，但是大部分都不能抽象成多阶段决策模型（类似各阶段情况相同，二分查找）。  </p>
+<p><strong>回溯算法</strong>是个万金油。基本上能用动态规划、贪心算法解决的问题，都可以用回溯算法解决。回溯算法相当于穷举搜索，穷举所有的情况，然后对比得到最优解。回溯算法的时间复杂度 非常高，是指数级别的，只能用来解决小规模数据的问题。  </p>
+<p>尽管<strong>动态规划</strong>比回溯算法高效，但是并不是所有问题都可以用动态规划来解决。能用动态规划解决的问题，需要满足三个特征，最优子结构、无后效性、重复子问题。<br>在重复子问题上，动态规划和分治算法的区分非常明显。分治算法要求分割成的子问题，不能有重复子问题，而动态规划正好相反，动态规划之所以高效，就是因为回溯算法实现中存在大量的重复子问题。  </p>
+<p><strong>贪心算法</strong>实际上是动态规划算法的一种特殊情况。它解决问题起来更加高效，代码实现也更加简洁，可以解决的问题也更加有限。它能解决的问题需要满足三个条件，最优子结构、无后效性、贪心选择性（不强调重复子问题）。<br>贪心选择性指，通过局部最优的选择，能产生全局的最优选择。每一个阶段，都选择当前看起来最优的决策，所有阶段的决策完成之后，最终由这些局部最优解构成全局最优解。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>动态规划实战</title>
     <url>/2020/05/18/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%AE%9E%E6%88%98/</url>
     <content><![CDATA[<p>量化两个字符串之间的相似程度-编辑距离(Edit Distance)<br>编辑距离指的是，将一个字符串转化成另一个字符串，需要的最少编辑操作次数（增加一个字符、删除一个字符、替换一个字符）。编辑距离越大说明两个字符串的相似程度越小；相反编辑距离越小，说明两个字符串的相似程度越大。对于两个完全相同的字符串来说，编辑距离就是0。  </p>
@@ -1703,78 +1862,6 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
-    <title>动态规划理论</title>
-    <url>/2020/05/16/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%90%86%E8%AE%BA/</url>
-    <content><![CDATA[<h3 id="一个模型三个特征"><a href="#一个模型三个特征" class="headerlink" title="一个模型三个特征"></a>一个模型三个特征</h3><ul>
-<li><p><strong>多阶段决策最优解模型</strong><br>一般用动态规划解决最优问题。解决问题的过程需要经历多个决策阶段，每个决策阶段都对应着一组状态。寻找一组决策序列，经过这组决策序列，能够产生最终期望求解的最优值。  </p>
-</li>
-<li><p><strong>最优子结构</strong><br>问题的最优解包含子问题的最优解。同样，可以通过子问题的最优解，推导出问题的最优解。对应动态规划问题模型，后面阶段的装填可以通过前面阶段状的状态推导出来。  </p>
-</li>
-<li><p><strong>无后效性</strong><br>两层含义，第一层含义是，在推倒后面阶段的状态的时候，只关心前面阶段的状态值，不关心这个状态是怎么一步一步推导出来的。第二层含义是，某阶段状态一旦确定，就不受之后阶段的决策影响。  </p>
-</li>
-<li><p><strong>重复子问题</strong><br>不同的决策序列，到达某个相同的阶段时，可能会产生重复的状态。  </p>
-</li>
-</ul>
-<p>实例解析：<br>一个n乘以n的矩阵w[n][n]。矩阵存储的都是正整数，棋子起始位置在左上角，终止位置在右下角。将棋子从左上角移动到右下角。每次只能向右或者向下移动一位。从左上角到右下角，会有很多不同的路径可以走。把每条路径经过的数字加起来看做路径的长度。求从左上角移动到右下角的最短路径长度。  </p>
-<p>从(0,0)走到(n-1.n-1),总共需要走2*(n-1)步，也就对应着2*(n-1)个阶段。每个阶段都有向右走或者向下走两种决策，并且每个阶段都会对应一个状态集合。把状态定义为min_dist(i,j)，其中i表示行，j表示列。min_dist表达式的值表示从(0,0)到达(i,j)的最短路径长度。这个问题是一个多阶段决策最优解问题，符合“动态规划的模型”。  </p>
-<p>可以用回溯算法解决问题。递归树中有重复的节点，重复的节点表示，从左上角到节点对应的位置，有多种路线，说明这个问题存在“重复子问题”。  </p>
-<p>走到(i,j)这个位置，只能通过(i-1,j)，(i,j-1)这两个位置移动过来。所以计算(i,j)位置对应的状态，只需要关心(i-1,j)，(i,j-1)两个位置对应的状态，并不关心棋子是通过什么样的路线到达这两个位置的。而且，仅仅允许往下和往右移动，不允许后退，前面阶段的状态确定之后，不会被后面阶段的决策所改变，符合“无后效性”。  </p>
-<p>定义状态的时候，把从起始位置(0,0)到(i,j)的最小路径，记作min_dist(i,j)。因为只能往右或往下移动，所以只有可能从(i-1,j)或者(i,j-1)两个位置到达(i,j)。到达(i,j)的最短路径肯定包含到达这两个位置的最短路径之一。min_dist(i,j)可以通过min_dist(i,j-1)和min_dist(i-1,j)这两个状态推导出来，这个问题符合“最优子结构”。</p>
-<blockquote>
-<p>min_dist(i,j) = w[i][j] + min(min_dist(i,j-1),min(i-1,j))</p>
-</blockquote>
-<h3 id="动态规划解题思路"><a href="#动态规划解题思路" class="headerlink" title="动态规划解题思路"></a>动态规划解题思路</h3><p>状态转移表法&amp;状态转移方程法  </p>
-<ol>
-<li><p>状态转移表法<br>思路：回溯算法实现-定义状态-画递归树-找重复子问题-画状态转移表-根据递推关系填表-将填表过程翻译成代码  </p>
-<p>一般能用动态规划解决的问题，都可以使用回溯算法的暴力搜索解决。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矩阵最短路径 回溯算法
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> minDist = Integer.MAX_VALUE;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">minDistBT</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> dist, <span class="keyword">int</span>[][] w, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//到达(n-1,n-1)这个位置</span></span><br><span class="line">    <span class="keyword">if</span>(i == n &amp;&amp; j == n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(dist &lt; minDist) midDist = dist;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(i &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往下走，更新i=i+1,j=j</span></span><br><span class="line">        minDistBT(i+<span class="number">1</span>, j, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j &lt; n) &#123;</span><br><span class="line">        <span class="comment">//往右走，更新i=i,j=j+1</span></span><br><span class="line">        minDistBT(i, j+<span class="number">1</span>, dist+w[i][j], w, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-<p>先用简单的回溯算法解决，然后定义状态，每个状态表示一个节点，然后对应画出递归树。从递归树中，可以看出来是否存才重复子问题，以及重复子问题是如何产生的。以此来寻找规律，看是够能用动态规划解决。<br>找到重复子问题之后，一种是直接使用<strong>回溯加备忘录</strong>的方法，来避免重复子问题，提高执行效率。一种是使用动态规划的解决方法，<strong>状态转移表法</strong>。  </p>
-<p>先画出一个状态表，状态表一般是二维的，类似二维数组。其中每个状态包含三个变量，行、列、数组值。根据决策的先后过程，从前往后，根据递推关系，分阶段填充状态表中的每个状态。最后将这个递推填表的过程，翻译成代码，就是动态规划代码。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矩阵最短路径 状态转移表
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDistDP</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] states = <span class="keyword">new</span> <span class="keyword">int</span>[n][n];</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一行数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">        sum += matrix[<span class="number">0</span>][j];</span><br><span class="line">        states[<span class="number">0</span>][j] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化states的第一列数据</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        sum += matrix[i][<span class="number">0</span>];</span><br><span class="line">        states[i][<span class="number">0</span>] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            states[i][j] + Math.min(states[i][j-<span class="number">1</span>], states[i-<span class="number">1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> states[n-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-<p>大部分状态表都是二维的，如果状态比较复杂，需要很多变量来表示，那对应的状态表可能是高维的，不适合用状态转移表法解决，  </p>
-</li>
-<li><p>状态转移方程法<br>思路：找最优子结构-写状态转移方程-将状态转移方程翻译成代码  </p>
-<p>状态转移方程法类似递归的解题思路。分析某个问题如何通过子问题来递归求解，即最优子结构。根据最优子结构，写出递归公式，即状态转移方程。状态转移方程式解决动态规划的关键。<br>有了状态转移方程，一种是<strong>递归加备忘录</strong>，一种是<strong>迭代递推</strong>。  </p>
- <div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矩阵最短路径 回溯算法
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] matrix = &#123;&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">9</span>&#125;,&#123;<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>&#125;,&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">7</span>&#125;,&#123;<span class="number">6</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">3</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> n = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>[][] mem = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>][<span class="number">4</span>];</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDist</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(men[i][j] &gt; <span class="number">0</span>) <span class="keyword">return</span> matrix[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> minLeft = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(j-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minLeft = minDeft(i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> minUp = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">if</span>(i-<span class="number">1</span> &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        minUp = minDist(i-<span class="number">1</span>,j);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> currMinDist = matrix[i][j] + Math.min(minLeft, minUp);</span><br><span class="line">    mem[i][j] = currMinDist;</span><br><span class="line">    <span class="keyword">return</span> currMinDist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-</li>
-</ol>
-<h3 id="贪心、分治、回溯、动态规划对比"><a href="#贪心、分治、回溯、动态规划对比" class="headerlink" title="贪心、分治、回溯、动态规划对比"></a>贪心、分治、回溯、动态规划对比</h3><p>贪心、回溯、动态规划可以归为一类，解决问题的模型都可以抽象成多阶段决策最优解模型；<strong>分治算法</strong>解决问题大部分是最优解问题，但是大部分都不能抽象成多阶段决策模型（类似各阶段情况相同，二分查找）。  </p>
-<p><strong>回溯算法</strong>是个万金油。基本上能用动态规划、贪心算法解决的问题，都可以用回溯算法解决。回溯算法相当于穷举搜索，穷举所有的情况，然后对比得到最优解。回溯算法的时间复杂度 非常高，是指数级别的，只能用来解决小规模数据的问题。  </p>
-<p>尽管<strong>动态规划</strong>比回溯算法高效，但是并不是所有问题都可以用动态规划来解决。能用动态规划解决的问题，需要满足三个特征，最优子结构、无后效性、重复子问题。<br>在重复子问题上，动态规划和分治算法的区分非常明显。分治算法要求分割成的子问题，不能有重复子问题，而动态规划正好相反，动态规划之所以高效，就是因为回溯算法实现中存在大量的重复子问题。  </p>
-<p><strong>贪心算法</strong>实际上是动态规划算法的一种特殊情况。它解决问题起来更加高效，代码实现也更加简洁，可以解决的问题也更加有限。它能解决的问题需要满足三个条件，最优子结构、无后效性、贪心选择性（不强调重复子问题）。<br>贪心选择性指，通过局部最优的选择，能产生全局的最优选择。每一个阶段，都选择当前看起来最优的决策，所有阶段的决策完成之后，最终由这些局部最优解构成全局最优解。  </p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>动态规划</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>跳表</title>
     <url>/2020/05/19/%E8%B7%B3%E8%A1%A8/</url>
     <content><![CDATA[<p>二分查找底层依赖的是数组随机访问的特性。  </p>
@@ -1800,93 +1887,6 @@ public int hashCode() {
       </categories>
       <tags>
         <tag>跳表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>贪心算法</title>
-    <url>/2020/05/12/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="贪心算法理解"><a href="#贪心算法理解" class="headerlink" title="贪心算法理解"></a>贪心算法理解</h3><ul>
-<li>针对一组数据，定义了限制值和期望值，希望从中选出几个数据，在满足限制值的情况下，期望值最大。这类问题首先要联想到贪心算法。  </li>
-<li>每次选择当前情况下，在对限制值同等共享量的情况下，对期望值贡献最大的数据。这种问题可以用贪心算法解决。  </li>
-<li>举例验证贪心算法产生的结果是否是最优的。  </li>
-</ul>
-<p>用贪心算法解决问题的思路，并不总能给出最优解。  </p>
-<p>在一个有权图中，从顶点S开始，找一条到顶点T的最短路径（路径中边的权值和最小）。<br>贪心算法的解决思路是，每次都选择一条跟当前顶点相连的权最小的边，直到找到顶点T。前面的选择，会影响到后面的选择。即便第一步选择最优的走法（边最短），但有可能因为这一步选择，导致后面每一步的选择都很糟糕，最终也就无缘全局最优解了。  </p>
-<h3 id="贪心算法实战"><a href="#贪心算法实战" class="headerlink" title="贪心算法实战"></a>贪心算法实战</h3><ol>
-<li><p>分糖果<br>m个糖果分给n个孩子，m&lt;n。每个糖果的大小不等，每个孩子对糖果大小的需求也不一样，糖果大小需要&gt;=孩子对糖果大小的需求，最多能满足多少个孩子。  </p>
-<p>从需求小的孩子开始分配糖果，然后每次从剩下的孩子中，找出对糖果大小需求最小的，然后发给他剩下的糖果中能满足他的最小的糖果，这样的分配方案是能满足的孩子个数最多的方案。  </p>
-</li>
-<li><p>钱币找零<br>不同面值的钱币，不同的张数，支付K元，最少需要多少张纸币。  </p>
-<p>先用面值最大的来支付，如果不够，就继续用更小一点面值的，以此类推。  </p>
-</li>
-<li><p>区间覆盖<br>有n个区间，区间的起始端点和结束端点各不相同。从这n个区间中选出一部分区间，这部分区间满足两两不相交。最多能选出多少个区间。（任务调度、教师排课）  </p>
-<p>每次选择的时候，左端点跟前面的已经覆盖的区间不重合的，右端点尽量小的，可以让剩下的未覆盖区间尽可能的打，就可以放置更多的区间。  </p>
-</li>
-</ol>
-<h3 id="实现霍夫曼编码"><a href="#实现霍夫曼编码" class="headerlink" title="实现霍夫曼编码"></a>实现霍夫曼编码</h3><p>一个包含1000个字符的文件，每个字符占1个byte(1byte=8bits)，存储这个文件需要8000bits。  </p>
-<p>1000个字符中质保函6中不同的字符，分别是a、b、c、d、e、f。三个二进制位（bit）就可以表示8个不同的字符，为了尽量减少存储空间，每个字符用3个二进制位来表示，存储这个文件只需要3000bits。  </p>
-<blockquote>
-<p>a(000)、b(001)、c(010)、d(011)、e(100)、f(101)  </p>
-</blockquote>
-<p><strong>霍夫曼编码思想</strong>：  </p>
-<ul>
-<li>霍夫曼编码不仅考察文本中有多少个不同字符，还会考察每个字符出现的频率，根据频率的不同选择不同长度的编码。霍夫曼编码用这种<strong>不等长的编码方法</strong>，来进一步增加压缩的效率。  </li>
-<li>根据贪心的思想，可以把出现频率比较多的字符，用稍微短一些的编码；出现评率比较少的字符，用稍微长一些的编码。  </li>
-<li>为了避免解压缩过程中的歧义，霍夫曼编码要求各个字符的编码之间，不会出现某个编码是另一个编码前缀的情况。在解压缩的时候，每次读取尽可能长的可解压的二进制串。  </li>
-</ul>
-<p><strong>霍夫曼编码实现：</strong>：</p>
-<ul>
-<li><p>把每个字符看做一个节点，并且辅带着把频率放到优先级队列中。从队列中取出频率最小的两个节点A、B，然后新建一个节点C，把频率设置为两个节点的频率之和，并把新节点C作为A、B的父节点，再把C节点翻入到优先级队列中，重复这个过程，直到队列中没有数据。<br>（构造的优先级队列根据频率的不同，各不相同，极端退化成近似链表的结构，除了最后一层都走一个叉，1、01、001、0001、00001、00000）  </p>
-</li>
-<li><p>给每一条边加上一个权值，指向左子节点的边标记为0，指向右子节点的边，标记为1，从根节点到叶子节点就是叶子节点对应字符的霍夫曼编码。<br>（最理想情况，完全二叉树00、01、10、11）</p>
-</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>贪心算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>递归</title>
-    <url>/2020/04/21/%E9%80%92%E5%BD%92/</url>
-    <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
-<h4 id="递归特点"><a href="#递归特点" class="headerlink" title="递归特点"></a>递归特点</h4><ul>
-<li>一个问题的解可以分解为几个子问题的解</li>
-<li>原问题与分解后的子问题，除了数据规模不同，求解思路完全一样</li>
-<li>存在递归终止条件</li>
-</ul>
-<p>关键：<br>找到如何将大问题分解为小问题的规律，基于此写出递推公式，推敲终止条件，最后将递推公式和终止条件翻译成代码。<br>遇到递归，不用想一层层的调用关系，不要试图用人脑去分解递归的每个步骤，把它抽象成一个递推公式。</p>
-<h4 id="递归问题"><a href="#递归问题" class="headerlink" title="递归问题"></a>递归问题</h4><ul>
-<li>栈溢出<a href="#refer-anchor-1"><sup>1</sup></a><br>函数调用会使用栈来保存临时变量，每调用一个函数，都会将临时变量封装为栈帧压入内存栈，等函数执行完成返回时才出栈。如果递归求解的数据规模很大，调用层次很深，一直压入栈，就会有栈溢出的风险。<br>解决：1.最大深度比较小的情况，在代码中限制递归调用的最大深度。2.数据规模较大的情况，用非递归-循环代码实现。</li>
-<li>重复计算<br>解决：通过一个数据结构（散列表）来保存已经求解过的f(k)，当递归调用到f(k)时，先看下是否已经求解过。如果是则直接从散列表中取值返回，不需要重复计算。</li>
-<li>时间空间成本</li>
-</ul>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>所有的递归代码都可以改为迭代循环的非递归写法</p>
-<blockquote>
-<p>递归本身依然是借助栈实现的。抽象出递推公式、初始值、边界条件，用迭代循环实现。</p>
-</blockquote>
-<p>递归代码的调试方法</p>
-<blockquote>
-<p>日志中打印递归值<br>添加条件语句进行断点调试  </p>
-</blockquote>
-<p>检测递归中环的存在</p>
-<blockquote>
-<p>通过散列表保存已计算完成的数据，每次递归调用，先去散列表中查询，没有查到的话就加入，如果存在则表示存在环。  </p>
-</blockquote>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/Ki3WN2AJ5HhxxmaQ0lVh3Q" target="_blank" rel="noopener">还有程序员天真地以为”尾递归“真的可以避免堆栈溢出！</a> </li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>递归</tag>
       </tags>
   </entry>
   <entry>
@@ -2194,8 +2194,7 @@ public int hashCode() {
     <title>字符串匹配：BM</title>
     <url>/2020/05/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABM/</url>
     <content><![CDATA[<h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>把模式串和主串的匹配过程，看做模式串在主串中不停地往后滑动。当遇到不匹配的字符时，BF和RK算法的做法是，模式串往后滑动一位，然后从模式串的第一个字符开始重新匹配。  </p>
-<p>主串中的某个字符，在模式串中不存在，模式串向后滑动的时候，只要该字符与模式串有重合，肯定无法匹配，可以一次性把模式串往后多滑动几位，把模式串移动到该字符的后面。  </p>
-<p>BM算法核心思想是，利用模式串本身的特点，在模式串中某个字符与子串不能匹配的时候，将模式串往后多滑动即为，以此来减少不必要的字符比较，提高匹配的效率。</p>
+<p>主串中的某个字符，在模式串中不存在，模式串向后滑动的时候，只要该字符与模式串有重合，肯定无法匹配，可以一次性把模式串往后多滑动几位，跳过一些肯定不会匹配的情况，以此来减少不必要的字符比较，提高匹配的效率。</p>
 <h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>BM算法包含两部分，分别是<strong>坏字符规则</strong>和<strong>好后缀规则</strong>。  </p>
 <h4 id="坏字符规则"><a href="#坏字符规则" class="headerlink" title="坏字符规则"></a>坏字符规则</h4><p>BM算法的匹配顺序是按照模式串下标从大到小的顺序，倒着匹配的。<br>从模式串的末尾往前倒着匹配，当发现某个字符没法匹配的时候，把这个没有匹配的字符叫做<strong>坏字符</strong>(主串中的字符)。  </p>
 <ol>
@@ -2262,6 +2261,117 @@ public int hashCode() {
 <h3 id="性能分析及优化"><a href="#性能分析及优化" class="headerlink" title="性能分析及优化"></a>性能分析及优化</h3><h4 id="内存消耗"><a href="#内存消耗" class="headerlink" title="内存消耗"></a>内存消耗</h4><p>整个算法用到了额外的3个数组，其中bc数组的大小跟字符集大小有关，suffix数组和prefix数组的大小跟模式串长度m有关。  </p>
 <p>处理字符集很大的字符串匹配问题，bc数组对内存的消耗会比较多，<strong>好后缀和坏字符规则是独立的</strong>，如果对内存要求苛刻，可以只是用好后缀规则，不使用坏字符规则，可以避免bc数组过多的内存消耗。  </p>
 <h4 id="执行效率"><a href="#执行效率" class="headerlink" title="执行效率"></a>执行效率</h4><p>极端情况下，suffix数组、prefix数组的预处理的时间复杂度为O(m<sup>2</sup>)。<br>优化待扩展。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>字符串匹配</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>字符串匹配：KMP</title>
+    <url>/2020/05/27/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9AKMP/</url>
+    <content><![CDATA[<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>KMP核心思想与BM类似，假设主串是a，模式串是b。在模式串与主串匹配的过程中，当遇到不可匹配的字符的时候，找到一些规律，将模式串往后多滑动几位，跳过那些肯定不会匹配的情况。  </p>
+<p>在模式串和主串匹配的过程中，把不能匹配的那个字符叫做<strong>坏字符</strong>，把已经匹配的那段字符叫做<strong>好前缀</strong>。<br>当遇到坏字符的时候，把模式串往后滑动，在滑动的过程中，只要模式串和好前缀有上下重合，前面几个字符的比较，就相当于拿好前缀的后缀字符串，跟模式串的前缀子串在比较。  </p>
+<p>拿到好前缀本身，在它的后缀子串中，查找最长的那个可以跟好前缀的前缀子串匹配。<br>假设最长的可匹配的那部分前缀子串是{v}，长度是k。把模式串一次性往后滑动j-k位，相当于，每次遇到坏字符的时候，就把j更新为k，i不变，然后继续比较。<br>把好前缀的所有后缀子串中，最长的可匹配前缀子串的那个后缀子串，叫做<strong>最长可匹配后缀子串</strong>；对应的前缀子串，叫做<strong>最长可匹配前缀子串</strong>。</p>
+<p>模式串a b a b a c d<br>前缀子串a b a b a c  </p>
+<table>
+<thead>
+<tr>
+<th>子串</th>
+<th>前缀</th>
+<th>后缀</th>
+<th>最大公共元素长度</th>
+<th>前缀结尾字符下标</th>
+<th>最长可匹配前缀子串结尾字符下标</th>
+<th>next值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>空</td>
+<td>空</td>
+<td>0</td>
+<td>0</td>
+<td>-1</td>
+<td>next[0]=-1</td>
+</tr>
+<tr>
+<td>ab</td>
+<td>a</td>
+<td>b</td>
+<td>0</td>
+<td>1</td>
+<td>-1</td>
+<td>next[1]=-1</td>
+</tr>
+<tr>
+<td>aba</td>
+<td>a,ab</td>
+<td>a,ba</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+<td>next[2]=0</td>
+</tr>
+<tr>
+<td>abab</td>
+<td>a,ab,aba</td>
+<td>b,ab,bab</td>
+<td>2</td>
+<td>3</td>
+<td>1</td>
+<td>next[3]=1</td>
+</tr>
+<tr>
+<td>ababa</td>
+<td>a,ab,aba,abab</td>
+<td>a,ba,aba,baba</td>
+<td>3</td>
+<td>4</td>
+<td>2</td>
+<td>next[4]=2</td>
+</tr>
+<tr>
+<td>ababac</td>
+<td>a,ab,aba,abab,ababc</td>
+<td>c,ac,bac,abac,babac</td>
+<td>0</td>
+<td>5</td>
+<td>0</td>
+<td>next[5]=-1</td>
+</tr>
+</tbody></table>
+<p>提前构建一个数组，用来存储模式串中每个前缀（这些前缀都有可能是好前缀）的最长可匹配前缀子串的结尾字符下标。把这个数组定义为<strong>next数组（失效函数）</strong>。<br>数组的下标是每个前缀结尾字符下标，数组的值是这个前缀的最长可以匹配前缀子串的结尾字符下标。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        KMP算法框架
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//a,b分别是主串和模式串；n,m分别是主串和模式串的长度</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="keyword">char</span>[] a, <span class="keyword">int</span> n, <span class="keyword">char</span>[] b, <span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] next = getNext(b,m);</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span>(j &gt; <span class="number">0</span> &amp;&amp; a[i] != b[j]) &#123;<span class="comment">//一直找到a[i]和b[j]</span></span><br><span class="line">            j = next[j-<span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(a[i] == b[j]) &#123;</span><br><span class="line">            ++j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(j == m) &#123;<span class="comment">//找到匹配模式串的了</span></span><br><span class="line">            <span class="keyword">return</span> i - m + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<h3 id="失效函数"><a href="#失效函数" class="headerlink" title="失效函数"></a>失效函数</h3><p>按照下标从小到大，依次计算next数组的值，当要计算next[i]的时候，前面的next[0],next[1],…,next[i-1]已经计算出来了，利用已经计算出来的next值，推导next[i]的值。（动态规划的思想）  </p>
+<p>如果next[i-1]=k-1，也就是说，子串b[0,k-1]是b[0,i-1]的最长可匹配前缀子串，如果子串b[0,k-1]的下一个字符b[k]，与b[0,i-1]的下一个字符b[i]匹配，那子串b[0,k]就是b[0,i]的最长可匹配前缀子串。所以next[i]=k。  </p>
+<p>如果b[0,k-1]的下一个字符b[k]跟b[0,i-1]的下一个字符b[i]不相等。<br>假设b[0,i]的最长可匹配后缀子串是[r,i]。如果把最后一个字符去掉，那b[r,i-1]肯定是b[0,i-1]的可匹配后缀子串，但不一定是最长可匹配后缀子串。所以，既然b[0,i-1]最长可匹配后缀子串对应的模式串的前缀子串的下一个字符并不等于b[i]，那么就可以考察b[0,i-1]的次长可匹配后缀子串b[x,i-1]对应的可匹配前缀子串b[0,i-1-x]的下一个字符b[i-x]是否等于b[i]。如果等于，那b[x,i]就是b[0,i]的最长可匹配后缀子串。  </p>
+<p>次长可匹配后缀子串肯定被包含在最长可匹配后缀子串中，而最长可匹配后缀子串又对应最长可匹配前缀子串b[0,y]。查找b[0,i-1]的次长可匹配后缀子串，转化为查找b[0,y]的最长匹配后缀子串。  </p>
+<p>考察完所有的b[0,i-1]的可匹配后缀子串b[y,i-1]，直到找到一个可匹配的后缀子串，它对应的前缀子串的下一个字符等于b[i]，那这个b[y,i]就是b[0,i]的最长可匹配后缀子串。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        失效函数
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getNexts(<span class="keyword">char</span>[] b, <span class="keyword">int</span> m) &#123;</span><br><span class="line">    <span class="keyword">int</span>[] next = <span class="keyword">new</span> <span class="keyword">int</span>[m];</span><br><span class="line">    next[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> k = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span>(k != -<span class="number">1</span> &amp;&amp; b[k+<span class="number">1</span>] != b[i]) &#123;</span><br><span class="line">            k = next[k];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(b[k+<span class="number">1</span>] == b[i]) &#123;</span><br><span class="line">            ++k;</span><br><span class="line">        &#125;</span><br><span class="line">        next[i] = k;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><h4 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h4><p>KMP算法只需要一个额外的next数组，数组的大小跟模式串相同，空间复杂度为O(m)，m表示模式串的长度。  </p>
+<h4 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p>KMP算法包含两部分，第一部分是构建next数组，第二部分是借助next数组匹配。  </p>
+<p>第一部分，for循环i从1开始一直增加到m，而k并不是每次for循环都会增加，所以k累计增加的值肯定小于m。而while循环里k=next[k]，实际上是在减少k的值，k累积都没有增加超过m，所以while循环里面k=next[k]总的执行次数也不可能超过m。next数组计算的时间复杂度是O(m)。  </p>
+<p>第二部分，i从0循环增长到n-1，j的增长量不可能超过i，所以肯定小于n。next[j-1]的值肯定小于j-1，所以while循环中的j=next[j-1]+1实际上也是在让j的值减少。而j总共增长的量都不会超过n，减少的量也不可能超过n，所以while循环中的这条语句总的执行次数也不会超过n。这部分的时间复杂度是O(n)。  </p>
+<p>综合两部分的时间复杂度，KMP算法的时间复杂度为O(m+n)。  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>数据结构与算法</category>

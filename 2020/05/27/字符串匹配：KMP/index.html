@@ -18,20 +18,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="数据库索引是用B+树实现的">
+  <meta name="description" content="基本原理KMP核心思想与BM类似，假设主串是a，模式串是b。在模式串与主串匹配的过程中，当遇到不可匹配的字符的时候，找到一些规律，将模式串往后多滑动几位，跳过那些肯定不会匹配的情况。   在模式串和主串匹配的过程中，把不能匹配的那个字符叫做坏字符，把已经匹配的那段字符叫做好前缀。当遇到坏字符的时候，把模式串往后滑动，在滑动的过程中，只要模式串和好前缀有上下重合，前面几个字符的比较，就相当于拿好前缀">
 <meta property="og:type" content="article">
-<meta property="og:title" content="B+树">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/05/23/B+%E6%A0%91/index.html">
+<meta property="og:title" content="字符串匹配：KMP">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/05/27/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9AKMP/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="数据库索引是用B+树实现的">
+<meta property="og:description" content="基本原理KMP核心思想与BM类似，假设主串是a，模式串是b。在模式串与主串匹配的过程中，当遇到不可匹配的字符的时候，找到一些规律，将模式串往后多滑动几位，跳过那些肯定不会匹配的情况。   在模式串和主串匹配的过程中，把不能匹配的那个字符叫做坏字符，把已经匹配的那段字符叫做好前缀。当遇到坏字符的时候，把模式串往后滑动，在滑动的过程中，只要模式串和好前缀有上下重合，前面几个字符的比较，就相当于拿好前缀">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-05-23T11:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-24T10:20:48.720Z">
+<meta property="article:published_time" content="2020-05-27T14:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-29T02:54:43.801Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="B+树">
+<meta property="article:tag" content="字符串匹配">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/05/23/B+%E6%A0%91/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/05/27/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9AKMP/">
 
 
 <script id="page-configurations">
@@ -44,7 +44,7 @@
   };
 </script>
 
-  <title>B+树 | Notes</title>
+  <title>字符串匹配：KMP | Notes</title>
   
 
 
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/23/B+%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/27/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9AKMP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          B+树
+          字符串匹配：KMP
         </h1>
 
         <div class="post-meta">
@@ -224,14 +224,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-05-23 19:00:00" itemprop="dateCreated datePublished" datetime="2020-05-23T19:00:00+08:00">2020-05-23</time>
+              <time title="创建时间：2020-05-27 22:00:00" itemprop="dateCreated datePublished" datetime="2020-05-27T22:00:00+08:00">2020-05-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-24 18:20:48" itemprop="dateModified" datetime="2020-05-24T18:20:48+08:00">2020-05-24</time>
+                <time title="修改时间：2020-05-29 10:54:43" itemprop="dateModified" datetime="2020-05-29T10:54:43+08:00">2020-05-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,7 +256,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
+              <span>2.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -265,7 +265,6 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>4 分钟</span>
             </span>
-            <div class="post-description">数据库索引是用B+树实现的</div>
 
         </div>
       </header>
@@ -276,44 +275,106 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="支持快速查询、插入等操作的数据结构"><a href="#支持快速查询、插入等操作的数据结构" class="headerlink" title="支持快速查询、插入等操作的数据结构"></a>支持快速查询、插入等操作的数据结构</h3><p><strong>散列表</strong><br>散列表的查询性能很好，时间复杂度是O(1)。散列表不能支持按照区间快速查找数据。  </p>
-<p><strong>平衡二叉查找树</strong><br>平衡二叉查找树的性能很好，时间复杂度是O(logn)。对树进行中序遍历，可以得到一个从小到大的有序的数据序列，但不足以支持按照区间快速查找数据。  </p>
-<p><strong>跳表</strong><br>跳表是在链表之上加上多层索引构成的，支持快速的插入、查找、删除数据，时间复杂度为O(logn)。跳表也支持按照区间快速的查找数据，只需要定位到区间起点值对应在链表中的结点，然后从这个结点开始，顺序遍历链表，直到区间终点对应的结点为止，这期间遍历得到的数据就是满足区间值的数据。  </p>
-<p><strong>二叉查找树改造—&gt;B+树</strong><br>解决<strong>区间查找</strong>问题，树中的节点并不存储数据本身，而是只是作为索引。把每个叶子节点串在一条链表上，链表中的数据是从小到大有序的。<br>改造之后，如果要求某个区间的数据，只需要拿区间的起始值，在树中进行查找，当查找到某个叶子节点之后，再顺着链表往后遍历，直到链表中的结点数据值大于区间的终点值位置。所遍历到的数据，就是符合区间值的所有数据。  </p>
-<p>解决<strong>内存占用</strong>问题，借助时间换空间的思路，把索引存储在硬盘中。<br>比起内存读写操作，磁盘IO操作非常耗时，尽量减少磁盘IO操作—降低树的高度。构建m叉树。  </p>
+        <h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>KMP核心思想与BM类似，假设主串是a，模式串是b。在模式串与主串匹配的过程中，当遇到不可匹配的字符的时候，找到一些规律，将模式串往后多滑动几位，跳过那些肯定不会匹配的情况。  </p>
+<p>在模式串和主串匹配的过程中，把不能匹配的那个字符叫做<strong>坏字符</strong>，把已经匹配的那段字符叫做<strong>好前缀</strong>。<br>当遇到坏字符的时候，把模式串往后滑动，在滑动的过程中，只要模式串和好前缀有上下重合，前面几个字符的比较，就相当于拿好前缀的后缀字符串，跟模式串的前缀子串在比较。  </p>
+<p>拿到好前缀本身，在它的后缀子串中，查找最长的那个可以跟好前缀的前缀子串匹配。<br>假设最长的可匹配的那部分前缀子串是{v}，长度是k。把模式串一次性往后滑动j-k位，相当于，每次遇到坏字符的时候，就把j更新为k，i不变，然后继续比较。<br>把好前缀的所有后缀子串中，最长的可匹配前缀子串的那个后缀子串，叫做<strong>最长可匹配后缀子串</strong>；对应的前缀子串，叫做<strong>最长可匹配前缀子串</strong>。</p>
+<p>模式串a b a b a c d<br>前缀子串a b a b a c  </p>
+<table>
+<thead>
+<tr>
+<th>子串</th>
+<th>前缀</th>
+<th>后缀</th>
+<th>最大公共元素长度</th>
+<th>前缀结尾字符下标</th>
+<th>最长可匹配前缀子串结尾字符下标</th>
+<th>next值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>空</td>
+<td>空</td>
+<td>0</td>
+<td>0</td>
+<td>-1</td>
+<td>next[0]=-1</td>
+</tr>
+<tr>
+<td>ab</td>
+<td>a</td>
+<td>b</td>
+<td>0</td>
+<td>1</td>
+<td>-1</td>
+<td>next[1]=-1</td>
+</tr>
+<tr>
+<td>aba</td>
+<td>a,ab</td>
+<td>a,ba</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+<td>next[2]=0</td>
+</tr>
+<tr>
+<td>abab</td>
+<td>a,ab,aba</td>
+<td>b,ab,bab</td>
+<td>2</td>
+<td>3</td>
+<td>1</td>
+<td>next[3]=1</td>
+</tr>
+<tr>
+<td>ababa</td>
+<td>a,ab,aba,abab</td>
+<td>a,ba,aba,baba</td>
+<td>3</td>
+<td>4</td>
+<td>2</td>
+<td>next[4]=2</td>
+</tr>
+<tr>
+<td>ababac</td>
+<td>a,ab,aba,abab,ababc</td>
+<td>c,ac,bac,abac,babac</td>
+<td>0</td>
+<td>5</td>
+<td>0</td>
+<td>next[5]=-1</td>
+</tr>
+</tbody></table>
+<p>提前构建一个数组，用来存储模式串中每个前缀（这些前缀都有可能是好前缀）的最长可匹配前缀子串的结尾字符下标。把这个数组定义为<strong>next数组（失效函数）</strong>。<br>数组的下标是每个前缀结尾字符下标，数组的值是这个前缀的最长可以匹配前缀子串的结尾字符下标。  </p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
-        m叉树实现B+树索引
+        KMP算法框架
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 非叶子节点</span></span><br><span class="line"><span class="comment">* </span></span><br><span class="line"><span class="comment">* 假设keywords=[3,5,8,10]</span></span><br><span class="line"><span class="comment">* 4个键值将数据分为5个区间：(-INF,3),[3,5),[5,8),[8,10),[10,inf)</span></span><br><span class="line"><span class="comment">* 5个区间分别对应：children[0]...children[4]</span></span><br><span class="line"><span class="comment">* </span></span><br><span class="line"><span class="comment">* m值是事先计算得到的，计算的依据是让所有信息的大小正好等于页的大小：</span></span><br><span class="line"><span class="comment">* PAGE_SIZE = (m-1)*4[keywords大小] + m*8[children大小]</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BPlusTreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> m = <span class="number">5</span>;<span class="comment">//5叉树</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] keywords = <span class="keyword">new</span> <span class="keyword">int</span>[m-<span class="number">1</span>];<span class="comment">//键值，用来划分数据区间</span></span><br><span class="line">    <span class="keyword">public</span> BPlusTressNode[] children = <span class="keyword">new</span> BPlusTreeNode[m];<span class="comment">//保存子节点指针</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 叶子节点</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* 叶子节点存储的是值，而非区间</span></span><br><span class="line"><span class="comment">* 每个叶子节点存储3个数据行的键值及地址信息</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* k值是事先计算得到的，计算的依据是让所有信息的大小正好等于页的大小：</span></span><br><span class="line"><span class="comment">* PAGE_SIZE = k*4[keywords大小]+k*8[dataAddress大小]+8[prev大小]+8[next大小]</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BPlusTreeLeafNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> k = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] keywords = <span class="keyword">new</span> <span class="keyword">int</span>[k];<span class="comment">//数据的键值</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">long</span>[] dataAddress = <span class="keyword">new</span> <span class="keyword">long</span>[k];<span class="comment">//数据地址</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> BPlusTreeLeafNode prev;<span class="comment">//这个结点在链表中的前驱结点</span></span><br><span class="line">    <span class="keyword">public</span> BPlusTreeLeafNode next;<span class="comment">//这个结点在链表中的后继结点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//a,b分别是主串和模式串；n,m分别是主串和模式串的长度</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="keyword">char</span>[] a, <span class="keyword">int</span> n, <span class="keyword">char</span>[] b, <span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] next = getNext(b,m);</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span>(j &gt; <span class="number">0</span> &amp;&amp; a[i] != b[j]) &#123;<span class="comment">//一直找到a[i]和b[j]</span></span><br><span class="line">            j = next[j-<span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(a[i] == b[j]) &#123;</span><br><span class="line">            ++j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(j == m) &#123;<span class="comment">//找到匹配模式串的了</span></span><br><span class="line">            <span class="keyword">return</span> i - m + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 </div>  
 
-<p>对于相同个数的数据构建m叉树索引，m叉树中的m越大，树的高度就越小。<br>内存中的数据，以及磁盘中的数据，操作系统都是按页（一页大小通常是4KB，这个值可以通过getconfig PAGE_SIZE命令查看）来读取的，一次会读取一页的数据。如果要读取的数据超过一页的大小，就会触发多次IO操作。所以选择m大小的时候，尽量让每个节点的大小等于一个页的大小。读取一个节点，只需要一次磁盘IO操作。  </p>
-<ul>
-<li><p>写入数据效率下降<br>  数据的写入过程，会涉及索引的更新，这是索引导致写入变慢的主要原因。  </p>
-<p>  对于一个B+树来说，m值是根据页的大小事先计算好的，每个节点最多只能有m个子节点。在往数据库中写入数据的过程中，可能使索引中某些节点的子节点个数超过m，这个节点的大小超过了一个页的大小，读取这样一个节点，就会导致多次IO操作。  </p>
-<p>  需要将这个节点分裂成两个节点。节点分裂之后，其上层父节点的子节点个数有可能超过m个。可以用同样的方法，将父节点也分裂成两个节点。这种级联反应会从下往上，一直影响到根节点。  </p>
-</li>
-<li><p>删除数据效率下降<br>  删除某个数据的时候，也要对应的更新索引节点。处理思路类似跳表中删除数据的处理思路。频繁的数据删除，就会导致某些节点中，子节点的个数变得非常少，长此以往，如果某个节点的子节点都比较少，势必会影响索引的效率。  </p>
-<p>  设置一个阈值，在B+树中，这个阈值等于m/2，如果摸一个节点的子节点个数小于m/2，就将它跟相邻的兄弟节点合并。合并之后的子节点个数有可能会超过m。针对这种情况，可以借助插入数据的时候的处理方法，再分裂节点。  </p>
-</li>
-</ul>
-<p>理论上，对跳表稍加改造也可以替代B+树，作为数据库的索引实现。  </p>
-<h3 id="B-树特点"><a href="#B-树特点" class="headerlink" title="B+树特点"></a>B+树特点</h3><ul>
-<li>每个节点中子节点的个数不能超过m，也不能小于m/2；</li>
-<li>根节点的子节点个数可以不超过m/2，这是一个例外；</li>
-<li>m叉树只存储索引，并不真正存储数据，这个类似跳表；</li>
-<li>通过链表将叶子节点串联在一起，可以方便按区间查找；</li>
-<li>一般情况，根节点会被存储在内存中，其他节点存储在磁盘中。</li>
-</ul>
-<p>B-树就是B树  </p>
-<ul>
-<li>B+树中的节点不存储数据，只是索引，而B树中的节点存储数据；</li>
-<li>B树中的叶子节点并不需要链表来串联。</li>
-<li>B树只是一个每个节点的子节点个数不能小于m/2的m叉树。</li>
-</ul>
+<h3 id="失效函数"><a href="#失效函数" class="headerlink" title="失效函数"></a>失效函数</h3><p>按照下标从小到大，依次计算next数组的值，当要计算next[i]的时候，前面的next[0],next[1],…,next[i-1]已经计算出来了，利用已经计算出来的next值，推导next[i]的值。（动态规划的思想）  </p>
+<p>如果next[i-1]=k-1，也就是说，子串b[0,k-1]是b[0,i-1]的最长可匹配前缀子串，如果子串b[0,k-1]的下一个字符b[k]，与b[0,i-1]的下一个字符b[i]匹配，那子串b[0,k]就是b[0,i]的最长可匹配前缀子串。所以next[i]=k。  </p>
+<p>如果b[0,k-1]的下一个字符b[k]跟b[0,i-1]的下一个字符b[i]不相等。<br>假设b[0,i]的最长可匹配后缀子串是[r,i]。如果把最后一个字符去掉，那b[r,i-1]肯定是b[0,i-1]的可匹配后缀子串，但不一定是最长可匹配后缀子串。所以，既然b[0,i-1]最长可匹配后缀子串对应的模式串的前缀子串的下一个字符并不等于b[i]，那么就可以考察b[0,i-1]的次长可匹配后缀子串b[x,i-1]对应的可匹配前缀子串b[0,i-1-x]的下一个字符b[i-x]是否等于b[i]。如果等于，那b[x,i]就是b[0,i]的最长可匹配后缀子串。  </p>
+<p>次长可匹配后缀子串肯定被包含在最长可匹配后缀子串中，而最长可匹配后缀子串又对应最长可匹配前缀子串b[0,y]。查找b[0,i-1]的次长可匹配后缀子串，转化为查找b[0,y]的最长匹配后缀子串。  </p>
+<p>考察完所有的b[0,i-1]的可匹配后缀子串b[y,i-1]，直到找到一个可匹配的后缀子串，它对应的前缀子串的下一个字符等于b[i]，那这个b[y,i]就是b[0,i]的最长可匹配后缀子串。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        失效函数
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getNexts(<span class="keyword">char</span>[] b, <span class="keyword">int</span> m) &#123;</span><br><span class="line">    <span class="keyword">int</span>[] next = <span class="keyword">new</span> <span class="keyword">int</span>[m];</span><br><span class="line">    next[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> k = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span>(k != -<span class="number">1</span> &amp;&amp; b[k+<span class="number">1</span>] != b[i]) &#123;</span><br><span class="line">            k = next[k];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(b[k+<span class="number">1</span>] == b[i]) &#123;</span><br><span class="line">            ++k;</span><br><span class="line">        &#125;</span><br><span class="line">        next[i] = k;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><h4 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h4><p>KMP算法只需要一个额外的next数组，数组的大小跟模式串相同，空间复杂度为O(m)，m表示模式串的长度。  </p>
+<h4 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p>KMP算法包含两部分，第一部分是构建next数组，第二部分是借助next数组匹配。  </p>
+<p>第一部分，for循环i从1开始一直增加到m，而k并不是每次for循环都会增加，所以k累计增加的值肯定小于m。而while循环里k=next[k]，实际上是在减少k的值，k累积都没有增加超过m，所以while循环里面k=next[k]总的执行次数也不可能超过m。next数组计算的时间复杂度是O(m)。  </p>
+<p>第二部分，i从0循环增长到n-1，j的增长量不可能超过i，所以肯定小于n。next[j-1]的值肯定小于j-1，所以while循环中的j=next[j-1]+1实际上也是在让j的值减少。而j总共增长的量都不会超过n，减少的量也不可能超过n，所以while循环中的这条语句总的执行次数也不会超过n。这部分的时间复杂度是O(n)。  </p>
+<p>综合两部分的时间复杂度，KMP算法的时间复杂度为O(m+n)。  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -324,7 +385,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/B-%E6%A0%91/" rel="tag"><i class="fa fa-tag"></i> B+树</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D/" rel="tag"><i class="fa fa-tag"></i> 字符串匹配</a>
           </div>
 
         
@@ -333,13 +394,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/22/A-%E6%90%9C%E7%B4%A2/" rel="prev" title="A*搜索">
-      <i class="fa fa-chevron-left"></i> A*搜索
+    <a href="/2020/05/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABM/" rel="prev" title="字符串匹配：BM">
+      <i class="fa fa-chevron-left"></i> 字符串匹配：BM
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/05/24/%E7%B4%A2%E5%BC%95/" rel="next" title="索引">
-      索引 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -398,7 +456,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#支持快速查询、插入等操作的数据结构"><span class="nav-number">1.</span> <span class="nav-text">支持快速查询、插入等操作的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-树特点"><span class="nav-number">2.</span> <span class="nav-text">B+树特点</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本原理"><span class="nav-number">1.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#失效函数"><span class="nav-number">2.</span> <span class="nav-text">失效函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂度分析"><span class="nav-number">3.</span> <span class="nav-text">复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#空间复杂度"><span class="nav-number">3.1.</span> <span class="nav-text">空间复杂度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时间复杂度"><span class="nav-number">3.2.</span> <span class="nav-text">时间复杂度</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
