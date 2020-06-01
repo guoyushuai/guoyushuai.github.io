@@ -18,21 +18,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
+  <meta name="description" content="递归树分析递归代码时间复杂度">
 <meta property="og:type" content="article">
-<meta property="og:title" content="复杂度分析">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="递归树">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/06/01/%E9%80%92%E5%BD%92%E6%A0%91/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
+<meta property="og:description" content="递归树分析递归代码时间复杂度">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-05T15:36:42.097Z">
+<meta property="article:published_time" content="2020-06-01T08:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-01T09:58:01.333Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="时间复杂度">
-<meta property="article:tag" content="空间复杂度">
+<meta property="article:tag" content="递归树">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/06/01/%E9%80%92%E5%BD%92%E6%A0%91/">
 
 
 <script id="page-configurations">
@@ -45,7 +44,7 @@
   };
 </script>
 
-  <title>复杂度分析 | Notes</title>
+  <title>递归树 | Notes</title>
   
 
 
@@ -202,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/06/01/%E9%80%92%E5%BD%92%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -215,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          复杂度分析
+          递归树
         </h1>
 
         <div class="post-meta">
@@ -224,16 +223,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-04-15 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-15T00:00:00+08:00">2020-04-15</time>
+              <time title="创建时间：2020-06-01 16:00:00 / 修改时间：17:58:01" itemprop="dateCreated datePublished" datetime="2020-06-01T16:00:00+08:00">2020-06-01</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-05 23:36:42" itemprop="dateModified" datetime="2020-05-05T23:36:42+08:00">2020-05-05</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -257,16 +250,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>932</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>4 分钟</span>
             </span>
-            <div class="post-description">复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系</div>
+            <div class="post-description">递归树分析递归代码时间复杂度</div>
 
         </div>
       </header>
@@ -277,56 +270,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="时间复杂度与空间复杂度"><a href="#时间复杂度与空间复杂度" class="headerlink" title="时间复杂度与空间复杂度"></a>时间复杂度与空间复杂度</h2><p>复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系。  </p>
-<h3 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h3><p>代码执行时间随数据规模增长的变化趋势，叫作渐进时间复杂度（asymptotic time complexity），简称<strong>时间复杂度</strong>。  </p>
-<p>所有代码的执行时间T(n)与每行代码的执行次数成正比  </p>
-<p><code>T(n) = O(f(n))</code>  </p>
-<blockquote>
-<p>其中T(n)表示算法执行的总时间，f(n)表示每行代码执行总次数，而n往往表示数据的规模。常量阶、低阶、系数对增长趋势不产生决定性影响，在做复杂度分析时可忽略这些项。</p>
-</blockquote>
-<h4 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h4><ol>
-<li>单段代码看高频：比如循环。</li>
-<li>多段代码取最大：比如一段代码中有单循环和多重循环，那么取多重循环的复杂度。</li>
-<li>嵌套代码求乘积：比如递归、多重循环等。</li>
-<li>多个规模求加法：比如方法有两个参数控制两个循环的次数，那么这是就取二者复杂度相加。</li>
-</ol>
-<h4 id="级别"><a href="#级别" class="headerlink" title="级别"></a>级别</h4><p><em>多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用，按照多项式的比例增长。</p>
-<ol>
-<li>常量阶 O(1)  </li>
-<li>对数阶 O(logn)  </li>
-<li>线性阶 O(n)  </li>
-<li>线性对数阶 O(nlogn)  </li>
-<li>O(n<sup>2</sup>)平方阶、O(n<sup>3</sup>)立方阶……</li>
-</ol>
-<p><em>非多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用暴增，这类算法的性能极差</p>
-<ol start="6">
-<li>指数阶 O(2<sup>n</sup>)  </li>
-<li>阶乘阶 O(n!)  </li>
-</ol>
-<h3 id="空间复杂度分析"><a href="#空间复杂度分析" class="headerlink" title="空间复杂度分析"></a>空间复杂度分析</h3><p><strong>空间复杂度</strong>全称就是渐进空间复杂度（asymptotic space complexity），表示算法的存储空间与数据规模之间的增长关系。  </p>
-<p>类似于时间复杂度</p>
-<h3 id="其他复杂度"><a href="#其他复杂度" class="headerlink" title="其他复杂度"></a>其他复杂度</h3><ol>
-<li><p>最好情况时间复杂度（best case time complexity）  </p>
-<blockquote>
-<p>在最理想的情况下，执行这段代码的时间复杂度  </p>
-</blockquote>
-</li>
-<li><p>最坏情况时间复杂度（worst case time complexity）</p>
-<blockquote>
-<p>在最糟糕的情况下，执行这段代码的时间复杂度  </p>
-</blockquote>
-</li>
-<li><p>平均情况时间复杂度（average case time complexity）</p>
-<blockquote>
-<p>加权平均时间复杂度/期望时间复杂度<br>用代码在所有情况下执行的次数的加权平均值表示</p>
-</blockquote>
-</li>
-<li><p>均摊时间复杂度（amortized time complexity）</p>
-<blockquote>
-<p>摊还分析、平摊分析。一种特殊的平均时间复杂度。<br>在代码执行的所有复杂度情况中绝大部分是低级别的复杂度，个别情况是高级别复杂度且发生具有时序关系时，可以将个别高级别复杂度均摊到低级别复杂度上。基本上均摊结果等于低级别复杂度。（重点1、高级别少数2、低高出现具有时序规律）</p>
-</blockquote>
-</li>
-</ol>
+        <h3 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h3><p>递归的思想，将大问题分解为小问题来求解，然后再将小问题分解为小小问题。这样一层一层的分解，直到问题的数据规模被分解得足够小，不用继续递归分解为止。<br>如果把这个一层一层分解过程画成图，它其实就是一棵树—递归树。  </p>
+<p>归并的时间复杂度、快排的最好情况时间复杂度适合用递推公式分析。<br>快排平均时间复杂度适合用递归树分析。<br>二叉树的前中后序遍历都不适合。  </p>
+<h3 id="归并排序的时间复杂度"><a href="#归并排序的时间复杂度" class="headerlink" title="归并排序的时间复杂度"></a>归并排序的时间复杂度</h3><p>归并排序每次会将数据规模一分为二。因为每次分解都是一分为二，所以代价很低，把时间上的消耗记作常量l。归并算法中比较耗时的是归并操作，也就是把连个子数组合并为大数组。每一层归并操作消耗的时间总和是一样的，跟要排序的数据规模有关，把每一层归并操作消耗的时间记作n。  </p>
+<p>只需要知道这棵树的高度h，用高度h乘以每一层的时间消耗n，就可以得到总的时间复杂度O(n*h)。<br>归并排序递归树是一棵满二叉树，满二叉树的高度大约是log<sub>2</sub>n，归并排序的时间复杂度就是O(nlogn)。  </p>
+<h3 id="快速排序的时间复杂度"><a href="#快速排序的时间复杂度" class="headerlink" title="快速排序的时间复杂度"></a>快速排序的时间复杂度</h3><h4 id="递推公式分析时间复杂度"><a href="#递推公式分析时间复杂度" class="headerlink" title="递推公式分析时间复杂度"></a>递推公式分析时间复杂度</h4><p>快速排序在最好情况下，每次分区都能一分为二，此时用递推公式T(n)=2T(n/2)+n，推导出时间复杂度是O(nlogn)。  </p>
+<p>平均情况下，每次分区之后，两个分区的大小比例为1:k。当k=9时，如果用递推公式的方法求解时间复杂度，递推公式为T(n)=T(n/10)+T(9n/10)+n。  </p>
+<h4 id="递归树分析时间复杂度"><a href="#递归树分析时间复杂度" class="headerlink" title="递归树分析时间复杂度"></a>递归树分析时间复杂度</h4><p>快速排序的过程中，每次分区都要遍历待分区区间的所有数据，每一层分区操作所遍历的数据的个数之和就是n。只要求出递归树的高度h，快排过程遍历的数据个数就是h*n，时间复杂度就是O(h*n)。</p>
+<p>每次分区并不是均匀的一分为二，递归树并不是满二叉树。<br>快速排序结束的条件是排序的小区间大小为1，即叶子节点里的数据规模是1。从根节点n到叶子节点1，递归树中最短的一个路径每次都乘以1/10，最长的一个路径每次都乘以9/10。计算后可得，从根节点到叶子节点的最短路径是log<sub>10</sub>n，最长路径是log<sub>10/9</sub>n。<br>遍历数据的个数总和就介于nlog<sub>10</sub>n和nlog<sub>10/9</sub>n之间。根据复杂度的大O表示法，对数复杂度的底数不管是多少，统一写成logn。所以当分区大小比例是1:9时，快速排序的时间复杂度仍然是O(nlogn)。  </p>
+<p>只要k的值不随n变化，是一个事先确定的常量，快排的时间复杂度就是O(nlogn)。  </p>
+<h3 id="斐波那契数列的时间复杂度"><a href="#斐波那契数列的时间复杂度" class="headerlink" title="斐波那契数列的时间复杂度"></a>斐波那契数列的时间复杂度</h3><p>递推公式f(n)=f(n-1)+f(n-2)。<br>递归代码画成递归树。f(n)分解为f(n-1)和f(n-2)，每次数据规模都是-1或者-2，叶子节点的数据规模是1或者2。所以从根节点走到叶子节点，每条路径是长短不一的。如果每次都是-1，那最长路径大约是n；如果每次都是-2，那最短路径大约是n/2。  </p>
+<p>每次分解之后的合并操作只需要一次加法运算，把加法运算的时间消耗记作1。从上往下，第一层的总时间消耗是1，第二层的总时间消耗是2，第三层的总时间消耗是2<sup>2</sup>。依次类推，第k层的时间消耗就是2<sup>k-1</sup>，整个算法的总时间消耗就是每一层时间消耗之和。  </p>
+<p>如果路径长度都为n，总和就是2<sup>n</sup>-1。<br>如果路径长度都是n/2，那总和是2<sup>n/2</sup>-1。<br>所以算法的时间复杂度介于O(2<sup>n</sup>)和O(2<sup>n/2</sup>)之间。指数级。  </p>
+<h3 id="全排列的时间复杂度"><a href="#全排列的时间复杂度" class="headerlink" title="全排列的时间复杂度"></a>全排列的时间复杂度</h3><p>把n个数据的所有排列都找出来，就是全排列的问题。<br>可以用递归来打印一组数据的所有排列。  </p>
+<p>如果确定了最后一位数据，就变成求解剩下n-1个数据的排列问题。最后一个数据可以是n个数据中的任意一个，它的取值有n种情况。“n个数据的排列”问题，可以分解成n个“n-1个数据的排列”的子问题。  </p>
+<p>递推公式：<br>f(1,2,…n) = {最后一位是1, f(n-1)} + {最后一位是2, f(n-1)} +…+{最后一位是n, f(n-1)}  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        全排列
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printPermutations</span><span class="params">(<span class="keyword">int</span>[] data, <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(k == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            System.out.print(data[i] + <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; ++i) &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = data[i];</span><br><span class="line">        data[i] = data[k-<span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        printPermutations(data, n, k-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        tmp = data[i];</span><br><span class="line">        data[i] = data[k-<span class="number">1</span>];</span><br><span class="line">        data[k-<span class="number">1</span>] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>画出递归树<br>第一层分解有n次交换操作，第二层有n个节点，每个节点分解需要n-1次交换，所以第二层总的交换次数是n<em>(n-1)。第三层有n</em>(n-1)个节点，每个节点分解需要n-2次，所以第三层总的交换次数是n<em>(n-1)</em>(n-2)。  </p>
+<p>以此类推，第k层总的交换次数就是n<em>(n-1)</em>(n-2)<em>…</em>(n-k+1)。最后一层的交换次数就是n*(n-1)*(n-2)*…*2*1。每一层的交换次数之和就是总的交换次数。  </p>
+<p>n + n*(n-1) + n*(n-1)*(n-2) +… + n*(n-1)(n-2)*…*2*1  </p>
+<p>最后一个数等于n!，前面n-1个数都小于最后一个数，总和肯定小于n*n!。全排列的递归算法的时间复杂度在O(n!)与O(n*n!)之间。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -337,8 +308,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 时间复杂度</a>
-              <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 空间复杂度</a>
+              <a href="/tags/%E9%80%92%E5%BD%92%E6%A0%91/" rel="tag"><i class="fa fa-tag"></i> 递归树</a>
           </div>
 
         
@@ -347,13 +317,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/15/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2020/06/01/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" rel="prev" title="哈希算法">
+      <i class="fa fa-chevron-left"></i> 哈希算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/17/%E6%95%B0%E7%BB%84/" rel="next" title="数组">
-      数组 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -412,7 +379,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度与空间复杂度"><span class="nav-number">1.</span> <span class="nav-text">时间复杂度与空间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度分析"><span class="nav-number">1.1.</span> <span class="nav-text">时间复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原则"><span class="nav-number">1.1.1.</span> <span class="nav-text">原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#级别"><span class="nav-number">1.1.2.</span> <span class="nav-text">级别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间复杂度分析"><span class="nav-number">1.2.</span> <span class="nav-text">空间复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他复杂度"><span class="nav-number">1.3.</span> <span class="nav-text">其他复杂度</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#递归树"><span class="nav-number">1.</span> <span class="nav-text">递归树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归并排序的时间复杂度"><span class="nav-number">2.</span> <span class="nav-text">归并排序的时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速排序的时间复杂度"><span class="nav-number">3.</span> <span class="nav-text">快速排序的时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#递推公式分析时间复杂度"><span class="nav-number">3.1.</span> <span class="nav-text">递推公式分析时间复杂度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#递归树分析时间复杂度"><span class="nav-number">3.2.</span> <span class="nav-text">递归树分析时间复杂度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#斐波那契数列的时间复杂度"><span class="nav-number">4.</span> <span class="nav-text">斐波那契数列的时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全排列的时间复杂度"><span class="nav-number">5.</span> <span class="nav-text">全排列的时间复杂度</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
