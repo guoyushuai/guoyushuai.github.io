@@ -18,20 +18,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="字典树，处理字符串前缀匹配的数据结构">
+  <meta name="description" content="Redis常用的数据类型底层依赖的数据结构：压缩列表（一种特殊的数组&#x2F;链表）、有序数组、链表、散列表、跳表。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Trie树">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/05/10/Trie%E6%A0%91/index.html">
+<meta property="og:title" content="Redis常用数据类型对应的数据结构">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/06/02/1Redis%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AF%B9%E5%BA%94%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="字典树，处理字符串前缀匹配的数据结构">
+<meta property="og:description" content="Redis常用的数据类型底层依赖的数据结构：压缩列表（一种特殊的数组&#x2F;链表）、有序数组、链表、散列表、跳表。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-05-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-11T10:41:16.890Z">
+<meta property="article:published_time" content="2020-06-02T01:30:00.000Z">
+<meta property="article:modified_time" content="2020-06-02T06:46:01.395Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="Trie">
+<meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/05/10/Trie%E6%A0%91/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/06/02/1Redis%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AF%B9%E5%BA%94%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
 
 
 <script id="page-configurations">
@@ -44,7 +44,7 @@
   };
 </script>
 
-  <title>Trie树 | Notes</title>
+  <title>Redis常用数据类型对应的数据结构 | Notes</title>
   
 
 
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/10/Trie%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/06/02/1Redis%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AF%B9%E5%BA%94%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Trie树
+          Redis常用数据类型对应的数据结构
         </h1>
 
         <div class="post-meta">
@@ -223,16 +223,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-05-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-10T00:00:00+08:00">2020-05-10</time>
+              <time title="创建时间：2020-06-02 09:30:00 / 修改时间：14:46:01" itemprop="dateCreated datePublished" datetime="2020-06-02T09:30:00+08:00">2020-06-02</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-11 18:41:16" itemprop="dateModified" datetime="2020-05-11T18:41:16+08:00">2020-05-11</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -256,7 +250,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>1.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -265,7 +259,7 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>3 分钟</span>
             </span>
-            <div class="post-description">字典树，处理字符串前缀匹配的数据结构</div>
+            <div class="post-description">Redis常用的数据类型底层依赖的数据结构：压缩列表（一种特殊的数组/链表）、有序数组、链表、散列表、跳表。</div>
 
         </div>
       </header>
@@ -276,41 +270,76 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="Trie树定义"><a href="#Trie树定义" class="headerlink" title="Trie树定义"></a>Trie树定义</h3><p>Tire树-字典树。一个树形结构，专门处理字符串匹配的数据结构，用来解决在一组字符串集合中快速查找某个字符串的问题。  </p>
-<p>Trie树的本质，利用字符串之间的公共前缀，将重复的前缀合并在一起。<br>根节点不包含任何信息，每个节点表示一个字符串中的字符，从根节点到各个“结尾节点”（不一定都是叶子节点）的一条路径表示一个字符串。  </p>
-<p>Trie树的构造过程的每一步都相当于往Trie树中插入一个字符串，当所有字符串都插入完成之后，Trie树就构造好了。<br>在Trie树中查找一个字符串的时候，将要查找的字符串分割成单个的字符，然后从Trie树的根节点开始匹配。  </p>
-<h3 id="实现Trie树"><a href="#实现Trie树" class="headerlink" title="实现Trie树"></a>实现Trie树</h3><ol>
-<li>将字符串集合构造成Trie树（将字符串插入到Trie树）。<br>Trie树是一个多叉树，借助散列表的思想，通过一个下标与字符一一映射的数组，来存储子节点的指针。<br>假设字符串中只有从a-z这26个小写字母，在数据中下标为0的位置，存储指向子节点a的指针，下标为1的位置存储指向子节点b的指针，以此类推，下标为25的位置，存储的是指向子节点z的指针，如果某个字符的子节点不存在，在对应下标的位置存储null。</li>
-<li>在Trie树中查询一个字符串<br>在trie树中查找字符串的时候，通过字符的ASCII码减去“a”的ASCII码，迅速找到匹配的字节点的指针。  </li>
+        <h3 id="Redis-数据库介绍"><a href="#Redis-数据库介绍" class="headerlink" title="Redis 数据库介绍"></a>Redis 数据库介绍</h3><p>Redis是一种键值(Key-Value)数据库。相对于关系型数据库(MySQL、Oracle)，Redis也被叫做非关系型数据库。  </p>
+<p>Redis中只包含“键”和“值”两部分，只能通过“键”来查询“值”。存储结构简单，读写效率高。Redis主要作为内存数据库使用，数据存储在内存中，同时支持将数据存储在硬盘中。  </p>
+<p>Redis键的数据类型是字符串，值得数据类型包括字符串、列表、字典、集合、有序集合。  </p>
+<h3 id="字符串（string）"><a href="#字符串（string）" class="headerlink" title="字符串（string）"></a>字符串（string）</h3><p>对应数据结构的<strong>字符串</strong>。  </p>
+<h3 id="列表（list）"><a href="#列表（list）" class="headerlink" title="列表（list）"></a>列表（list）</h3><p>列表数据类型支持存储一组数据，两种实现方法：压缩列表（ziplist）、双向循环链表。  </p>
+<ol>
+<li>压缩列表<br> 列表中存储数据量比较小  </li>
 </ol>
-<div class='spoiler collapsed'>
+<ul>
+<li><p>列表中保存的单个数据（可以是字符串类型）小于64字节；  </p>
+</li>
+<li><p>列表中数据个数小于512个。  </p>
+<p>  压缩列表不是基础数据结构。类似数组，通过一片连续的内存空间来存储数据。允许存储的数据大小不同。但压缩列表不支持随笔访问，类似链表。<br>  Redis一般通过key获取整个value的值—整个压缩列表的数据，并不需要随机访问。访问某个元素的时候需要从头开始遍历。  </p>
+<p>  压缩列表一方面比较节省内存，另一方面可以支持不同类型数据的存储。  </p>
+</li>
+</ul>
+<ol start="2">
+<li><p>双向循环链表<br> 链表的一种。  </p>
+ <div class='spoiler collapsed'>
     <div class='spoiler-title'>
-        BF算法
+        list-Redis
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> data;</span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isEndingChar = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root = <span class="keyword">new</span> TrieNode(<span class="string">'/'</span>);</span><br><span class="line">    <span class="comment">//往Trie树中插入一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">char</span>[] text)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; text.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = text[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                TrieNode newNode =<span class="keyword">new</span> TrieNode(text[i]);</span><br><span class="line">                p.children[index] = newNode;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        p.isEndingChar = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在Trie树中查找一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">select</span><span class="params">(<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pattern.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = pattern[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p.isEndingChar == <span class="keyword">false</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//额外定义了一个list结构体，组织链表的首、尾指针，以及长度信息</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listnode</span> &#123;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line"><span class="keyword">void</span> *value;</span><br><span class="line">&#125; listNode;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span></span><br><span class="line">listNode *head;</span><br><span class="line">listNode *tail;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> len;</span><br><span class="line"><span class="comment">// ....省略其他定义</span></span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
     </div>
-</div>
+</div>  
 
-<p>构建Trie树的过程要扫描所有字符串，时间复杂度为O(n)，n表示虽有字符串的长度和。<br>构建好Trie树后，在其中查找字符串的时间复杂度为O(k)，k表示要查找的字符串的长度。  </p>
-<h3 id="Trie树缺点及优化"><a href="#Trie树缺点及优化" class="headerlink" title="Trie树缺点及优化"></a>Trie树缺点及优化</h3><p>用数组存储一个节点的字节点的指针，如果字符串中包含从a到z这26个字符，那每个节点都要存储一个长度为26的数组，并且数组每个元素要存储一个8或者4字节指针。浪费内存。  </p>
-<p><strong>优化</strong>：将每个节点的数组换成其他数据结构，来存储一个节点的子节点指针，有序数组、跳表、散列表、红黑树。<br>有序数组中的指针按照所指向的子节点中的字符的大小顺序排列。查询的时候，通过二分查找的方法，快速查找到某个字符应该匹配的子节点的指针。但是在往Trie树中插入一个字符串的时候，需要维护数组中数据的有序性。  </p>
-<p><strong>变体</strong>：缩点优化，对于只有一个子节点的节点，而且此节点不是一个串的结束节点，可以将此节点与子节点合并。节省空间增加编码难度。  </p>
-<p><strong>扩展</strong>：后缀树、DAT（双数组trie树）。  </p>
-<h3 id="Trie树的使用场景"><a href="#Trie树的使用场景" class="headerlink" title="Trie树的使用场景"></a>Trie树的使用场景</h3><p>动态数据高效操作的数据结构：散列表、红黑树、跳表  </p>
+</li>
+</ol>
+<h3 id="字典（hash）"><a href="#字典（hash）" class="headerlink" title="字典（hash）"></a>字典（hash）</h3><p>字典类型用来存储一组数据对。每个数据对又包含键值两部分。两种实现方法：压缩列表、散列表。  </p>
+<ol>
+<li>压缩列表<br> 存储的数据量比较小  </li>
+</ol>
 <ul>
-<li>字符串中包含的字符集不能太大。浪费存储空间。  </li>
-<li>字符串的前缀重合比较多。  </li>
-<li>需要从零开始实现一个Trie树。  </li>
-<li>用到了指针，数据块不连续，堆缓存不友好。  </li>
+<li>字典中保存的键和值的大小都要小于64字节；  </li>
+<li>字典中键值对的个数要小于512个。  </li>
 </ul>
-<p>Trie树不适合精确匹配查找（散列表、红黑树），比较适合查找前缀匹配的字符串。搜索引擎提示关键词、输入法自动补全、IDE代码编辑器自动补全、浏览器啊网址输入自动补全、屏蔽字/敏感词检测。  </p>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><ul>
-<li>复杂中文实现  </li>
-<li>前缀匹配过多，选择展示  </li>
-<li>拼写错误，校正提示  </li>
+<ol start="2">
+<li>散列表<br> Redis使用MurmurHash2这种运行速度快、随机性好的哈希算法作为哈希函数。<br> Redis使用链表法解决哈希冲突问题。<br> Redis支持散列表的动态扩容（装载因子大于1，散列表扩大为原来的2倍左右）、缩容（装载因子小于0.1，缩小为字典中数据个数的大约2倍大小）。<br> 采用渐进式扩容缩容策略，将数据的搬移分批进行，避免大量数据一次性搬移导致的服务停顿。  </li>
+</ol>
+<h3 id="集合（set）"><a href="#集合（set）" class="headerlink" title="集合（set）"></a>集合（set）</h3><p>集合类型用来存储一组不重复的数据。两种实现方法：有序数组、散列表。  </p>
+<ol>
+<li>有序数组  </li>
+</ol>
+<ul>
+<li>存储的数据都是整数；  </li>
+<li>存储的数据元素个数不超过512个。  </li>
 </ul>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>Apache Commons<br>PatriciaTrie<br>AbstractPatriciaTrie  </p>
+<ol start="2">
+<li>散列表  </li>
+</ol>
+<h3 id="有序集合（sortedset）"><a href="#有序集合（sortedset）" class="headerlink" title="有序集合（sortedset）"></a>有序集合（sortedset）</h3><p>有序集合用来存储一组数据。两种实现方式：压缩列表、跳表。  </p>
+<ol>
+<li>压缩列表  </li>
+</ol>
+<ul>
+<li>所有数据的大小都要小于64字节；</li>
+<li>元素个数要小于128个。  </li>
+</ul>
+<ol start="2">
+<li>跳表<br> 每个数据会附带一个得分。通过得分的大小，将数据组织成跳表这样的数据结构，以支持快速的按照得分值、得分区间获取数据。  </li>
+</ol>
+<h3 id="数据结构持久化（对象持久化）"><a href="#数据结构持久化（对象持久化）" class="headerlink" title="数据结构持久化（对象持久化）"></a>数据结构持久化（对象持久化）</h3><p>Redis常被用作内存数据库，也支持数据落盘，将内存中的数据存储到磁盘中。  </p>
+<p>Redis的数据格式由“键”和“值”两部分组成。“值”支持很多数据类型。两种持久化思路：  </p>
+<ul>
+<li><p>清除原有的存储结构，只将数据存储到磁盘中。当需要从磁盘还原数据到内存的时候，再重新将数据组织成原来的数据结构。数据从硬盘还原到内存的过程，会耗用比较多的时间。（重新构建散列表时，需要重新计算每个数据的哈希值。）</p>
+</li>
+<li><p>保留原来的存储格式，将数据按照原有的格式存储在磁盘中。将散列表的大小、每个数据被散列到的槽的编号等信息，都保存在磁盘中。从磁盘中将数据还原到内存中的时候，可以避免重新计算哈希值。  </p>
+</li>
+</ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -321,7 +350,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Trie/" rel="tag"><i class="fa fa-tag"></i> Trie</a>
+              <a href="/tags/Redis/" rel="tag"><i class="fa fa-tag"></i> Redis</a>
           </div>
 
         
@@ -330,12 +359,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABF&RK/" rel="prev" title="字符串匹配：BF&RK">
-      <i class="fa fa-chevron-left"></i> 字符串匹配：BF&RK
+    <a href="/2020/06/01/%E9%80%92%E5%BD%92%E6%A0%91/" rel="prev" title="递归树">
+      <i class="fa fa-chevron-left"></i> 递归树
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/11/%E5%9B%BE/" rel="next" title="图">
-      图 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/06/02/2%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E8%83%8C%E5%90%8E%E7%9A%84%E7%BB%8F%E5%85%B8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" rel="next" title="搜索引擎背后的经典数据结构和算法">
+      搜索引擎背后的经典数据结构和算法 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -395,7 +424,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树定义"><span class="nav-number">1.</span> <span class="nav-text">Trie树定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现Trie树"><span class="nav-number">2.</span> <span class="nav-text">实现Trie树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树缺点及优化"><span class="nav-number">3.</span> <span class="nav-text">Trie树缺点及优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树的使用场景"><span class="nav-number">4.</span> <span class="nav-text">Trie树的使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他问题"><span class="nav-number">5.</span> <span class="nav-text">其他问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-数据库介绍"><span class="nav-number">1.</span> <span class="nav-text">Redis 数据库介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串（string）"><span class="nav-number">2.</span> <span class="nav-text">字符串（string）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列表（list）"><span class="nav-number">3.</span> <span class="nav-text">列表（list）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字典（hash）"><span class="nav-number">4.</span> <span class="nav-text">字典（hash）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集合（set）"><span class="nav-number">5.</span> <span class="nav-text">集合（set）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序集合（sortedset）"><span class="nav-number">6.</span> <span class="nav-text">有序集合（sortedset）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构持久化（对象持久化）"><span class="nav-number">7.</span> <span class="nav-text">数据结构持久化（对象持久化）</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

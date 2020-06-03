@@ -18,20 +18,20 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="字典树，处理字符串前缀匹配的数据结构">
+  <meta name="description" content="搜集、分析、索引、查询">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Trie树">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/05/10/Trie%E6%A0%91/index.html">
+<meta property="og:title" content="搜索引擎背后的经典数据结构和算法">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/06/02/2%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E8%83%8C%E5%90%8E%E7%9A%84%E7%BB%8F%E5%85%B8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="字典树，处理字符串前缀匹配的数据结构">
+<meta property="og:description" content="搜集、分析、索引、查询">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-05-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-11T10:41:16.890Z">
+<meta property="article:published_time" content="2020-06-02T06:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-03T03:26:22.549Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="Trie">
+<meta property="article:tag" content="搜索引擎">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/05/10/Trie%E6%A0%91/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/06/02/2%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E8%83%8C%E5%90%8E%E7%9A%84%E7%BB%8F%E5%85%B8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -44,7 +44,7 @@
   };
 </script>
 
-  <title>Trie树 | Notes</title>
+  <title>搜索引擎背后的经典数据结构和算法 | Notes</title>
   
 
 
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/05/10/Trie%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/06/02/2%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E8%83%8C%E5%90%8E%E7%9A%84%E7%BB%8F%E5%85%B8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Trie树
+          搜索引擎背后的经典数据结构和算法
         </h1>
 
         <div class="post-meta">
@@ -224,14 +224,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-05-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-10T00:00:00+08:00">2020-05-10</time>
+              <time title="创建时间：2020-06-02 14:00:00" itemprop="dateCreated datePublished" datetime="2020-06-02T14:00:00+08:00">2020-06-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-11 18:41:16" itemprop="dateModified" datetime="2020-05-11T18:41:16+08:00">2020-05-11</time>
+                <time title="修改时间：2020-06-03 11:26:22" itemprop="dateModified" datetime="2020-06-03T11:26:22+08:00">2020-06-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,16 +256,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>3.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>5 分钟</span>
             </span>
-            <div class="post-description">字典树，处理字符串前缀匹配的数据结构</div>
+            <div class="post-description">搜集、分析、索引、查询</div>
 
         </div>
       </header>
@@ -276,41 +276,63 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="Trie树定义"><a href="#Trie树定义" class="headerlink" title="Trie树定义"></a>Trie树定义</h3><p>Tire树-字典树。一个树形结构，专门处理字符串匹配的数据结构，用来解决在一组字符串集合中快速查找某个字符串的问题。  </p>
-<p>Trie树的本质，利用字符串之间的公共前缀，将重复的前缀合并在一起。<br>根节点不包含任何信息，每个节点表示一个字符串中的字符，从根节点到各个“结尾节点”（不一定都是叶子节点）的一条路径表示一个字符串。  </p>
-<p>Trie树的构造过程的每一步都相当于往Trie树中插入一个字符串，当所有字符串都插入完成之后，Trie树就构造好了。<br>在Trie树中查找一个字符串的时候，将要查找的字符串分割成单个的字符，然后从Trie树的根节点开始匹配。  </p>
-<h3 id="实现Trie树"><a href="#实现Trie树" class="headerlink" title="实现Trie树"></a>实现Trie树</h3><ol>
-<li>将字符串集合构造成Trie树（将字符串插入到Trie树）。<br>Trie树是一个多叉树，借助散列表的思想，通过一个下标与字符一一映射的数组，来存储子节点的指针。<br>假设字符串中只有从a-z这26个小写字母，在数据中下标为0的位置，存储指向子节点a的指针，下标为1的位置存储指向子节点b的指针，以此类推，下标为25的位置，存储的是指向子节点z的指针，如果某个字符的子节点不存在，在对应下标的位置存储null。</li>
-<li>在Trie树中查询一个字符串<br>在trie树中查找字符串的时候，通过字符的ASCII码减去“a”的ASCII码，迅速找到匹配的字节点的指针。  </li>
+        <p>搜索引擎大致可以分为四个部分：搜集、分析、索引、查询。<br>搜集：利用爬虫爬取网页；<br>分析：网页内容抽取、分词，构建临时索引，计算PageRank值；<br>索引：通过分析阶段得到的临时索引，构建倒排索引；<br>查询：响应用户的请求，根据倒排索引获取相关网页，计算网页排名，返回查询结果给用户。  </p>
+<h3 id="搜集"><a href="#搜集" class="headerlink" title="搜集"></a>搜集</h3><p>对搜索引擎来说，它事先并不知道网页都在哪里。搜索引擎把整个互联网看做数据结构中的有向图，把每个页面看做一个顶点。如果某个页面中包含另外一个页面的链接，就在两个顶点之间连一条有向边。可以利用图的遍历搜索算法，来遍历整个互联网中的网页。  </p>
+<p>搜索引擎采用的是<strong>广度优先搜索策略</strong>。先找一些比较知名的网页（权重比较高）的链接，作为种子网页链接，放入到队列中。爬虫按照广度优先的策略，不停的从队列中取出链接，然后去爬取对应的网页，解析出网页里包含的其他网页链接，再将解析出来的链接添加到队列中。  </p>
+<ol>
+<li><p>待爬取网页链接文件：links.bin<br> 在广度优先搜索爬取页面的过程中，爬虫会不停的解析页面链接，将其放到队列中。队列中的链接会越来越多，可能会多到内存放不下。用一个存储在磁盘中的文件-links.bin来作为广度优先搜索中的队列。爬虫从links.bin文件中，取出链接去爬取对应的页面。等爬取到网页之后，将解析出来的链接，直接存储到links.bin文件中。  </p>
+<p> 用文件存储网页链接的方式，支持断点续爬。当机器断点之后，网页链接不会丢失；当机器重启之后，还可以从之前爬取到的位置继续爬取。  </p>
+<p> 把整个页面看做一个大的字符串，然后利用字符串匹配算法，在这个大字符串中，搜索<link>这样一个网页标签，然后顺序读取<link></link>之间的字符串，就是网页链接。  </p>
+</li>
+<li><p>网页判重文件：bloom_filter.bin<br> 采用位图数据结构，使用布隆过滤器快速并且非常节省内存的实现网页的判重。  </p>
+<p> 解决机器宕机重启后，存储在内存中的布隆过滤器被清空的问题（导致已经爬取的网易会被重复爬取）。定期（每个半个小时）将布隆过滤器持久化到磁盘中，存储在bloom_filter.bin文件中。即便出现宕机，也只会丢失布隆过滤器中的部分数据，当机器重启后，可以重新读取磁盘中的bloom_filter.bin文件，将其恢复到内容中。  </p>
+</li>
+<li><p>原始网页存储文件：doc_raw.bin<br> 爬取到网页之后，需要将其存储下来，以备后面离线分析、索引之用。  </p>
+<p> 把多个网页存储在一个文件中(避免一个网页对应一个独立文件造成大量文件。同时一个文件不能太大，每个文件大小超过一定的值就创建新的文件)。每个网页之间，通过一定的表示进行分隔，方便后续读取。（网页编号 \t 网页大小 \t 网页 \r\n\r\n）  </p>
+</li>
+<li><p>网页链接及其编号的对应文件：doc_id.bin<br> 网页编号就是给每个网页分配一个唯一的ID，方便后续对网页进行分析、索引。  </p>
+<p> 可以按照网页被爬取的先后顺序，从小到大依次编号。维护一个中心的计数器，每爬取到一个网页之后，就从计数器中拿一个号码，分配给这个网页，然后计数器加一。在存储网页的同时，将网页链接跟编号之间的对应关系，存储在另一个doc_id.bin文件中。  </p>
+</li>
 </ol>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        BF算法
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> data;</span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isEndingChar = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root = <span class="keyword">new</span> TrieNode(<span class="string">'/'</span>);</span><br><span class="line">    <span class="comment">//往Trie树中插入一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">char</span>[] text)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; text.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = text[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                TrieNode newNode =<span class="keyword">new</span> TrieNode(text[i]);</span><br><span class="line">                p.children[index] = newNode;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        p.isEndingChar = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在Trie树中查找一个字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">select</span><span class="params">(<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">        TrieNode p = root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pattern.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = pattern[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span>(p.children[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            p = p.children[index];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p.isEndingChar == <span class="keyword">false</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>
-
-<p>构建Trie树的过程要扫描所有字符串，时间复杂度为O(n)，n表示虽有字符串的长度和。<br>构建好Trie树后，在其中查找字符串的时间复杂度为O(k)，k表示要查找的字符串的长度。  </p>
-<h3 id="Trie树缺点及优化"><a href="#Trie树缺点及优化" class="headerlink" title="Trie树缺点及优化"></a>Trie树缺点及优化</h3><p>用数组存储一个节点的字节点的指针，如果字符串中包含从a到z这26个字符，那每个节点都要存储一个长度为26的数组，并且数组每个元素要存储一个8或者4字节指针。浪费内存。  </p>
-<p><strong>优化</strong>：将每个节点的数组换成其他数据结构，来存储一个节点的子节点指针，有序数组、跳表、散列表、红黑树。<br>有序数组中的指针按照所指向的子节点中的字符的大小顺序排列。查询的时候，通过二分查找的方法，快速查找到某个字符应该匹配的子节点的指针。但是在往Trie树中插入一个字符串的时候，需要维护数组中数据的有序性。  </p>
-<p><strong>变体</strong>：缩点优化，对于只有一个子节点的节点，而且此节点不是一个串的结束节点，可以将此节点与子节点合并。节省空间增加编码难度。  </p>
-<p><strong>扩展</strong>：后缀树、DAT（双数组trie树）。  </p>
-<h3 id="Trie树的使用场景"><a href="#Trie树的使用场景" class="headerlink" title="Trie树的使用场景"></a>Trie树的使用场景</h3><p>动态数据高效操作的数据结构：散列表、红黑树、跳表  </p>
+<p><strong>搜集阶段得到四个文件：links.bin和bloom_filter.bin是爬虫自身所用。<br>doc_raw.bin和doc_id.bin作为搜集阶段的成果，供后面的分析、索引、查询使用。</strong>  </p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>网页爬取下来之后，需要对网页进行离线分析。分析阶段主要包含两个步骤：抽取网页文本信息、分词并创建临时索引。  </p>
+<ol>
+<li><p>抽取网页文本信息<br> 网页是半结构化数据，里面夹杂着各种标签、JavaScript代码、CSS样式。对于搜索引擎来说，它只关心网页中的文本信息，也就是网页显示在浏览器中时，能被用户肉眼看到的那部分信息。  </p>
+<p> 去掉JavaScript代码、CSS格式以及下拉框中的内容。（script、style、option标签之间的内容，利用AC自动机多模式串匹配算法处理，）  </p>
+<p> 去掉所有HTML标签。  </p>
+</li>
+<li><p>分词并创建临时索引<br> 对于英文网页，只需要通过空格、标点符号等分隔符，将每个电磁分割开来就可以。</p>
+<p> 对于中文来说，采用基于字典和规则的分词方法。<br> 字典也叫词库，里面包含大量常用的词语，借助词库并采用最长匹配原则（匹配尽可能长的词语），来对文本进行分词。<br> 将词库中的单词，构建成Trie树结构，然后拿网页文本在Trie树中匹配。  </p>
+<p> 每个网页的文本信息在分词完成之后，得到一组单词列表。把单词与网页之间的对应关系，写入到一盒临时索引文件中tmp_index.bin，用来构建倒排索引。（单词编号 \t 网页编号 \r\n）  </p>
+<p> 在临时索引文件中，存储的是单词编号term_id，而非单词本身，主要是为了节省存储空间。<br> 给单词编号的方式，跟给网页编号类似。维护一个计数器，每当网页文本信息中分割出一个新的单词的时候，就从计数器中取一个编号，分配给他，然后计数器加一。<br> 在这个过程中使用散列表，记录已经变过号的单词。在对网页文本信息分词的过程中，拿分割出来的单词，先到散列表中查找，如果找到就直接使用已有的编号；如果没有找到，再去计数器中拿号码，并且将这个新单词以及编号添加到散列表中。  </p>
+<p> 当所有的网页处理完成之后，再将单词跟编号之间的对应关系，吸入到磁盘文件中，命名为term_id.bin。  </p>
+</li>
+</ol>
+<p><strong>分析阶段得到两个文件：临时索引文件tmp_index.bin和单词编号文件term_id.bin。</strong>  </p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>索引阶段主要负责将分析阶段产生的临时索引，构建成倒排索引—Inverted index。倒排索引中记录了每个单词以及包含它的网页列表。（term_id缩写，单词编号 \t did1,…didx表示包含单词的网页编号列表 \r\n）  </p>
+<blockquote>
+<p>正排-文档中包含哪些单词<br>倒排-单词被哪些文档包含  </p>
+</blockquote>
+<p>采用多路归并排序的方法，通过临时索引文件，构建出倒排索引文件。  </p>
+<p>先对临时索引文件，按照单词编号的大小进行排序。采用归并排序的处理思想，将其分割成多个小文件，先对每个小文件独立排序，最后再合并在一起。（可直接用MapReduce来处理）  </p>
+<p>临时索引文件排序完成之后，相同的单词被排列到了一起。只需要顺序地遍历遍历排好序的临时索引文件，就能将每个单词对应的网页编号列表找出来，然后把他们存储在倒排索引文件中。  </p>
+<p>除了倒排文件外，需要一个记录每个单词编号在倒排索引文件中的偏移位置的文件—term_offset.bin。这个文件可以快速的查找某个单词编号在倒排索引中存储的位置，进而快速的从倒排索引中读取单词编号对应的网页编号列表。（单词编号 \t 偏移位置 \r\n）  </p>
+<p><strong>索引阶段得到两个文件：倒排索引文件index.bin和记录单词编号在索引文件中的偏移位置的文件term_offset.bin。</strong>  </p>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><p>利用之前产生的几个文件，实现最终的用户搜索功能。  </p>
 <ul>
-<li>字符串中包含的字符集不能太大。浪费存储空间。  </li>
-<li>字符串的前缀重合比较多。  </li>
-<li>需要从零开始实现一个Trie树。  </li>
-<li>用到了指针，数据块不连续，堆缓存不友好。  </li>
+<li>doc_id.bin:记录网页链接和编号之间的对应关系。  </li>
+<li>term_id.bin:记录单词和编号之间的对应关系。  </li>
+<li>index.bin:倒排索引文件，记录每个单词编号以及对应包含它的网页编号列表。  </li>
+<li>term_offset.bin:记录每个单词编号在倒排索引文件中的偏移位置。  </li>
 </ul>
-<p>Trie树不适合精确匹配查找（散列表、红黑树），比较适合查找前缀匹配的字符串。搜索引擎提示关键词、输入法自动补全、IDE代码编辑器自动补全、浏览器啊网址输入自动补全、屏蔽字/敏感词检测。  </p>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><ul>
-<li>复杂中文实现  </li>
-<li>前缀匹配过多，选择展示  </li>
-<li>拼写错误，校正提示  </li>
-</ul>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>Apache Commons<br>PatriciaTrie<br>AbstractPatriciaTrie  </p>
+<p>除了倒排索引文件比较大之外其他都比较小。将其他三个文件都加载到内存中，并组织成散列表这种数据结构。  </p>
+<p>当用户在搜索框中，输入某个查询文本的时候，先对用户输入的文本进行分词处理。假设分词之后，得到k个单词。  </p>
+<p>拿这k个单词，去term_id.bin对应的散列表中，查找对应的单词编号，得到这k个单词对应的单词编号。  </p>
+<p>拿这k个单词编号，去term_offset.bin对应的散列表中，查找每个单词编号在倒排索引文件中的偏移位置，得到k个偏移位置。  </p>
+<p>拿这k个偏移位置，去倒排索引index.bin中，查找k个单词对应的包含它的网页编号列表，得到k个网页编号列表。  </p>
+<p>针对k个网页编号列表，统计每个网页编号出现的次数。对统计结果，按照出现的次数的多少，从小到大排序。出现次数越多，说明包含越多的用户查询单词。  </p>
+<p>经过这一系列查询，得到一组排好序的网页编号，拿着网页编号，去doc_id.bin文件中查找对应的网页链接，分页显示给用户。  </p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>计算网页权重PageRank算法<br>计算查询结果排名th-idf模型<br>搜索结果展示摘要信息和网页快照  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -321,7 +343,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Trie/" rel="tag"><i class="fa fa-tag"></i> Trie</a>
+              <a href="/tags/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/" rel="tag"><i class="fa fa-tag"></i> 搜索引擎</a>
           </div>
 
         
@@ -330,13 +352,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%EF%BC%9ABF&RK/" rel="prev" title="字符串匹配：BF&RK">
-      <i class="fa fa-chevron-left"></i> 字符串匹配：BF&RK
+    <a href="/2020/06/02/1Redis%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AF%B9%E5%BA%94%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="prev" title="Redis常用数据类型对应的数据结构">
+      <i class="fa fa-chevron-left"></i> Redis常用数据类型对应的数据结构
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/05/11/%E5%9B%BE/" rel="next" title="图">
-      图 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -395,7 +414,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树定义"><span class="nav-number">1.</span> <span class="nav-text">Trie树定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现Trie树"><span class="nav-number">2.</span> <span class="nav-text">实现Trie树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树缺点及优化"><span class="nav-number">3.</span> <span class="nav-text">Trie树缺点及优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie树的使用场景"><span class="nav-number">4.</span> <span class="nav-text">Trie树的使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他问题"><span class="nav-number">5.</span> <span class="nav-text">其他问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#搜集"><span class="nav-number">1.</span> <span class="nav-text">搜集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引"><span class="nav-number">3.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询"><span class="nav-number">4.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展"><span class="nav-number">5.</span> <span class="nav-text">扩展</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
