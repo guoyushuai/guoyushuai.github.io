@@ -18,21 +18,21 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
+  <meta name="description" content="哈希算法生成短网址&amp;ID生成器生成短网址">
 <meta property="og:type" content="article">
-<meta property="og:title" content="复杂度分析">
-<meta property="og:url" content="https://guoyushuai.github.io/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="短网址系统使用的数据结构和算法">
+<meta property="og:url" content="https://guoyushuai.github.io/2020/06/04/5%E7%9F%AD%E7%BD%91%E5%9D%80%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
+<meta property="og:description" content="哈希算法生成短网址&amp;ID生成器生成短网址">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-05T15:36:42.097Z">
+<meta property="article:published_time" content="2020-06-04T09:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-05T10:06:57.186Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="时间复杂度">
-<meta property="article:tag" content="空间复杂度">
+<meta property="article:tag" content="MurmurHash">
+<meta property="article:tag" content="短网址">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/">
+<link rel="canonical" href="https://guoyushuai.github.io/2020/06/04/5%E7%9F%AD%E7%BD%91%E5%9D%80%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>复杂度分析 | Notes</title>
+  <title>短网址系统使用的数据结构和算法 | Notes</title>
   
 
 
@@ -202,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/04/15/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/2020/06/04/5%E7%9F%AD%E7%BD%91%E5%9D%80%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -215,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          复杂度分析
+          短网址系统使用的数据结构和算法
         </h1>
 
         <div class="post-meta">
@@ -225,14 +225,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-04-15 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-15T00:00:00+08:00">2020-04-15</time>
+              <time title="创建时间：2020-06-04 17:00:00" itemprop="dateCreated datePublished" datetime="2020-06-04T17:00:00+08:00">2020-06-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-05 23:36:42" itemprop="dateModified" datetime="2020-05-05T23:36:42+08:00">2020-05-05</time>
+                <time title="修改时间：2020-06-05 18:06:57" itemprop="dateModified" datetime="2020-06-05T18:06:57+08:00">2020-06-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,16 +257,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>932</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
-            <div class="post-description">复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系</div>
+            <div class="post-description">哈希算法生成短网址&ID生成器生成短网址</div>
 
         </div>
       </header>
@@ -277,56 +277,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="时间复杂度与空间复杂度"><a href="#时间复杂度与空间复杂度" class="headerlink" title="时间复杂度与空间复杂度"></a>时间复杂度与空间复杂度</h2><p>复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系。  </p>
-<h3 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h3><p>代码执行时间随数据规模增长的变化趋势，叫作渐进时间复杂度（asymptotic time complexity），简称<strong>时间复杂度</strong>。  </p>
-<p>所有代码的执行时间T(n)与每行代码的执行次数成正比  </p>
-<p><code>T(n) = O(f(n))</code>  </p>
+        <p>短网址服务的核心功能，就是把原始的长网址转化成短网址；当用户点击短网址的时候，短网址服务会将浏览器重定向为原始网址。  </p>
+<h3 id="哈希算法生成短网址"><a href="#哈希算法生成短网址" class="headerlink" title="哈希算法生成短网址"></a>哈希算法生成短网址</h3><p>哈希算法可以将一个不管多长的字符串，转化成一个长度固定的哈希值。<br>生成短网址，不需要考虑反向解密的难度，只需要关心哈希算法的计算速度和冲突概率。  </p>
+<p>MurmurHash算法提供了两种长度的哈希值，一种是32bits，一种是128bits。对原始网址进行hash计算之后，得到的哈希值再品尚短网址服务的域名，就构成最终的短网址。  </p>
+<h4 id="让短网址更短"><a href="#让短网址更短" class="headerlink" title="让短网址更短"></a>让短网址更短</h4><p>将10进制的哈希值，转化成更高进制的哈希值。<br>16进制中，用A~E来表示10~15。在网址URL中，常用的合法字符有0~9、a~z、A~Z这样62个字符。so将10进制的哈希值转化成62进制。（10进制除以62取余，余数相应字符）  </p>
+<h4 id="解决哈希冲突问题"><a href="#解决哈希冲突问题" class="headerlink" title="解决哈希冲突问题"></a>解决哈希冲突问题</h4><p>一般情况下，保存短网址跟原始网址之间的对应关系（数据库），以便后续用户在访问短网址的时候，可以根据对应关系，查找到原始网址。  </p>
+<p>当有一个新的原始网址需要生成短网址的时候，先利用MurmurHash算法生成短网址，然后拿生成的短网址在数据库中查找。如果没有找到相同的短网址，表明此短网址没有冲突，将对应关系存到数据库，并将短网址返回给用户。  </p>
+<p>如果在数据库中找到了相同的短网址，将其对应的原始网址也取出来，跟正在处理的原始网址对比，相同则直接用；若不同则说明发生哈希冲突。<br>给原始网址拼接一串特殊的字符（DUPLICATED），重新计算哈希值，极端情况再次出现冲突就继续拼接字符串。最终把哈希值和原始网址拼接了特殊字符串之后的文本分别存在数据库中。  </p>
+<p>当用户访问短网址的时候，短网址服务先通过短网址在数据库中查找对应的原始网址。如果原始网址中有凭借特殊字符，就先将特殊字符去掉再返回给浏览器。  </p>
+<h4 id="优化哈希算法性能"><a href="#优化哈希算法性能" class="headerlink" title="优化哈希算法性能"></a>优化哈希算法性能</h4><p>给<strong>短网址字段添加B+树索引</strong>。提高通过短网址查询原始网址的速度。  </p>
+<p>在短网址生成的过程中，会跟数据库打两次交到，执行两条SQL语句。<br>通过短网址查询短网址与原始网址的对应关系；将新生成的短网址和原始网址之间的对应关系存储到数据库。<br>给数据库中的<strong>短网址字段添加唯一索引</strong>。当有新的原始网址需要生成短网址时，直接将生成的短网址与对应的原始网址尝试存储到数据库中。如果数据库能将数据正常写入，则说明没有违反唯一索引，新生成的短网址没有冲突。如果范围违反唯一索引异常，则按正常的“查询-写入过程”。  </p>
+<p>将已经生成的<strong>短网址构建成布隆过滤器</strong>。当有新的短网址生成的时候，先拿短网址在布隆过滤器中查找。如果查找的结果是不存在的，说明没有冲突，只需要执行写入的SQL语句。  </p>
+<h3 id="ID生成器生成短网址"><a href="#ID生成器生成短网址" class="headerlink" title="ID生成器生成短网址"></a>ID生成器生成短网址</h3><p>维护一个ID自增生成器，可以生成自增的整数ID。当短网址服务接收到一个原始网址转化成短网址的请求之后，它先从ID生成器中取一个号码，然后将其转化成62进制表示法，拼接到短网址服务的域名后面，就形成了最终的短网址。最后将生成的短网址和对应的原始网址存储到数据库中。  </p>
+<h4 id="相同的原始网址可能会对应不同的短网址"><a href="#相同的原始网址可能会对应不同的短网址" class="headerlink" title="相同的原始网址可能会对应不同的短网址"></a>相同的原始网址可能会对应不同的短网址</h4><p>每次新来一个原始网址，就生成一个新的短网址，会导致两个相同的原始网址生成了不同的短网址。解决方案：  </p>
+<ul>
+<li><p>不做处理。相同的原始网址对应不同的短网址，可以接受。大部分短网址的应用场景中，用户只关心短网址能否正确的跳转到原始网址，并不关心短网址长什么样。同一个原始网址，两次生成的短网址不一样，并不会影响到用户的使用。  </p>
+</li>
+<li><p>借助哈希算法生成短网址的处理思想。要给一个原始网址生成短网址的时候，先拿原始网址在数据库中查找，看数据库中是否已经存在相同的原始网址。若存在就取出对应的短网址，直接返回给用户。  </p>
 <blockquote>
-<p>其中T(n)表示算法执行的总时间，f(n)表示每行代码执行总次数，而n往往表示数据的规模。常量阶、低阶、系数对增长趋势不产生决定性影响，在做复杂度分析时可忽略这些项。</p>
-</blockquote>
-<h4 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h4><ol>
-<li>单段代码看高频：比如循环。</li>
-<li>多段代码取最大：比如一段代码中有单循环和多重循环，那么取多重循环的复杂度。</li>
-<li>嵌套代码求乘积：比如递归、多重循环等。</li>
-<li>多个规模求加法：比如方法有两个参数控制两个循环的次数，那么这是就取二者复杂度相加。</li>
-</ol>
-<h4 id="级别"><a href="#级别" class="headerlink" title="级别"></a>级别</h4><p><em>多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用，按照多项式的比例增长。</p>
-<ol>
-<li>常量阶 O(1)  </li>
-<li>对数阶 O(logn)  </li>
-<li>线性阶 O(n)  </li>
-<li>线性对数阶 O(nlogn)  </li>
-<li>O(n<sup>2</sup>)平方阶、O(n<sup>3</sup>)立方阶……</li>
-</ol>
-<p><em>非多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用暴增，这类算法的性能极差</p>
-<ol start="6">
-<li>指数阶 O(2<sup>n</sup>)  </li>
-<li>阶乘阶 O(n!)  </li>
-</ol>
-<h3 id="空间复杂度分析"><a href="#空间复杂度分析" class="headerlink" title="空间复杂度分析"></a>空间复杂度分析</h3><p><strong>空间复杂度</strong>全称就是渐进空间复杂度（asymptotic space complexity），表示算法的存储空间与数据规模之间的增长关系。  </p>
-<p>类似于时间复杂度</p>
-<h3 id="其他复杂度"><a href="#其他复杂度" class="headerlink" title="其他复杂度"></a>其他复杂度</h3><ol>
-<li><p>最好情况时间复杂度（best case time complexity）  </p>
-<blockquote>
-<p>在最理想的情况下，执行这段代码的时间复杂度  </p>
+<p>需要给数据库中的短网址和原始网址两个字段都添加索引。</p>
 </blockquote>
 </li>
-<li><p>最坏情况时间复杂度（worst case time complexity）</p>
-<blockquote>
-<p>在最糟糕的情况下，执行这段代码的时间复杂度  </p>
-</blockquote>
+</ul>
+<h4 id="高性能ID生成器"><a href="#高性能ID生成器" class="headerlink" title="高性能ID生成器"></a>高性能ID生成器</h4><p>低性能：数据库自增字段、计数器等。  </p>
+<p>高性能：</p>
+<ul>
+<li><p>借助Disruptor的思想，给ID生成器装多个前置发号器。批量的给每个前置发号器发送ID号码。当接收到短网址生成请求时，就选择一个前置发号器来取号码，通过多个前置发号器，提高并发发号能力。  </p>
 </li>
-<li><p>平均情况时间复杂度（average case time complexity）</p>
-<blockquote>
-<p>加权平均时间复杂度/期望时间复杂度<br>用代码在所有情况下执行的次数的加权平均值表示</p>
-</blockquote>
+<li><p>实现多个ID生成器同时服务。为了保证每个ID生成器生成的ID不重复。要求每个ID生成器按照一定的规则，生成ID号码。（第一个ID生成器只能生成尾号为0的ID，第二个只能生成尾号为1的ID，以此类推）。</p>
 </li>
-<li><p>均摊时间复杂度（amortized time complexity）</p>
-<blockquote>
-<p>摊还分析、平摊分析。一种特殊的平均时间复杂度。<br>在代码执行的所有复杂度情况中绝大部分是低级别的复杂度，个别情况是高级别复杂度且发生具有时序关系时，可以将个别高级别复杂度均摊到低级别复杂度上。基本上均摊结果等于低级别复杂度。（重点1、高级别少数2、低高出现具有时序规律）</p>
-</blockquote>
-</li>
-</ol>
+</ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -337,8 +317,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 时间复杂度</a>
-              <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 空间复杂度</a>
+              <a href="/tags/MurmurHash/" rel="tag"><i class="fa fa-tag"></i> MurmurHash</a>
+              <a href="/tags/%E7%9F%AD%E7%BD%91%E5%9D%80/" rel="tag"><i class="fa fa-tag"></i> 短网址</a>
           </div>
 
         
@@ -347,13 +327,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/15/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2020/06/03/4%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%8F%A3%E9%89%B4%E6%9D%83%E9%99%90%E6%B5%81%E8%83%8C%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" rel="prev" title="微服务接口鉴权限流背后的数据结构和算法">
+      <i class="fa fa-chevron-left"></i> 微服务接口鉴权限流背后的数据结构和算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/17/%E6%95%B0%E7%BB%84/" rel="next" title="数组">
-      数组 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -412,7 +389,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度与空间复杂度"><span class="nav-number">1.</span> <span class="nav-text">时间复杂度与空间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度分析"><span class="nav-number">1.1.</span> <span class="nav-text">时间复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原则"><span class="nav-number">1.1.1.</span> <span class="nav-text">原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#级别"><span class="nav-number">1.1.2.</span> <span class="nav-text">级别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间复杂度分析"><span class="nav-number">1.2.</span> <span class="nav-text">空间复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他复杂度"><span class="nav-number">1.3.</span> <span class="nav-text">其他复杂度</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#哈希算法生成短网址"><span class="nav-number">1.</span> <span class="nav-text">哈希算法生成短网址</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#让短网址更短"><span class="nav-number">1.1.</span> <span class="nav-text">让短网址更短</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决哈希冲突问题"><span class="nav-number">1.2.</span> <span class="nav-text">解决哈希冲突问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优化哈希算法性能"><span class="nav-number">1.3.</span> <span class="nav-text">优化哈希算法性能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ID生成器生成短网址"><span class="nav-number">2.</span> <span class="nav-text">ID生成器生成短网址</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#相同的原始网址可能会对应不同的短网址"><span class="nav-number">2.1.</span> <span class="nav-text">相同的原始网址可能会对应不同的短网址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高性能ID生成器"><span class="nav-number">2.2.</span> <span class="nav-text">高性能ID生成器</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
