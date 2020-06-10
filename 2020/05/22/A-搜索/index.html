@@ -26,7 +26,7 @@
 <meta property="og:description" content="接近于最短路径的次优路线">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-22T07:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-23T11:26:00.203Z">
+<meta property="article:modified_time" content="2020-06-10T05:56:20.912Z">
 <meta property="article:author" content="Magic Candy">
 <meta property="article:tag" content="图">
 <meta property="article:tag" content="A*搜索">
@@ -132,17 +132,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">41</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">49</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">51</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -232,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-23 19:26:00" itemprop="dateModified" datetime="2020-05-23T19:26:00+08:00">2020-05-23</time>
+                <time title="修改时间：2020-06-10 13:56:20" itemprop="dateModified" datetime="2020-06-10T13:56:20+08:00">2020-06-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,7 +257,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.7k</span>
+              <span>3.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -280,7 +280,7 @@
         <p>A*算法是对Dijkstra算法的优化和改造。属于一种<strong>启发式搜索算法</strong>。  </p>
 <p>常见的启发式搜索算法：IDA*算法、蚁群算法、遗传算法、模拟退火算法。  </p>
 <p>启发式搜索算法利用估价函数，避免“跑偏”，贪心的朝着最有可能到达终点的方向前进。这种算法找出的路线，并不是最短路线。但是能很好的平衡路线质量和执行效率。  </p>
-<h3 id="算法解析"><a href="#算法解析" class="headerlink" title="算法解析"></a>算法解析</h3><p>Dijkstra算法类似BFS算法，每次找到跟起点最近的顶点，往外扩展。<br>在Dijkstra算法的实现思路中，用一个优先级队列，来记录已经遍历到的顶点以及这个顶点与起点的路径长度。顶点与起点路径长度越小，就越先被从优先级队列中取出来扩展。尽管找到是从s到t的路线，但是最先被搜索的路线可能是与期望路线的反方向。  </p>
+<h3 id="算法解析"><a href="#算法解析" class="headerlink" title="算法解析"></a>算法解析</h3><p>Dijkstra算法类似BFS算法，每次找到跟起点最近的顶点，往外扩展，有些盲目（离起点最近的点可能离终点最远）。<br>在Dijkstra算法的实现思路中，用一个优先级队列，来记录已经遍历到的顶点以及这个顶点与起点的路径长度。顶点与起点路径长度越小，就越先被从优先级队列中取出来扩展。尽管找到是从s到t的路线，但是最先被搜索的路线可能是与期望路线的反方向。  </p>
 <p>按照顶点与起点的路径长度的大小，来安排出队列顺序，与起点越近的顶点，就会越早出队列。并没有考虑到这个顶点到终点的距离，所以尽管顶点离起始顶点最近，但离终点却越来越远。  </p>
 <p>当遍历到某个顶点的时候，从起点走到这个顶点的路径长度是确定的，记作g(i)(i表示顶点编号)。<br>这个顶点跟终点之间的直线距离-欧几里得距离，可以近似的估计顶点跟 终点的路径长度，记作h(i)(i表示顶点编号)—<strong>启发函数</strong>。更进一步使用两点之间横纵坐标的距离之和-曼哈顿距离来简化。  </p>
 <p>原来只是单纯的通过顶点与起点之间的路径长度g(i)，来判断谁先出队列；现在加上顶点到终点的路径长度估计值，通过两者之和f(i)=g(i)+h(i)—<strong>估价函数</strong>。综合两部分，能有效避免跑偏。  </p>
@@ -346,8 +346,8 @@
       <i class="fa fa-chevron-left"></i> 最短路径
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/23/B+%E6%A0%91/" rel="next" title="B+树">
-      B+树 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/05/23/%E8%B7%B3%E8%A1%A8/" rel="next" title="跳表">
+      跳表 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -423,20 +423,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
