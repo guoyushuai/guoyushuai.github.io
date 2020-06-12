@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="针对有权图的搜索算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最短路径">
+<meta property="og:url" content="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="针对有权图的搜索算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-21T06:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-10T05:54:37.609Z">
+<meta property="article:author" content="Magic Candy">
+<meta property="article:tag" content="图">
+<meta property="article:tag" content="最短路径">
+<meta property="article:tag" content="Dijkstra">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>最短路径 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">53</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最短路径
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-21 14:00:00" itemprop="dateCreated datePublished" datetime="2020-05-21T14:00:00+08:00">2020-05-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-10 13:54:37" itemprop="dateModified" datetime="2020-06-10T13:54:37+08:00">2020-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+            <div class="post-description">针对有权图的搜索算法</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="算法解析"><a href="#算法解析" class="headerlink" title="算法解析"></a>算法解析</h3><p><strong>建模</strong>：将复杂的场景抽象成具体的数据结构。  </p>
+<p>把地图抽象成图。把每个岔路口看做一个顶点，岔路口与岔路口之间的路看作一条边，路的长度就是边的权重。如果路是单行道，就在两个顶点之间画一条有向边；如果路是双行道，就在两个顶点之间画两条方向不同的边。整个地图被抽象成一个有向有权图。  </p>
+<p>地图中起点到终点的最短路径问题转化为在一个有向有权图中，求两个顶点间的最短路径。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        有向有权图
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Graph</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> LinkedList&lt;Edge&gt; adj[];<span class="comment">//邻接表</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> v;<span class="comment">//顶点个数</span></span><br><span class="line"></span><br><span class="line">    publicGraph(<span class="keyword">int</span> v) &#123;</span><br><span class="line">        <span class="keyword">this</span>.v = v;</span><br><span class="line">        <span class="keyword">this</span>.adj = <span class="keyword">new</span> LinkedList[v];<span class="comment">//v个链表</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; v; ++i) &#123;</span><br><span class="line">            <span class="keyword">this</span>.adj[i] = <span class="keyword">new</span> LinkedList&lt;&gt;();<span class="comment">//每个编号的顶点都存了一个链表</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//添加一条边</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addEdge</span><span class="params">(<span class="keyword">int</span> s, <span class="keyword">int</span> t, <span class="keyword">int</span> w)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.add[s].add(<span class="keyword">new</span> Edge(s,t,w));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Edge</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> sid;<span class="comment">//边的起始顶点编号</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> tid;<span class="comment">//边的终止顶点编号</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> w;<span class="comment">//权重</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Edge</span><span class="params">(<span class="keyword">int</span> sid, <span class="keyword">int</span> tid, <span class="keyword">int</span> w)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.sid = sid;</span><br><span class="line">            <span class="keyword">this</span>.tid = sid;</span><br><span class="line">            <span class="keyword">this</span>.w = w;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Vertex</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> id;<span class="comment">//顶点编号ID</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> dist;<span class="comment">//从起始顶点到这个顶点的距离</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Vertex</span><span class="params">(<span class="keyword">int</span> id, <span class="keyword">int</span> dist)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.id = id;</span><br><span class="line">            <span class="keyword">this</span>.dist = dist;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>最短路径算法-单源最短路径算法(一个顶点到一个顶点)。  </p>
+<blockquote>
+<p>将每个顶点到起始顶点的距离初始化为无穷，然后从起始点开始，将其加入一个优先级队列中，从优先级队列中取出到源点距离最小的顶点，然后比较其周围顶点离源点的距离是否大于其到源点的距离+其到周围顶点的距离，如果大于的话，更新周围顶点到源点的距离为较小的值以及其前序节点，并将其加入优先级队列中(如果已经加入过，就更新)，再取出优先级队列中的距离最小值，循环往复，直到取出终止顶点t，或者优先级队列为空。此时倒序输出终止顶点t的前序节点，前序节点的前序节点。。。直到前序节点为起始顶点s，此路径即为最短路径。  </p>
+</blockquote>
+<p>Dijkstra算法：<br>动态规划算法，求得的解是全局最优解。  </p>
+<p>Dijkstra算法类似BFS算法，每次找到跟起点最近的顶点，往外扩展。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        Dijkstra算法
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//带更新数据接口的优先级队列</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">PriorityQueue</span> </span>&#123;</span><br><span class="line">    <span class="comment">//根据vertex.dist构建小顶堆</span></span><br><span class="line">    <span class="keyword">private</span> Vertex[] nodes;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PriorityQueue</span><span class="params">(<span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.nodes = <span class="keyword">new</span> Vertex[v+<span class="number">1</span>];<span class="comment">//从下标1开始存数据</span></span><br><span class="line">        <span class="keyword">this</span>.count = v;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Vertex <span class="title">poll</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Vertex vertex)</span> </span>&#123;&#125;</span><br><span class="line">    <span class="comment">//更新结点的值，并且从下往上堆化，重新符合堆的定义。时间复杂度O(logn)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Vertex vertex)</span> </span>&#123;</span><br><span class="line">        Vertex v = nodes[vertex.id];</span><br><span class="line">        v.dist = vertex.dist;</span><br><span class="line">        <span class="comment">//todo 堆化</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//从顶点s到顶点t的最短路径</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> s, <span class="keyword">int</span> t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] predecessor = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="keyword">this</span>.v];<span class="comment">//还原最短路径</span></span><br><span class="line">    Vertex[] vertexes = <span class="keyword">new</span> Vertex[<span class="keyword">this</span>.v];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.v; +=i) &#123;</span><br><span class="line">        vertexes[i] = <span class="keyword">new</span> Vertex(i, Integer.MAX_VALUE);</span><br><span class="line">    &#125;</span><br><span class="line">    PriorityQueue queue = <span class="keyword">new</span> PriorityQueue(<span class="keyword">this</span>.v);<span class="comment">//小顶堆</span></span><br><span class="line">    <span class="keyword">boolean</span>[] inqueue = <span class="keyword">new</span> <span class="keyword">boolean</span>[<span class="keyword">this</span>.v];<span class="comment">//标记是否进入过队列</span></span><br><span class="line">    vertexes[s].dist = <span class="number">0</span>;</span><br><span class="line">    queue.add(vertexes[s]);</span><br><span class="line">    inqueue[s] = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        Vertex minVertex = queue.poll();<span class="comment">//取堆顶元素并删除</span></span><br><span class="line">        <span class="keyword">if</span>(minVertex.id == t) <span class="keyword">break</span>;<span class="comment">//最短路径产生不在循环</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; adj[minVertex.id].size(); ++i) &#123;</span><br><span class="line">            Edge e = adj[minVertex.id].get(i);<span class="comment">//取出一条minVertex相连的边</span></span><br><span class="line">            Vertex nextVertex = vertexes[e.tid];<span class="comment">//minVertex-&gt;nextVertex</span></span><br><span class="line">            <span class="keyword">if</span>(minVertex.dist + e.w &lt; nextVertex.dist) &#123;<span class="comment">//更新next的dist</span></span><br><span class="line">                nextVertex.dist = minVertex.dist + e.w;</span><br><span class="line">                predecessor[nextVertex.id] = minVertex.id;</span><br><span class="line">                <span class="keyword">if</span>(inqueue[nextVertex.is] == <span class="keyword">true</span>) &#123;</span><br><span class="line">                    queue.update(nextVertex);<span class="comment">//更新队列中的dist值，自动更新位置(堆化)</span></span><br><span class="line">                    <span class="comment">//queue.remove(nextVertex);</span></span><br><span class="line">                    <span class="comment">//queue.add(nextVertex);</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    queue.add(nextVertex);</span><br><span class="line">                    inqueue[nextVertex.id] = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//输出最短路径</span></span><br><span class="line">    System.out.print(s);</span><br><span class="line">    print(s,t,predecessor);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">int</span> s, <span class="keyword">int</span> t, <span class="keyword">int</span>[] predecessor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s == t) <span class="keyword">return</span>;</span><br><span class="line">    print(s, predecessor[t], predecessor);</span><br><span class="line">    System.out.print(<span class="string">"-&gt;"</span> + t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>用vertexes数组，记录从起始顶点到每个顶点的距离(dist)。<br>起始将所有顶点的dist都初始化为无穷大(Integer.MAX_VALUE)。把起始顶点的dist值初始化为0，然后将其放到优先级队列中。  </p>
+<p>从优先级队列中取出dist最小的顶点minVertex，然后考察这个顶点可达的所有顶点(nextVertex)。如果minVertex的dist值加上minVertex与nextVertex之间边的权重w小于nextVertex。把nextVertex的dist更新为minVertex的dist值加上w。然后把nextVertex加入到优先级队列中。重复这个过程，直到找到终止顶点t或者队列为空。  </p>
+<blockquote>
+<p>predecessor数组的作用是为了还原最短路径，它记录每个顶点的前驱顶点。最后通过递归的方式，将这个路径打印出来（深度广度优先搜索）。  </p>
+</blockquote>
+<blockquote>
+<p>inqueue数组是为了避免将一个顶点多次添加到优先级队列中。更新了某个顶点的dist值之后，如果这个顶点已经在优先级队列中了，就不再将它重读添加进去。  </p>
+</blockquote>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>在代码实现中，最复杂的是while循环嵌套for循环的代码。while循环最多会执行V此(V表示顶点的个数)，而内部的for循环的执行次数不确定，跟每个顶点的相邻边的个数有关，分别记作E0、E1、E2、…、E(V-1)。如果把这V个顶点的边都加起来，最大也不会超过图中所有边的个数E(E表示边的个数)。  </p>
+<p>for循环内部的代码涉及从优先级队列取数据、往优先级队列中添加数据、更新优先级队列中的数据，这三个主要的操作。优先级队列是用堆来实现的，堆中的这几个操作，时间复杂度都是O(logV)(堆中的元素个数不会超多顶点的个数V)。  </p>
+<p>综合之后，利用乘法原则，整个代码的时间复杂度为O(E*logV)。  </p>
+<h3 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h3><p>实际问题没有必要非得求出个绝对最优解，很多时候为了兼顾执行效率，只需要计算出一个可行的次优解就可以。  </p>
+<ol>
+<li><p>超级大地图最短路径<br>超级大地图，两点之间的最短路径或者说较好的出行路径，并不会很“发散”，只会出现在两点之间和两点附近的区块内。可以在整个大地图上，划出一个小的区块，这个小的区块恰好可以覆盖住两个点，但是又不会很大，只需要在这个小区块内部运行Dijkstra算法，这样就可以避免遍历整个大图，也就大大提高了执行效率。  </p>
+<p>对于两点之间距离较远的路线规划，先规划大的出行路线，然后再细化每个阶段的小路线。  </p>
+</li>
+<li><p>最少时间<br>在计算最少时间的时候，算法与最短路径相同，只需要把边的权重，从路的长度变成经过这段路所需要的时间。  </p>
+</li>
+<li><p>最少红绿灯<br>每经过一条边，就要经过一个红绿灯。关于最少红绿灯的出行方案，只需要把每条边的权值改为1即可，算法还是不变，可以使用Dijkstra算法。边的权值为1，相当于无权图，可以使用广度优先搜索算法，广度优先搜索算法计算出来的两点之间的路径，就是两点的最短路径。  </p>
+</li>
+<li><p>翻译<br>只针对单个词翻译的翻译系统。<br>翻译一整个句子，将句子拆分成一个一个的单词，再丢给翻译系统。针对每个单词，翻译系统会返回一组可选的翻译列表，并且针对每个翻译打一个分，表示这个翻译的可信程度。<br>针对每个单词，从可选列表中，选择其中一个翻译，组合起来就是整个句子的翻译。每个单词的翻译的得分之和，就是真个句子的翻译得分。随意搭配单词的翻译，会得到一个句子的不同翻译。针对整个句子，编程计算出得分最高的前k个翻译结果。  </p>
+<ul>
+<li><p>回溯算法，穷举所有的排列组合情况，然后选出得分最高的前k个翻译结果。时间复杂度为O(m<sup>n</sup>)，m表示平均每个单词的可选翻译个数，n表示一个句子中包含的单词数量。  </p>
+</li>
+<li><p>Dijkstra算法，每个单词的可选翻译是按照分数从大到小排列的，a<sub>0</sub>b<sub>0</sub>c<sub>0</sub>肯定是得分最高组合结果。把其及其得分作为一个对象，放入优先级队列中。  </p>
+<p>  每次从优先级队列中取出一个得分最高的组合，并给予这个组合进行扩展。扩展的策略是每个单词的翻译分别替换成下一个单词的翻译。a<sub>0</sub>b<sub>0</sub>c<sub>0</sub>扩展后会得到三个组合，a<sub>1</sub>b<sub>0</sub>c<sub>0</sub>、a<sub>0</sub>b<sub>1</sub>c<sub>0</sub>、a<sub>0</sub>b<sub>0</sub>c<sub>1</sub>。把扩展之后的组合，加到优先级队列中。重复这个过程，直到获取到k个翻译组合或者队列为空。  </p>
+<p>  时间复杂度，假设句子包含n个单词，每个单词平均有m个可选的翻译，求得分最高的前k个组合结果。每次一个组合出队列，就对应着一个组合结果，希望得到k个，就对应着k次出队操作。每次有一个组合出队列，就有n个组合入队列。优先级队列中出队和入队操作的时间复杂度都是O(logX)，X表示队列中的组合个数。总的时间复杂度就是O(k*n*logX)。<br>  k次出入队列，队列中的总数据不会超过k*n，也就是说，出队、入队操作的时间复杂度是O(log(k*n))。总的时间复杂度为O(k*n*log(k*n))。</p>
+</li>
+</ul>
+</li>
+</ol>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE/" rel="tag"><i class="fa fa-tag"></i> 图</a>
+              <a href="/tags/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/" rel="tag"><i class="fa fa-tag"></i> 最短路径</a>
+              <a href="/tags/Dijkstra/" rel="tag"><i class="fa fa-tag"></i> Dijkstra</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" rel="prev" title="拓扑排序">
+      <i class="fa fa-chevron-left"></i> 拓扑排序
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/A-%E6%90%9C%E7%B4%A2/" rel="next" title="A*搜索">
+      A*搜索 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法解析"><span class="nav-number">1.</span> <span class="nav-text">算法解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度"><span class="nav-number">2.</span> <span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际应用"><span class="nav-number">3.</span> <span class="nav-text">实际应用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>
