@@ -26,7 +26,7 @@
 <meta property="og:description" content="深入浅出索引">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-11T02:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-12T09:34:01.010Z">
+<meta property="article:modified_time" content="2020-06-15T05:30:28.553Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 
@@ -140,7 +140,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">53</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">55</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-12 17:34:01" itemprop="dateModified" datetime="2020-06-12T17:34:01+08:00">2020-06-12</time>
+                <time title="修改时间：2020-06-15 13:30:28" itemprop="dateModified" datetime="2020-06-15T13:30:28+08:00">2020-06-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,14 +255,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.5k</span>
+              <span>4.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
+              <span>8 分钟</span>
             </span>
             <div class="post-description">深入浅出索引</div>
 
@@ -300,37 +300,38 @@
 <p><strong>B+树的叶子节点存储的是page(页，默认大小16k)，一个页里面可以存多个行。</strong><br>索引只能定位到page，page内部有个有序数组，二分法定位行数据。  </p>
 </blockquote>
 <p>每一个索引在InnoDB里面对应一棵B+树。一张表可以有多个索引。  </p>
+<hr>
 <p>根据叶子节点的内容，索引类型分为<strong>主键索引</strong>和<strong>非主键索引</strong>。  </p>
-<ul>
-<li><p>主键索引的叶子节点value存的是整行数据（一页16K，可以存多行。整张表的数据其实存在主键索引中。是数据不是地址）。在InnoDB里，主键索引也被称为聚簇索引(clustered index)。  </p>
+<h4 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h4><p>主键索引的叶子节点value存的是整行数据（一页16K，可以存多行。整张表的数据其实存在主键索引中。是数据不是地址）。在InnoDB里，主键索引也被称为<strong>聚簇索引</strong>(clustered index)。  </p>
 <blockquote>
 <p>主键查询方式，只需要搜索主键对应的B+树，就可以获得数据。(树节点的key是某行主键，value是该行数据。)  </p>
 </blockquote>
-</li>
-<li><p>非主键索引的叶子节点内容是主键的值（每个叶子节点是一个数据页，每个数据页16K,存放多个主键值）。在InnoDB里，非主键索引也被称为二级索引(secondary index)。  </p>
+<h4 id="非主键索引"><a href="#非主键索引" class="headerlink" title="非主键索引"></a>非主键索引</h4><p>非主键索引的叶子节点内容是主键的值（每个叶子节点是一个数据页，每个数据页16K,存放多个主键值）。在InnoDB里，非主键索引也被称为<strong>二级索引</strong>(secondary index)。  </p>
 <blockquote>
 <p>普通索引查询方式，需要先搜索普通索引树，得到主键的值，再到主键索引树搜索一次。这个过程称为<strong>回表</strong>。(基于非主键索引的查询多扫描一棵索引树，每条查出的数据都要分别回表。当然只需要主键的值，就不需要回表)  </p>
 </blockquote>
-</li>
-</ul>
-<p>基于B+树的结构，对于范围查找between and，索引定位到左边界后遍历直到不满足条件。(且对于二级索引边扫描边回表搜索，有mrr(Multi-Range Read Optimization)优化就一起回表)<br>where条件in语句走对应字段的索引，把in里面的条件挨个循环走索引。<br>扫描行数问题，在引擎内部读取了多条记录，在server层只拿到了符合条件的记录，而扫描行数统计结果以server层的为主了。  </p>
-<h3 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h3><p>B+树为了维护索引有序性，在插入新值的时候需要做必要的维护—移动数据(追加新增递增插入时，不需要移动数据，不会页分裂)。如果原来所在的数据页已经满了，根据B+树的算法，需要申请一个新的数据页，然后挪动部分数据过去。这个过程称为<strong>页分裂</strong>。（每个页面之间是用指针串的。分裂时只需要改指针指向。）  </p>
+<p>InnoDB会把主键字段放在普通索引字段后面，同时会去重。(二级索引中的主键会依次进行排序)  </p>
+<blockquote>
+<p>当主键是(a,b)的时候，<br>定义为c的索引，实际上是(c,a,b);<br>定义为(c,a)的索引，实际上是(c,a,a,b)–&gt;(c,a,b);<br>定义为(c,b)的索引，实际上是(c,b,a,b)–&gt;(c,b,a);– 回表时自动交换a,b列来查找对应的主键值  </p>
+</blockquote>
+<h3 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h3><h4 id="页分裂"><a href="#页分裂" class="headerlink" title="页分裂"></a>页分裂</h4><p>B+树为了维护索引有序性，在插入新值的时候需要做必要的维护—移动数据(追加新增递增插入时，不需要移动数据，不会页分裂)。如果原来所在的数据页已经满了，根据B+树的算法，需要申请一个新的数据页，然后挪动部分数据过去。这个过程称为<strong>页分裂</strong>。（每个页面之间是用指针串的。分裂时只需要改指针指向。）  </p>
 <p>页分裂操作不仅影响性能，还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约50%。  </p>
-<p><strong>页合并</strong>，当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。  </p>
-<p><strong>自增主键</strong>的插入数据模式。插入新纪录的时候可以不指定ID的值，系统会获取当前ID最大值加1作为下一条记录的ID值。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。（一个页满了，就申请另外一个页面从左边开始写数据。）  </p>
+<h4 id="页合并"><a href="#页合并" class="headerlink" title="页合并"></a>页合并</h4><p>当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。  </p>
+<hr>
+<p>没有主键的表，InnoDB会默认创建一个Rowid做主键。  </p>
+<h4 id="自增主键"><a href="#自增主键" class="headerlink" title="自增主键"></a>自增主键</h4><p>自增主键的插入数据模式：插入新纪录的时候可以不指定ID的值，系统会获取当前ID最大值加1作为下一条记录的ID值。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。（一个页满了，就申请另外一个页面从左边开始写数据。）  </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 自增主键是指自增列上定义的主键。主键天然是索引，不用显示指定index  </span></span><br><span class="line">not null primary key quto_increment</span><br></pre></td></tr></table></figure>
 
-<p><strong>业务逻辑主键</strong>（业务逻辑的字段做主键），不容易保证有序插入，写数据成本高。<br>每个非主键索引的叶子节点上都是主键的值。如果用业务逻辑字段做主键，叶子节点占用空间一般比整型（4字节）或长整型（8字节）自增主键占用的空间大。  </p>
+<h4 id="业务逻辑主键"><a href="#业务逻辑主键" class="headerlink" title="业务逻辑主键"></a>业务逻辑主键</h4><p>业务逻辑的字段做主键，不容易保证有序插入，写数据成本高。<br>每个非主键索引的叶子节点上都是主键的值。如果用业务逻辑字段做主键，叶子节点占用空间一般比整型（4字节）或长整型（8字节）自增主键占用的空间大。  </p>
 <p>只有一个索引；该索引必须是唯一索引。适合用业务字段直接做主键。<br>典型的KV场景（没有range操作），由于没有其他索引，不用考虑其他索引的叶子节点大小的问题。利用尽量使用主键查询的原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。  </p>
-<blockquote>
-<p>没有主键的表，InnoDB会默认创建一个Rowid做主键。  </p>
-</blockquote>
+<hr>
 <p>索引可能因为删除、或者页分裂等原因，导致数据页有空洞，重建索引的过程会创建一个新的索引，把数据按顺序插入，这样页面利用率最高，索引更紧凑、更省空间。  </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 关键字index 与 key无区别</span></span><br><span class="line"><span class="comment">-- 删除并重建普通索引  </span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> T <span class="keyword">drop</span> <span class="keyword">index</span> k;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> T <span class="keyword">add</span> <span class="keyword">index</span>(k);</span><br><span class="line"><span class="comment">-- 删除重建主键索引  </span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> T <span class="keyword">drop</span> primary <span class="keyword">key</span>;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> T <span class="keyword">add</span> primary <span class="keyword">key</span>(<span class="keyword">id</span>);</span><br><span class="line"><span class="comment">-- 删除主键或者创建主键，都会将整个表重建，导致普通索引失效  </span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> T <span class="keyword">engine</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
 
 <h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>回到主键索引树搜索的过程，称为<strong>回表</strong>。查询结果所需要的的数据只在主键索引上有，不得不回表。  </p>
 <p>在查询里面，要查询的值已经在普通索引树上了，可以直接提供查询结果，不需要回表。普通索引已经“覆盖了”查询需求，称为<strong>覆盖索引</strong>。（select返回部分的列+where条件条件的列）<br>覆盖索引可以减少树的搜索次数，显著提升查询性能，使用覆盖索引是一个常用的性能优化手段。（维护性能下降）  </p>
-<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>B+树这种索引结构，可以利用索引的“最左前缀”，来定位记录。  </p>
+<p>基于B+树的结构，对于范围查找between and，索引定位到左边界后遍历直到不满足条件。(且对于二级索引边扫描边回表搜索，有mrr(Multi-Range Read Optimization)优化就一起回表)<br>where条件in语句走对应字段的索引，把in里面的条件挨个循环走一遍索引。  </p>
+<h3 id="最左前缀原则-联合索引"><a href="#最左前缀原则-联合索引" class="headerlink" title="最左前缀原则-联合索引"></a>最左前缀原则-联合索引</h3><p>B+树这种索引结构，可以利用索引的“最左前缀”，来定位记录。  </p>
 <p>不只是索引的全部定义，只要满足最左前缀，就可以利用索引来加速检索。<br>最左前缀可以是联合索引的最左N个字段，也可以是字符串索引的最左M个字符。  </p>
 <p><strong>InnoDB的每个普通索引（叶子节点存的是主键值），都相当于这个索引字段和主键字段的联合索引。联合索引按照联合字段定义的先后顺序，依次进行排序存储。</strong>(避免order by再排序，先排序再回表)<del>非叶子节点只是第一个关键字的索引(所以只有第一个关键字能用到快速定位)</del>。非叶子节点存储的对应联合索引各个字段，叶子节点在非叶子基础上加上主键字段。  </p>
 <p>建立联合索引，安排索引内字段顺序的原则：  </p>
@@ -344,6 +345,7 @@
 <blockquote>
 <p>index_merge，合并索引优化，有临时表消耗。</p>
 </blockquote>
+<hr>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> T <span class="keyword">where</span> <span class="keyword">name</span> <span class="keyword">like</span> <span class="string">'j'</span> 或 <span class="string">'j%'</span> 或 <span class="string">'%j'</span> 或 <span class="string">'%j%'</span> 使用<span class="keyword">name</span>索引的问题(主键<span class="keyword">id</span>)：</span><br><span class="line">a. 只有 <span class="keyword">id</span> 和 <span class="keyword">name</span> 字段。</span><br><span class="line">b. 添加了 age 字段，即 <span class="keyword">id</span>、<span class="keyword">name</span>、age 字段。</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> <span class="keyword">like</span> <span class="string">'j'</span> 或 <span class="string">'j%'</span> 可以使用<span class="keyword">name</span>索引，并且快速定位记录。</span><br><span class="line"><span class="number">2.</span> <span class="keyword">like</span> <span class="string">'%j'</span> 或 <span class="string">'%j%'</span>，只是在<span class="keyword">name</span>二级索引树上遍历查找记录，并不能快速定位（扫描了整棵索引树）。</span><br><span class="line"><span class="number">3.</span> 只有 <span class="keyword">id</span> 和 <span class="keyword">name</span> 字段时，上述 <span class="number">4</span> 种 <span class="keyword">like</span> 查询，<span class="keyword">name</span> 索引能满足 <span class="keyword">id</span> 和 <span class="keyword">name</span> 的查询情况，不需要回表，所以选择了使用 <span class="keyword">name</span> 的索引树解决问题。</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> 添加了 age 但无联合索引 (<span class="keyword">name</span>, age) 的情况，如果使用 <span class="keyword">name</span> 索引树，需要回表。再 <span class="keyword">like</span> <span class="string">'%j'</span> 或 <span class="string">'%j%'</span> 直接扫描主键索引树，现象就是没有使用 <span class="keyword">name</span> 索引。</span><br><span class="line"><span class="number">5.</span> 添加了 age 字段，也添加了 (<span class="keyword">name</span>, age) 索引，和第 <span class="number">3</span> 点同理，使用覆盖索引就能满足 <span class="keyword">select</span> * 的字段查询，不需要回表，因此使用了 (<span class="keyword">name</span>, age) 索引树。但是只有 <span class="keyword">like</span> <span class="string">'j'</span> 和 <span class="string">'j%'</span>能快速定位记录，而 <span class="keyword">like</span> <span class="string">'%j'</span> 和 <span class="string">'%j%'</span> 也能使用该索引树，但是不能快速定位，需要顺序遍历。</span><br><span class="line"><span class="comment">-- 针对联合索引，左侧字段的条件必须是=，不能是大于或者小于等范围值、不等于（!= &lt;&gt;）、is null is not null，否则右侧字段用不上。  </span></span><br><span class="line"><span class="comment">-- 如果查询中有某个列的范围查询，则其右边所有列都无法使用索引优化查找。（不能用索引快速定位）</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>不符合最左前缀的部分。索引下推需要server层和引擎层配合。<br>联合索引（name,age），查询 name like ‘张%’ and age = 10的记录。  </p>
@@ -351,6 +353,9 @@
 <li>用到联合索引找到张开头的记录。  </li>
 <li>判断其他条件<br> 2.1 MySQL5.6之前，只能从得到的‘张’开头的记录开始（根本不看联合索引中其他字段的值），一个个回表，到主键索引上找出数据行，再对比其他字段值。<br> 2.2 MySQL5.6引入索引下推优化(index condition pushdown)，可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录（不是快速定位，只是快速过滤），减少回表次数。（索引下推其实是把条件判断提前了）  </li>
 </ol>
+<blockquote>
+<p>扫描行数问题，在引擎内部读取了多条记录，在server层只拿到了符合条件的记录，而扫描行数统计结果以server层的为主了。  </p>
+</blockquote>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -369,7 +374,10 @@
     <a href="/MySQL/3%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/" rel="prev" title="事务隔离">
       <i class="fa fa-chevron-left"></i> 事务隔离
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/MySQL/5%E5%85%A8%E5%B1%80%E9%94%81+%E8%A1%A8%E9%94%81+%E8%A1%8C%E9%94%81/" rel="next" title="全局锁+表锁+行锁">
+      全局锁+表锁+行锁 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -428,7 +436,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引的常见模型"><span class="nav-number">1.</span> <span class="nav-text">索引的常见模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#哈希表-Memcached"><span class="nav-number">1.1.</span> <span class="nav-text">哈希表-Memcached</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有序数组"><span class="nav-number">1.2.</span> <span class="nav-text">有序数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉搜索树-MySQL"><span class="nav-number">1.3.</span> <span class="nav-text">二叉搜索树-MySQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跳表-Redis"><span class="nav-number">1.4.</span> <span class="nav-text">跳表-Redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LSM树-HBase"><span class="nav-number">1.5.</span> <span class="nav-text">LSM树-HBase</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB的索引模型"><span class="nav-number">2.</span> <span class="nav-text">InnoDB的索引模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引维护"><span class="nav-number">3.</span> <span class="nav-text">索引维护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖索引"><span class="nav-number">4.</span> <span class="nav-text">覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最左前缀原则"><span class="nav-number">5.</span> <span class="nav-text">最左前缀原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引下推"><span class="nav-number">6.</span> <span class="nav-text">索引下推</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引的常见模型"><span class="nav-number">1.</span> <span class="nav-text">索引的常见模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#哈希表-Memcached"><span class="nav-number">1.1.</span> <span class="nav-text">哈希表-Memcached</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有序数组"><span class="nav-number">1.2.</span> <span class="nav-text">有序数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉搜索树-MySQL"><span class="nav-number">1.3.</span> <span class="nav-text">二叉搜索树-MySQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跳表-Redis"><span class="nav-number">1.4.</span> <span class="nav-text">跳表-Redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LSM树-HBase"><span class="nav-number">1.5.</span> <span class="nav-text">LSM树-HBase</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB的索引模型"><span class="nav-number">2.</span> <span class="nav-text">InnoDB的索引模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主键索引"><span class="nav-number">2.1.</span> <span class="nav-text">主键索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非主键索引"><span class="nav-number">2.2.</span> <span class="nav-text">非主键索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引维护"><span class="nav-number">3.</span> <span class="nav-text">索引维护</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#页分裂"><span class="nav-number">3.1.</span> <span class="nav-text">页分裂</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#页合并"><span class="nav-number">3.2.</span> <span class="nav-text">页合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自增主键"><span class="nav-number">3.3.</span> <span class="nav-text">自增主键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#业务逻辑主键"><span class="nav-number">3.4.</span> <span class="nav-text">业务逻辑主键</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖索引"><span class="nav-number">4.</span> <span class="nav-text">覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最左前缀原则-联合索引"><span class="nav-number">5.</span> <span class="nav-text">最左前缀原则-联合索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引下推"><span class="nav-number">6.</span> <span class="nav-text">索引下推</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -444,7 +452,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
