@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%E8%A1%8C%E7%8A%B6%E6%80%81%E5%8F%98%E6%9B%B4%E5%9B%BE.png">
 <meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%E6%95%B0%E6%8D%AE%E7%89%88%E6%9C%AC%E5%8F%AF%E8%A7%81%E6%80%A7%E8%A7%84%E5%88%99.png">
 <meta property="article:published_time" content="2020-06-15T14:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-16T10:04:46.099Z">
+<meta property="article:modified_time" content="2020-06-17T01:38:23.193Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://guoyushuai.github.io/img/MySQL%E8%A1%8C%E7%8A%B6%E6%80%81%E5%8F%98%E6%9B%B4%E5%9B%BE.png">
@@ -143,7 +143,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">55</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">56</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-16 18:04:46" itemprop="dateModified" datetime="2020-06-16T18:04:46+08:00">2020-06-16</time>
+                <time title="修改时间：2020-06-17 09:38:23" itemprop="dateModified" datetime="2020-06-17T09:38:23+08:00">2020-06-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,14 +258,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>3.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>5 分钟</span>
             </span>
             <div class="post-description">事务到底是隔离的还是不隔离的</div>
 
@@ -278,35 +278,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>可重复读隔离级别，事务T启动的时候会创建一个视图read-view，之后事务T执行期间，即使有其他事务修改了数据，事务T看到的仍然跟启动时看到的一样。（一个在可重复读隔离级别下执行的事务，与世无争，不受外界影响。）  </p>
+        <p>可重复读隔离级别，事务T启动的时候（start transaction with consistent snapshot）会创建一个视图read-view，之后事务T执行期间，即使有其他事务修改了数据，事务T看到的仍然跟启动时看到的是一致的，称之为一致性读。（一个在可重复读隔离级别下执行的事务，与世无争，不受外界影响。）  </p>
 <p>一个事务要更新一行，如果刚好有另外一个事务拥有这一行的行锁，会被锁住，进入等待状态。  </p>
 <h3 id="事务的启动时机"><a href="#事务的启动时机" class="headerlink" title="事务的启动时机"></a>事务的启动时机</h3><p>默认 autocommit = 1;（需要显式的开启事务和提交事务）  </p>
-<p>1 begin/start transaction命令并不是一个事务的起点，在执行到它们之后的第一个操作InnoDB表的语句，事务才真正启动。2 如果想马上启动一个事务，可以使用start transaction with consistent snapshot命令。  </p>
+<ol>
+<li><strong>begin/start transaction命令并不是一个事务的起点</strong>，在执行到它们之后的第一个操作InnoDB表的语句，事务才真正启动。  </li>
+<li>如果想马上启动一个事务，可以使用start transaction with consistent snapshot命令。  </li>
+</ol>
 <ul>
 <li>第一种启动方式，一致性视图是在执行第一个快照读语句时创建的；  </li>
-<li>第二种启动方式，一致性视图是在执行start transaction with consistent snapshot时创建的。  </li>
+<li>第二种启动方式，一致性视图是在执行start transaction with consistent snapshot时创建的。（可重复读隔离级别下）  </li>
 </ul>
 <p>在MySQL里有两个“视图”的概念：  </p>
 <ul>
 <li>一个是view。它是一个用查询语句定义的虚拟表，在调用的时候执行查询语句并生成结果。创建视图的语法是create view…，它的查询方法与表一样。  </li>
-<li>一个是InnoDB在实现MVCC(多版本并发控制)时用到的<strong>一致性读</strong>视图，即consistent read view，用于支持RC(Read Committed，读提交)和RR(Repeatable Read，可重复度)隔离级别的实现。它没有物理结构，作用是事务执行期间用来定义“我能看到什么数据”。  </li>
+<li>一个是InnoDB在实现MVCC(多版本并发控制)时用到的<strong>一致性读</strong>视图，即consistent read view，<strong>用于支持RC(Read Committed，读提交)和RR(Repeatable Read，可重复度)隔离级别的实现</strong>。它没有物理结构，作用是事务执行期间用来定义“我能看到什么数据”。  </li>
 </ul>
-<h3 id="查询-一致性读-“快照”在MVCC里是怎么工作的"><a href="#查询-一致性读-“快照”在MVCC里是怎么工作的" class="headerlink" title="查询-一致性读-“快照”在MVCC里是怎么工作的"></a>查询-一致性读-“快照”在MVCC里是怎么工作的</h3><p>在可重复读隔离级别下，事务在启动的时候就“拍了个快照”。这个快照是基于整库的。  </p>
-<p>InnoDB里面每个事务有一个唯一的事务ID，叫做transaction id。它是在事务开始的时候向InnoDB的事务系统申请的，是按申请顺序严格递增的。  </p>
-<p><strong>每行数据有多个版本。每次事务更新数据的时候，都会生成一个新的数据版本，</strong>并且把transaction id赋值给这个数据版本的事务ID，记为row trx_id。同时，旧的数据版本要保留，并且在新的数据版本中，能够有信息可以直接拿到它。  </p>
-<p>数据表中的一行记录，可能有多个版本(row)，每个版本有自己的row trx_id，每个事务或者语句有自己的一致性视图。下图对应一个记录被多个事务连续更新后的状态。  </p>
+<h3 id="查询-一致性读-“快照”在MVCC里是怎么工作的"><a href="#查询-一致性读-“快照”在MVCC里是怎么工作的" class="headerlink" title="查询-一致性读-“快照”在MVCC里是怎么工作的"></a>查询-一致性读-“快照”在MVCC里是怎么工作的</h3><p>(MVCC一致性读到的数据对于update这种指令不适用。可以看到别人已提交修改后的数据。)<br>在可重复读隔离级别下，事务在启动(begin不是启动)的时候就“拍了个快照”。这个快照是基于整库的所有InnoDB引擎的表。  </p>
+<p>InnoDB里面每个事务有一个唯一的事务ID，叫做transaction id。它是在<strong>事务开始的时候</strong>向InnoDB的事务系统申请的（事务启动时），是按申请顺序严格递增的。  </p>
+<p><strong>每行数据有多个版本。每次事务更新数据的时候，都会生成一个新的数据版本，</strong>并且把transaction id赋值给这个数据版本的事务ID，记为row trx_id。同时，旧的数据版本要保留，并且在新的数据版本中，能够有信息可以直接拿到它（新旧版本与id本身自然数大小无关，与事务提交先后有关，没提交也生成版本，但是未提交的，还加着锁）。  </p>
+<p>数据表中的一行记录，可能有多个版本(row)，每个版本有自己的row trx_id。每个事务或者语句有自己的一致性视图。下图对应一个记录被多个事务连续更新后的状态。  </p>
 <img src="/img/MySQL行状态变更图.png">
 
+<p>数据版本与事务版本</p>
 <p>语句更新会生成undo log(回滚日志)，对应图中的三个虚线箭头。V1、V2、V3并不是物理上真实存在的，而是每次需要的时候根据当前版本和undo log计算出来的。需要前面的版本V，就通过当前版本依次执行回滚日志U算出来。  </p>
+<p>回滚就是把最新的版本（还没提交）删掉。</p>
 <hr>
 <p>根据可重复读的定义，一个事务启动的时候，能够看到所有已经提交的事务结果。但是之后，这个事务执行期间，其他事务的更新对它不可见。  </p>
-<p>可重复读的核心就是一致性读(consistent read)。  </p>
-<p>一个事务只需要在启动的时候声明说，“以我启动的时刻为准，如果一个数据版本是在我启动之前生成的，就认；如果是我启动以后才生成的，就不认，必须要找到它的上一个版本”。如果上一个版本也不可见，那就继续往前找。如果是这个事务自己更新的数据，自己还是要认的。这个事务的快照，相当于是静态的。  </p>
+<p>一个事务只需要在启动的时候声明说，“以我启动的时刻为准，如果一个数据版本是在我启动之前生成并提交的，就认；如果是我启动以后才生成的，就不认，必须要找到它的上一个版本”。如果上一个版本也不可见，那就继续往前找。如果是这个事务自己更新的数据，自己还是要认的。这个事务的快照，相当于是静态的。  </p>
 <hr>
-<p>在实现上，InnoDB为每个事务构造了一个数组，用来保存这个事务启动瞬间，当前正在“活跃”的所有事务ID。“活跃”指的就是，启动了但还没提交（比当前事务的ID小）。  </p>
-<p>数据里面事务ID的最小值记为低水位，当前系统里面已经创建过的事务ID的最大值加1记为高水位。  </p>
-<p>这个视图数组和高水位，就组成了当前事务的一致性视图(read-view)。  </p>
-<p>数据版本的可见性规则，就是基于数据的row trx_id和这个一致性视图的对比结果得到的。（普通查询语句是一致性读，一致性读会根据row trx_id和一致性视图确定数据版本的可见性。）  </p>
+<p>在实现上，InnoDB为每个事务构造了一个数组（数组不保证是连续自然数，存在已提交的），用来保存这个事务启动瞬间，当前正在“活跃”的所有事务ID(创建事务，到创建事务视图数组，中间可能有别的事务新建或提交)。“活跃”指的就是，启动了但还没提交（比当前事务的ID还小）。  </p>
+<p>数组里面事务ID的最小值记为低水位，当前系统里面已经创建过的事务ID的最大值加1记为高水位。  </p>
+<p><strong>这个视图数组和高水位，就组成了当前事务的一致性视图(read-view)</strong>。（高水位不在视图数组中）  </p>
+<p>数据版本的可见性规则，就是基于数据的row trx_id和这个一致性视图的对比结果得到的。（同一行数据，最新版本的row trx_id是可能会小于旧版本的row trx_id的）  </p>
+<blockquote>
+<p>可重复读下，开启一个事务时创建一个数组来记录当前所有活跃的事务id。后续有新的事务也不会再更新该数组。<br>读提交，开启事务时也会创建数组来保存事务id，而且之后每个查询都会更新一次这个数组。  </p>
+</blockquote>
 <p>视图数组把所有的row  trx_id分成了几种不同的情况。  </p>
 <img src="/img/MySQL数据版本可见性规则.png">
 
@@ -316,7 +323,7 @@
 <li>落在红色部分，表示这个版本是由将来启动的事务生成的，是肯定不可见的；  </li>
 <li>落在黄色部分，包括两种情况  <ul>
 <li>若row trx_id在数组中，表示这个版本是由还没提交的事务生成的，不可见；  </li>
-<li>若row trx_id不在数组中，表示这个版本是已经提交了的事务生成的，可见。  </li>
+<li>若row trx_id不在数组中，表示这个版本是已经提交了的事务生成的，可见。（一个比低水位大，但是在当前事务启动前就已经提交了的事务）  </li>
 </ul>
 </li>
 </ul>
@@ -325,22 +332,21 @@
 <ul>
 <li>版本未提交，不可见；  </li>
 <li>版本已提交，但是是在视图创建后提交的，不可见；  </li>
-<li>版本已提交，而且是在视图创建钱提交的，可见。  </li>
+<li>版本已提交，而且是在视图创建前提交的，可见。  </li>
 </ul>
-<h3 id="更新-当前读"><a href="#更新-当前读" class="headerlink" title="更新-当前读"></a>更新-当前读</h3><p>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”(current read)。  </p>
-<p>除了update语句外，select语句如果加锁，也是当前读。  </p>
-<p>当前读必须要读最新版本，而且必须加锁，必须等到其他事务释放锁，才能继续它的当前读。  </p>
+<h3 id="更新-当前读-加锁读-Locking-reads"><a href="#更新-当前读-加锁读-Locking-reads" class="headerlink" title="更新-当前读-加锁读(Locking reads)"></a>更新-当前读-加锁读(Locking reads)</h3><p>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”(current read)。有过有锁，就等待其他事务提交释放锁再读。（总是读取已经提交完成的最新版本，update语句把数据更新后，对应记录上的数据版本id就变成当前事务的id）  </p>
+<p>除了update语句外，select语句如果加锁，也是当前读，会访问最新版本并加锁。（普通查询语句是一致性读）  </p>
 <pre><code class="sql">mysql&gt; select k from t where id=1 lock in share mode;-- 读锁(S锁，共享锁)
 mysql&gt; select k from t where id=1 for update;-- 写锁(X锁，排它锁)</code></pre>
+<p>表结构没有对应的行数据，也没有row trx_id，因此只能遵循当前读的逻辑，不支持可重读读。（MySQL8.0可以把表结构放在InnoDB字典里）  </p>
 <hr>
-<p>事务更新数据的时候，只能用当前读。如果当前的记录的行锁被其他事务占用的话，就需要进入锁等待。当前读总是读取已经提交完成的最新版本。  </p>
+<p><strong>可重复读的核心就是一致性读(consistent read)，但可重复读下select … lock in share mode 是当前读；而且事务更新数据的时候，只能用当前读。如果当前的记录的行锁被其他事务占用的话，就需要进入锁等待，等待其他事务释放锁才能继续当前读。当前读总是读取已经提交完成的最新版本。</strong>  </p>
 <p>读提交的逻辑和可重复读的主要区别：  </p>
 <ul>
 <li>在可重复读隔离级别下，只需要在事务开始的时候创建一致性视图，之后事务里的其他查询都共用这个一致性视图；（查询只承认在事务启动前就已经提交完成的数据）  </li>
-<li>在读提交隔离级别下，每一个语句执行前都会重新算出一个新的视图。（查询只承认在语句启动前就已经提交完成的数据）  </li>
+<li>在读提交隔离级别下，每一个语句执行前都会重新算出一个新的视图，每个视图只管自己一个语句。（查询只承认在语句启动前就已经提交完成的数据）  </li>
 </ul>
-<p>表结构没有对应的行数据，也没有row trx_id，因此只能遵循当前读的逻辑，不支持可重读读。（MySQL8.0可以把表结构放在InnoDB字典里）  </p>
-<p>“start transaction with consistent snapshot;”的意思是从这个语句开始，创建一个持续整个事务的一致性快照。在读提交隔离级别下，这个用法失去意义，等效于普通的start transaction。  </p>
+<p>“start transaction with consistent snapshot;”的意思是从这个语句开始，创建一个持续整个事务的一致性快照。在读提交隔离级别下，这个用法失去意义，等效于普通的start transaction（执行第一个快照语句时才创建一致性视图）。  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -359,7 +365,10 @@ mysql&gt; select k from t where id=1 for update;-- 写锁(X锁，排它锁)</cod
     <a href="/MySQL/5%E5%85%A8%E5%B1%80%E9%94%81+%E8%A1%A8%E9%94%81+%E8%A1%8C%E9%94%81/" rel="prev" title="全局锁+表锁+行锁">
       <i class="fa fa-chevron-left"></i> 全局锁+表锁+行锁
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/MySQL/%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95%E5%92%8C%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95/" rel="next" title="普通索引和唯一索引">
+      普通索引和唯一索引 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -418,7 +427,7 @@ mysql&gt; select k from t where id=1 for update;-- 写锁(X锁，排它锁)</cod
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的启动时机"><span class="nav-number">1.</span> <span class="nav-text">事务的启动时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询-一致性读-“快照”在MVCC里是怎么工作的"><span class="nav-number">2.</span> <span class="nav-text">查询-一致性读-“快照”在MVCC里是怎么工作的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新-当前读"><span class="nav-number">3.</span> <span class="nav-text">更新-当前读</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的启动时机"><span class="nav-number">1.</span> <span class="nav-text">事务的启动时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询-一致性读-“快照”在MVCC里是怎么工作的"><span class="nav-number">2.</span> <span class="nav-text">查询-一致性读-“快照”在MVCC里是怎么工作的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新-当前读-加锁读-Locking-reads"><span class="nav-number">3.</span> <span class="nav-text">更新-当前读-加锁读(Locking reads)</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -434,7 +443,7 @@ mysql&gt; select k from t where id=1 for update;-- 写锁(X锁，排它锁)</cod
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
