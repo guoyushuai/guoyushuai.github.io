@@ -27,7 +27,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%20redo%20log%E7%BB%93%E6%9E%84%E5%9B%BE.png">
 <meta property="article:published_time" content="2020-06-09T03:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-17T08:21:42.347Z">
+<meta property="article:modified_time" content="2020-06-18T10:05:30.605Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://guoyushuai.github.io/img/MySQL%20redo%20log%E7%BB%93%E6%9E%84%E5%9B%BE.png">
@@ -142,7 +142,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">56</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">58</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -232,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-17 16:21:42" itemprop="dateModified" datetime="2020-06-17T16:21:42+08:00">2020-06-17</time>
+                <time title="修改时间：2020-06-18 18:05:30" itemprop="dateModified" datetime="2020-06-18T18:05:30+08:00">2020-06-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,14 +257,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>2.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>5 分钟</span>
             </span>
             <div class="post-description">一条SQL更新语句是如何执行的</div>
 
@@ -342,7 +342,7 @@
 <p><strong>备份/扩容</strong>：<br>使用两阶段提交，保证数据库的状态和用它的日志恢复出来的库的状态一致。扩容时可以使用全量备份加上binlog来实现。  </p>
 <p><strong>对比</strong>：<br>redo log的crash-safe是崩溃恢复；binlog恢复制造副本。<br>redo log循环使用，会被覆盖，数据不全，不能用作备份、同步等。<br>binlog恢复不了，WAL机制中“已经提交但是还没落盘”的数据。没有crash-safe能力。  </p>
 <blockquote>
-<p>innodb_flush_log_at_trx_commit=1;（默认值）表示每次事务提交时，redo log都直接持久化到磁盘。<br>innodb_flush_log_at_trx_commit=2;表示每次事务提交都写redo log文件，但是没有持久化，由系统来进行fsync操作。如果数据库宕机，不会丢失redo log；如果服务器宕机，文件系统的缓存还没同步到磁盘中的数据丢失。    </p>
+<p>innodb_flush_log_at_trx_commit=1;（默认值）表示每次事务提交时，redo log都直接持久化到磁盘。<br>innodb_flush_log_at_trx_commit=2;表示每次事务提交都写redo log文件，但是没有持久化，由系统来进行fsync操作。如果数据库宕机，不会丢失redo log；如果服务器宕机，文件系统的缓存还没同步到磁盘中的数据丢失。<br><strong>redolog buffer在事务执行过程中，先把要写的内容在内存中存起来，在commit阶段，一次性写入redolog file。</strong><br>commit时确保redo log持久化到磁盘。  </p>
 </blockquote>
 <blockquote>
 <p>sync_binlog=1;表示每次事务的binlog都持久化到磁盘。N表示事物提交次数。<br>sync_binlog=0;（默认值）由文件系统控制缓存的刷新，系统crash会丢失部分数据。  </p>
@@ -443,7 +443,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
