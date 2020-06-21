@@ -18,20 +18,21 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="将一组零散的内存块串联起来进行数据存储的数据结构">
+  <meta name="description" content="刷脏页导致sql语句变慢">
 <meta property="og:type" content="article">
-<meta property="og:title" content="链表">
-<meta property="og:url" content="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:title" content="刷脏页抖动">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E5%88%B7%E8%84%8F%E9%A1%B5%E6%8A%96%E5%8A%A8/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="将一组零散的内存块串联起来进行数据存储的数据结构">
+<meta property="og:description" content="刷脏页导致sql语句变慢">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-06T02:33:38.305Z">
+<meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%20redo%20log%E7%BB%93%E6%9E%84%E5%9B%BE.png">
+<meta property="article:published_time" content="2020-06-20T08:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-21T08:52:33.940Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="链表">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoyushuai.github.io/img/MySQL%20redo%20log%E7%BB%93%E6%9E%84%E5%9B%BE.png">
 
-<link rel="canonical" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%93%BE%E8%A1%A8/">
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E5%88%B7%E8%84%8F%E9%A1%B5%E6%8A%96%E5%8A%A8/">
 
 
 <script id="page-configurations">
@@ -44,7 +45,7 @@
   };
 </script>
 
-  <title>链表 | Notes</title>
+  <title>刷脏页抖动 | Notes</title>
   
 
 
@@ -201,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%93%BE%E8%A1%A8/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E5%88%B7%E8%84%8F%E9%A1%B5%E6%8A%96%E5%8A%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          链表
+          刷脏页抖动
         </h1>
 
         <div class="post-meta">
@@ -224,14 +225,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-04-18 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-18T00:00:00+08:00">2020-04-18</time>
+              <time title="创建时间：2020-06-20 16:00:00" itemprop="dateCreated datePublished" datetime="2020-06-20T16:00:00+08:00">2020-06-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-06 10:33:38" itemprop="dateModified" datetime="2020-05-06T10:33:38+08:00">2020-05-06</time>
+                <time title="修改时间：2020-06-21 16:52:33" itemprop="dateModified" datetime="2020-06-21T16:52:33+08:00">2020-06-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -239,7 +240,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
                 </span>
             </span>
 
@@ -256,16 +257,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
+              <span>3.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>6 分钟</span>
             </span>
-            <div class="post-description">将一组零散的内存块串联起来进行数据存储的数据结构</div>
+            <div class="post-description">刷脏页导致sql语句变慢</div>
 
         </div>
       </header>
@@ -276,80 +277,84 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>链表的内存结构是不连续的内存空间，将一组零散的内存块串联起来进行数据存储的数据结构。</p>
-<p>引子：缓存淘汰策略</p>
+        <p>一条SQL语句，正常执行的时候特别快，但是有时候就会变得特别慢，这样的场景很难复现，它不只随机，而且持续时间还很短。  </p>
+<h3 id="SQL语句变慢原因"><a href="#SQL语句变慢原因" class="headerlink" title="SQL语句变慢原因"></a>SQL语句变慢原因</h3><p>WAL 的全称是 Write-Ahead Logging，它的关键点就是先写日志，再写磁盘。数据库将随机写转换成了顺序写，大大提升了数据库的性能。  </p>
 <blockquote>
-<ul>
-<li>先进先出FITO(First In,First Out)</li>
-<li>最少使用LFU(Least Frequently Used)</li>
-<li>最近最少使用LRU(Least Recently Used)</li>
+<p>随机写：每次更新，都直接将数据写到磁盘。  </p>
+</blockquote>
+<p>InnoDB在处理更新语句的时候，只做了写日志这一个<strong>磁盘</strong>操作。这个日志叫做redo log（重做日志），在更新内存写完redo log后，就返回给客户端本次更新成功。  </p>
+<blockquote>
+<p>redo log其实是“磁盘页到内存页的diff”，记录了“这是哪个页面的修改”。<br>undo log,每一行存了一个位置可以直接找到undo log，是MVCC的基础。</p>
+</blockquote>
+<p>把内存里的数据写入磁盘的过程，称为<strong>flush</strong>。在这个flush操作执行之前内存里的数据和磁盘上数据文件记录的数据是不一致的。  </p>
+<blockquote>
+<p>flush 一般是说刷脏页；<br>purge一般是指清undo log；<br>merge一般是指应用change buffer。（change buffer只对非唯一索引有效）  </p>
+</blockquote>
+<p>当内存数据页跟磁盘数据页内容不一致的时候，称这个内存页为“<strong>脏页</strong>”。内存数据写入磁盘后，内存和磁盘上的数据页的内容就一致了，称为“<strong>干净页</strong>”。(checkpoint往前推进只是把脏页变成干净页，干净页还在内存，只有淘汰时才会逐出内存)  </p>
+<p>平时执行很快的更新操作，其实就是在写内存和日志，而MySQL偶尔“抖”一下的那个瞬间，可能就是再刷脏页（flush）。<br>刷脏页的时候要将内存页写入磁盘(直接将脏页数据覆盖到对应磁盘上的数据)。无论是查询语句在需要内存的时候要求淘汰一个脏页，还是由于刷脏页的逻辑会占用IO资源影响到了更新语句，都可能是业务端感知到MySQL抖一下的原因。  </p>
+<blockquote>
+<p>刷脏页不用动redo log，redo log在“重放”的时候，如果一个数据页已经是刷过的，会识别出来并跳过。（每个数据页头部有LSN，8字节，每次修改都会变大(更新这个page的最后一个lab)。对比这个LSN跟redo log的checkpoint的LSN，比checkpoint小的一定是干净页。）  </p>
+</blockquote>
+<blockquote>
+<p>redolog buffer在事务执行过程中，先把要写的内容在内存中存起来，在commit阶段，一次性写入redolog file（磁盘上固定空间循环使用）。  innodb_flush_log_at_trx_commit=1;（默认值）表示每次事务提交时，redo log都直接持久化到磁盘。  </p>
+</blockquote>
+<h3 id="引发数据库flush的场景"><a href="#引发数据库flush的场景" class="headerlink" title="引发数据库flush的场景"></a>引发数据库flush的场景</h3><ul>
+<li><p>场景一：InnoDB的redo log写满了。此时系统会停止所有更新操作，把checkpoint往前推进，redo log留出空间可以继续写。  </p>
+<img src="/img/MySQL redo log结构图.png">  
+checkpoint往前推进时，需要将推进过程中的日志，对应的所有脏页都flush到磁盘上。之后write pos到checkpoint新位置之间就可以再写入redo log。  
+</li>
+<li><p>场景二：系统内存不足。当需要新的内存页，而内存不够用的时候，就要淘汰一些数据页，空出内存给别的数据页使用。如果淘汰掉的是脏页，就要先将脏页写到磁盘。刷脏页一定会写盘，保证每个数据页有两种状态：  </p>
+<pre><code>- 内存里存在，内存里就肯定是正确的结果，直接返回；  
+- 内存里没有数据，就可以肯定数据文件上是正确的结果，读入内存后返回。  </code></pre></li>
+<li><p>场景三：MySQL认为系统空闲的时候。当然MySQL一直很忙时，也要合理的安排时间，即使是忙的时候，也要见缝插针的找时间，只要有机会就刷一点“脏页”。  </p>
+</li>
+<li><p>场景四：MySQL正常关闭的情况。这时，MySQL会把内存的脏页都flush到磁盘上，这样下次MySQL启动的时候，就可以直接从磁盘上读数据，启动速度会很快。  </p>
+</li>
 </ul>
-</blockquote>
-<h4 id="常见链表结构"><a href="#常见链表结构" class="headerlink" title="常见链表结构"></a>常见链表结构</h4><ol>
-<li>单链表  <blockquote>
-<p>-&gt;(数据+后继指针next)-&gt;<br>首结点地址表示整条链表，尾结点的后继指针指向空地址null </p>
-</blockquote>
+<h3 id="不同flush场景对性能影响"><a href="#不同flush场景对性能影响" class="headerlink" title="不同flush场景对性能影响"></a>不同flush场景对性能影响</h3><ul>
+<li><p>情况三，属于MySQL空闲时的操作。这时系统没什么压力。  </p>
 </li>
-<li>双向链表<blockquote>
-<p>-&gt;(前驱指针prev+数据+后继指针next)-&gt;<br>首结点的前驱指针prev和尾结点的后继指针均指向空地址null</p>
-<ul>
-<li>给定数据值删除对应结点,需要从头到尾遍历时间复杂度O(n);  </li>
-<li>给定结点地址删除结点,单链表需要从头到尾遍历前驱结点时间复杂度O(n),双向链表可以直接找到前驱结点时间复杂度O(1)。</li>
+<li><p>情况四，属于数据库本来就要关闭了。不太关注性能问题。  </p>
+</li>
+<li><p>情况一，是InnoDB要尽量避免的。出现这种情况时，整个系统就不能再接受更新了，所有的更新都必须堵住。从监控上看，此时更新数会跌为0。  </p>
+</li>
+<li><p>情况二，是常态。InnoDB用缓冲池buffer pool管理内存（查询缓存innodb buffer pool是server层的，存储的是SQL语句的查询结果），缓冲池中的内存页有三种状态：  </p>
+<pre><code>- 第一种，还没有使用的；
+- 第二种，使用了并且是干净页；
+- 第三种，使用了并且是脏页。  </code></pre></li>
 </ul>
-</blockquote>
-</li>
-<li>循环链表<blockquote>
-<p>尾结点的后继指针指向链表的首结点的地址</p>
-</blockquote>
-</li>
-<li>双向循环链表</li>
-</ol>
-<h4 id="实现链表"><a href="#实现链表" class="headerlink" title="实现链表"></a>实现链表</h4><ol>
-<li>理解指针或引用的含义(所指或引用对象的内存地址)<br>将某个变量赋值给指针，实际上就是将这个变量的地址赋值给指针；指针中存储了这个变量的内存地址，指向了这个变量，通过指针就能找到这个变量。</li>
-<li>警惕指针丢失和内存泄漏<br>插入结点时，一定要注意操作的顺序；删除结点时，一定要记得手动释放内存空间。</li>
-<li>利用哨兵简化实现难度<br>针对链表的插入、删除操作，需要对插入第一个结点和删除最后一个结点的情况进行特殊处理。利用哨兵解决边界问题，不直接参与业务逻辑。<br>引入哨兵结点，在任何时候，不管链表是不是空，head指针都会一直指向这个哨兵结点，哨兵结点不存储数据。</li>
-<li>重点留意边界条件处理<br>链表为空、链表只包含一个结点、链表只包含两个结点、代码逻辑在处理头结点和尾结点等情况时，是否能正常工作。</li>
-<li>举例画图，辅助思考  </li>
-<li>多写多练，没有捷径<br>单链表反转、链表中环的检测、两个有序的链表合并、删除链表倒数第n个结点、求链表的中间结点</li>
-</ol>
-<h4 id="链表or数组"><a href="#链表or数组" class="headerlink" title="链表or数组"></a>链表or数组</h4><table>
-<thead>
-<tr>
-<th>时间复杂度</th>
-<th>数组</th>
-<th>链表</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>插入操作</td>
-<td>O(n)</td>
-<td>O(1)</td>
-</tr>
-<tr>
-<td>随机访问</td>
-<td>O(1)</td>
-<td>O(n)</td>
-</tr>
-</tbody></table>
-<p>与数组相比，链表除了存储数据，需要消耗更多的内存空间，存储后继指针。<br>对链表进行频繁的插入和删除操作，会导致频繁的内存申请和释放，容易造成内存碎片。</p>
-<p>数组需要连续的内存空间。有利有弊，便于借助CPU缓冲机制于都数组中的数据；不能充分利用不连续的内存空间。<br>数组大小固定，若存储空间不足需要进行扩容，一旦扩容需要进行数据复制，非常耗时。</p>
-<h4 id="链表实现LRU算法"><a href="#链表实现LRU算法" class="headerlink" title="链表实现LRU算法"></a>链表实现LRU算法</h4><p>维护一个有序单链表，越靠近链表尾部的结点是越早之前访问的。当有有一个新的数据被访问时，从链表头开始顺序遍历链表。  </p>
-<blockquote>
+<p>InnoDB的策略是尽量使用内存，因此对于一个长时间运行的库来说，未被使用的页面很少（第一种）。<br>当要读入的数据页没有在内存的时候，就必须到缓冲池中申请一个数据页。此时只能把最久不使用的数据页从内存中淘汰掉：如果要淘汰的是一个干净页，就直接释放出来复用（第二种）；但是如果是脏页，就必须将脏页先刷到磁盘，变成干净页后才能复用（第三种）。  </p>
+<p>明显影响性能的两种情况：  </p>
 <ol>
-<li>数据之前已经被缓存在链表中了，将遍历得到的对应结点从原来的位置删除，然后再插入到链表的头部。</li>
-<li>数据没有在缓存链表中，若缓存未满，将结点直接插入到链表的头部；若缓存已满，将链表尾结点删除，将新数据结点插入链表的头部。</li>
+<li>一个查询要淘汰的脏页个数太多，会导致查询的响应时间明显变长；  </li>
+<li>日志写满，更新全部堵住，写性能跌为0，这种情况对敏感业务来说，是不能接受的。  </li>
 </ol>
-</blockquote>
-<h4 id="数组实现LRU算法"><a href="#数组实现LRU算法" class="headerlink" title="数组实现LRU算法"></a>数组实现LRU算法</h4><p>维护一个有序数组，越靠近数组尾部的元素是越早访问的，当有一个新的数据被访问时，从数组第一个元素开始遍历数组</p>
+<p>InnoDB需要有控制脏页比例的机制，来尽量避免上面的这两种情况。  </p>
+<h3 id="InnoDB刷脏页的控制策略"><a href="#InnoDB刷脏页的控制策略" class="headerlink" title="InnoDB刷脏页的控制策略"></a>InnoDB刷脏页的控制策略</h3><h4 id="正确的告诉InnoDB所在主机的IO能力"><a href="#正确的告诉InnoDB所在主机的IO能力" class="headerlink" title="正确的告诉InnoDB所在主机的IO能力"></a>正确的告诉InnoDB所在主机的IO能力</h4><p>这样InnoDB才能知道需要全力刷脏页的时候，可以刷多块。  </p>
+<p>通过innodb_io_capacity参数告诉InnoDB磁盘能力。这个值设置成磁盘的IOPS。磁盘的IOPS可以通过fio工具测试(磁盘随机读写)：（机械硬盘的随机 IOPS 一般只有几百）</p>
 <blockquote>
-<ol>
-<li>数据在数组中，将当前数据对应元素前的元素后移一位，并将当前数据放入头部。</li>
-<li>数据不在数组中，若缓存未满，将当前数组所有元素后移一位，将数据放入头部；若缓存已满，先删除数组最后一个元素，将数组所有元素后移一位，将数据放入头部。</li>
-</ol>
+<p>fio -filename=$filename -direct=1 -iodepth 1 -thread -rw=randrw -ioengine=psync -bs=16k -size=500M -numjobs=10 -runtime=10 -group_reporting  -name=mytest  </p>
 </blockquote>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>单链表判断回文字符串</p>
+<p>设置太小，则InnoDB认为这个系统的能力差，所以刷脏页刷的特别慢（频率慢），甚至比脏页生成的速度还慢，这样就造成了脏页累积，影响了查询和更新性能。（要读取的数据不在内存中，但是脏页过多导致新页必须等待脏页刷新盘后，淘汰掉再加载到内存）  </p>
+<p>磁盘能力不能只用来刷脏页，还需要服务用户请求。  </p>
+<h4 id="InnoDB控制引擎按照“全力”的百分比来刷脏页"><a href="#InnoDB控制引擎按照“全力”的百分比来刷脏页" class="headerlink" title="InnoDB控制引擎按照“全力”的百分比来刷脏页"></a>InnoDB控制引擎按照“全力”的百分比来刷脏页</h4><p>InnoDB的刷盘速度参考两个因素：脏页比例、redo log写盘速度。  </p>
+<p><strong>脏页比例</strong><br>参数innodb_max_dirty_pages_pct是脏页比例上限，默认值是75%。InnoDB会根据当前的脏页比例（假设为M），算出一个范围在0到100之间的数字。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">F1(M)</span><br><span class="line">&#123;</span><br><span class="line">      if M&gt;=innodb_max_dirty_pages_pct then</span><br><span class="line">            return 100;</span><br><span class="line">      return 100*M/innodb_max_dirty_pages_pct;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>脏页比例是通过innodb_buffer_pool_pages_dirty/innodb_buffer_pool_pages_tital得到的：  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">user information_schema;</span><br><span class="line"><span class="keyword">select</span> VARIABLE_VALUE <span class="keyword">into</span> @a <span class="keyword">from</span> global_status <span class="keyword">where</span> VARIABLE_NAME = <span class="string">'Innodb_buffer_pool_pages_dirty'</span>;  </span><br><span class="line"><span class="keyword">select</span> VARIABLE_VALUE <span class="keyword">into</span> @b <span class="keyword">from</span> global_status <span class="keyword">where</span> VARIABLE_NAME = <span class="string">'Innodb_buffer_pool_pages_total'</span>;  </span><br><span class="line"><span class="keyword">select</span> @a/@b;</span><br></pre></td></tr></table></figure>
+
+<p>平时要多关注脏页比例，不要让它经常接近75%（max值）。  </p>
+<p><strong>写盘速度</strong><br>InnoDB每次写入的日志都有一个序号，当前写入的序号跟checkpoint对应的序号之间的差值，设为N。InnoDB会根据这个N算出一个范围在0到100之间的数字，这个计算公式可以即为F2(N)。N越大，算出来的值越大。  </p>
+<p><strong>根据上述算的的F1(M)和F2(N)两个值，取其中较大的值记为R，之后引擎就可以按照innodb_io_capacity定义的能力乘以R%来控制刷脏页的速度。</strong>  </p>
+<h4 id="脏页连坐"><a href="#脏页连坐" class="headerlink" title="脏页连坐"></a>脏页连坐</h4><p>一旦一个查询请求需要在执行过程中先flush掉一个脏页时，这个查询就可能要比平时慢。MySQL中的一个机制会让查询更慢：在准备刷一个脏页的时候，如果这个数据页旁边的数据页刚好是脏页，就会把这个“邻居”也带着一起刷掉；而且把这个邻居拖下水的逻辑还可以继续蔓延，也就是对于每个邻居数据页，如果跟它相邻的数据页也还是脏页的话，也会被放到一起刷。  </p>
+<p>innodb_flush_neighbors=1;时会有连坐机制；  </p>
 <blockquote>
-<p>快慢指针，链表反转</p>
+<p>（适合机械硬盘，可以减少随机IO，提升系统性能）  </p>
+</blockquote>
+<p>innodb_flush_neighbors=0;时不找邻居，自己刷自己的（随机IO）。(MySQL8.0默认值)  </p>
+<blockquote>
+<p>（适合固态硬盘，IOPS不是瓶颈，只刷自己，能更快的执行完必要的刷脏页操作，减少SQL语句相应时间）  </p>
 </blockquote>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
@@ -359,10 +364,6 @@
     
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag"><i class="fa fa-tag"></i> 链表</a>
-          </div>
 
         
 
@@ -370,13 +371,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84/" rel="prev" title="数组">
-      <i class="fa fa-chevron-left"></i> 数组
+    <a href="/MySQL/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8A%A0%E7%B4%A2%E5%BC%95/" rel="prev" title="字符串加索引">
+      <i class="fa fa-chevron-left"></i> 字符串加索引
     </a></div>
-      <div class="post-nav-item">
-    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%A0%88/" rel="next" title="栈">
-      栈 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -435,7 +433,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见链表结构"><span class="nav-number">1.</span> <span class="nav-text">常见链表结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现链表"><span class="nav-number">2.</span> <span class="nav-text">实现链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链表or数组"><span class="nav-number">3.</span> <span class="nav-text">链表or数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链表实现LRU算法"><span class="nav-number">4.</span> <span class="nav-text">链表实现LRU算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组实现LRU算法"><span class="nav-number">5.</span> <span class="nav-text">数组实现LRU算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展"><span class="nav-number">6.</span> <span class="nav-text">扩展</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语句变慢原因"><span class="nav-number">1.</span> <span class="nav-text">SQL语句变慢原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引发数据库flush的场景"><span class="nav-number">2.</span> <span class="nav-text">引发数据库flush的场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同flush场景对性能影响"><span class="nav-number">3.</span> <span class="nav-text">不同flush场景对性能影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB刷脏页的控制策略"><span class="nav-number">4.</span> <span class="nav-text">InnoDB刷脏页的控制策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正确的告诉InnoDB所在主机的IO能力"><span class="nav-number">4.1.</span> <span class="nav-text">正确的告诉InnoDB所在主机的IO能力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InnoDB控制引擎按照“全力”的百分比来刷脏页"><span class="nav-number">4.2.</span> <span class="nav-text">InnoDB控制引擎按照“全力”的百分比来刷脏页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脏页连坐"><span class="nav-number">4.3.</span> <span class="nav-text">脏页连坐</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
