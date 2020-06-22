@@ -18,20 +18,19 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="数组是一种线性数据结构，用连续的存储空间存储相同类型数据">
+  <meta name="description" content="删除表数据，表文件大小不变">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数组">
-<meta property="og:url" content="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84/index.html">
+<meta property="og:title" content="重建表回收空间">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E9%87%8D%E5%BB%BA%E8%A1%A8%E5%9B%9E%E6%94%B6%E7%A9%BA%E9%97%B4/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="数组是一种线性数据结构，用连续的存储空间存储相同类型数据">
+<meta property="og:description" content="删除表数据，表文件大小不变">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-05T15:37:08.601Z">
+<meta property="article:published_time" content="2020-06-21T14:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-22T08:36:44.859Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="数组">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84/">
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E9%87%8D%E5%BB%BA%E8%A1%A8%E5%9B%9E%E6%94%B6%E7%A9%BA%E9%97%B4/">
 
 
 <script id="page-configurations">
@@ -44,7 +43,7 @@
   };
 </script>
 
-  <title>数组 | Notes</title>
+  <title>重建表回收空间 | Notes</title>
   
 
 
@@ -201,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E9%87%8D%E5%BB%BA%E8%A1%A8%E5%9B%9E%E6%94%B6%E7%A9%BA%E9%97%B4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          数组
+          重建表回收空间
         </h1>
 
         <div class="post-meta">
@@ -224,14 +223,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-17T00:00:00+08:00">2020-04-17</time>
+              <time title="创建时间：2020-06-21 22:00:00" itemprop="dateCreated datePublished" datetime="2020-06-21T22:00:00+08:00">2020-06-21</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-05 23:37:08" itemprop="dateModified" datetime="2020-05-05T23:37:08+08:00">2020-05-05</time>
+                <time title="修改时间：2020-06-22 16:36:44" itemprop="dateModified" datetime="2020-06-22T16:36:44+08:00">2020-06-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -239,7 +238,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
                 </span>
             </span>
 
@@ -256,16 +255,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>717</span>
+              <span>2.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>4 分钟</span>
             </span>
-            <div class="post-description">数组是一种线性数据结构，用连续的存储空间存储相同类型数据</div>
+            <div class="post-description">删除表数据，表文件大小不变</div>
 
         </div>
       </header>
@@ -276,35 +275,71 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>数组是一种<strong>线性表</strong>结构。它用一组<strong>连续的内存空间</strong>，来存储一组具有<strong>相同类型的数据</strong>。</p>
-<h4 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h4><ol>
-<li>线性表<blockquote>
-<p>数组、链表、队列、栈  </p>
-</blockquote>
-</li>
-<li>非线性表<blockquote>
-<p>二叉树、堆、图  </p>
-</blockquote>
-</li>
-</ol>
-<h4 id="连续的内存空间和相同类型的数据-1"><a href="#连续的内存空间和相同类型的数据-1" class="headerlink" title="连续的内存空间和相同类型的数据  1"></a>连续的内存空间和相同类型的数据  <a href="#refer-anchor-1"><sup>1</sup></a></h4><p>寻址公式（数组下标从0开始 ，减少计算内存地址时的减法运算）</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">a[i]_address</span> = base_address + i * data_type_size</span><br></pre></td></tr></table></figure>
+        <p>一个InnoDB表包含两部分：表结构定义和数据。<br>MySQL8.0以前，表结构是存在以.frm为后缀的文件里。MySQL8.0版本，允许把表结构定义放在系统数据表中。表结构定义占用的空间很小。  </p>
+<h3 id="表数据存储位置"><a href="#表数据存储位置" class="headerlink" title="表数据存储位置"></a>表数据存储位置</h3><p>表数据既可以存在共享表空间中，也可以是单独的文件。  </p>
 <ol>
-<li>数组支持随机访问，根据下标随机访问的时间复杂度为O(1)。排好序的数组二分查找的时间复杂度为O(logn)</li>
-<li>插入操作 大量数据搬移保证连续性<br>最好O(1)在数组末尾插入元素，不需要移动数据；<br>最坏O(n)在数组开头插入元素，所有数据都需要依次往后移动一位。<br>在每个位置插入元素的概率是一样的，平均时间复杂度为”(1+2+…n)/n=O(n)”；<br>优化：数组中存储的数据没有规律，只是作为一个存储数据的集合，避免大规模的数据搬移，在将某个数据插入到第k个位置时，直接将第k位的数据搬移到数组元素的最后，把新的元素直接放入第k个位置。<blockquote>
-<p>快速排序的思想</p>
-</blockquote>
-</li>
-<li>删除操作(大量数据搬移保证连续性)的平均时间复杂度为O(n)，最好O(1)，最坏O(n)<br>优化：先记录下已经删除的数据。每次的删除操作并不是真正的搬移数据，只是记录数据已经被删除了，当数组没有更多空间存储数据时，再触发执行一次真正的删除操作，从而大大减少删除操作导致的数据搬移。  <blockquote>
-<p>JVM标记清除垃圾回收算法的核心思想</p>
-</blockquote>
-</li>
+<li>innodb_file_per_table=OFF，表示表的数据放在系统共享表空间，也就是跟数据字典放在一起。  </li>
+<li>innodb_file_per_table=ON，（建议）表示每个InnoDB表数据存储在一个以.ibd为后缀的文件中。  </li>
 </ol>
-<h4 id="数组or容器"><a href="#数组or容器" class="headerlink" title="数组or容器"></a>数组or容器</h4><p>容器：<br>将很多数组操作的细节封装起来，比如搬移数据；支持动态扩容。<br>数组：<br>存储基本类型，避免自动装箱拆箱的性能消耗；<br>数组大小事先已知、对数据的操作简单；<br>表示多维数组比较直观；<br>注重性能的底层开发。 </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
+<p>MySQL5.6.6版本开始，该参数默认值为ON。<br>一个表单独存储为一个文件更容易管理，而且在不需要这个表的时候，通过drop table命令，系统就会直接删除这个文件。而如果是放在共享表空间，即使表删掉了，空间也是不会回收的。  </p>
+<p>针对表中某些行被删除，表空间没有被回收。  </p>
+<h3 id="数据页空洞"><a href="#数据页空洞" class="headerlink" title="数据页空洞"></a>数据页空洞</h3><p>InnoDB里的数据都是用B+树的结构组织的。  </p>
+<p>如果要删掉某个记录，InnoDB引擎只会把这个记录标记为删除，但磁盘文件的大小并不会缩小，后续有符合其前后范围的新记录插入，可能会复用这个位置。InnoDB的数据是按页存储的，如果删掉了一个数据页上的所有记录（被标记），整个数据页就可以被复用了（任意数据都可复用）。  </p>
+<p><strong>记录的复用与数据页的复用是不同的</strong>。记录的复用，只限于符合范围条件的数据。而当整个页从B+树里面摘掉以后，可以复用到任何位置。如果相邻的两个数据页利用率都很小，系统还会把这两个页上的数据合到其中一个页上，另外一个数据页就被标记为可复用。  </p>
+<p>如果用delete命令把整个表的数据删除，所有的数据页都会被标记为可复用，但是磁盘上，文件不会变小。delete命令是不能回收表空间的，这些可以复用，而没有被使用的空间，看起来就像是空洞。  </p>
+<hr>
+<p>插入数据也会造成空洞。  </p>
+<p>如果数据是按照索引递增顺序插入的，那么索引是紧凑的。如果数据是随机插入的，就可能造成索引的数据页分裂。  </p>
+<p>由于一个page1满了，再插入一个page1数值大小范围内的数据时，就不得不再申请一个新的页面page2来保存数据，并将page1上的后部分数据挪到page2，页分裂完成后，page1的末尾就留下了空洞。  </p>
+<p>更新索引上的值，可以理解为删除一个旧的值，再插入一个新的值，明显也会造成空洞。经过大量增删改的表，都是可能存在空洞的。把这些空洞去掉，才能达到收缩表空间的目的。  </p>
+<h3 id="重建表"><a href="#重建表" class="headerlink" title="重建表"></a>重建表</h3><p>重建表可以达到收缩表空间的目的。  </p>
+<blockquote>
+<p>删除主键或者创建主键都会将整个表重建。  </p>
+</blockquote>
+<p>新建一个与表A(原始表)结构相同的临时表B，然后按照主键ID递增的顺序，把数据一行一行地从表A里读出来再插入到表B中。交换表名，删除临时表。  </p>
+<blockquote>
+<p>MySQL5.5版本前使用alter table A engine=InnoDB;命令来重建表。</p>
+</blockquote>
+<p>表B是新建的表，表A主键索引上的空洞，在表B中都不存在了。表B的主键索引更紧凑，数据页的利用率页更高。从效果上看，起到了收缩表A空间的作用。  </p>
+<hr>
+<p>DDL花时间最多的步骤是往临时表插入数据的过程，如果在这个过程中，有新的数据要写入到表A的话，就会造成数据丢失。在整个DDL过程中，表A中不能有更新，阻塞MDL，这个DDL不是Online的。  </p>
+<p>MySQL5.6版本引入了OnlineDDL：  </p>
+<ol>
+<li>建立一个临时文件，扫描表A主键的所有数据页；  </li>
+<li>用数据页中表A的记录生成B+树，存储到临时文件中；  </li>
+<li>生成临时文件的过程中，将所有对A的操作记录在一个日志文件(row log)中。  </li>
+<li>临时文件生成后，将日志文件中的操作应用到临时文件，得到一个逻辑数据上与表A相同的数据文件。  </li>
+<li>用临时文件替换表A的数据文件。  </li>
+</ol>
+<p>由于日志文件记录和重放操作这个功能的存在，在重建表的过程冲，允许对表A(旧表)做增删改操作。  </p>
+<p>alter语句（DDL操作）在启动的时候需要获取MDL写锁，在真正拷贝数据之前退化成读锁，MDL读锁不会阻塞增删改操作，同时禁止其他线程对这个表同时做DDL。最后临时文件替换表A的数据文件时重新加上MDL写锁。  </p>
+<p>Online DDL最耗时的过程就是拷贝数据到临时表的过程，这个步骤的执行期间可以接收增删改操作。相对于整个DDL过程来说，写锁的时间非常短，对业务来说，相当于是Online的。  </p>
+<p>重建表会扫描原表结构和构建临时文件。对于很大的表很消耗IO和CPU资源。线上服务要很小心的控制操作时间。<br>比较安全的操作是使用GitHub开源的gh-ost做。  </p>
+<h3 id="Online和inplace"><a href="#Online和inplace" class="headerlink" title="Online和inplace"></a>Online和inplace</h3><p>MySQL5.5版本重建表，把表A中的数据导出来存放在tmp_table。这是一个临时表，是在server层创建的。  </p>
+<blockquote>
+<p>alter table t engine=innodb,ALGORITHM=copy;– 强制拷贝表  </p>
+</blockquote>
+<p>MySQL5.6版本重建表，根据表A重建出来的数据是放在tmp_file里的，这个临时文件是InnoDB在内部创建出来的。整个DDL过程都在InnoDB内部完成。对于server层来说，没有把数据挪动到临时表，是一个原地操作。称之为inplace。  </p>
+<blockquote>
+<p>alter table t engine=innodb,ALGORITHM=inplace;</p>
+</blockquote>
+<p>区别（都需要占用临时空间）：  </p>
 <ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/E-c41h2v_AfffrlAQpkyLg" target="_blank" rel="noopener">详解数据结构中的“数组”与编程语言中的“数组”的区别和联系</a> </li>
+<li>DDL过程如果是Online的，就一定是inplace的；  </li>
+<li>反过来未必，inplace的DDL，有可能不是Online的。添加全文索引(FULLTEXT index)和空间索引(SPATIAL index)。8.0  <blockquote>
+<p>给InnoDB表的一个字段加全文索引：alter table t add FULLTEXT(field_name);<br>这个过程是inplace的，但是会阻塞增删改操作，是非Online的。  </p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<p>optimize table、analyze table、alter table三种重建表区别：</p>
+<ul>
+<li>MySQL5.6版本开始，alter table t engine=InnoDB;（recreate）默认ALGORITHM=inplace。（no-rebuild主键索引不用重建）  <blockquote>
+<p>在事务里面显式用alter table语句，会默认提交前面的事务，然后自己独立执行。  </p>
+</blockquote>
+</li>
+<li>analyze table t;不是重建表，只是对表的索引信息做重新统计，没有修改数据，这个过程中加了MDL读锁。  </li>
+<li>optimize table t;等于recreate+analyze。（recreate后全新的表，极端情况下才需要analyze）  </li>
 </ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
@@ -314,10 +349,6 @@
     
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/%E6%95%B0%E7%BB%84/" rel="tag"><i class="fa fa-tag"></i> 数组</a>
-          </div>
 
         
 
@@ -325,13 +356,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/" rel="prev" title="复杂度分析">
-      <i class="fa fa-chevron-left"></i> 复杂度分析
+    <a href="/MySQL/%E5%88%B7%E8%84%8F%E9%A1%B5%E6%8A%96%E5%8A%A8/" rel="prev" title="刷脏页抖动">
+      <i class="fa fa-chevron-left"></i> 刷脏页抖动
     </a></div>
-      <div class="post-nav-item">
-    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%93%BE%E8%A1%A8/" rel="next" title="链表">
-      链表 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -390,7 +418,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#线性表"><span class="nav-number">1.</span> <span class="nav-text">线性表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连续的内存空间和相同类型的数据-1"><span class="nav-number">2.</span> <span class="nav-text">连续的内存空间和相同类型的数据  1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组or容器"><span class="nav-number">3.</span> <span class="nav-text">数组or容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考-amp-扩展"><span class="nav-number">4.</span> <span class="nav-text">参考&amp;扩展</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#表数据存储位置"><span class="nav-number">1.</span> <span class="nav-text">表数据存储位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据页空洞"><span class="nav-number">2.</span> <span class="nav-text">数据页空洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重建表"><span class="nav-number">3.</span> <span class="nav-text">重建表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Online和inplace"><span class="nav-number">4.</span> <span class="nav-text">Online和inplace</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

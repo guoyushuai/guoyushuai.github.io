@@ -26,7 +26,7 @@
 <meta property="og:description" content="深入浅出索引">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-11T02:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-18T09:42:51.008Z">
+<meta property="article:modified_time" content="2020-06-22T07:59:38.775Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 
@@ -140,7 +140,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">59</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">60</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-18 17:42:51" itemprop="dateModified" datetime="2020-06-18T17:42:51+08:00">2020-06-18</time>
+                <time title="修改时间：2020-06-22 15:59:38" itemprop="dateModified" datetime="2020-06-22T15:59:38+08:00">2020-06-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -297,7 +297,7 @@
 <h4 id="LSM树-HBase"><a href="#LSM树-HBase" class="headerlink" title="LSM树-HBase"></a>LSM树-HBase</h4><p>牺牲读性能，提高写性能。<br>LSM(Log Structured Merge Tree)将磁盘随机写转化为顺序写。把一棵大树拆分成N棵小树，将对数据的修改增量保存在内存中，达到指定大小限制后批量把数据flush到磁盘中，磁盘中定期做merge操作，合并成一棵大树，以优化读性能。  </p>
 <h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>在InnoDB中，表都是根据主键顺序以索引的形式存放的，这种存储方式的表称为<strong>索引组织表</strong>。InnoDB使用了B+树索引模型，数据都是存储在B+树中的（有序）。（树中的节点并不存储数据本身，而是只是作为索引。叶子节点存储数据，把每个叶子节点串在一条链表上，链表中的数据是从小到大有序的。）  </p>
 <blockquote>
-<p><strong>B+树的叶子节点存储的是page(页，默认大小16k)，一个页里面可以存多个行。</strong><br>索引只能定位到page，page内部有个有序数组，二分法定位行数据。  </p>
+<p>B+树的每个节点都是一页，最上层的根节点单独一页。<br><strong>B+树的叶子节点存储的是page(页，默认大小16k)，一个页里面可以存多个行。</strong><br>索引只能定位到page，page内部有个有序数组，二分法定位行数据。  </p>
 </blockquote>
 <p>每一个索引在InnoDB里面对应一棵B+树。一张表可以有多个索引。  </p>
 <hr>
@@ -452,7 +452,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
