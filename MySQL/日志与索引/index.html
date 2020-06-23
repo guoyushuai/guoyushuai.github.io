@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="日志与索引扩展">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日志与索引">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E6%97%A5%E5%BF%97%E4%B8%8E%E7%B4%A2%E5%BC%95/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="日志与索引扩展">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-23T07:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-23T10:13:46.294Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E6%97%A5%E5%BF%97%E4%B8%8E%E7%B4%A2%E5%BC%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>日志与索引 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E6%97%A5%E5%BF%97%E4%B8%8E%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          日志与索引
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-23 15:00:00 / 修改时间：18:13:46" itemprop="dateCreated datePublished" datetime="2020-06-23T15:00:00+08:00">2020-06-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+            <div class="post-description">日志与索引扩展</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="两阶段提交的不同时刻，MySQL异常重启。"><a href="#两阶段提交的不同时刻，MySQL异常重启。" class="headerlink" title="两阶段提交的不同时刻，MySQL异常重启。"></a>两阶段提交的不同时刻，MySQL异常重启。</h3><p>崩溃恢复crash safe:  </p>
+<ol>
+<li>如果redo log里面的事务是完整的，也就是已经有了commit标识，则直接提交。  </li>
+<li>如果redo log里面的事务只有完整的prepare，则判断对应的事务binlog是否存在并完整（提交标记）：  <ul>
+<li>a. 如果是完整的，则提交事务；  </li>
+<li>b. 否则，回滚事务。  </li>
+</ul>
+</li>
+</ol>
+<h4 id="MySQL怎么知道binlog是完整的"><a href="#MySQL怎么知道binlog是完整的" class="headerlink" title="MySQL怎么知道binlog是完整的"></a>MySQL怎么知道binlog是完整的</h4><p>一个事务的binlog是有完整格式的：</p>
+<ul>
+<li>statement格式的binlog，最后会有commit；  </li>
+<li>row格式的binlog，最后会有一个XID event。  </li>
+</ul>
+<p>MySQL5.6.2版本后，引入binlog-checksum参数，用来验证binlog内容的正确性。对于binlog日志由于磁盘原因，可能会在日志中间出错的情况，MySQL可以通过校验checksum的结果来发现。  </p>
+<h4 id="redo-log和binlog是怎么关联起来的"><a href="#redo-log和binlog是怎么关联起来的" class="headerlink" title="redo log和binlog是怎么关联起来的"></a>redo log和binlog是怎么关联起来的</h4><p>他们有一个共同的数据字段—XID。崩溃恢复的时候，会按顺序扫描redo log；  </p>
+<ul>
+<li>如果碰到既有prepare、又有commit的redo log，就直接提交；  </li>
+<li>如果碰到只有prepare、而没有commit的redo log，就拿着XID去binlog找对应的事务。  </li>
+</ul>
+<h4 id="处于prepare阶段的redo-log加上完整binlog，重启就能恢复，MySQL为什么要这么设计"><a href="#处于prepare阶段的redo-log加上完整binlog，重启就能恢复，MySQL为什么要这么设计" class="headerlink" title="处于prepare阶段的redo log加上完整binlog，重启就能恢复，MySQL为什么要这么设计"></a>处于prepare阶段的redo log加上完整binlog，重启就能恢复，MySQL为什么要这么设计</h4><p>binlog写完以后MySQL发生崩溃，这时候binlog已经写入了，之后就会被从库(或者用这个binlog恢复出来的库)使用。  </p>
+<p>所以在主库上也要提交这个事务。采用这个策略，主库和备库的数据就保证了一致性。  </p>
+<h4 id="只用binlog就能恢复，为什么需要两阶段提交"><a href="#只用binlog就能恢复，为什么需要两阶段提交" class="headerlink" title="只用binlog就能恢复，为什么需要两阶段提交"></a>只用binlog就能恢复，为什么需要两阶段提交</h4><p>两阶段提交是经典的分布式系统问题。  </p>
+<p>对于InnoDB引擎来说，如果redo log提交完成了，事务就不能回滚(如果还允许回滚，就可能覆盖掉别的事务的更新)。如果redo log直接提交，然后binlog写入的时候失败，InnoDB又回滚不了，数据和binlog日志不一致。  </p>
+<p>两阶段提交是为了给所有人一个机会，当每个人都OK的时候，再一起提交。  </p>
+<h4 id="不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档"><a href="#不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档" class="headerlink" title="不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档"></a>不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档</h4><p><strong>历史原因</strong>：<br>InnoDB并不是MySQL的原生存储引擎。MySQL的原生引擎是MyISAM，设计之初就没有支持崩溃恢复。  </p>
+<p>InnoDB在作为MySQL的插件加入MySQL的引擎家族之前，就已经是一个提供了崩溃恢复和事务支持的引擎了。  </p>
+<p>InnoDB接入了MySQL后，发现binlog没有崩溃恢复的能力，就用InnoDB原有的redo log。(redo log是在innodb引擎实现的，binlog是在server层实现的)  </p>
+<p><strong>实现原因</strong>：<br>binlog没有能力恢复”数据页”。<br>InnoDB引擎使用的是WAL技术，执行事务的时候，写完内存和日志，事务就算完成了。如果之后崩溃，要依赖于日志来恢复数据页。<br>未提交的事务，重启后引擎内部事务会回滚，然后应用binlog可以补回来；已经提交了的事务是可能丢失的(MySQL写数据写在内存里已提交但未落盘，恢复只关注未提交但已写binlog的数据)，而且是数据页级的丢失。<br>binlog里面并没有记录数据页的更新细节，只记录了逻辑操作，数据页是补不回来的。  </p>
+<blockquote>
+<p>一个事务的binlog如果回放，就是重做整个事务，一个事务更新的可能不止一个page。  </p>
+</blockquote>
+<h4 id="只用redo-log，不要binlog"><a href="#只用redo-log，不要binlog" class="headerlink" title="只用redo log，不要binlog"></a>只用redo log，不要binlog</h4><p>如果只从崩溃恢复的角度来讲可以。可以把binlog关掉，这样就没有两阶段提交了，但系统依然是crash-safe的。  </p>
+<p>正式的生产库上，binlog有着redo log无法替代的功能。  </p>
+<ul>
+<li>归档，redo log是循环写，写到末尾是要回到开头继续写的。这样历史日志没法保留，redo log也就起不到归档的作用。  </li>
+<li>MySQL系统以来binlog。binlog作为MySQL一开始就有的功能，被用在了很多地方。其中MySQL系统高可用的基础就是binlog复制。  </li>
+<li>异构系统(数据分析类系统)，这些系统依靠消费MySQL的binlog来更新自己的数据。关掉binlog的话，下游系统没有输入。  </li>
+</ul>
+<h4 id="redo-log一般设置多大"><a href="#redo-log一般设置多大" class="headerlink" title="redo log一般设置多大"></a>redo log一般设置多大</h4><p>redo log太小的话，会导致很快就被写满，然后不得不强行刷redo log，这样WAL机制的能力发挥不出来。  </p>
+<p>对于几个TB的磁盘，redo log设置为4个文件，每个文件1GB。  </p>
+<h4 id="正常运行中的实例，数据写入后的最终落盘，是从redo-log更新过来的还是从buffer-pool更新过来的-rodo-log里面到底是什么"><a href="#正常运行中的实例，数据写入后的最终落盘，是从redo-log更新过来的还是从buffer-pool更新过来的-rodo-log里面到底是什么" class="headerlink" title="正常运行中的实例，数据写入后的最终落盘，是从redo log更新过来的还是从buffer pool更新过来的(rodo log里面到底是什么)"></a>正常运行中的实例，数据写入后的最终落盘，是从redo log更新过来的还是从buffer pool更新过来的(rodo log里面到底是什么)</h4><p>redo log并没有记录数据页的完整数据，它并没有能力去更新磁盘数据页，页不存在“数据最终落盘，是由redo log更新过去”的情况。  </p>
+<ul>
+<li>如果是正常运行的实例，数据页被修改以后，跟磁盘的数据页不一致，称为脏页。最终数据落盘，就是把内存中的数据页写盘。这个过程跟redo log毫无关系。  </li>
+<li>在崩溃恢复场景中，InnoDB如果判断到一个数据页可能在崩溃恢复的时候丢失了更新，就会将它督导内存，然后让redo log更新内存内容，更新完成后，内存页变成脏页，就回到了第一种情况的状态。  </li>
+</ul>
+<h4 id="redo-log-buffer是什么，是先修改内存，还是先写redo-log文件"><a href="#redo-log-buffer是什么，是先修改内存，还是先写redo-log文件" class="headerlink" title="redo log buffer是什么，是先修改内存，还是先写redo log文件"></a>redo log buffer是什么，是先修改内存，还是先写redo log文件</h4><p>在一个事务的更新过程中，日志是要写多次的。每次生成的日志都得先保存起来，但又不能在还没commit的时候就直接写到redo log文件里。  </p>
+<p>redo log buffer就是一块内存，用来先存redo 日志的。真正把日志写到redo log文件(文件名是id_logfile+ 数字)，是在执行commit语句的时候做的。  </p>
+<blockquote>
+<p>prepare的时候就要落盘一次(包含一次写数据到盘)。一个大事务中，如果生成的redo log很多，在事务未提交之前，log也会从redo log buffer写到redo log file里。  </p>
+</blockquote>
+<p>事务执行过程中不会“主动去刷盘”，以减少不必要的IO消耗。但是可能会出现“被动写入磁盘”，比如内存不够、其他事务提交等情况。  </p>
+<p>单独执行一个更新语句的时候，InnoDB会自己启动一个事务，在语句执行完成的时候提交。过程跟上面一样，只不多是“压缩”到了一个语句里面完成。  </p>
+<p>binlo 有对应的binlog cache，binlog写完磁盘就发送给从库。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/MySQL/count%E5%87%BD%E6%95%B0/" rel="prev" title="count(*)">
+      <i class="fa fa-chevron-left"></i> count(*)
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#两阶段提交的不同时刻，MySQL异常重启。"><span class="nav-number">1.</span> <span class="nav-text">两阶段提交的不同时刻，MySQL异常重启。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL怎么知道binlog是完整的"><span class="nav-number">1.1.</span> <span class="nav-text">MySQL怎么知道binlog是完整的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redo-log和binlog是怎么关联起来的"><span class="nav-number">1.2.</span> <span class="nav-text">redo log和binlog是怎么关联起来的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处于prepare阶段的redo-log加上完整binlog，重启就能恢复，MySQL为什么要这么设计"><span class="nav-number">1.3.</span> <span class="nav-text">处于prepare阶段的redo log加上完整binlog，重启就能恢复，MySQL为什么要这么设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#只用binlog就能恢复，为什么需要两阶段提交"><span class="nav-number">1.4.</span> <span class="nav-text">只用binlog就能恢复，为什么需要两阶段提交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档"><span class="nav-number">1.5.</span> <span class="nav-text">不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#只用redo-log，不要binlog"><span class="nav-number">1.6.</span> <span class="nav-text">只用redo log，不要binlog</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redo-log一般设置多大"><span class="nav-number">1.7.</span> <span class="nav-text">redo log一般设置多大</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正常运行中的实例，数据写入后的最终落盘，是从redo-log更新过来的还是从buffer-pool更新过来的-rodo-log里面到底是什么"><span class="nav-number">1.8.</span> <span class="nav-text">正常运行中的实例，数据写入后的最终落盘，是从redo log更新过来的还是从buffer pool更新过来的(rodo log里面到底是什么)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redo-log-buffer是什么，是先修改内存，还是先写redo-log文件"><span class="nav-number">1.9.</span> <span class="nav-text">redo log buffer是什么，是先修改内存，还是先写redo log文件</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>
