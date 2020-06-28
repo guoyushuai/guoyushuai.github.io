@@ -18,22 +18,19 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="鉴权：精确匹配、前缀匹配、模糊匹配；限流：固定时间窗口、滑动时间窗口、令牌桶、漏桶">
+  <meta name="description" content="内存临时表与磁盘临时表、随机排序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="微服务接口鉴权限流">
-<meta property="og:url" content="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/4%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%8F%A3%E9%89%B4%E6%9D%83%E9%99%90%E6%B5%81/index.html">
+<meta property="og:title" content="随机排序">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%BA%8F/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="鉴权：精确匹配、前缀匹配、模糊匹配；限流：固定时间窗口、滑动时间窗口、令牌桶、漏桶">
+<meta property="og:description" content="内存临时表与磁盘临时表、随机排序">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-06-03T09:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-11T01:34:22.219Z">
+<meta property="article:published_time" content="2020-06-25T08:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-28T03:05:19.635Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="微服务">
-<meta property="article:tag" content="鉴权">
-<meta property="article:tag" content="限流">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/4%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%8F%A3%E9%89%B4%E6%9D%83%E9%99%90%E6%B5%81/">
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%BA%8F/">
 
 
 <script id="page-configurations">
@@ -46,7 +43,7 @@
   };
 </script>
 
-  <title>微服务接口鉴权限流 | Notes</title>
+  <title>随机排序 | Notes</title>
   
 
 
@@ -203,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/4%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%8F%A3%E9%89%B4%E6%9D%83%E9%99%90%E6%B5%81/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -216,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          微服务接口鉴权限流
+          随机排序
         </h1>
 
         <div class="post-meta">
@@ -226,14 +223,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-06-03 17:00:00" itemprop="dateCreated datePublished" datetime="2020-06-03T17:00:00+08:00">2020-06-03</time>
+              <time title="创建时间：2020-06-25 16:00:00" itemprop="dateCreated datePublished" datetime="2020-06-25T16:00:00+08:00">2020-06-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-11 09:34:22" itemprop="dateModified" datetime="2020-06-11T09:34:22+08:00">2020-06-11</time>
+                <time title="修改时间：2020-06-28 11:05:19" itemprop="dateModified" datetime="2020-06-28T11:05:19+08:00">2020-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,7 +238,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
                 </span>
             </span>
 
@@ -258,16 +255,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.4k</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>6 分钟</span>
             </span>
-            <div class="post-description">鉴权：精确匹配、前缀匹配、模糊匹配；限流：固定时间窗口、滑动时间窗口、令牌桶、漏桶</div>
+            <div class="post-description">内存临时表与磁盘临时表、随机排序</div>
 
         </div>
       </header>
@@ -278,55 +275,180 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>服务治理，管理微服务，保证平台整体正常、平稳的运行。服务治理涉及鉴权、限流、降级、熔断、监控告警等。  </p>
-<h3 id="鉴权"><a href="#鉴权" class="headerlink" title="鉴权"></a>鉴权</h3><p>不同的接口提供给不同的应用，并不是所有应用都可以访问该服务，也不是每个有访问权限的应用都可以访问该服务的所有接口。  </p>
-<p>要实现接口鉴权功能，需要事先将应用对接口的访问权限规则设置好。当某个应用访问其中一个接口的时候，可以拿应用的请求URL，在规则中进行匹配。如果匹配成功，就说明允许访问；如果没有可以匹配的规则，那就说明这个应用没有这个接口的访问权限，就拒绝服务。  </p>
-<p>接口格式格式：类似Dubbo的RPC接口，类似Spring Cloud的HTTP接口。  </p>
-<h4 id="精确匹配规则"><a href="#精确匹配规则" class="headerlink" title="精确匹配规则"></a>精确匹配规则</h4><p>只有当请求URL跟规则中配置的某个接口精确匹配时，这个请求才会被接受、处理。  </p>
-<p>不同的应用对应不同的规则集合。可以采用散列表来存储这种对应关系。<br>将每个应用对应的权限规则，存储在一个字符串数组中。当用户请求到来时，拿用户的请求URL，在这个字符串数组中逐一匹配，匹配的算法对应字符串匹配算法（KMP、BM、BF）。  </p>
-<p>规则不会经常变动，可以按照字符串的大小给规则排序，把它组织成有序数组这种数据结构，加快匹配速度。当要查找某个URL能否匹配其中某条规则的时候，可以采用二分查找算法，在有序数组中进行匹配。  </p>
-<h4 id="前缀匹配规则"><a href="#前缀匹配规则" class="headerlink" title="前缀匹配规则"></a>前缀匹配规则</h4><p>只要某条规则可以匹配请求URL的前缀，这个请求就可以被接受处理。  </p>
-<p>不同的应用对应不同的规则集合。同样采用散列表来存储这种对应关系。<br>将每个应用的规则集合，组织成Trie树这种数据结构。Trie树非常适合用来做前缀匹配。Trie树中的每个节点不是存储单个字符，而是存储接口被“/”分割之后的子目录。  </p>
-<p>规则并不会经常变动，在Trie树中，可以把每个节点的子节点门，组织成有序数组这种数据结构。当在匹配的过程中，可以利用二分查找算法，决定从一个节点应该跳到哪一个子节点。  </p>
-<h4 id="模糊匹配规则"><a href="#模糊匹配规则" class="headerlink" title="模糊匹配规则"></a>模糊匹配规则</h4><p>规则中包含通配符（“**”匹配任意多个子目录，“*”匹配任意一个子目录），只要请求URL可以跟某条规则模糊匹配，就可以被接受处理。  </p>
-<p>不同的应用对应不同的规则集合。依然采用散列表来存储这种对应关系。  </p>
-<ul>
-<li>借助正则表达式的解决思路，采用回溯算法，拿请求URL跟每条规则逐一进行模糊匹配。  </li>
-<li>并不是每条规则都包含通配符，包含通配符的只是少数。把不包含通配符的规则和包含通配符的规则分开处理。<br>把不包含通配符的规则，组织成<strong>有序数组或者Trie树</strong>。剩下的少数包含通配符的规则，简单存储在一个<strong>普通数组</strong>中。<br>当接收到一个请求URL之后，可以先在不包含通配符的有序数组或者Trie树中查找。如果能够匹配，就不需要继续在通配符规则中匹配；如果不能匹配，就继续在通配符规则中查找匹配。  </li>
-</ul>
-<h3 id="限流1"><a href="#限流1" class="headerlink" title="限流1"></a>限流<a href="#refer-anchor-1"><sup>1</sup></a></h3><p><span id="back-1"></span><br>对接口调用的频率进行限制。例如每秒钟不能超过100次调用，超过之后就拒绝服务。  </p>
-<p>按照不同的限流粒度，限流可以分为很多种类型。给每个接口限制不同的访问频率；给所有接口限制总的访问频率；限制某个应用对某个接口的访问频率等。  </p>
-<h4 id="固定时间窗口限流算法"><a href="#固定时间窗口限流算法" class="headerlink" title="固定时间窗口限流算法"></a>固定时间窗口限流算法</h4><p>首先需要选定一个时间起点，之后每当有接口请求到来，就将计数器加一。如果在当前时间窗口内，根据限流规则，出现累加访问次数超过限流值的情况时，就拒绝后续的访问请求。当进入下一个时间窗口之后，计数器就清零重新计数。  </p>
-<p>缺点：限流策略过于粗略，无法应对两个时间窗口临界时间内的突发流量。  </p>
-<h4 id="滑动时间窗口限流算法"><a href="#滑动时间窗口限流算法" class="headerlink" title="滑动时间窗口限流算法"></a>滑动时间窗口限流算法</h4><p>限制任意时间窗口内，接口请求数都不能超过某个阈值。从流量曲线上来看会更加平滑。  </p>
-<p>假设限流的规则为，在任意1s内，接口的请求次数都不能大于K次。就维护一个大小为K+1的循环队列，用来记录1s内到来的请求。（循环队列的大小等于限流次数加一，循环队列存储数据时浪费一个存储单元）  </p>
-<p>当有新的请求到来时，将与这个新请求的时间间隔超过1s的请求，从队列中删除，然后再来开队列中是否有空闲位置，如果有，则把新请求存储在队列尾部（tail指针所指的位置）；如果没有，则说明这1s内的请求次数已经超多了限流值K，这个请求被拒绝服务。  </p>
-<p>缺点：滑动时间窗口限流算法，依然不能防止，在细粒度上访问过于集中的问题。  </p>
-<p>其他：</p>
-<ul>
-<li>维护成优先级队列（根据请求时间构建小顶堆），最早的请求时间放在堆顶。当有新的请求进来时相当于在小顶堆内插入数据，判断此时跟堆顶的时间差是否小于1s，并且堆的大小小于请求限制次数。每次插入数据时，删除1s外的数据，重新排序，确定新的堆顶。时间复杂度较高。  </li>
-</ul>
-<h4 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h4><p>基于时间窗口的限流算法，不管是固定时间窗口还是滑动时间窗口，只能在选定的时间粒度上限流，对选定时间粒度内的更加细粒度的访问频率不做限制。无法应对细时间粒度的突发流量。  </p>
-<ol>
-<li>接口限制t秒内最大访问次数为n，则每隔t/n秒会放一个token到桶中；  </li>
-<li>桶中最多可以存放b个token，如果token到达时令牌桶已经满了，那么这个token会被丢弃；  </li>
-<li>接口请求会先从令牌桶中取token，拿到token则处理接口请求，拿不到token则执行限流。  </li>
-</ol>
-<p>改进思路：</p>
-<ul>
-<li>预热桶  </li>
-<li>一次性放入多个令牌<blockquote>
-<p>不需要专门起一个线程每隔固定时间放token到桶中。每次在取token之前，根据上次放入token的时间戳和现在的时间戳，计算出这段时间需要放多少token进去，一次性放进去。  </p>
-</blockquote>
-</li>
-<li>支持一次性取多个令牌</li>
-</ul>
-<p>缺点：对于没有预热的令牌桶，做否决式限流会导致误杀很多请求。间隔一定时间才向桶中放入一个令牌，但接口的访问在1s内的随机性很强。</p>
-<h4 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h4><p>漏桶算法相当于令牌桶算法的改进。<br>对于取令牌的频率也有限制，要按照t/n固定的速度来取令牌。漏桶算法对流量的整形效果更加好，流量更佳平滑，任何突发流量都会被限流。  </p>
-<h4 id="总结延伸"><a href="#总结延伸" class="headerlink" title="总结延伸"></a>总结延伸</h4><p>令牌桶和漏桶算法比较适合阻塞式限流，超过最大访问频率后，请求不会被拒绝，而是被阻塞到有令牌后再继续执行。<br>对相应时间比较敏感的限流场景（微服务），适合选择基于时间窗口的否决式限流算法。滑动时间窗口限流算法空间复杂度较高，内存占用较多。固定时间窗口算法适合微服务接口限流场景，简单、性能好、不易出错。  </p>
-<div id="refer-anchor-1"></div>  
+        <p>随机选择三个记录。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        单词表
+    </div>
+    <div class='spoiler-content'>
+        <pre><code class="sql">mysql&gt; CREATE TABLE `words` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `word` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
 
-<p>[<a href="#back-1">1</a>] <a href="https://mp.weixin.qq.com/s?__biz=MzI4MTY5NTk4Ng==&mid=2247488993&amp;idx=1&amp;sn=4b9d5deedd0e626c456744f04b499bbb&source=41#wechat_redirect" target="_blank" rel="noopener">微服务接口限流的设计与思考</a>  </p>
+delimiter ;;
+<span class="keyword">create</span> <span class="keyword">procedure</span> idata()
+<span class="keyword">begin</span>
+  <span class="keyword">declare</span> i <span class="built_in">int</span>;
+  <span class="keyword">set</span> i=<span class="number">0</span>;
+  while i&lt;10000 do
+    <span class="keyword">insert</span> <span class="keyword">into</span> words(word) <span class="keyword">values</span>(<span class="keyword">concat</span>(<span class="built_in">char</span>(<span class="number">97</span>+(i <span class="keyword">div</span> <span class="number">1000</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">1000</span> <span class="keyword">div</span> <span class="number">100</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">100</span> <span class="keyword">div</span> <span class="number">10</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">10</span>))));
+    <span class="keyword">set</span> i=i+<span class="number">1</span>;
+  <span class="keyword">end</span> <span class="keyword">while</span>;
+<span class="keyword">end</span>;;
+delimiter ;
+
+<span class="keyword">call</span> idata();</code></pre>
+
+    </div>
+</div>  
+<h3 id="内存临时表"><a href="#内存临时表" class="headerlink" title="内存临时表"></a>内存临时表</h3><p>随机排序取前3个。  </p>
+<blockquote>
+<p>explain select word from words order by rand() limit 3;  </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>select_type</th>
+<th>table</th>
+<th>partitions</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>ref</th>
+<th>rows</th>
+<th>filtered</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>words</td>
+<td>NULL</td>
+<td>ALL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>9980</td>
+<td>100.00</td>
+<td>Using temporary;Using filesort</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Extra字段显示Using temporary，表示的是需要使用临时表；Using filesort，表示的是需要执行排序操作。（需要临时表，并且需要在临时表上排序）  </li>
+</ul>
+<p>对于InnoDB表，执行全字段排序会减少磁盘访问。<br>对于内存表，回表过程只是简单的根据数据行的位置，直接访问内存得到数据，根本不会导致多访问磁盘。用于排序的行越小越好，优先选择rowid排序。<br>针对临时表，小的用memory引擎，大的用innodb引擎。  </p>
+<p>执行流程：  </p>
+<ol>
+<li>创建一个临时表。临时表使用的是memory引擎，表里两个字段，第一个字段是double类型，记为字段R，第二个字段是varchar(64)类型，记为字段W。这个表没有建索引。  </li>
+<li>从words表中，按主键顺序取出所有word值。对于每一个word值，调用rand()函数生成一个大于0小于1的随机小数，并把这个随机小数和word分别存入临时表R和W字段中，此时扫描行数为10000。  </li>
+<li>临时表有10000行数据，接下来在这个没有索引的内存临时表上，按照字段R排序。  </li>
+<li>初始化sort_buffer。sort_buffer中有两个字段，一个是double类型，另一个是整型。</li>
+<li>从内存临时表中一行一行的取出R值和<strong>位置信息</strong>，分别存入sort_buffer中的两个字段里。这个过程要对内存临时表做全表扫描，此时扫描行数增加10000，为20000。  </li>
+<li>在sort_buffer中根据R的值进行排序。这个过程没有涉及到表操作，不会增加扫描行数。  </li>
+<li>排序完成后，取出前三个结果的<strong>位置信息</strong>，依次到内存临时表中取出word值，返回给客户端。访问了表的三行数据，总扫描函数变成了20003。  </li>
+</ol>
+<hr>
+<h4 id="MySQL的表定位“一行数据”的方法"><a href="#MySQL的表定位“一行数据”的方法" class="headerlink" title="MySQL的表定位“一行数据”的方法"></a>MySQL的表定位“一行数据”的方法</h4><p>如果创建的表没有主键，或者把一个表的主键删掉了，那么InnoDB会自己生成一个<strong>长度为6字节的rowid来作为主键</strong>。<strong>每个引擎用来唯一标识数据行的信息</strong>。  </p>
+<ul>
+<li>有主键的InnoDB表，rowid就是主键ID；  </li>
+<li>没有主键的InnoDB表，rowid就是由系统生成的；  </li>
+<li>MEMORY引擎不是索引组织表。可以认为它就是一个数组，rowid是数组的下标。  </li>
+</ul>
+<p>order by rand()使用了内存临时表，内存临时表排序的时候使用了rowid排序方法。  </p>
+<h3 id="磁盘临时表"><a href="#磁盘临时表" class="headerlink" title="磁盘临时表"></a>磁盘临时表</h3><p>tmp_table_size这个配置限制了内存临时表的大小，默认值是16M。如果临时表大小超过了tmp_table_size，那么内存临时表就会转成磁盘临时表。  </p>
+<p>磁盘临时表使用的引擎默认是InnoDB，由参数internal_tmp_disk_storage_engine控制。  </p>
+<p>当使用磁盘临时表的时候，对应的就是一个没有显式索引的InnoDB表的排序过程。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        磁盘临时表
+    </div>
+    <div class='spoiler-content'>
+        <pre><code class="sql"><span class="comment">-- 单位字节(Byte)。1Byte=8bit</span>
+<span class="keyword">set</span> tmp_table_size=<span class="number">1024</span>;
+<span class="keyword">set</span> sort_buffer_size=<span class="number">32768</span>;
+<span class="keyword">set</span> max_length_for_sort_data=<span class="number">16</span>;
+
+<span class="comment">/* 打开 optimizer_trace，只对本线程有效 */</span>
+<span class="keyword">SET</span> optimizer_trace=<span class="string">'enabled=on'</span>; 
+
+<span class="comment">/* 执行语句 */</span>
+<span class="keyword">select</span> word <span class="keyword">from</span> words <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">3</span>;
+
+<span class="comment">/* 查看 OPTIMIZER_TRACE 输出 */</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`information_schema`</span>.<span class="string">`OPTIMIZER_TRACE`</span>\G</code></pre>
+<pre><code class="json">"filesort_priority_queue_optimization":{
+    "limit":3,
+    "rows_estimate":1213,
+    "row_size":14,
+    "memory_available":32768,
+    "chosen":true
+},
+"filesort_execution":[],
+"filesort_summary":{
+    "rows":4,
+    "examined_rows":10000,
+    "number_of_tmp_files":0,
+    "sort_buffer_size":88,
+    "sort_mode":"&lt;sort_key,rowid&gt;"
+}</code></pre>
+
+    </div>
+</div>  
+
+<ul>
+<li>将max_length_for_sort_data=16，小于word字段的长度定义。sort_mode显示的是rowid排序，参与排序的是随机值R字段和rowid字段组成的行。  </li>
+<li>R字段存放的随机值是8个字节，rowid是6个字节，数据总行数是10000，总共140000字节，超过sort_buffer_size为32768字节。number_of_tmp_files为0，表示不使用临时文件。  </li>
+</ul>
+<p>MySQL5.6引入优先队列排序算法。没有使用临时文件算法—归并排序算法(所有数据有序，浪费计算量)。  </p>
+<p>执行流程：  </p>
+<ol>
+<li>对于10000个准备排序的(R,rowid)，先取前三行，构造一个堆；  </li>
+<li>取下一个行(R’,rowid’)，跟当前堆里最大的R比较，如果R’小于R，把这个(R,rowid)从堆中去掉，换成(R’,rowid’)；   </li>
+<li>重复第2步，直到第10000个(R’,rowid’)完成比较。  </li>
+</ol>
+<p>流程结束，堆中就是10000行中R值最小的三行，依次取出rowid，到临时表中拿到word字段。  </p>
+<p>OPTIMIZER_TRACE结果中，filesort_priority_queue_optimization.chosen=true；表示使用优先级队列排序算法，不需要临时文件，对应的filesort_summary.number_of_tmp_files=0。  </p>
+<blockquote>
+<p>limit参数，影响排序算法，最小堆的维护代价小于sort_buffer_size时采用优先队列排序。  </p>
+</blockquote>
+<h3 id="随机排序方法"><a href="#随机排序方法" class="headerlink" title="随机排序方法"></a>随机排序方法</h3><p>无论使用哪种类型的临时表，order by rand()都会让计算过程非常复杂，需要大量的的扫描行数，排序过程的资源消耗也很大。  </p>
+<h4 id="随机算法1"><a href="#随机算法1" class="headerlink" title="随机算法1"></a>随机算法1</h4><ol>
+<li>取表的主键ID的最大值M和最小值N；  </li>
+<li>用随机函数生成一个最大值到最小值之间的数X=(M-N)*rand()+N;  </li>
+<li>取不小于X的第一个ID的行。  </li>
+</ol>
+<blockquote>
+<p>select max(id),min(id) into @M,@N from t;<br>set @X= floor((@M-@N+1)*rand() + @N);<br>select * from t where id &gt;= @X limit 1;  </p>
+</blockquote>
+<p>取max(id)和min(id)走索引但不需要扫描索引，第三步的select可以用索引快速定位，综合扫描3行。  </p>
+<h4 id="随机算法2"><a href="#随机算法2" class="headerlink" title="随机算法2"></a>随机算法2</h4><ol>
+<li>取整个表的行数，记为C。  </li>
+<li>取得Y=floor(C*rand())。floor函数取整数部分。  </li>
+<li>用limitY,1取得一行。  </li>
+</ol>
+<blockquote>
+<p>select count(*) into @C from t;<br>set @Y = floor(@C * rand());<br>set @sql = concat(“select * from t limit “, @Y, “,1”);<br>prepare stmt from @sql;<br>execute stmt;<br>DEALLOCATE prepare stmt;  </p>
+</blockquote>
+<p>解决了算法1的概率不均匀问题。(算法1要求ID中间没有空洞，否则选择不同行的概率不一样)  </p>
+<p><strong>MySQL处理limit Y,1的做法是按顺序一个一个的读出来，丢掉前Y个，然后把下一个记录作为返回结果，这一步需要扫描Y+1行。</strong>加上第一步扫描的C行，总共需要扫描C+Y+1行，执行代价比算法1高，比直接order by rand()低。  </p>
+<blockquote>
+<p>limit获取数据的时候是根据主键排序获取的，主键索引天然有序，比order by rand()方法组成临时表R字段排序再获取rowid代价小。</p>
+</blockquote>
+<h4 id="随机算法3"><a href="#随机算法3" class="headerlink" title="随机算法3"></a>随机算法3</h4><ol>
+<li>取整个表的行数，记为C。  </li>
+<li>根据相同的随机方法得到Y1、Y2、Y3。  </li>
+<li>执行三个limitY,1语句得到三行数据。  </li>
+</ol>
+<blockquote>
+<p>select count(*) into @C from t;<br>set @Y1 = floor(@C * rand());<br>set @Y2 = floor(@C * rand());<br>set @Y3 = floor(@C * rand());<br>select * from t limit @Y1，1； //在应用代码里面取Y1、Y2、Y3值，拼出SQL后执行<br>select * from t limit @Y2，1；<br>select * from t limit @Y3，1；  </p>
+</blockquote>
+<p>总的扫描行数C+(Y1+1)+(Y2+1)+(Y3+1)。  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -335,12 +457,6 @@
     
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"><i class="fa fa-tag"></i> 微服务</a>
-              <a href="/tags/%E9%89%B4%E6%9D%83/" rel="tag"><i class="fa fa-tag"></i> 鉴权</a>
-              <a href="/tags/%E9%99%90%E6%B5%81/" rel="tag"><i class="fa fa-tag"></i> 限流</a>
-          </div>
 
         
 
@@ -348,13 +464,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/3%E9%AB%98%E6%80%A7%E8%83%BD%E9%98%9F%E5%88%97Disruptor/" rel="prev" title="高性能队列Disruptor">
-      <i class="fa fa-chevron-left"></i> 高性能队列Disruptor
+    <a href="/MySQL/order%20by%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" rel="prev" title="order by工作原理">
+      <i class="fa fa-chevron-left"></i> order by工作原理
     </a></div>
-      <div class="post-nav-item">
-    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/5%E7%9F%AD%E7%BD%91%E5%9D%80%E7%B3%BB%E7%BB%9F/" rel="next" title="短网址系统">
-      短网址系统 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -413,7 +526,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#鉴权"><span class="nav-number">1.</span> <span class="nav-text">鉴权</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#精确匹配规则"><span class="nav-number">1.1.</span> <span class="nav-text">精确匹配规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前缀匹配规则"><span class="nav-number">1.2.</span> <span class="nav-text">前缀匹配规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模糊匹配规则"><span class="nav-number">1.3.</span> <span class="nav-text">模糊匹配规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#限流1"><span class="nav-number">2.</span> <span class="nav-text">限流1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#固定时间窗口限流算法"><span class="nav-number">2.1.</span> <span class="nav-text">固定时间窗口限流算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#滑动时间窗口限流算法"><span class="nav-number">2.2.</span> <span class="nav-text">滑动时间窗口限流算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#令牌桶算法"><span class="nav-number">2.3.</span> <span class="nav-text">令牌桶算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#漏桶算法"><span class="nav-number">2.4.</span> <span class="nav-text">漏桶算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结延伸"><span class="nav-number">2.5.</span> <span class="nav-text">总结延伸</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#内存临时表"><span class="nav-number">1.</span> <span class="nav-text">内存临时表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL的表定位“一行数据”的方法"><span class="nav-number">1.1.</span> <span class="nav-text">MySQL的表定位“一行数据”的方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘临时表"><span class="nav-number">2.</span> <span class="nav-text">磁盘临时表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机排序方法"><span class="nav-number">3.</span> <span class="nav-text">随机排序方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#随机算法1"><span class="nav-number">3.1.</span> <span class="nav-text">随机算法1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#随机算法2"><span class="nav-number">3.2.</span> <span class="nav-text">随机算法2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#随机算法3"><span class="nav-number">3.3.</span> <span class="nav-text">随机算法3</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
