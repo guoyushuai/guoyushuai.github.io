@@ -26,7 +26,7 @@
 <meta property="og:description" content="order by工作原理及优化">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-24T02:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-27T15:41:18.656Z">
+<meta property="article:modified_time" content="2020-06-28T09:19:24.523Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 
@@ -140,7 +140,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">65</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">67</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-27 23:41:18" itemprop="dateModified" datetime="2020-06-27T23:41:18+08:00">2020-06-27</time>
+                <time title="修改时间：2020-06-28 17:19:24" itemprop="dateModified" datetime="2020-06-28T17:19:24+08:00">2020-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,7 +262,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
+              <span>9 分钟</span>
             </span>
             <div class="post-description">order by工作原理及优化</div>
 
@@ -325,32 +325,7 @@
 </ol>
 <p>按照name排序这个动作，可能在内存中完成，也可能需要使用外部排序，取决于排序所需的内存和参数sort_buffer_size。<br>sort_buffer_size就是MySQL为排序开辟的内存(sort_buffer)的大小。如果要排序的数据量小于sort_buffer_size，排序就在内存中完成。如果排序数据量太大，内存放不下，则不得不利用磁盘临时文件辅助排序。  </p>
 <hr>
-<pre><code class="sql"><span class="comment">/* 打开optimizer_trace，只对本线程有效 */</span>
-<span class="keyword">SET</span> optimizer_trace=<span class="string">'enabled=on'</span>; 
-
-<span class="comment">/* @a保存Innodb_rows_read的初始值 */</span>
-<span class="keyword">select</span> VARIABLE_VALUE <span class="keyword">into</span> @a <span class="keyword">from</span>  performance_schema.session_status <span class="keyword">where</span> variable_name = <span class="string">'Innodb_rows_read'</span>;
-
-<span class="comment">/* 执行语句 */</span>
-<span class="keyword">select</span> city, <span class="keyword">name</span>,age <span class="keyword">from</span> t <span class="keyword">where</span> city=<span class="string">'杭州'</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">name</span> <span class="keyword">limit</span> <span class="number">1000</span>; 
-
-<span class="comment">/* 查看 OPTIMIZER_TRACE 输出 */</span>
-<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`information_schema`</span>.<span class="string">`OPTIMIZER_TRACE`</span>\G
-
-<span class="comment">/* @b保存Innodb_rows_read的当前值 */</span>
-<span class="keyword">select</span> VARIABLE_VALUE <span class="keyword">into</span> @b <span class="keyword">from</span> performance_schema.session_status <span class="keyword">where</span> variable_name = <span class="string">'Innodb_rows_read'</span>;
-
-<span class="comment">/* 计算Innodb_rows_read差值 */</span>
-<span class="keyword">select</span> @b-@a;<span class="comment">-- 4000</span></code></pre>
-<p>通过查看OPTIMIZER_TRACE的结果来确认，可以从number_of_tmp_files中看到是否使用了临时文件。  </p>
-<pre><code class="json">"filesort_execution":[],
-"filesort_summary":{
-    "rows":4000,
-    "examined_rows":4000,
-    "number_of_tmp_files":12,
-    "sort_buffer_size":32664,
-    "sort_mode":"&lt;sort_key,packed_additional_fields&gt;"
-}</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 打开optimizer_trace，只对本线程有效 */</span></span><br><span class="line"><span class="keyword">SET</span> optimizer_trace=<span class="string">'enabled=on'</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">/* @a保存Innodb_rows_read的初始值 */</span></span><br><span class="line"><span class="keyword">select</span> VARIABLE_VALUE <span class="keyword">into</span> @a <span class="keyword">from</span>  performance_schema.session_status <span class="keyword">where</span> variable_name = <span class="string">'Innodb_rows_read'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 执行语句 */</span></span><br><span class="line"><span class="keyword">select</span> city, <span class="keyword">name</span>,age <span class="keyword">from</span> t <span class="keyword">where</span> city=<span class="string">'杭州'</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">name</span> <span class="keyword">limit</span> <span class="number">1000</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 查看 OPTIMIZER_TRACE 输出 */</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`information_schema`</span>.<span class="string">`OPTIMIZER_TRACE`</span>\G</span><br><span class="line"></span><br><span class="line"><span class="comment">/* @b保存Innodb_rows_read的当前值 */</span></span><br><span class="line"><span class="keyword">select</span> VARIABLE_VALUE <span class="keyword">into</span> @b <span class="keyword">from</span> performance_schema.session_status <span class="keyword">where</span> variable_name = <span class="string">'Innodb_rows_read'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 计算Innodb_rows_read差值 */</span></span><br><span class="line"><span class="keyword">select</span> @b-@a;<span class="comment">-- 4000</span></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">通过查看OPTIMIZER_TRACE的结果来确认，可以从number_of_tmp_files中看到是否使用了临时文件。  </span><br><span class="line">``` json  </span><br><span class="line">"filesort_execution":[],</span><br><span class="line">"filesort_summary":&#123;</span><br><span class="line">    "rows":4000,</span><br><span class="line">    "examined_rows":4000,</span><br><span class="line">    "number_of_tmp_files":12,</span><br><span class="line">    "sort_buffer_size":32664,</span><br><span class="line">    "sort_mode":"&lt;sort_key,packed_additional_fields&gt;"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>examined_rows表示参与排序的行数。市民表中有4000条满足city=’杭州’的记录。  </li>
 <li>number_of_tmp_files表示排序过程使用的临时文件数。内存放不下时，就需要使用外部排序，外部排序一般使用归并排序算法。  <blockquote>
@@ -378,14 +353,8 @@
 <li>遍历排序结果，取前1000行，并按照id的值回到原表中取出city、name、age三个字段返回给客户端。  </li>
 </ol>
 <p>rowid排序多访问了一次表t的主键索引。(回表)<br>MySQL服务端从排序后的sort_buffer中依次取出id，然后到原表查到city、name、age三个字段的结果，不需要在服务端再耗费内存存储结果，是直接返回给客户端的。  </p>
-<pre><code class="json">"filesort_execution":[],
-"filesort_summary":{
-    "rows":4000,
-    "examined_rows":4000,
-    "number_of_tmp_files":10,
-    "sort_buffer_size":32728,
-    "sort_mode":"&lt;sort_key,rowid&gt;"
-}</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">"filesort_execution":[],</span><br><span class="line">"filesort_summary":&#123;</span><br><span class="line">    "rows":4000,</span><br><span class="line">    "examined_rows":4000,</span><br><span class="line">    "number_of_tmp_files":10,</span><br><span class="line">    "sort_buffer_size":32728,</span><br><span class="line">    "sort_mode":"&lt;sort_key,rowid&gt;"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>examined_rows的值还是4000，表示用于排序的数据是4000行。但是select @b-@a的结果为5000。除了排序过程外，在排序完成后，还要根据id去原表取值。语句limit 1000，会多读1000行。  <blockquote>
 <p>rows_examined。server层调用引擎取一行的时候加1；引擎内部自己调用读取行不加1。  </p>
@@ -589,7 +558,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

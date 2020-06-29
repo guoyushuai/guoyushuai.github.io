@@ -18,21 +18,19 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
+  <meta name="description" content="行锁+间隙锁&#x3D;next-key lock">
 <meta property="og:type" content="article">
-<meta property="og:title" content="复杂度分析">
-<meta property="og:url" content="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="幻读">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E5%B9%BB%E8%AF%BB/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系">
+<meta property="og:description" content="行锁+间隙锁&#x3D;next-key lock">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-05T15:36:42.097Z">
+<meta property="article:published_time" content="2020-06-28T05:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-29T10:15:39.719Z">
 <meta property="article:author" content="Magic Candy">
-<meta property="article:tag" content="时间复杂度">
-<meta property="article:tag" content="空间复杂度">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/">
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E5%B9%BB%E8%AF%BB/">
 
 
 <script id="page-configurations">
@@ -45,7 +43,7 @@
   };
 </script>
 
-  <title>复杂度分析 | Notes</title>
+  <title>幻读 | Notes</title>
   
 
 
@@ -202,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E5%B9%BB%E8%AF%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -215,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          复杂度分析
+          幻读
         </h1>
 
         <div class="post-meta">
@@ -225,14 +223,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-04-15 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-15T00:00:00+08:00">2020-04-15</time>
+              <time title="创建时间：2020-06-28 13:00:00" itemprop="dateCreated datePublished" datetime="2020-06-28T13:00:00+08:00">2020-06-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-05 23:36:42" itemprop="dateModified" datetime="2020-05-05T23:36:42+08:00">2020-05-05</time>
+                <time title="修改时间：2020-06-29 18:15:39" itemprop="dateModified" datetime="2020-06-29T18:15:39+08:00">2020-06-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,7 +238,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
                 </span>
             </span>
 
@@ -257,16 +255,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>932</span>
+              <span>3.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>5 分钟</span>
             </span>
-            <div class="post-description">复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系</div>
+            <div class="post-description">行锁+间隙锁=next-key lock</div>
 
         </div>
       </header>
@@ -277,56 +275,107 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="时间复杂度与空间复杂度"><a href="#时间复杂度与空间复杂度" class="headerlink" title="时间复杂度与空间复杂度"></a>时间复杂度与空间复杂度</h2><p>复杂度描述的是算法执行时间或者占用空间与数据规模的增长关系。  </p>
-<h3 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h3><p>代码执行时间随数据规模增长的变化趋势，叫作渐进时间复杂度（asymptotic time complexity），简称<strong>时间复杂度</strong>。  </p>
-<p>所有代码的执行时间T(n)与每行代码的执行次数成正比  </p>
-<p><code>T(n) = O(f(n))</code>  </p>
+        <div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        样例
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">'t'</span> (</span><br><span class="line">    <span class="string">'id'</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'c'</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">default</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'d'</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">default</span> <span class="literal">null</span>,</span><br><span class="line">    primary <span class="keyword">key</span> (<span class="string">'id'</span>),</span><br><span class="line">    <span class="keyword">key</span> <span class="string">'c'</span> (<span class="string">'c'</span>)</span><br><span class="line">) <span class="keyword">engine</span>=<span class="keyword">InnoDB</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>),(<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>),(<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>),(<span class="number">15</span>,<span class="number">15</span>,<span class="number">15</span>),(<span class="number">20</span>,<span class="number">20</span>,<span class="number">20</span>),(<span class="number">25</span>,<span class="number">25</span>,<span class="number">25</span>);</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
 <blockquote>
-<p>其中T(n)表示算法执行的总时间，f(n)表示每行代码执行总次数，而n往往表示数据的规模。常量阶、低阶、系数对增长趋势不产生决定性影响，在做复杂度分析时可忽略这些项。</p>
+<p>begin;<br>select * from t where d=5 for update;<br>commit;  </p>
 </blockquote>
-<h4 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h4><ol>
-<li>单段代码看高频：比如循环。</li>
-<li>多段代码取最大：比如一段代码中有单循环和多重循环，那么取多重循环的复杂度。</li>
-<li>嵌套代码求乘积：比如递归、多重循环等。</li>
-<li>多个规模求加法：比如方法有两个参数控制两个循环的次数，那么这是就取二者复杂度相加。</li>
-</ol>
-<h4 id="级别"><a href="#级别" class="headerlink" title="级别"></a>级别</h4><p><em>多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用，按照多项式的比例增长。</p>
+<p>这个语句会命中d=5这一行，对应的主键id=5，在select语句执行完成后，id=5这一行会加一个写锁，由于两阶段锁协议，这个写锁会在执行commit语句的时候释放。（由于字段d上没有索引，这条查询语句会做全表扫描。其他被扫描到的，但是不满足条件的记录也会加锁）  </p>
+<h3 id="理解幻读"><a href="#理解幻读" class="headerlink" title="理解幻读"></a>理解幻读</h3><p>假设：<br>||sessionA|sessionB|sessionC|<br>|–|–|–|–|<br>|T1|begin;  select * from t where d=5 for update;– Q1 (5,5,5)|||<br>|T2||update t set d=5 where id=0;||<br>|T3|select * from t where d=5 for update;– Q2 (0,0,5),(5,5,5)|||<br>|T4|||insert into t values(1,1,5);|<br>|T5|select * from t where d=5 for update;– Q3 (0,0,5),(1,1,5),(5,5,5)|||<br>|T6|commit;|||</p>
+<p>sessionA执行了三次查询：Q1、Q2、Q3。它们的SQL语句相同。select * from t where d=5 for update;查所有d=5的行，而且使用的是当前读，能读到所有已经提交的记录的最新值，并且加上写锁。  </p>
+<p>Q3读到id=1这一行的现象被称为“幻读”。<br><strong>幻读指的是一个事务在前后两次查询同一个范围的时候，后一次查询看到了前一次查询没有看到的行。</strong>  </p>
+<ul>
+<li>在可重复读隔离级别下，普通的查询时快照读，是不会看到别的事务插入的数据的。幻读在“当前读”下才会出现。  </li>
+<li>sessionB的修改结果，被sessionA之后的select语句用“当前读”看到，不能成为幻读。幻读仅专指“新插入的行”。  </li>
+</ul>
+<h3 id="幻读引发的问题"><a href="#幻读引发的问题" class="headerlink" title="幻读引发的问题"></a>幻读引发的问题</h3><h4 id="语义上的问题"><a href="#语义上的问题" class="headerlink" title="语义上的问题"></a>语义上的问题</h4><p>sessionA在T1时刻声明，把所有d=5的行锁住，不准别的事务进行读写操作，只给id=5这一行加了行锁。sessionB和sessionC中的语句正常修改，会产生新的d=5的行，破坏了sessionA中Q1语句要锁住所有d=5的行的加锁声明。  </p>
+<h4 id="数据一致性问题"><a href="#数据一致性问题" class="headerlink" title="数据一致性问题"></a>数据一致性问题</h4><p>锁的设计是为了保证数据的一致性。不只是数据库内部数据状态在此刻的一致性，还包含了数据和日志在逻辑上的一致性。  </p>
+<p>sessionA在T1时刻加一个更新语句：update t set d=100 where d=5;<br>数据库中结果：  </p>
+<ul>
+<li>T1时刻后，id=5这一行变成(5,5,100)，这个最终结果是在T6时刻正式提交的；</li>
+<li>T2时刻后，id=0这一行变成(0,0,5);</li>
+<li>T4时刻后，表里多了一行(1,1,5);</li>
+</ul>
+<p>binlog中内容：  </p>
+<ul>
+<li>T2时刻，sessionB事务提交，写入了一条语句；</li>
+<li>T4时刻，sessionC事务提交，写入了一条语句；</li>
+<li>T6时刻，sessionA事务提交，写入了update t set d=100 where d=5这条语句。（所有d=5的行，d改成100）</li>
+</ul>
+<p>使用binlog的语句序列，拿到备库执行或者克隆一个库，这三行结构都变成了(0,0,100),(1,1,100),(5,5,100)。产生了数据不一致。  </p>
+<p>数据不一致是因为select * from t where d=5 for update只给d=5这一行，也就是id=5这一行加锁导致的。  </p>
+<p>即使把扫描过程中碰到的行，都加上写锁(当前存在的所有行)，也只能解决update语句导致的数据不一致问题(sessionB被锁住，等到sessionA提交后才能继续执行)。但是阻止不了insert语句新插入记录，加锁的时候新插入的记录行不存在，不存在也就加不上锁(无锁可随意修改并先提交，若sessionC中加一条把d改成5的操作并先提交，根据日志语句序列依然会导致主从数据不一致)。</p>
+<h3 id="解决幻读"><a href="#解决幻读" class="headerlink" title="解决幻读"></a>解决幻读</h3><h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h4><p>产生幻读的原因是，行锁只能锁住行，但是新插入记录这个动作，要更新的是记录之间的“间隙”。为了解决幻读问题，InnoDB引入了新的锁—间隙锁(Gap Lock)。间隙锁锁的是两个值之间的空隙。  </p>
+<p>执行select * from t where d=5 for update;时，不止是给数据中已有的6个记录加上了行锁，还同时加了7个间隙锁。确保了无法再插入新的记录。  </p>
+<p>行锁分成读锁和写锁。读读兼容，读写、写写冲突。跟行锁有冲突关系的是“另外一个行锁”。  </p>
+<p><strong>间隙锁之间都不存在冲突关系。跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作。</strong></p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;select * from t where c=7 lock in share mode;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>begin;select * from t where c=7 for update;</td>
+</tr>
+</tbody></table>
+<p>sessionB并不会被堵住，表t中没有c=7这个记录，因此sessionA加的是间隙锁(5,10)。而sessionB也是在这个间隙加的间隙锁。它们有共同的目标：保护这个间隙，不允许插入值，但是它们之间是不冲突的。  </p>
+<h4 id="next-key-lock"><a href="#next-key-lock" class="headerlink" title="next-key lock"></a>next-key lock</h4><p>间隙锁和行锁合称next-key lock，每个next-key lock是前开后闭区间。示例表可以形成7个next-key lock：(-∞,0]、(0,5]、(5,10]、(10,15]、(15,20]、(20,25]、(25,+suprenum]。  </p>
+<blockquote>
+<p>间隙锁为开区间，next-key lock为前开后闭区间。<br>+∞是开区间。InnoDB给每个索引加了一个不存在的最大值supremum，符合前开后闭区间。  </p>
+</blockquote>
+<h4 id="新的问题"><a href="#新的问题" class="headerlink" title="新的问题"></a>新的问题</h4><p><strong>间隙锁和next-key lock的引入，解决了幻读的问题，但可能会导致同样的语句锁住更大的范围，影响了并发度。</strong></p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;select * from t where id=9 for update;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>begin;select * from t where id=9 for update;</td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(9,9,9);– blocked</td>
+</tr>
+<tr>
+<td>insert into t values(9,9,9);– error 1213(40001):deadlock found</td>
+<td></td>
+</tr>
+</tbody></table>
 <ol>
-<li>常量阶 O(1)  </li>
-<li>对数阶 O(logn)  </li>
-<li>线性阶 O(n)  </li>
-<li>线性对数阶 O(nlogn)  </li>
-<li>O(n<sup>2</sup>)平方阶、O(n<sup>3</sup>)立方阶……</li>
+<li>sessionA执行select…for update语句，由于id=9这一行并不存在，因此会加上间隙锁(5,10)；</li>
+<li>sessionB执行select…for update语句，同样会加上间隙锁(5,10)，间隙锁之间不会冲突，这个语句可以执行成功；</li>
+<li>sessionB视图插入一行(9,9,9)，被sessionA的间隙锁挡住了，只好进入等待；</li>
+<li>sessionA视图插入一行(9,9,9)，被sessionA的间隙锁挡住了。  </li>
 </ol>
-<p><em>非多项式量级</em>  随着数据规模的增长，算法的执行时间和空间占用暴增，这类算法的性能极差</p>
-<ol start="6">
-<li>指数阶 O(2<sup>n</sup>)  </li>
-<li>阶乘阶 O(n!)  </li>
-</ol>
-<h3 id="空间复杂度分析"><a href="#空间复杂度分析" class="headerlink" title="空间复杂度分析"></a>空间复杂度分析</h3><p><strong>空间复杂度</strong>全称就是渐进空间复杂度（asymptotic space complexity），表示算法的存储空间与数据规模之间的增长关系。  </p>
-<p>类似于时间复杂度</p>
-<h3 id="其他复杂度"><a href="#其他复杂度" class="headerlink" title="其他复杂度"></a>其他复杂度</h3><ol>
-<li><p>最好情况时间复杂度（best case time complexity）  </p>
+<p>两个session进入互相等待状态，形成死锁。(InnoDB的死锁检测马上就发现了这对死锁关系，让sessionA的insert语句报错返回)  </p>
 <blockquote>
-<p>在最理想的情况下，执行这段代码的时间复杂度  </p>
+<p>只有一个唯一索引的时候，可以用insert…on duplicate key update语法避免死锁</p>
 </blockquote>
-</li>
-<li><p>最坏情况时间复杂度（worst case time complexity）</p>
+<p>间隙锁是可重复读隔离级别下才会生效的。如果把隔离级别设置为读提交，就没有间隙锁了。但要解决可能出现的数据和日志不一致问题，需要把binlog格式设置为row。(set transaction_isolation=’read-committed’;set binlog_format=’row’)  </p>
 <blockquote>
-<p>在最糟糕的情况下，执行这段代码的时间复杂度  </p>
+<p>innodb_locks_unsafe_for_binlog=1;表示不加间隙锁</p>
 </blockquote>
-</li>
-<li><p>平均情况时间复杂度（average case time complexity）</p>
-<blockquote>
-<p>加权平均时间复杂度/期望时间复杂度<br>用代码在所有情况下执行的次数的加权平均值表示</p>
-</blockquote>
-</li>
-<li><p>均摊时间复杂度（amortized time complexity）</p>
-<blockquote>
-<p>摊还分析、平摊分析。一种特殊的平均时间复杂度。<br>在代码执行的所有复杂度情况中绝大部分是低级别的复杂度，个别情况是高级别复杂度且发生具有时序关系时，可以将个别高级别复杂度均摊到低级别复杂度上。基本上均摊结果等于低级别复杂度。（重点1、高级别少数2、低高出现具有时序规律）</p>
-</blockquote>
-</li>
-</ol>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -335,11 +384,6 @@
     
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 时间复杂度</a>
-              <a href="/tags/%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag"><i class="fa fa-tag"></i> 空间复杂度</a>
-          </div>
 
         
 
@@ -347,13 +391,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/uncategorized/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/MySQL/%E7%AE%80%E5%8D%95%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E6%85%A2%E8%A7%A3%E6%9E%90/" rel="prev" title="简单查询执行慢解析">
+      <i class="fa fa-chevron-left"></i> 简单查询执行慢解析
     </a></div>
-      <div class="post-nav-item">
-    <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84/" rel="next" title="数组">
-      数组 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -412,7 +453,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度与空间复杂度"><span class="nav-number">1.</span> <span class="nav-text">时间复杂度与空间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度分析"><span class="nav-number">1.1.</span> <span class="nav-text">时间复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原则"><span class="nav-number">1.1.1.</span> <span class="nav-text">原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#级别"><span class="nav-number">1.1.2.</span> <span class="nav-text">级别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间复杂度分析"><span class="nav-number">1.2.</span> <span class="nav-text">空间复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他复杂度"><span class="nav-number">1.3.</span> <span class="nav-text">其他复杂度</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#理解幻读"><span class="nav-number">1.</span> <span class="nav-text">理解幻读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幻读引发的问题"><span class="nav-number">2.</span> <span class="nav-text">幻读引发的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#语义上的问题"><span class="nav-number">2.1.</span> <span class="nav-text">语义上的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据一致性问题"><span class="nav-number">2.2.</span> <span class="nav-text">数据一致性问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决幻读"><span class="nav-number">3.</span> <span class="nav-text">解决幻读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#间隙锁"><span class="nav-number">3.1.</span> <span class="nav-text">间隙锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#next-key-lock"><span class="nav-number">3.2.</span> <span class="nav-text">next-key lock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新的问题"><span class="nav-number">3.3.</span> <span class="nav-text">新的问题</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
