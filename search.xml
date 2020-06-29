@@ -210,6 +210,28 @@
       </tags>
   </entry>
   <entry>
+    <title>队列</title>
+    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
+<h4 id="实现队列"><a href="#实现队列" class="headerlink" title="实现队列"></a>实现队列</h4><p>队列主要包含两个操作：入队enqueue(),放一个数据到队列尾部；出队dequeue(),从队列头部取一个元素。<br>用数组实现的队列-<strong>顺序队列</strong>，多为有界队列。<br>队列需要两个指针：1指向队头的head指针；2指向队尾的tail指针。<br>顺序队列实现优化，出队时不搬移数据，入队时如果没有空闲空间集中触发一次数据的搬移操作。更进一步，循环队列可以避免数据搬移操作。<br>用链表实现的队列-<strong>链式队列</strong>，多为无界队列。<br>入队：tail-&gt;next=new_node,tail=tail-&gt;next(tail=new_node);<br>出队：head=head-&gt;next.</p>
+<h4 id="特殊队列"><a href="#特殊队列" class="headerlink" title="特殊队列"></a>特殊队列</h4><ul>
+<li>循环队列(基于数组)<br>与普通队列的区别关键在于队空和队满的判定条件<br>普通队列：队空<strong>head==tail</strong>,队满<strong>tail==n</strong>;<br>循环队列：队空<strong>head==tail</strong>,队满<strong>(tail+1)%n==head</strong>.  <blockquote>
+<p>tail指向的位置没有存储数据，循环队列会浪费一个数组的存储空间。为了区分队空和队满。<br>普通队列队满的时候tail指向n，而不是n-1，不会浪费空间，数组中所有的位置都有数据。  </p>
+</blockquote>
+</li>
+<li>阻塞队列（生产者-消费者模型）<br>在队列的基础上增加了阻塞操作：在队列为空的时候，从对头取数据会被阻塞；如果队列已满，插入数组的操作会被阻塞。  </li>
+<li>并发队列<br>线程安全的队列<br>在入队、出队操作方法上加锁，锁粒度大并发度低。<br>基于数组的循环队列，利用CAS原子操作实现高效的并发队列。  </li>
+</ul>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>资源有限场景中，没有空闲资源时，通过队列来实现请求排队。<br>线程池、数据库连接池等</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>递归</title>
     <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%80%92%E5%BD%92/</url>
     <content><![CDATA[<p>方法或者函数调用自身的方式称为递归调用，调用称为递，返回称为归。<br>用栈的数据结构加上简单的逻辑算法实现业务功能。  </p>
@@ -247,28 +269,6 @@
       </categories>
       <tags>
         <tag>递归</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>队列</title>
-    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<p>队列也是一种操作受限的线性表数据结构，具有先进者先出的特性。  </p>
-<h4 id="实现队列"><a href="#实现队列" class="headerlink" title="实现队列"></a>实现队列</h4><p>队列主要包含两个操作：入队enqueue(),放一个数据到队列尾部；出队dequeue(),从队列头部取一个元素。<br>用数组实现的队列-<strong>顺序队列</strong>，多为有界队列。<br>队列需要两个指针：1指向队头的head指针；2指向队尾的tail指针。<br>顺序队列实现优化，出队时不搬移数据，入队时如果没有空闲空间集中触发一次数据的搬移操作。更进一步，循环队列可以避免数据搬移操作。<br>用链表实现的队列-<strong>链式队列</strong>，多为无界队列。<br>入队：tail-&gt;next=new_node,tail=tail-&gt;next(tail=new_node);<br>出队：head=head-&gt;next.</p>
-<h4 id="特殊队列"><a href="#特殊队列" class="headerlink" title="特殊队列"></a>特殊队列</h4><ul>
-<li>循环队列(基于数组)<br>与普通队列的区别关键在于队空和队满的判定条件<br>普通队列：队空<strong>head==tail</strong>,队满<strong>tail==n</strong>;<br>循环队列：队空<strong>head==tail</strong>,队满<strong>(tail+1)%n==head</strong>.  <blockquote>
-<p>tail指向的位置没有存储数据，循环队列会浪费一个数组的存储空间。为了区分队空和队满。<br>普通队列队满的时候tail指向n，而不是n-1，不会浪费空间，数组中所有的位置都有数据。  </p>
-</blockquote>
-</li>
-<li>阻塞队列（生产者-消费者模型）<br>在队列的基础上增加了阻塞操作：在队列为空的时候，从对头取数据会被阻塞；如果队列已满，插入数组的操作会被阻塞。  </li>
-<li>并发队列<br>线程安全的队列<br>在入队、出队操作方法上加锁，锁粒度大并发度低。<br>基于数组的循环队列，利用CAS原子操作实现高效的并发队列。  </li>
-</ul>
-<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>资源有限场景中，没有空闲资源时，通过队列来实现请求排队。<br>线程池、数据库连接池等</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -578,71 +578,6 @@ public int partition(int[] a,int start,int end) {
       </tags>
   </entry>
   <entry>
-    <title>二分查找</title>
-    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<p>二分查找算法-折半查找算法  </p>
-<h4 id="二分思想"><a href="#二分思想" class="headerlink" title="二分思想"></a>二分思想</h4><p>二分查找针对的是一个有序的数据集合，查找思想类似分治思想。每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0。  </p>
-<h4 id="查找速度O-logn"><a href="#查找速度O-logn" class="headerlink" title="查找速度O(logn)"></a>查找速度O(logn)</h4><p><strong>数组：</strong><br>假设数据大小是n，每次查找后数据都会缩小为原来的一半，也就是除以2。最坏情况下，直到查找区间被缩小为空才停止。被查找区间的大小变化n,n/2,n/4,n/8,…,n/2<sup>k</sup>…为一个等比数列，当n/2<sup>k</sup>=1时，k的值就是总共缩小的次数。而每一次缩小操作只涉及两个数据的大小比较，所以经过了k次区间缩小操作，时间复杂度就是O(k)。通过n/2<sup>k</sup>，可以求得k=log<sub>2</sub>n，所以时间复杂度就是O(logn)。   </p>
-<p>对数时间复杂度是一直极其高效的时间复杂度，有的时候甚至常量级时间复杂度的算法还要高效。  </p>
-<p><strong>链表：</strong><br>假设链表长度为n，二分查找每次都要找到中间结点：<br>第一次查找中间结点需要移动指针n/2次;<br>第二次，需要移动n/4次；<br>第三次，需要n/8次；<br>。。。<br>以此类推，一直到1次为止。<br>指针一共移动次数k=n/2+n/4+n/8+…+1，等比数列求和为n-1。<br>时间复杂度为O(n)。与顺序查找时间复杂度相同。但二分查找需要进行多余的运算，比顺序查找慢。</p>
-<h4 id="递归与非递归实现"><a href="#递归与非递归实现" class="headerlink" title="递归与非递归实现"></a>递归与非递归实现</h4><p>最简单的情况就是有序数组中不存在重复元素，用二分查找值等于给定值的数据。  </p>
-<pre><code>//非递归
-public int bsearch(int[] a,int value) {
-    int low = 0;
-    int high = a.length-1;
-    while(low &lt;= high) {
-        int mid = (low+high) / 2;
-        if(a[mid] == value) {
-            return mid;
-        } else if(a[mid] &lt; value) {
-            low = mid + 1;
-        } else {
-            high = mid -1;
-        }
-    }
-    return -1;
-}</code></pre><blockquote>
-<p>low、high、mid都是指数组下标，low和high表示当前查找的区间范围，初始low=0,high=n-1。mid表示[low,high]的中间位置，通过a[mid]与value的大小，来更新接下来要查找的区间范围，直到找到或者区间缩小为0就退出。  </p>
-</blockquote>
-<ul>
-<li>循环退出条件<br>low&lt;=high  </li>
-<li>mid取值<br>mid=(low+high)/2。<br>low + (high - low) /2;避免low和high比较大时，两者和溢出。<br>将除以2转化成位运算low+((high-low)&gt;&gt;1)。注意位运算优先级  </li>
-<li>low和high的更新<br>low=mid+1&amp;high=mid-1。<br>low=mid|high=mid可能发生死循环。  </li>
-</ul>
-<pre><code>//递归
-public int bsearch(int[] a,int value) {
-    return bserachInter(a,0,a.length-1,value);
-}
-
-private int bserachInter(int[] a,int low,int high,int value) {
-    if(low &gt; high) return -1;
-    int mid = low + ((high-low)&gt;&gt;1);
-    if(a[mid] == value) {
-        return mid;
-    } else if(a[mid] &lt; value) {
-        return bserachInter(a,mid+1,high,value);
-    } else {
-        return bserachInter(a,low,high+1,value);
-    }
-}</code></pre><h4 id="应用场景局限性"><a href="#应用场景局限性" class="headerlink" title="应用场景局限性"></a>应用场景局限性</h4><ul>
-<li><p>二分查找依赖的是顺序表结构-数组<br>二分查找算法需要按照下标随机访问数组。数组按照下标随机访问数据的时间复杂度是O(1)，链表随机访问的时间复杂度是O(n)。如果数据使用链表存储，二分查找的时间复杂度会变得很高。<br>二分查找只能用在数据是通过顺序表来存储的数据结构上，如果数据是通过其他数据结构存储的，则无法使用二分查找。 </p>
-</li>
-<li><p>二分查找针对的是有序数据<br>数据必须是有序的。如果数据无序，需要先排序，排序的时间复杂度最低是O(nlogn)。如果针对的是一组静态的数据，没有频繁的插入、删除，可以进行一次排序、多次二分查找。这样排序的成本可被均摊，二分查找的边际成本就会比较低。<br>数据集合有频繁的插入和删除操作，要想用二分查找，要么每次插入、删除操作之后保证数据仍然有序，要么在每次二分查找之前都先进行排序。针对动态数据，无论什么方法，维护有序的成本都很高。(二叉树)  </p>
-</li>
-<li><p>数据量太小不适合二分查找<br>数据量很小，顺序便利足够。但是数据之间的比较操作非常耗时，不管数据量大小，都推荐二分查找，尽可能的减少比较次数，大大提高性能。  </p>
-</li>
-<li><p>数据量太大不适合二分查找<br>二分查找底层依赖数组这种数据结构，数组为了支持随机访问特性，要求内存空间连续，对内存的要求比较苛刻。即使拥有更多的内存空间剩余，如果是零散的不连续，依然无法申请相应大小的数组。  </p>
-</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二分查找</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>排序优化</title>
     <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<table>
@@ -745,6 +680,71 @@ private int bserachInter(int[] a,int low,int high,int value) {
       </categories>
       <tags>
         <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二分查找</title>
+    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<p>二分查找算法-折半查找算法  </p>
+<h4 id="二分思想"><a href="#二分思想" class="headerlink" title="二分思想"></a>二分思想</h4><p>二分查找针对的是一个有序的数据集合，查找思想类似分治思想。每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0。  </p>
+<h4 id="查找速度O-logn"><a href="#查找速度O-logn" class="headerlink" title="查找速度O(logn)"></a>查找速度O(logn)</h4><p><strong>数组：</strong><br>假设数据大小是n，每次查找后数据都会缩小为原来的一半，也就是除以2。最坏情况下，直到查找区间被缩小为空才停止。被查找区间的大小变化n,n/2,n/4,n/8,…,n/2<sup>k</sup>…为一个等比数列，当n/2<sup>k</sup>=1时，k的值就是总共缩小的次数。而每一次缩小操作只涉及两个数据的大小比较，所以经过了k次区间缩小操作，时间复杂度就是O(k)。通过n/2<sup>k</sup>，可以求得k=log<sub>2</sub>n，所以时间复杂度就是O(logn)。   </p>
+<p>对数时间复杂度是一直极其高效的时间复杂度，有的时候甚至常量级时间复杂度的算法还要高效。  </p>
+<p><strong>链表：</strong><br>假设链表长度为n，二分查找每次都要找到中间结点：<br>第一次查找中间结点需要移动指针n/2次;<br>第二次，需要移动n/4次；<br>第三次，需要n/8次；<br>。。。<br>以此类推，一直到1次为止。<br>指针一共移动次数k=n/2+n/4+n/8+…+1，等比数列求和为n-1。<br>时间复杂度为O(n)。与顺序查找时间复杂度相同。但二分查找需要进行多余的运算，比顺序查找慢。</p>
+<h4 id="递归与非递归实现"><a href="#递归与非递归实现" class="headerlink" title="递归与非递归实现"></a>递归与非递归实现</h4><p>最简单的情况就是有序数组中不存在重复元素，用二分查找值等于给定值的数据。  </p>
+<pre><code>//非递归
+public int bsearch(int[] a,int value) {
+    int low = 0;
+    int high = a.length-1;
+    while(low &lt;= high) {
+        int mid = (low+high) / 2;
+        if(a[mid] == value) {
+            return mid;
+        } else if(a[mid] &lt; value) {
+            low = mid + 1;
+        } else {
+            high = mid -1;
+        }
+    }
+    return -1;
+}</code></pre><blockquote>
+<p>low、high、mid都是指数组下标，low和high表示当前查找的区间范围，初始low=0,high=n-1。mid表示[low,high]的中间位置，通过a[mid]与value的大小，来更新接下来要查找的区间范围，直到找到或者区间缩小为0就退出。  </p>
+</blockquote>
+<ul>
+<li>循环退出条件<br>low&lt;=high  </li>
+<li>mid取值<br>mid=(low+high)/2。<br>low + (high - low) /2;避免low和high比较大时，两者和溢出。<br>将除以2转化成位运算low+((high-low)&gt;&gt;1)。注意位运算优先级  </li>
+<li>low和high的更新<br>low=mid+1&amp;high=mid-1。<br>low=mid|high=mid可能发生死循环。  </li>
+</ul>
+<pre><code>//递归
+public int bsearch(int[] a,int value) {
+    return bserachInter(a,0,a.length-1,value);
+}
+
+private int bserachInter(int[] a,int low,int high,int value) {
+    if(low &gt; high) return -1;
+    int mid = low + ((high-low)&gt;&gt;1);
+    if(a[mid] == value) {
+        return mid;
+    } else if(a[mid] &lt; value) {
+        return bserachInter(a,mid+1,high,value);
+    } else {
+        return bserachInter(a,low,high+1,value);
+    }
+}</code></pre><h4 id="应用场景局限性"><a href="#应用场景局限性" class="headerlink" title="应用场景局限性"></a>应用场景局限性</h4><ul>
+<li><p>二分查找依赖的是顺序表结构-数组<br>二分查找算法需要按照下标随机访问数组。数组按照下标随机访问数据的时间复杂度是O(1)，链表随机访问的时间复杂度是O(n)。如果数据使用链表存储，二分查找的时间复杂度会变得很高。<br>二分查找只能用在数据是通过顺序表来存储的数据结构上，如果数据是通过其他数据结构存储的，则无法使用二分查找。 </p>
+</li>
+<li><p>二分查找针对的是有序数据<br>数据必须是有序的。如果数据无序，需要先排序，排序的时间复杂度最低是O(nlogn)。如果针对的是一组静态的数据，没有频繁的插入、删除，可以进行一次排序、多次二分查找。这样排序的成本可被均摊，二分查找的边际成本就会比较低。<br>数据集合有频繁的插入和删除操作，要想用二分查找，要么每次插入、删除操作之后保证数据仍然有序，要么在每次二分查找之前都先进行排序。针对动态数据，无论什么方法，维护有序的成本都很高。(二叉树)  </p>
+</li>
+<li><p>数据量太小不适合二分查找<br>数据量很小，顺序便利足够。但是数据之间的比较操作非常耗时，不管数据量大小，都推荐二分查找，尽可能的减少比较次数，大大提高性能。  </p>
+</li>
+<li><p>数据量太大不适合二分查找<br>二分查找底层依赖数组这种数据结构，数组为了支持随机访问特性，要求内存空间连续，对内存的要求比较苛刻。即使拥有更多的内存空间剩余，如果是零散的不连续，依然无法申请相应大小的数组。  </p>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二分查找</tag>
       </tags>
   </entry>
   <entry>
@@ -1020,6 +1020,55 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
+    <title>二叉树</title>
+    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
+    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
+<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
+<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
+<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
+<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
+<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
+</ol>
+<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
+<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
+</li>
+<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
+</li>
+<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
+<p> 递推公式：  </p>
+ <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">前序遍历  </span><br><span class="line">preOrder<span class="function"><span class="params">(r)</span> = <span class="title">print</span> <span class="title">r</span> -&gt;</span> preOrder<span class="function"><span class="params">(r-&gt;left)</span> -&gt;</span> preOrder(r-&gt;right)  </span><br><span class="line">中序遍历  </span><br><span class="line">inOrder<span class="function"><span class="params">(r)</span> = <span class="title">inOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> <span class="built_in">print</span> r<span class="function"> -&gt;</span> inOrder(r-&gt;right)  </span><br><span class="line">后序遍历  </span><br><span class="line">postOrder<span class="function"><span class="params">(r)</span> = <span class="title">postOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> postOrder<span class="function"><span class="params">(r-&gt;right)</span> -&gt;</span> <span class="built_in">print</span> r</span><br></pre></td></tr></table></figure>
+
+<p> 伪代码：  </p>
+ <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前序遍历</span></span><br><span class="line">void pre<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    print root;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//中序遍历</span></span><br><span class="line">void <span class="keyword">in</span><span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//后序遍历</span></span><br><span class="line">void post<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        按层遍历
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(T x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;TreeNode&gt; <span class="title">floorlevelOrder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;TreeNode&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//利用队列先进先出的特点实现按层遍历</span></span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//根节点入队</span></span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="comment">//从队列中弹出各结点数据，直到队列为空，遍历完毕</span></span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环</span></span><br><span class="line">        TreeNode node = queue.poll();</span><br><span class="line">        result.add(node);</span><br><span class="line">        <span class="keyword">if</span>(node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+</div>  
+
+</li>
+</ol>
+<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
+<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
+
+<ul>
+<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>二叉查找树</title>
     <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
     <content><![CDATA[<p>二叉查找树是二叉树中最常用的一种类型，也叫二叉查找树。<br>二叉查找树要求，在树中的任意一个节点，其左子树中的每个节点的值，都要小于这个节点的值，而右子树节点的值都大于这个节点的值。  </p>
@@ -1082,55 +1131,6 @@ public int hashCode() {
 <li>散列表的查找等操作的时间复杂度是常量级的，但是哈希冲突存在&amp;哈希函数耗时，不一定比平衡二叉查找树的效率高。</li>
 <li>散列表的构造比二叉查找树要复杂，需要考虑的额东西很多，散列函数、冲突解决、扩容、缩容等。平衡二叉查找树只需要考虑平衡性。  </li>
 <li>为了避免散列冲突，装载因子不能太大，基于开放寻址法解决冲突的散列表，会浪费一定的存储空间。</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>二叉树</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>二叉树</title>
-    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%A0%91/</url>
-    <content><![CDATA[<h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><p>每个元素代表一个结点，相邻节点之间的连线关系，称为父子关系。<br>父节点<br>子节点<br>兄弟节点：节点的父节点是同一个节点<br>根节点：没有父节点的节点<br>叶子节点/叶节点：没有子节点的节点  </p>
-<p>节点的高度=节点到叶子节点的最长路径(边数)。起点是0，从下往上<br>节点的深度=根节点到这个所经历的边的个数。起点是0，从上往下<br>节点的层数=节点的深度+1。起点是1，从上往下<br>树的高度=根节点的高度  </p>
-<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><p>每个节点最多有两个叉-两个子节点，分别是左子节点和右子节点。但不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。<br>满二叉树：叶子节点全部在最底层，除叶子节点之外，每个节点都有左右两个子节点。<br>完全二叉树：叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其它层的节点个数都要达到最大。  </p>
-<h4 id="存储-表示一棵二叉树"><a href="#存储-表示一棵二叉树" class="headerlink" title="存储/表示一棵二叉树"></a>存储/表示一棵二叉树</h4><ol>
-<li>基于指针或者引用的二叉链式存储法<br>每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。  </li>
-<li>基于数组的顺序存储法<br>把根节点存储在下标i=1的位置，左子节点存储在下标2<em>i=2的位置，右子节点存储在2</em>i+1=3的位置。以此类推。<br>如果节点X存储在数据中下标为i的位置，下标为i<em>2的位置存储的就是左子节点，下标为2</em>i+1的位置存储的就是右子节点。反过来，下标为i/2的位置存储的是它的父节点。只要知道根节点存储的位置(一般为下标为1的位置，便于计算)，可以通过下标计算，把整棵树都串起来。<br>完全二叉树，仅仅浪费了一个下标为0的存储位置，如果是非完全二叉树，会浪费比较多的数组存储空间。如果某棵二叉树是完全二叉树，那用数组存储无疑是最节省内存的一种方式。(堆-完全二叉树)  </li>
-</ol>
-<h4 id="遍历二叉树-递归1"><a href="#遍历二叉树-递归1" class="headerlink" title="遍历二叉树-递归1"></a>遍历二叉树-递归<a href="#refer-anchor-1"><sup>1</sup></a></h4><ol>
-<li><p>前序遍历<br>对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。  </p>
-</li>
-<li><p>中序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它本身，最后打印它的右子树。  </p>
-</li>
-<li><p>后序遍历<br>对于树中的任意节点来说，先打印它的左子树，再打印它的右子树，最后打印这个节点本身。  </p>
-<p> 递推公式：  </p>
- <figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">前序遍历  </span><br><span class="line">preOrder<span class="function"><span class="params">(r)</span> = <span class="title">print</span> <span class="title">r</span> -&gt;</span> preOrder<span class="function"><span class="params">(r-&gt;left)</span> -&gt;</span> preOrder(r-&gt;right)  </span><br><span class="line">中序遍历  </span><br><span class="line">inOrder<span class="function"><span class="params">(r)</span> = <span class="title">inOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> <span class="built_in">print</span> r<span class="function"> -&gt;</span> inOrder(r-&gt;right)  </span><br><span class="line">后序遍历  </span><br><span class="line">postOrder<span class="function"><span class="params">(r)</span> = <span class="title">postOrder</span><span class="params">(r-&gt;left)</span> -&gt;</span> postOrder<span class="function"><span class="params">(r-&gt;right)</span> -&gt;</span> <span class="built_in">print</span> r</span><br></pre></td></tr></table></figure>
-
-<p> 伪代码：  </p>
- <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前序遍历</span></span><br><span class="line">void pre<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    print root;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    pre<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//中序遍历</span></span><br><span class="line">void <span class="keyword">in</span><span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">    <span class="keyword">in</span><span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//后序遍历</span></span><br><span class="line">void post<span class="constructor">Order(Node<span class="operator">*</span> <span class="params">root</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root<span class="operator"> == </span>null) return;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">left</span>)</span>;</span><br><span class="line">    post<span class="constructor">Order(<span class="params">root</span> -&gt; <span class="params">right</span>)</span>;</span><br><span class="line">    print root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>按层遍历<br>借助队列辅助：根节点先入队列，队列不为空，取出对头元素，如果左子存在就入队列，否则什么也不做，如果右子同理，直到队列为空，表示树层次遍历结束。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        按层遍历
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(T x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> List&lt;TreeNode&gt; <span class="title">floorlevelOrder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;TreeNode&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//利用队列先进先出的特点实现按层遍历</span></span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//根节点入队</span></span><br><span class="line">    queue.add(root);</span><br><span class="line">    <span class="comment">//从队列中弹出各结点数据，直到队列为空，遍历完毕</span></span><br><span class="line">    <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//弹出队首元素，放入结果集。并依次将其左右子节点入队(如果存在的话)，进行下一轮循环</span></span><br><span class="line">        TreeNode node = queue.poll();</span><br><span class="line">        result.add(node);</span><br><span class="line">        <span class="keyword">if</span>(node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.add(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-    </div>
-</div>  
-
-</li>
-</ol>
-<h4 id="二叉树遍历时间复杂度"><a href="#二叉树遍历时间复杂度" class="headerlink" title="二叉树遍历时间复杂度"></a>二叉树遍历时间复杂度</h4><p>每个节点最多会被访问两次，遍历操作的时间复杂度跟节点的个数n成正比，时间复杂度为O(n)。  </p>
-<h4 id="参考-amp-扩展"><a href="#参考-amp-扩展" class="headerlink" title="参考&amp;扩展"></a>参考&amp;扩展</h4><div id="refer-anchor-1"></div>
-
-<ul>
-<li>[1] <a href="https://mp.weixin.qq.com/s/0b5OsnFLLg18Td4CuR51_Q" target="_blank" rel="noopener">一篇总结二叉树的4种遍历方式（含模板）</a> </li>
 </ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
@@ -1239,6 +1239,45 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
+    <title>堆的应用</title>
+    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<h4 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h4><p>在优先级队列中，数据的出队顺序不是先进先出，而是按照优先级来，优先级高的，最先出队。  </p>
+<p>优先级队列实现方法有很多，用堆来实现是最直接、最高效的。<strong>一个堆可以看做一个优先级队列</strong>，往优先级队列中插入一个元素，就相当于往堆中插入一个元素；从优先级队列中取出优先级最高的元素，相当于取出堆顶元素。<br>霍夫曼编码、图的最短路径、最小生成树算法。  </p>
+<ul>
+<li><p>合并有序小文件<br>小文件中存储的都是有序的字符串。从各个小文件中各取出一个字符串，放入到与文件个数等长的小顶堆中，堆顶的元素就是优先级队列队首的元素-最小的字符串。<br>将这个字符串放入到大文件中，并将其从堆中删除。然后再从对应的小文件中取出下一个字符串，放入到堆中。循环。  </p>
+<p>删除堆顶数据和往堆中插入数据的时间复杂度都是O(logn)，n表示堆中的数据个数。  </p>
+</li>
+<li><p>高性能定时器<br>按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（小顶堆的堆顶）存储的是最先执行的任务。<br>拿队首任务的执行时间点，与当前时间点相减，得到时间间隔T。表示从当前时间开始，等待多久才会有第一个任务需要被执行。这样定时器就可以设定在T秒之后再来执行任务，从当前时间点到（T-1）秒这段时间里，定时器不需要做任何事情。<br>当T秒过去后，定时器取优先级队列中队首的任务执行。然后再计算新的队首任务的执行时间点与当前时间点的差值，该值是定时器执行下一个任务需要等待的时间。</p>
+<p>避免了普通定时器频繁轮训和遍历整个任务列表。  </p>
+</li>
+</ul>
+<h4 id="利用堆求TopK"><a href="#利用堆求TopK" class="headerlink" title="利用堆求TopK"></a>利用堆求TopK</h4><ul>
+<li><p>静态数据集合<br>针对包含n个数据的数组，查找前K大元素。先顺序取出数组中前k个元素，维护成一个大小为K的小顶堆，再顺序遍历数组，从数组中取出数据与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如果比堆顶元素小，则不处理。数组中护具都遍历完之后，堆中的数据就是前K大数据。  </p>
+<p>遍历数组时间复杂度为O(n)，一次堆化操作时间复杂度为O(logK)，最坏情况下，n个元素都入堆一次，时间复杂度为O(nlogK)。</p>
+</li>
+<li><p>动态数据集合<br>如果每次询问前K大数据，都基于当前的数据重新计算的话，时间复杂度为O(nlogK)，n表示当前的数据的大小。  </p>
+<p>维护一个K大小的小顶堆，当有数据被添加进集合中时，与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如多比堆顶元素小，就不做处理。无论任何时候需要查询当前的前K大数据，都可以立刻返回。  </p>
+</li>
+</ul>
+<h4 id="利用堆求中位数"><a href="#利用堆求中位数" class="headerlink" title="利用堆求中位数"></a>利用堆求中位数</h4><p>中位数，处在中间位置的那个数。如果数据的个数是奇数，把数据从小到大排列，第n/2 + 1个数就是中位数（数据从0开始编号）；如果数据的个数是偶数，处于中间位置的数据有两个，第n/2个和第n/2 + 1个，可以随意取一个作为中位数。  </p>
+<ul>
+<li><p>静态数据<br>中位数固定，可以先排序，第n/2个数据就是中位数。每次询问中位数直接返回固定值。  </p>
+</li>
+<li><p>动态数据<br>中位数在不停的变动，不能每次都先排序。  </p>
+<p>维护两个堆，一个大顶堆，一个小顶堆。大顶堆存储前半部分数据，小顶堆存储后半部分数据，而且小顶堆中的数据都大于大顶堆中的数据。<br>如果新加入的数据小于等于大顶堆的堆顶元素，就将新数据插入到大顶堆；否则将新数据插入到小顶堆。插入后两个堆中的数据个数不符合约定情况时，从一个堆中将堆顶元素移动到另一个堆。  </p>
+<p>插入数据因为需要涉及堆化，时间复杂度为O(logn)，求中位数只需要返回大顶堆的堆顶元素，时间复杂度是O(1)。  </p>
+<p>中位数相当于50%，可以扩展到任意百分位数。  </p>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>堆</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>图</title>
     <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%9B%BE/</url>
     <content><![CDATA[<h3 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h3><p>图是比树更加复杂的非线性表结构。适合存储微博、微信等社交网络中的好友关系。<br><strong>顶点</strong>：图中的元素；用户<br><strong>边</strong>：顶点与任意其它顶点之间的连接关系；好友关系<br><strong>度</strong>：顶点相连接的边的条数；好友个数<br><strong>有向图</strong>：带箭头的边，表示边的方向，有方向的图；关注关系<br><strong>无向图</strong>：边没有方向的图；好友关系<br><strong>度</strong>：无向图中表示一个顶点有多少条边；好友个数<br><strong>入度</strong>：有向图中，表示有多少条边指向这个顶点；粉丝个数<br><strong>出度</strong>：有向图中，表示有多少条边是以这个顶点为起点指向其他顶点；关注人数<br><strong>带权图</strong>：每条边都有一个权重。亲密度  </p>
@@ -1284,45 +1323,6 @@ public int hashCode() {
       </categories>
       <tags>
         <tag>图</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>堆的应用</title>
-    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<h4 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h4><p>在优先级队列中，数据的出队顺序不是先进先出，而是按照优先级来，优先级高的，最先出队。  </p>
-<p>优先级队列实现方法有很多，用堆来实现是最直接、最高效的。<strong>一个堆可以看做一个优先级队列</strong>，往优先级队列中插入一个元素，就相当于往堆中插入一个元素；从优先级队列中取出优先级最高的元素，相当于取出堆顶元素。<br>霍夫曼编码、图的最短路径、最小生成树算法。  </p>
-<ul>
-<li><p>合并有序小文件<br>小文件中存储的都是有序的字符串。从各个小文件中各取出一个字符串，放入到与文件个数等长的小顶堆中，堆顶的元素就是优先级队列队首的元素-最小的字符串。<br>将这个字符串放入到大文件中，并将其从堆中删除。然后再从对应的小文件中取出下一个字符串，放入到堆中。循环。  </p>
-<p>删除堆顶数据和往堆中插入数据的时间复杂度都是O(logn)，n表示堆中的数据个数。  </p>
-</li>
-<li><p>高性能定时器<br>按照任务设定的执行时间，将这些任务存储在优先级队列中，队列首部（小顶堆的堆顶）存储的是最先执行的任务。<br>拿队首任务的执行时间点，与当前时间点相减，得到时间间隔T。表示从当前时间开始，等待多久才会有第一个任务需要被执行。这样定时器就可以设定在T秒之后再来执行任务，从当前时间点到（T-1）秒这段时间里，定时器不需要做任何事情。<br>当T秒过去后，定时器取优先级队列中队首的任务执行。然后再计算新的队首任务的执行时间点与当前时间点的差值，该值是定时器执行下一个任务需要等待的时间。</p>
-<p>避免了普通定时器频繁轮训和遍历整个任务列表。  </p>
-</li>
-</ul>
-<h4 id="利用堆求TopK"><a href="#利用堆求TopK" class="headerlink" title="利用堆求TopK"></a>利用堆求TopK</h4><ul>
-<li><p>静态数据集合<br>针对包含n个数据的数组，查找前K大元素。先顺序取出数组中前k个元素，维护成一个大小为K的小顶堆，再顺序遍历数组，从数组中取出数据与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如果比堆顶元素小，则不处理。数组中护具都遍历完之后，堆中的数据就是前K大数据。  </p>
-<p>遍历数组时间复杂度为O(n)，一次堆化操作时间复杂度为O(logK)，最坏情况下，n个元素都入堆一次，时间复杂度为O(nlogK)。</p>
-</li>
-<li><p>动态数据集合<br>如果每次询问前K大数据，都基于当前的数据重新计算的话，时间复杂度为O(nlogK)，n表示当前的数据的大小。  </p>
-<p>维护一个K大小的小顶堆，当有数据被添加进集合中时，与堆顶元素比较。如果比堆顶元素大，就把堆顶元素删除，并将这个数据插入堆中；如多比堆顶元素小，就不做处理。无论任何时候需要查询当前的前K大数据，都可以立刻返回。  </p>
-</li>
-</ul>
-<h4 id="利用堆求中位数"><a href="#利用堆求中位数" class="headerlink" title="利用堆求中位数"></a>利用堆求中位数</h4><p>中位数，处在中间位置的那个数。如果数据的个数是奇数，把数据从小到大排列，第n/2 + 1个数就是中位数（数据从0开始编号）；如果数据的个数是偶数，处于中间位置的数据有两个，第n/2个和第n/2 + 1个，可以随意取一个作为中位数。  </p>
-<ul>
-<li><p>静态数据<br>中位数固定，可以先排序，第n/2个数据就是中位数。每次询问中位数直接返回固定值。  </p>
-</li>
-<li><p>动态数据<br>中位数在不停的变动，不能每次都先排序。  </p>
-<p>维护两个堆，一个大顶堆，一个小顶堆。大顶堆存储前半部分数据，小顶堆存储后半部分数据，而且小顶堆中的数据都大于大顶堆中的数据。<br>如果新加入的数据小于等于大顶堆的堆顶元素，就将新数据插入到大顶堆；否则将新数据插入到小顶堆。插入后两个堆中的数据个数不符合约定情况时，从一个堆中将堆顶元素移动到另一个堆。  </p>
-<p>插入数据因为需要涉及堆化，时间复杂度为O(logn)，求中位数只需要返回大顶堆的堆顶元素，时间复杂度是O(1)。  </p>
-<p>中位数相当于50%，可以扩展到任意百分位数。  </p>
-</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>堆</tag>
       </tags>
   </entry>
   <entry>
@@ -1470,6 +1470,66 @@ public int hashCode() {
       <tags>
         <tag>分治算法</tag>
         <tag>MapRedue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>回溯算法</title>
+    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>深度优先搜索利用的是回溯算法思想。<br>回溯算法大部分情况下都是用来解决广义的搜索问题：从一组可能的解中，选出一个满足要求的解。  </p>
+<p>回溯算法非常适合用递归来实现，在实现的过程中，剪枝操作是提高回溯效率的一种技巧，利用剪枝，并不需要穷举搜索所有的情况，从未提高搜索效率。  </p>
+<h3 id="回溯算法理解"><a href="#回溯算法理解" class="headerlink" title="回溯算法理解"></a>回溯算法理解</h3><p>对比贪心算法，在每次面对岔路口的时候，都做出看起来最优的选择，期望这一组选择是最终的最优解。但是贪心算法并不一定能得到最优解。  </p>
+<p>回溯的处理思想，类似枚举搜索。枚举所有的解，找到满足期望的解。为了有规律的枚举所有可能的解，避免遗漏和重复，把问题求解的过程分为多个阶段。每个阶段都有会面对一个岔路口，先随意选一条路走，当发现这条路走不通的时候（不符合期望的解），就退回到上一个岔路口，另选一种走法继续走。  </p>
+<h3 id="回溯算法应用"><a href="#回溯算法应用" class="headerlink" title="回溯算法应用"></a>回溯算法应用</h3><p><strong>八皇后问题</strong><a href="#refer-anchor-1"><sup>1</sup></a>  <span id="back-1"></span></p>
+<p>有一个8X8的棋盘，希望往里放8个棋子（皇后），每个棋子所在的行、列、对角线都不能有另一个棋子。  </p>
+<p>把这个问题分成8个阶段，依次将8个棋子放到第一行、第二行、第三行…第八行。在放置的过程中，不停地检查当前放法，是否满足要求。如果满足，则跳到下一行继续放置棋子；如果不满足，那就再换一种放法，继续尝试。<a href="#refer-anchor-2"><sup>2</sup></a>  <span id="back-2"></span>  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        八皇后
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//全局变量，下标表示行，值表示queen存在哪一列</span></span><br><span class="line"><span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>];</span><br><span class="line"><span class="comment">//记录目前是第几种解法</span></span><br><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//调用：cal8queens(0)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cal8queens</span><span class="params">(<span class="keyword">int</span> row)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//8个棋子都放置好了，打印结果</span></span><br><span class="line">    <span class="keyword">if</span>(row == <span class="number">8</span>) &#123;</span><br><span class="line">        printQueens(result);</span><br><span class="line">        <span class="comment">//8行棋子都放好了，已经无法再往下递归</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//每一行都有8种放法</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> column = <span class="number">0</span>; column &lt; <span class="number">8</span>; ++column) &#123;</span><br><span class="line">        <span class="comment">//有些放法不满足要求</span></span><br><span class="line">        <span class="keyword">if</span>(isOk(row,column)) &#123;</span><br><span class="line">            <span class="comment">//第row行的棋子放到了column列</span></span><br><span class="line">            result[row] = column;</span><br><span class="line">            <span class="comment">//考察下一行</span></span><br><span class="line">            cal8queens(row + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//判断row行column列放置是否合适</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isOk</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> column)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//当前的左上和右上</span></span><br><span class="line">    <span class="keyword">int</span> leftup = column - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> rightup = column + <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//逐行往上考察每一行</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = row - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">        <span class="comment">//1、第i行的column列有棋子么</span></span><br><span class="line">        <span class="keyword">if</span>(result[i] == column) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">//2、考察左上对角线，第i行的leftup列有棋子么</span></span><br><span class="line">        <span class="keyword">if</span>(leftup &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(result[i] == leftup) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//3、考察右上对角线，第i行rightup列有棋子么</span></span><br><span class="line">        <span class="keyword">if</span>(rightup &lt; <span class="number">8</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(result[i] == rightup) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//行互减的绝对值等于列互减的绝对值</span></span><br><span class="line">        --leftup;</span><br><span class="line">        ++rightup;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//打印一个二维矩阵</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">printQueens</span><span class="params">(<span class="keyword">int</span>[] result)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"第"</span> + ++count + <span class="string">"种解法："</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> row = <span class="number">0</span>; row &lt; <span class="number">8</span>; ++row) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> column = <span class="number">0</span>; column &lt; <span class="number">8</span>; ++column) &#123;</span><br><span class="line">            <span class="keyword">if</span>(result[row] == column)</span><br><span class="line">                System.out.print(<span class="string">"Q "</span>);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                System.out.print(<span class="string">"* "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p><strong>0-1背包</strong><br>动态规划<br>回溯算法<br>一个背包，背包总的承载重量是Wkg。现在有n个物品，每个物品的重量不等，并且不可分割。期望选择几件物品，装载到背包中，在不超过背包所能装载重量的前提下，让背包中物品的总重量最大。  </p>
+<p>对于每个物品来说，都有两种选择，装进背包或者不装进背包。对于n各物品来说，总的装法就有2<sup>n</sup>种，去掉总重量超过Wkg的，从剩下的装法中选择总重量最接近Wkg的。<br>把物品依次排列，整个问题就分解成了n个阶段，每个阶段对应一个物品怎么选择，先对第一个物品进行处理，选择装进去或者不装进去，然后再递归地处理剩下的物品。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        0-1背包
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//存储背包中物品总重量的最大值</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> maxW = Integer.MIN_VALUE;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* cw表示当前已经装进去的物品的重量综合；</span></span><br><span class="line"><span class="comment">* i表示考察到哪个物品了；</span></span><br><span class="line"><span class="comment">* w背包重量；</span></span><br><span class="line"><span class="comment">* items表示每个物品的重量；</span></span><br><span class="line"><span class="comment">* n表示物品个数；</span></span><br><span class="line"><span class="comment">* 假设背包可承受重量100，物品个数10，物品重量存储在数组a中，调用方法 f(0,0,a,10,100)</span></span><br><span class="line"><span class="comment">* 借助递归回到上一个状态，装或者不装都只影响递归调用</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f01</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> cw, <span class="keyword">int</span>[] items, <span class="keyword">int</span> n, <span class="keyword">int</span> w)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//cw==w表示装满了；i==n表示已考察完所有的物品</span></span><br><span class="line">        <span class="keyword">if</span>(cw == w || i == n) &#123;</span><br><span class="line">            <span class="keyword">if</span>(cw &gt; maxW)</span><br><span class="line">                maxW = cw;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//当前物品不装进背包，考虑下一个时（i+1），cw不更新</span></span><br><span class="line">        f01(i+<span class="number">1</span>,cw,items,n,w);</span><br><span class="line">        <span class="keyword">if</span>(cw + items[i] &lt;= w) &#123;</span><br><span class="line">            <span class="comment">//当前物品装进背包，考虑下一个时（i+1），cw通过入参更新为cw+items[i]</span></span><br><span class="line">            f01(i+<span class="number">1</span>,cw+items[i],items,n,w);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+
+<p>变体：每个物品重量不同，价值不同，在不超过背包重量的情况下，让背包中的总价值最大。</p>
+<p><strong>正则表达式</strong><br>背景假设，正则表达式中只包含“<em>”和“？”这两种通配符，其中“</em>”匹配任意多个（&gt;=0个）任意字符，“？”匹配另个或者一个任意字符。  </p>
+<p>依次考察正则表达式中的每个字符，当是非通配符时，就直接跟文本的字符进行匹配，如果相同，则继续往下处理；如果不同，则回溯。<br>如果遇到特殊字符的时候，也就是岔路口，“*”，先随意的选择一种匹配方案，然后继续考察剩下的字符，如果中途发现无法继续匹配下去，就回溯到岔路口，重新选择一种匹配方案，然后再继续匹配剩下的字符。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        正则表达式
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Pattern</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">boolean</span> matched = <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">//正则表达式</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">char</span>[] pattern;</span><br><span class="line">        <span class="comment">//正则表达式长度</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> plen;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Pattern</span><span class="params">(<span class="keyword">char</span>[] pattern,<span class="keyword">int</span> plen)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.pattern = pattern;</span><br><span class="line">            <span class="keyword">this</span>.plen = plen;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//文本串及长度</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">match</span><span class="params">(<span class="keyword">char</span>[] text, <span class="keyword">int</span> tlen)</span> </span>&#123;</span><br><span class="line">            matched = <span class="keyword">false</span>;</span><br><span class="line">            rmatch(<span class="number">0</span>,<span class="number">0</span>,text,tlen);</span><br><span class="line">            <span class="keyword">return</span> matched;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rmatch</span><span class="params">(<span class="keyword">int</span> ti, <span class="keyword">int</span> pj, <span class="keyword">char</span>[] text, <span class="keyword">int</span> tlen)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//已经匹配了，不用继续递归</span></span><br><span class="line">            <span class="keyword">if</span>(matched) <span class="keyword">return</span>;</span><br><span class="line">            <span class="comment">//正则表达式结束</span></span><br><span class="line">            <span class="keyword">if</span>(pj == plen) &#123;</span><br><span class="line">                <span class="comment">//文本串结束</span></span><br><span class="line">                <span class="keyword">if</span>(ti == tlen)</span><br><span class="line">                    matched = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(pattern[pj] == <span class="string">'*'</span>) &#123;</span><br><span class="line">                <span class="comment">//匹配任意个字符0~tlen-ti</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= tlen-ti; ++k) &#123;</span><br><span class="line">                    rmatch(ti+k,pj+<span class="number">1</span>,text,tlen);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(pattern[pj] == <span class="string">'?'</span>) &#123;</span><br><span class="line">                <span class="comment">//匹配0个或者1个字符</span></span><br><span class="line">                rmatch(ti,pj+<span class="number">1</span>,text,tlen);<span class="comment">//0个</span></span><br><span class="line">                rmatch(ti+<span class="number">1</span>,pj+<span class="number">1</span>,text,tlen);<span class="comment">//1个</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ti &lt; tlen &amp;&amp; pattern[pj] == text[ti]) &#123;</span><br><span class="line">                <span class="comment">//纯字符匹配</span></span><br><span class="line">                rmatch(ti+<span class="number">1</span>,pj+<span class="number">1</span>,text,tlen);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><div id="refer-anchor-1"></div>  
+
+<ul>
+<li><p>[<a href="#back-1">1</a>] <a href="https://algorithm-visualizer.org/backtracking/n-queens-problem" target="_blank" rel="noopener">N皇后问题-回溯</a>  </p>
+<div id="refer-anchor-2"></div>  
+</li>
+<li><p>[<a href="#back-2">2</a>] <a href="https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/" target="_blank" rel="noopener">回溯算法-N皇后问题</a>  </p>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>回溯算法</tag>
+        <tag>深度优先</tag>
       </tags>
   </entry>
   <entry>
@@ -1758,66 +1818,6 @@ public int hashCode() {
       </categories>
       <tags>
         <tag>动态规划</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>回溯算法</title>
-    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<p>深度优先搜索利用的是回溯算法思想。<br>回溯算法大部分情况下都是用来解决广义的搜索问题：从一组可能的解中，选出一个满足要求的解。  </p>
-<p>回溯算法非常适合用递归来实现，在实现的过程中，剪枝操作是提高回溯效率的一种技巧，利用剪枝，并不需要穷举搜索所有的情况，从未提高搜索效率。  </p>
-<h3 id="回溯算法理解"><a href="#回溯算法理解" class="headerlink" title="回溯算法理解"></a>回溯算法理解</h3><p>对比贪心算法，在每次面对岔路口的时候，都做出看起来最优的选择，期望这一组选择是最终的最优解。但是贪心算法并不一定能得到最优解。  </p>
-<p>回溯的处理思想，类似枚举搜索。枚举所有的解，找到满足期望的解。为了有规律的枚举所有可能的解，避免遗漏和重复，把问题求解的过程分为多个阶段。每个阶段都有会面对一个岔路口，先随意选一条路走，当发现这条路走不通的时候（不符合期望的解），就退回到上一个岔路口，另选一种走法继续走。  </p>
-<h3 id="回溯算法应用"><a href="#回溯算法应用" class="headerlink" title="回溯算法应用"></a>回溯算法应用</h3><p><strong>八皇后问题</strong><a href="#refer-anchor-1"><sup>1</sup></a>  <span id="back-1"></span></p>
-<p>有一个8X8的棋盘，希望往里放8个棋子（皇后），每个棋子所在的行、列、对角线都不能有另一个棋子。  </p>
-<p>把这个问题分成8个阶段，依次将8个棋子放到第一行、第二行、第三行…第八行。在放置的过程中，不停地检查当前放法，是否满足要求。如果满足，则跳到下一行继续放置棋子；如果不满足，那就再换一种放法，继续尝试。<a href="#refer-anchor-2"><sup>2</sup></a>  <span id="back-2"></span>  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        八皇后
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//全局变量，下标表示行，值表示queen存在哪一列</span></span><br><span class="line"><span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>];</span><br><span class="line"><span class="comment">//记录目前是第几种解法</span></span><br><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//调用：cal8queens(0)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cal8queens</span><span class="params">(<span class="keyword">int</span> row)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//8个棋子都放置好了，打印结果</span></span><br><span class="line">    <span class="keyword">if</span>(row == <span class="number">8</span>) &#123;</span><br><span class="line">        printQueens(result);</span><br><span class="line">        <span class="comment">//8行棋子都放好了，已经无法再往下递归</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//每一行都有8种放法</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> column = <span class="number">0</span>; column &lt; <span class="number">8</span>; ++column) &#123;</span><br><span class="line">        <span class="comment">//有些放法不满足要求</span></span><br><span class="line">        <span class="keyword">if</span>(isOk(row,column)) &#123;</span><br><span class="line">            <span class="comment">//第row行的棋子放到了column列</span></span><br><span class="line">            result[row] = column;</span><br><span class="line">            <span class="comment">//考察下一行</span></span><br><span class="line">            cal8queens(row + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//判断row行column列放置是否合适</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isOk</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> column)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//当前的左上和右上</span></span><br><span class="line">    <span class="keyword">int</span> leftup = column - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> rightup = column + <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//逐行往上考察每一行</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = row - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">        <span class="comment">//1、第i行的column列有棋子么</span></span><br><span class="line">        <span class="keyword">if</span>(result[i] == column) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">//2、考察左上对角线，第i行的leftup列有棋子么</span></span><br><span class="line">        <span class="keyword">if</span>(leftup &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(result[i] == leftup) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//3、考察右上对角线，第i行rightup列有棋子么</span></span><br><span class="line">        <span class="keyword">if</span>(rightup &lt; <span class="number">8</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(result[i] == rightup) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//行互减的绝对值等于列互减的绝对值</span></span><br><span class="line">        --leftup;</span><br><span class="line">        ++rightup;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//打印一个二维矩阵</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">printQueens</span><span class="params">(<span class="keyword">int</span>[] result)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"第"</span> + ++count + <span class="string">"种解法："</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> row = <span class="number">0</span>; row &lt; <span class="number">8</span>; ++row) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> column = <span class="number">0</span>; column &lt; <span class="number">8</span>; ++column) &#123;</span><br><span class="line">            <span class="keyword">if</span>(result[row] == column)</span><br><span class="line">                System.out.print(<span class="string">"Q "</span>);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                System.out.print(<span class="string">"* "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-<p><strong>0-1背包</strong><br>动态规划<br>回溯算法<br>一个背包，背包总的承载重量是Wkg。现在有n个物品，每个物品的重量不等，并且不可分割。期望选择几件物品，装载到背包中，在不超过背包所能装载重量的前提下，让背包中物品的总重量最大。  </p>
-<p>对于每个物品来说，都有两种选择，装进背包或者不装进背包。对于n各物品来说，总的装法就有2<sup>n</sup>种，去掉总重量超过Wkg的，从剩下的装法中选择总重量最接近Wkg的。<br>把物品依次排列，整个问题就分解成了n个阶段，每个阶段对应一个物品怎么选择，先对第一个物品进行处理，选择装进去或者不装进去，然后再递归地处理剩下的物品。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        0-1背包
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//存储背包中物品总重量的最大值</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> maxW = Integer.MIN_VALUE;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* cw表示当前已经装进去的物品的重量综合；</span></span><br><span class="line"><span class="comment">* i表示考察到哪个物品了；</span></span><br><span class="line"><span class="comment">* w背包重量；</span></span><br><span class="line"><span class="comment">* items表示每个物品的重量；</span></span><br><span class="line"><span class="comment">* n表示物品个数；</span></span><br><span class="line"><span class="comment">* 假设背包可承受重量100，物品个数10，物品重量存储在数组a中，调用方法 f(0,0,a,10,100)</span></span><br><span class="line"><span class="comment">* 借助递归回到上一个状态，装或者不装都只影响递归调用</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f01</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> cw, <span class="keyword">int</span>[] items, <span class="keyword">int</span> n, <span class="keyword">int</span> w)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//cw==w表示装满了；i==n表示已考察完所有的物品</span></span><br><span class="line">        <span class="keyword">if</span>(cw == w || i == n) &#123;</span><br><span class="line">            <span class="keyword">if</span>(cw &gt; maxW)</span><br><span class="line">                maxW = cw;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//当前物品不装进背包，考虑下一个时（i+1），cw不更新</span></span><br><span class="line">        f01(i+<span class="number">1</span>,cw,items,n,w);</span><br><span class="line">        <span class="keyword">if</span>(cw + items[i] &lt;= w) &#123;</span><br><span class="line">            <span class="comment">//当前物品装进背包，考虑下一个时（i+1），cw通过入参更新为cw+items[i]</span></span><br><span class="line">            f01(i+<span class="number">1</span>,cw+items[i],items,n,w);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>
-
-<p>变体：每个物品重量不同，价值不同，在不超过背包重量的情况下，让背包中的总价值最大。</p>
-<p><strong>正则表达式</strong><br>背景假设，正则表达式中只包含“<em>”和“？”这两种通配符，其中“</em>”匹配任意多个（&gt;=0个）任意字符，“？”匹配另个或者一个任意字符。  </p>
-<p>依次考察正则表达式中的每个字符，当是非通配符时，就直接跟文本的字符进行匹配，如果相同，则继续往下处理；如果不同，则回溯。<br>如果遇到特殊字符的时候，也就是岔路口，“*”，先随意的选择一种匹配方案，然后继续考察剩下的字符，如果中途发现无法继续匹配下去，就回溯到岔路口，重新选择一种匹配方案，然后再继续匹配剩下的字符。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        正则表达式
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Pattern</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">boolean</span> matched = <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">//正则表达式</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">char</span>[] pattern;</span><br><span class="line">        <span class="comment">//正则表达式长度</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> plen;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Pattern</span><span class="params">(<span class="keyword">char</span>[] pattern,<span class="keyword">int</span> plen)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.pattern = pattern;</span><br><span class="line">            <span class="keyword">this</span>.plen = plen;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//文本串及长度</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">match</span><span class="params">(<span class="keyword">char</span>[] text, <span class="keyword">int</span> tlen)</span> </span>&#123;</span><br><span class="line">            matched = <span class="keyword">false</span>;</span><br><span class="line">            rmatch(<span class="number">0</span>,<span class="number">0</span>,text,tlen);</span><br><span class="line">            <span class="keyword">return</span> matched;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rmatch</span><span class="params">(<span class="keyword">int</span> ti, <span class="keyword">int</span> pj, <span class="keyword">char</span>[] text, <span class="keyword">int</span> tlen)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//已经匹配了，不用继续递归</span></span><br><span class="line">            <span class="keyword">if</span>(matched) <span class="keyword">return</span>;</span><br><span class="line">            <span class="comment">//正则表达式结束</span></span><br><span class="line">            <span class="keyword">if</span>(pj == plen) &#123;</span><br><span class="line">                <span class="comment">//文本串结束</span></span><br><span class="line">                <span class="keyword">if</span>(ti == tlen)</span><br><span class="line">                    matched = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(pattern[pj] == <span class="string">'*'</span>) &#123;</span><br><span class="line">                <span class="comment">//匹配任意个字符0~tlen-ti</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= tlen-ti; ++k) &#123;</span><br><span class="line">                    rmatch(ti+k,pj+<span class="number">1</span>,text,tlen);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(pattern[pj] == <span class="string">'?'</span>) &#123;</span><br><span class="line">                <span class="comment">//匹配0个或者1个字符</span></span><br><span class="line">                rmatch(ti,pj+<span class="number">1</span>,text,tlen);<span class="comment">//0个</span></span><br><span class="line">                rmatch(ti+<span class="number">1</span>,pj+<span class="number">1</span>,text,tlen);<span class="comment">//1个</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ti &lt; tlen &amp;&amp; pattern[pj] == text[ti]) &#123;</span><br><span class="line">                <span class="comment">//纯字符匹配</span></span><br><span class="line">                rmatch(ti+<span class="number">1</span>,pj+<span class="number">1</span>,text,tlen);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>
-
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><div id="refer-anchor-1"></div>  
-
-<ul>
-<li><p>[<a href="#back-1">1</a>] <a href="https://algorithm-visualizer.org/backtracking/n-queens-problem" target="_blank" rel="noopener">N皇后问题-回溯</a>  </p>
-<div id="refer-anchor-2"></div>  
-</li>
-<li><p>[<a href="#back-2">2</a>] <a href="https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/" target="_blank" rel="noopener">回溯算法-N皇后问题</a>  </p>
-</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>回溯算法</tag>
-        <tag>深度优先</tag>
       </tags>
   </entry>
   <entry>
@@ -2618,6 +2618,45 @@ public int hashCode() {
       </tags>
   </entry>
   <entry>
+    <title>递归树</title>
+    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%80%92%E5%BD%92%E6%A0%91/</url>
+    <content><![CDATA[<h3 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h3><p>递归的思想，将大问题分解为小问题来求解，然后再将小问题分解为小小问题。这样一层一层的分解，直到问题的数据规模被分解得足够小，不用继续递归分解为止。<br>如果把这个一层一层分解过程画成图，它其实就是一棵树—递归树。  </p>
+<p>归并的时间复杂度、快排的最好情况时间复杂度适合用递推公式分析。<br>快排平均时间复杂度适合用递归树分析。<br>二叉树的前中后序遍历都不适合。  </p>
+<h3 id="归并排序的时间复杂度"><a href="#归并排序的时间复杂度" class="headerlink" title="归并排序的时间复杂度"></a>归并排序的时间复杂度</h3><p>归并排序每次会将数据规模一分为二。因为每次分解都是一分为二，所以代价很低，把时间上的消耗记作常量l。归并算法中比较耗时的是归并操作，也就是把连个子数组合并为大数组。每一层归并操作消耗的时间总和是一样的，跟要排序的数据规模有关，把每一层归并操作消耗的时间记作n。  </p>
+<p>只需要知道这棵树的高度h，用高度h乘以每一层的时间消耗n，就可以得到总的时间复杂度O(n*h)。<br>归并排序递归树是一棵满二叉树，满二叉树的高度大约是log<sub>2</sub>n，归并排序的时间复杂度就是O(nlogn)。  </p>
+<h3 id="快速排序的时间复杂度"><a href="#快速排序的时间复杂度" class="headerlink" title="快速排序的时间复杂度"></a>快速排序的时间复杂度</h3><h4 id="递推公式分析时间复杂度"><a href="#递推公式分析时间复杂度" class="headerlink" title="递推公式分析时间复杂度"></a>递推公式分析时间复杂度</h4><p>快速排序在最好情况下，每次分区都能一分为二，此时用递推公式T(n)=2T(n/2)+n，推导出时间复杂度是O(nlogn)。  </p>
+<p>平均情况下，每次分区之后，两个分区的大小比例为1:k。当k=9时，如果用递推公式的方法求解时间复杂度，递推公式为T(n)=T(n/10)+T(9n/10)+n。  </p>
+<h4 id="递归树分析时间复杂度"><a href="#递归树分析时间复杂度" class="headerlink" title="递归树分析时间复杂度"></a>递归树分析时间复杂度</h4><p>快速排序的过程中，每次分区都要遍历待分区区间的所有数据，每一层分区操作所遍历的数据的个数之和就是n。只要求出递归树的高度h，快排过程遍历的数据个数就是h*n，时间复杂度就是O(h*n)。</p>
+<p>每次分区并不是均匀的一分为二，递归树并不是满二叉树。<br>快速排序结束的条件是排序的小区间大小为1，即叶子节点里的数据规模是1。从根节点n到叶子节点1，递归树中最短的一个路径每次都乘以1/10，最长的一个路径每次都乘以9/10。计算后可得，从根节点到叶子节点的最短路径是log<sub>10</sub>n，最长路径是log<sub>10/9</sub>n。<br>遍历数据的个数总和就介于nlog<sub>10</sub>n和nlog<sub>10/9</sub>n之间。根据复杂度的大O表示法，对数复杂度的底数不管是多少，统一写成logn。所以当分区大小比例是1:9时，快速排序的时间复杂度仍然是O(nlogn)。  </p>
+<p>只要k的值不随n变化，是一个事先确定的常量，快排的时间复杂度就是O(nlogn)。  </p>
+<h3 id="斐波那契数列的时间复杂度"><a href="#斐波那契数列的时间复杂度" class="headerlink" title="斐波那契数列的时间复杂度"></a>斐波那契数列的时间复杂度</h3><p>递推公式f(n)=f(n-1)+f(n-2)。<br>递归代码画成递归树。f(n)分解为f(n-1)和f(n-2)，每次数据规模都是-1或者-2，叶子节点的数据规模是1或者2。所以从根节点走到叶子节点，每条路径是长短不一的。如果每次都是-1，那最长路径大约是n；如果每次都是-2，那最短路径大约是n/2。  </p>
+<p>每次分解之后的合并操作只需要一次加法运算，把加法运算的时间消耗记作1。从上往下，第一层的总时间消耗是1，第二层的总时间消耗是2，第三层的总时间消耗是2<sup>2</sup>。依次类推，第k层的时间消耗就是2<sup>k-1</sup>，整个算法的总时间消耗就是每一层时间消耗之和。  </p>
+<p>如果路径长度都为n，总和就是2<sup>n</sup>-1。<br>如果路径长度都是n/2，那总和是2<sup>n/2</sup>-1。<br>所以算法的时间复杂度介于O(2<sup>n</sup>)和O(2<sup>n/2</sup>)之间。指数级。  </p>
+<h3 id="全排列的时间复杂度"><a href="#全排列的时间复杂度" class="headerlink" title="全排列的时间复杂度"></a>全排列的时间复杂度</h3><p>把n个数据的所有排列都找出来，就是全排列的问题。<br>可以用递归来打印一组数据的所有排列。  </p>
+<p>如果确定了最后一位数据，就变成求解剩下n-1个数据的排列问题。最后一个数据可以是n个数据中的任意一个，它的取值有n种情况。“n个数据的排列”问题，可以分解成n个“n-1个数据的排列”的子问题。  </p>
+<p>递推公式：<br>f(1,2,…n) = {最后一位是1, f(n-1)} + {最后一位是2, f(n-1)} +…+{最后一位是n, f(n-1)}  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        全排列
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printPermutations</span><span class="params">(<span class="keyword">int</span>[] data, <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(k == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            System.out.print(data[i] + <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; ++i) &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = data[i];</span><br><span class="line">        data[i] = data[k-<span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        printPermutations(data, n, k-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        tmp = data[i];</span><br><span class="line">        data[i] = data[k-<span class="number">1</span>];</span><br><span class="line">        data[k-<span class="number">1</span>] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>画出递归树<br>第一层分解有n次交换操作，第二层有n个节点，每个节点分解需要n-1次交换，所以第二层总的交换次数是n<em>(n-1)。第三层有n</em>(n-1)个节点，每个节点分解需要n-2次，所以第三层总的交换次数是n<em>(n-1)</em>(n-2)。  </p>
+<p>以此类推，第k层总的交换次数就是n<em>(n-1)</em>(n-2)<em>…</em>(n-k+1)。最后一层的交换次数就是n*(n-1)*(n-2)*…*2*1。每一层的交换次数之和就是总的交换次数。  </p>
+<p>n + n*(n-1) + n*(n-1)*(n-2) +… + n*(n-1)(n-2)*…*2*1  </p>
+<p>最后一个数等于n!，前面n-1个数都小于最后一个数，总和肯定小于n*n!。全排列的递归算法的时间复杂度在O(n!)与O(n*n!)之间。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>递归树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>哈希算法</title>
     <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<h3 id="哈希算法定义"><a href="#哈希算法定义" class="headerlink" title="哈希算法定义"></a>哈希算法定义</h3><p>散列=哈希<br>将任意长度的二进制值串映射为固定长度的二进制值串，这个映射的规则就是<strong>哈希算法</strong>，通过原始数据映射之后得到的二进制值串就是<strong>哈希值</strong>。  </p>
@@ -2914,45 +2953,6 @@ public int hashCode() {
         <tag>微服务</tag>
         <tag>鉴权</tag>
         <tag>限流</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>递归树</title>
-    <url>/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%80%92%E5%BD%92%E6%A0%91/</url>
-    <content><![CDATA[<h3 id="递归树"><a href="#递归树" class="headerlink" title="递归树"></a>递归树</h3><p>递归的思想，将大问题分解为小问题来求解，然后再将小问题分解为小小问题。这样一层一层的分解，直到问题的数据规模被分解得足够小，不用继续递归分解为止。<br>如果把这个一层一层分解过程画成图，它其实就是一棵树—递归树。  </p>
-<p>归并的时间复杂度、快排的最好情况时间复杂度适合用递推公式分析。<br>快排平均时间复杂度适合用递归树分析。<br>二叉树的前中后序遍历都不适合。  </p>
-<h3 id="归并排序的时间复杂度"><a href="#归并排序的时间复杂度" class="headerlink" title="归并排序的时间复杂度"></a>归并排序的时间复杂度</h3><p>归并排序每次会将数据规模一分为二。因为每次分解都是一分为二，所以代价很低，把时间上的消耗记作常量l。归并算法中比较耗时的是归并操作，也就是把连个子数组合并为大数组。每一层归并操作消耗的时间总和是一样的，跟要排序的数据规模有关，把每一层归并操作消耗的时间记作n。  </p>
-<p>只需要知道这棵树的高度h，用高度h乘以每一层的时间消耗n，就可以得到总的时间复杂度O(n*h)。<br>归并排序递归树是一棵满二叉树，满二叉树的高度大约是log<sub>2</sub>n，归并排序的时间复杂度就是O(nlogn)。  </p>
-<h3 id="快速排序的时间复杂度"><a href="#快速排序的时间复杂度" class="headerlink" title="快速排序的时间复杂度"></a>快速排序的时间复杂度</h3><h4 id="递推公式分析时间复杂度"><a href="#递推公式分析时间复杂度" class="headerlink" title="递推公式分析时间复杂度"></a>递推公式分析时间复杂度</h4><p>快速排序在最好情况下，每次分区都能一分为二，此时用递推公式T(n)=2T(n/2)+n，推导出时间复杂度是O(nlogn)。  </p>
-<p>平均情况下，每次分区之后，两个分区的大小比例为1:k。当k=9时，如果用递推公式的方法求解时间复杂度，递推公式为T(n)=T(n/10)+T(9n/10)+n。  </p>
-<h4 id="递归树分析时间复杂度"><a href="#递归树分析时间复杂度" class="headerlink" title="递归树分析时间复杂度"></a>递归树分析时间复杂度</h4><p>快速排序的过程中，每次分区都要遍历待分区区间的所有数据，每一层分区操作所遍历的数据的个数之和就是n。只要求出递归树的高度h，快排过程遍历的数据个数就是h*n，时间复杂度就是O(h*n)。</p>
-<p>每次分区并不是均匀的一分为二，递归树并不是满二叉树。<br>快速排序结束的条件是排序的小区间大小为1，即叶子节点里的数据规模是1。从根节点n到叶子节点1，递归树中最短的一个路径每次都乘以1/10，最长的一个路径每次都乘以9/10。计算后可得，从根节点到叶子节点的最短路径是log<sub>10</sub>n，最长路径是log<sub>10/9</sub>n。<br>遍历数据的个数总和就介于nlog<sub>10</sub>n和nlog<sub>10/9</sub>n之间。根据复杂度的大O表示法，对数复杂度的底数不管是多少，统一写成logn。所以当分区大小比例是1:9时，快速排序的时间复杂度仍然是O(nlogn)。  </p>
-<p>只要k的值不随n变化，是一个事先确定的常量，快排的时间复杂度就是O(nlogn)。  </p>
-<h3 id="斐波那契数列的时间复杂度"><a href="#斐波那契数列的时间复杂度" class="headerlink" title="斐波那契数列的时间复杂度"></a>斐波那契数列的时间复杂度</h3><p>递推公式f(n)=f(n-1)+f(n-2)。<br>递归代码画成递归树。f(n)分解为f(n-1)和f(n-2)，每次数据规模都是-1或者-2，叶子节点的数据规模是1或者2。所以从根节点走到叶子节点，每条路径是长短不一的。如果每次都是-1，那最长路径大约是n；如果每次都是-2，那最短路径大约是n/2。  </p>
-<p>每次分解之后的合并操作只需要一次加法运算，把加法运算的时间消耗记作1。从上往下，第一层的总时间消耗是1，第二层的总时间消耗是2，第三层的总时间消耗是2<sup>2</sup>。依次类推，第k层的时间消耗就是2<sup>k-1</sup>，整个算法的总时间消耗就是每一层时间消耗之和。  </p>
-<p>如果路径长度都为n，总和就是2<sup>n</sup>-1。<br>如果路径长度都是n/2，那总和是2<sup>n/2</sup>-1。<br>所以算法的时间复杂度介于O(2<sup>n</sup>)和O(2<sup>n/2</sup>)之间。指数级。  </p>
-<h3 id="全排列的时间复杂度"><a href="#全排列的时间复杂度" class="headerlink" title="全排列的时间复杂度"></a>全排列的时间复杂度</h3><p>把n个数据的所有排列都找出来，就是全排列的问题。<br>可以用递归来打印一组数据的所有排列。  </p>
-<p>如果确定了最后一位数据，就变成求解剩下n-1个数据的排列问题。最后一个数据可以是n个数据中的任意一个，它的取值有n种情况。“n个数据的排列”问题，可以分解成n个“n-1个数据的排列”的子问题。  </p>
-<p>递推公式：<br>f(1,2,…n) = {最后一位是1, f(n-1)} + {最后一位是2, f(n-1)} +…+{最后一位是n, f(n-1)}  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        全排列
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printPermutations</span><span class="params">(<span class="keyword">int</span>[] data, <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(k == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            System.out.print(data[i] + <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; ++i) &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = data[i];</span><br><span class="line">        data[i] = data[k-<span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        printPermutations(data, n, k-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        tmp = data[i];</span><br><span class="line">        data[i] = data[k-<span class="number">1</span>];</span><br><span class="line">        data[k-<span class="number">1</span>] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
-<p>画出递归树<br>第一层分解有n次交换操作，第二层有n个节点，每个节点分解需要n-1次交换，所以第二层总的交换次数是n<em>(n-1)。第三层有n</em>(n-1)个节点，每个节点分解需要n-2次，所以第三层总的交换次数是n<em>(n-1)</em>(n-2)。  </p>
-<p>以此类推，第k层总的交换次数就是n<em>(n-1)</em>(n-2)<em>…</em>(n-k+1)。最后一层的交换次数就是n*(n-1)*(n-2)*…*2*1。每一层的交换次数之和就是总的交换次数。  </p>
-<p>n + n*(n-1) + n*(n-1)*(n-2) +… + n*(n-1)(n-2)*…*2*1  </p>
-<p>最后一个数等于n!，前面n-1个数都小于最后一个数，总和肯定小于n*n!。全排列的递归算法的时间复杂度在O(n!)与O(n*n!)之间。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>递归树</tag>
       </tags>
   </entry>
   <entry>
@@ -4001,68 +4001,6 @@ checkpoint往前推进时，需要将推进过程中的日志，对应的所有�
       </categories>
   </entry>
   <entry>
-    <title>日志与索引</title>
-    <url>/MySQL/%E6%97%A5%E5%BF%97%E4%B8%8E%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<h3 id="两阶段提交的不同时刻，MySQL异常重启。"><a href="#两阶段提交的不同时刻，MySQL异常重启。" class="headerlink" title="两阶段提交的不同时刻，MySQL异常重启。"></a>两阶段提交的不同时刻，MySQL异常重启。</h3><p>崩溃恢复crash safe:  </p>
-<ol>
-<li>如果redo log里面的事务是完整的，也就是已经有了commit标识，则直接提交。  </li>
-<li>如果redo log里面的事务只有完整的prepare，则判断对应的事务binlog是否存在并完整（提交标记）：  <ul>
-<li>a. 如果是完整的，则提交事务；  </li>
-<li>b. 否则，回滚事务。  </li>
-</ul>
-</li>
-</ol>
-<h4 id="MySQL怎么知道binlog是完整的"><a href="#MySQL怎么知道binlog是完整的" class="headerlink" title="MySQL怎么知道binlog是完整的"></a>MySQL怎么知道binlog是完整的</h4><p>一个事务的binlog是有完整格式的：</p>
-<ul>
-<li>statement格式的binlog，最后会有commit；  </li>
-<li>row格式的binlog，最后会有一个XID event。  </li>
-</ul>
-<p>MySQL5.6.2版本后，引入binlog-checksum参数，用来验证binlog内容的正确性。对于binlog日志由于磁盘原因，可能会在日志中间出错的情况，MySQL可以通过校验checksum的结果来发现。  </p>
-<h4 id="redo-log和binlog是怎么关联起来的"><a href="#redo-log和binlog是怎么关联起来的" class="headerlink" title="redo log和binlog是怎么关联起来的"></a>redo log和binlog是怎么关联起来的</h4><p>他们有一个共同的数据字段—XID。崩溃恢复的时候，会按顺序扫描redo log；  </p>
-<ul>
-<li>如果碰到既有prepare、又有commit的redo log，就直接提交；  </li>
-<li>如果碰到只有prepare、而没有commit的redo log，就拿着XID去binlog找对应的事务。  </li>
-</ul>
-<h4 id="处于prepare阶段的redo-log加上完整binlog，重启就能恢复，MySQL为什么要这么设计"><a href="#处于prepare阶段的redo-log加上完整binlog，重启就能恢复，MySQL为什么要这么设计" class="headerlink" title="处于prepare阶段的redo log加上完整binlog，重启就能恢复，MySQL为什么要这么设计"></a>处于prepare阶段的redo log加上完整binlog，重启就能恢复，MySQL为什么要这么设计</h4><p>binlog写完以后MySQL发生崩溃，这时候binlog已经写入了，之后就会被从库(或者用这个binlog恢复出来的库)使用。  </p>
-<p>所以在主库上也要提交这个事务。采用这个策略，主库和备库的数据就保证了一致性。  </p>
-<h4 id="只用binlog就能恢复，为什么需要两阶段提交"><a href="#只用binlog就能恢复，为什么需要两阶段提交" class="headerlink" title="只用binlog就能恢复，为什么需要两阶段提交"></a>只用binlog就能恢复，为什么需要两阶段提交</h4><p>两阶段提交是经典的分布式系统问题。  </p>
-<p>对于InnoDB引擎来说，如果redo log提交完成了，事务就不能回滚(如果还允许回滚，就可能覆盖掉别的事务的更新)。如果redo log直接提交，然后binlog写入的时候失败，InnoDB又回滚不了，数据和binlog日志不一致。  </p>
-<p>两阶段提交是为了给所有人一个机会，当每个人都OK的时候，再一起提交。  </p>
-<h4 id="不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档"><a href="#不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档" class="headerlink" title="不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档"></a>不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档</h4><p><strong>历史原因</strong>：<br>InnoDB并不是MySQL的原生存储引擎。MySQL的原生引擎是MyISAM，设计之初就没有支持崩溃恢复。  </p>
-<p>InnoDB在作为MySQL的插件加入MySQL的引擎家族之前，就已经是一个提供了崩溃恢复和事务支持的引擎了。  </p>
-<p>InnoDB接入了MySQL后，发现binlog没有崩溃恢复的能力，就用InnoDB原有的redo log。(redo log是在innodb引擎实现的，binlog是在server层实现的)  </p>
-<p><strong>实现原因</strong>：<br>binlog没有能力恢复”数据页”。<br>InnoDB引擎使用的是WAL技术，执行事务的时候，写完内存和日志，事务就算完成了。如果之后崩溃，要依赖于日志来恢复数据页。<br>未提交的事务，重启后引擎内部事务会回滚，然后应用binlog可以补回来；已经提交了的事务是可能丢失的(MySQL写数据写在内存里已提交但未落盘，恢复只关注未提交但已写binlog的数据)，而且是数据页级的丢失。<br>binlog里面并没有记录数据页的更新细节，只记录了逻辑操作，数据页是补不回来的。  </p>
-<blockquote>
-<p>一个事务的binlog如果回放，就是重做整个事务，一个事务更新的可能不止一个page。  </p>
-</blockquote>
-<h4 id="只用redo-log，不要binlog"><a href="#只用redo-log，不要binlog" class="headerlink" title="只用redo log，不要binlog"></a>只用redo log，不要binlog</h4><p>如果只从崩溃恢复的角度来讲可以。可以把binlog关掉，这样就没有两阶段提交了，但系统依然是crash-safe的。  </p>
-<p>正式的生产库上，binlog有着redo log无法替代的功能。  </p>
-<ul>
-<li>归档，redo log是循环写，写到末尾是要回到开头继续写的。这样历史日志没法保留，redo log也就起不到归档的作用。  </li>
-<li>MySQL系统以来binlog。binlog作为MySQL一开始就有的功能，被用在了很多地方。其中MySQL系统高可用的基础就是binlog复制。  </li>
-<li>异构系统(数据分析类系统)，这些系统依靠消费MySQL的binlog来更新自己的数据。关掉binlog的话，下游系统没有输入。  </li>
-</ul>
-<h4 id="redo-log一般设置多大"><a href="#redo-log一般设置多大" class="headerlink" title="redo log一般设置多大"></a>redo log一般设置多大</h4><p>redo log太小的话，会导致很快就被写满，然后不得不强行刷redo log，这样WAL机制的能力发挥不出来。  </p>
-<p>对于几个TB的磁盘，redo log设置为4个文件，每个文件1GB。  </p>
-<h4 id="正常运行中的实例，数据写入后的最终落盘，是从redo-log更新过来的还是从buffer-pool更新过来的-rodo-log里面到底是什么"><a href="#正常运行中的实例，数据写入后的最终落盘，是从redo-log更新过来的还是从buffer-pool更新过来的-rodo-log里面到底是什么" class="headerlink" title="正常运行中的实例，数据写入后的最终落盘，是从redo log更新过来的还是从buffer pool更新过来的(rodo log里面到底是什么)"></a>正常运行中的实例，数据写入后的最终落盘，是从redo log更新过来的还是从buffer pool更新过来的(rodo log里面到底是什么)</h4><p>redo log并没有记录数据页的完整数据，它并没有能力去更新磁盘数据页，页不存在“数据最终落盘，是由redo log更新过去”的情况。  </p>
-<ul>
-<li>如果是正常运行的实例，数据页被修改以后，跟磁盘的数据页不一致，称为脏页。最终数据落盘，就是把内存中的数据页写盘。这个过程跟redo log毫无关系。  </li>
-<li>在崩溃恢复场景中，InnoDB如果判断到一个数据页可能在崩溃恢复的时候丢失了更新，就会将它督导内存，然后让redo log更新内存内容，更新完成后，内存页变成脏页，就回到了第一种情况的状态。  </li>
-</ul>
-<h4 id="redo-log-buffer是什么，是先修改内存，还是先写redo-log文件"><a href="#redo-log-buffer是什么，是先修改内存，还是先写redo-log文件" class="headerlink" title="redo log buffer是什么，是先修改内存，还是先写redo log文件"></a>redo log buffer是什么，是先修改内存，还是先写redo log文件</h4><p>在一个事务的更新过程中，日志是要写多次的。每次生成的日志都得先保存起来，但又不能在还没commit的时候就直接写到redo log文件里。  </p>
-<p>redo log buffer就是一块内存，用来先存redo 日志的。真正把日志写到redo log文件(文件名是id_logfile+ 数字)，是在执行commit语句的时候做的。  </p>
-<blockquote>
-<p>prepare的时候就要落盘一次(包含一次写数据到盘)。一个大事务中，如果生成的redo log很多，在事务未提交之前，log也会从redo log buffer写到redo log file里。  </p>
-</blockquote>
-<p>事务执行过程中不会“主动去刷盘”，以减少不必要的IO消耗。但是可能会出现“被动写入磁盘”，比如内存不够、其他事务提交等情况。  </p>
-<p>单独执行一个更新语句的时候，InnoDB会自己启动一个事务，在语句执行完成的时候提交。过程跟上面一样，只不多是“压缩”到了一个语句里面完成。  </p>
-<p>binlo 有对应的binlog cache，binlog写完磁盘就发送给从库。  </p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-  </entry>
-  <entry>
     <title>order by工作原理</title>
     <url>/MySQL/order%20by%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
     <content><![CDATA[<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`city`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`age`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`addr`</span> <span class="built_in">varchar</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`city`</span> (<span class="string">`city`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span>;<span class="comment">-- 市民表，city字段建普通索引city</span></span><br></pre></td></tr></table></figure>
@@ -4258,140 +4196,62 @@ checkpoint往前推进时，需要将推进过程中的日志，对应的所有�
       </categories>
   </entry>
   <entry>
-    <title>随机排序</title>
-    <url>/MySQL/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>随机选择三个记录。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        单词表
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE `words` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `word` varchar(64) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line"></span><br><span class="line">delimiter ;;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">procedure</span> idata()</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">declare</span> i <span class="built_in">int</span>;</span><br><span class="line">  <span class="keyword">set</span> i=<span class="number">0</span>;</span><br><span class="line">  while i&lt;10000 do</span><br><span class="line">    <span class="keyword">insert</span> <span class="keyword">into</span> words(word) <span class="keyword">values</span>(<span class="keyword">concat</span>(<span class="built_in">char</span>(<span class="number">97</span>+(i <span class="keyword">div</span> <span class="number">1000</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">1000</span> <span class="keyword">div</span> <span class="number">100</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">100</span> <span class="keyword">div</span> <span class="number">10</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">10</span>))));</span><br><span class="line">    <span class="keyword">set</span> i=i+<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">end</span> <span class="keyword">while</span>;</span><br><span class="line"><span class="keyword">end</span>;;</span><br><span class="line">delimiter ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">call</span> idata();</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-<h3 id="内存临时表"><a href="#内存临时表" class="headerlink" title="内存临时表"></a>内存临时表</h3><p>随机排序取前3个。  </p>
-<blockquote>
-<p>explain select word from words order by rand() limit 3;  </p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>id</th>
-<th>select_type</th>
-<th>table</th>
-<th>partitions</th>
-<th>type</th>
-<th>possible_keys</th>
-<th>key</th>
-<th>key_len</th>
-<th>ref</th>
-<th>rows</th>
-<th>filtered</th>
-<th>Extra</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>SIMPLE</td>
-<td>words</td>
-<td>NULL</td>
-<td>ALL</td>
-<td>NULL</td>
-<td>NULL</td>
-<td>NULL</td>
-<td>NULL</td>
-<td>9980</td>
-<td>100.00</td>
-<td>Using temporary;Using filesort</td>
-</tr>
-</tbody></table>
-<ul>
-<li>Extra字段显示Using temporary，表示的是需要使用临时表；Using filesort，表示的是需要执行排序操作。（需要临时表，并且需要在临时表上排序）  </li>
-</ul>
-<p>对于InnoDB表，执行全字段排序会减少磁盘访问。<br>对于内存表，回表过程只是简单的根据数据行的位置，直接访问内存得到数据，根本不会导致多访问磁盘。用于排序的行越小越好，优先选择rowid排序。<br>针对临时表，小的用memory引擎，大的用innodb引擎。  </p>
-<p>执行流程：  </p>
+    <title>日志与索引</title>
+    <url>/MySQL/%E6%97%A5%E5%BF%97%E4%B8%8E%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<h3 id="两阶段提交的不同时刻，MySQL异常重启。"><a href="#两阶段提交的不同时刻，MySQL异常重启。" class="headerlink" title="两阶段提交的不同时刻，MySQL异常重启。"></a>两阶段提交的不同时刻，MySQL异常重启。</h3><p>崩溃恢复crash safe:  </p>
 <ol>
-<li>创建一个临时表。临时表使用的是memory引擎，表里两个字段，第一个字段是double类型，记为字段R，第二个字段是varchar(64)类型，记为字段W。这个表没有建索引。  </li>
-<li>从words表中，按主键顺序取出所有word值。对于每一个word值，调用rand()函数生成一个大于0小于1的随机小数，并把这个随机小数和word分别存入临时表R和W字段中，此时扫描行数为10000。  </li>
-<li>临时表有10000行数据，接下来在这个没有索引的内存临时表上，按照字段R排序。  </li>
-<li>初始化sort_buffer。sort_buffer中有两个字段，一个是double类型，另一个是整型。</li>
-<li>从内存临时表中一行一行的取出R值和<strong>位置信息</strong>，分别存入sort_buffer中的两个字段里。这个过程要对内存临时表做全表扫描，此时扫描行数增加10000，为20000。  </li>
-<li>在sort_buffer中根据R的值进行排序。这个过程没有涉及到表操作，不会增加扫描行数。  </li>
-<li>排序完成后，取出前三个结果的<strong>位置信息</strong>，依次到内存临时表中取出word值，返回给客户端。访问了表的三行数据，总扫描函数变成了20003。  </li>
-</ol>
-<hr>
-<h4 id="MySQL的表定位“一行数据”的方法"><a href="#MySQL的表定位“一行数据”的方法" class="headerlink" title="MySQL的表定位“一行数据”的方法"></a>MySQL的表定位“一行数据”的方法</h4><p>如果创建的表没有主键，或者把一个表的主键删掉了，那么InnoDB会自己生成一个<strong>长度为6字节的rowid来作为主键</strong>。<strong>每个引擎用来唯一标识数据行的信息</strong>。  </p>
-<ul>
-<li>有主键的InnoDB表，rowid就是主键ID；  </li>
-<li>没有主键的InnoDB表，rowid就是由系统生成的；  </li>
-<li>MEMORY引擎不是索引组织表。可以认为它就是一个数组，rowid是数组的下标。  </li>
+<li>如果redo log里面的事务是完整的，也就是已经有了commit标识，则直接提交。  </li>
+<li>如果redo log里面的事务只有完整的prepare，则判断对应的事务binlog是否存在并完整（提交标记）：  <ul>
+<li>a. 如果是完整的，则提交事务；  </li>
+<li>b. 否则，回滚事务。  </li>
 </ul>
-<p>order by rand()使用了内存临时表，内存临时表排序的时候使用了rowid排序方法。  </p>
-<h3 id="磁盘临时表"><a href="#磁盘临时表" class="headerlink" title="磁盘临时表"></a>磁盘临时表</h3><p>tmp_table_size这个配置限制了内存临时表的大小，默认值是16M。如果临时表大小超过了tmp_table_size，那么内存临时表就会转成磁盘临时表。  </p>
-<p>磁盘临时表使用的引擎默认是InnoDB，由参数internal_tmp_disk_storage_engine控制。  </p>
-<p>当使用磁盘临时表的时候，对应的就是一个没有显式索引的InnoDB表的排序过程。  </p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        磁盘临时表
-    </div>
-    <div class='spoiler-content'>
-        <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 单位字节(Byte)。1Byte=8bit</span></span><br><span class="line"><span class="keyword">set</span> tmp_table_size=<span class="number">1024</span>;</span><br><span class="line"><span class="keyword">set</span> sort_buffer_size=<span class="number">32768</span>;</span><br><span class="line"><span class="keyword">set</span> max_length_for_sort_data=<span class="number">16</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打开 optimizer_trace，只对本线程有效 */</span></span><br><span class="line"><span class="keyword">SET</span> optimizer_trace=<span class="string">'enabled=on'</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 执行语句 */</span></span><br><span class="line"><span class="keyword">select</span> word <span class="keyword">from</span> words <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 查看 OPTIMIZER_TRACE 输出 */</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`information_schema`</span>.<span class="string">`OPTIMIZER_TRACE`</span>\G</span><br><span class="line"><span class="string">``</span><span class="string">`  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span> <span class="keyword">json</span>  </span><br><span class="line"><span class="string">"filesort_priority_queue_optimization"</span>:&#123;</span><br><span class="line">    <span class="string">"limit"</span>:<span class="number">3</span>,</span><br><span class="line">    <span class="string">"rows_estimate"</span>:<span class="number">1213</span>,</span><br><span class="line">    <span class="string">"row_size"</span>:<span class="number">14</span>,</span><br><span class="line">    <span class="string">"memory_available"</span>:<span class="number">32768</span>,</span><br><span class="line">    <span class="string">"chosen"</span>:<span class="literal">true</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">"filesort_execution"</span>:[],</span><br><span class="line"><span class="string">"filesort_summary"</span>:&#123;</span><br><span class="line">    <span class="string">"rows"</span>:<span class="number">4</span>,</span><br><span class="line">    <span class="string">"examined_rows"</span>:<span class="number">10000</span>,</span><br><span class="line">    <span class="string">"number_of_tmp_files"</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">"sort_buffer_size"</span>:<span class="number">88</span>,</span><br><span class="line">    <span class="string">"sort_mode"</span>:<span class="string">"&lt;sort_key,rowid&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    </div>
-</div>  
-
+</li>
+</ol>
+<h4 id="MySQL怎么知道binlog是完整的"><a href="#MySQL怎么知道binlog是完整的" class="headerlink" title="MySQL怎么知道binlog是完整的"></a>MySQL怎么知道binlog是完整的</h4><p>一个事务的binlog是有完整格式的：</p>
 <ul>
-<li>将max_length_for_sort_data=16，小于word字段的长度定义。sort_mode显示的是rowid排序，参与排序的是随机值R字段和rowid字段组成的行。  </li>
-<li>R字段存放的随机值是8个字节，rowid是6个字节，数据总行数是10000，总共140000字节，超过sort_buffer_size为32768字节。number_of_tmp_files为0，表示不使用临时文件。  </li>
+<li>statement格式的binlog，最后会有commit；  </li>
+<li>row格式的binlog，最后会有一个XID event。  </li>
 </ul>
-<p>MySQL5.6引入优先队列排序算法。没有使用临时文件算法—归并排序算法(所有数据有序，浪费计算量)。  </p>
-<p>执行流程：  </p>
-<ol>
-<li>对于10000个准备排序的(R,rowid)，先取前三行，构造一个堆；  </li>
-<li>取下一个行(R’,rowid’)，跟当前堆里最大的R比较，如果R’小于R，把这个(R,rowid)从堆中去掉，换成(R’,rowid’)；   </li>
-<li>重复第2步，直到第10000个(R’,rowid’)完成比较。  </li>
-</ol>
-<p>流程结束，堆中就是10000行中R值最小的三行，依次取出rowid，到临时表中拿到word字段。  </p>
-<p>OPTIMIZER_TRACE结果中，filesort_priority_queue_optimization.chosen=true；表示使用优先级队列排序算法，不需要临时文件，对应的filesort_summary.number_of_tmp_files=0。  </p>
+<p>MySQL5.6.2版本后，引入binlog-checksum参数，用来验证binlog内容的正确性。对于binlog日志由于磁盘原因，可能会在日志中间出错的情况，MySQL可以通过校验checksum的结果来发现。  </p>
+<h4 id="redo-log和binlog是怎么关联起来的"><a href="#redo-log和binlog是怎么关联起来的" class="headerlink" title="redo log和binlog是怎么关联起来的"></a>redo log和binlog是怎么关联起来的</h4><p>他们有一个共同的数据字段—XID。崩溃恢复的时候，会按顺序扫描redo log；  </p>
+<ul>
+<li>如果碰到既有prepare、又有commit的redo log，就直接提交；  </li>
+<li>如果碰到只有prepare、而没有commit的redo log，就拿着XID去binlog找对应的事务。  </li>
+</ul>
+<h4 id="处于prepare阶段的redo-log加上完整binlog，重启就能恢复，MySQL为什么要这么设计"><a href="#处于prepare阶段的redo-log加上完整binlog，重启就能恢复，MySQL为什么要这么设计" class="headerlink" title="处于prepare阶段的redo log加上完整binlog，重启就能恢复，MySQL为什么要这么设计"></a>处于prepare阶段的redo log加上完整binlog，重启就能恢复，MySQL为什么要这么设计</h4><p>binlog写完以后MySQL发生崩溃，这时候binlog已经写入了，之后就会被从库(或者用这个binlog恢复出来的库)使用。  </p>
+<p>所以在主库上也要提交这个事务。采用这个策略，主库和备库的数据就保证了一致性。  </p>
+<h4 id="只用binlog就能恢复，为什么需要两阶段提交"><a href="#只用binlog就能恢复，为什么需要两阶段提交" class="headerlink" title="只用binlog就能恢复，为什么需要两阶段提交"></a>只用binlog就能恢复，为什么需要两阶段提交</h4><p>两阶段提交是经典的分布式系统问题。  </p>
+<p>对于InnoDB引擎来说，如果redo log提交完成了，事务就不能回滚(如果还允许回滚，就可能覆盖掉别的事务的更新)。如果redo log直接提交，然后binlog写入的时候失败，InnoDB又回滚不了，数据和binlog日志不一致。  </p>
+<p>两阶段提交是为了给所有人一个机会，当每个人都OK的时候，再一起提交。  </p>
+<h4 id="不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档"><a href="#不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档" class="headerlink" title="不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档"></a>不引入两个日志，也就没有两阶段提交的必要了。只用binlog来支持崩溃恢复，又能支持归档</h4><p><strong>历史原因</strong>：<br>InnoDB并不是MySQL的原生存储引擎。MySQL的原生引擎是MyISAM，设计之初就没有支持崩溃恢复。  </p>
+<p>InnoDB在作为MySQL的插件加入MySQL的引擎家族之前，就已经是一个提供了崩溃恢复和事务支持的引擎了。  </p>
+<p>InnoDB接入了MySQL后，发现binlog没有崩溃恢复的能力，就用InnoDB原有的redo log。(redo log是在innodb引擎实现的，binlog是在server层实现的)  </p>
+<p><strong>实现原因</strong>：<br>binlog没有能力恢复”数据页”。<br>InnoDB引擎使用的是WAL技术，执行事务的时候，写完内存和日志，事务就算完成了。如果之后崩溃，要依赖于日志来恢复数据页。<br>未提交的事务，重启后引擎内部事务会回滚，然后应用binlog可以补回来；已经提交了的事务是可能丢失的(MySQL写数据写在内存里已提交但未落盘，恢复只关注未提交但已写binlog的数据)，而且是数据页级的丢失。<br>binlog里面并没有记录数据页的更新细节，只记录了逻辑操作，数据页是补不回来的。  </p>
 <blockquote>
-<p>limit参数，影响排序算法，最小堆的维护代价小于sort_buffer_size时采用优先队列排序。  </p>
+<p>一个事务的binlog如果回放，就是重做整个事务，一个事务更新的可能不止一个page。  </p>
 </blockquote>
-<h3 id="随机排序方法"><a href="#随机排序方法" class="headerlink" title="随机排序方法"></a>随机排序方法</h3><p>无论使用哪种类型的临时表，order by rand()都会让计算过程非常复杂，需要大量的的扫描行数，排序过程的资源消耗也很大。  </p>
-<h4 id="随机算法1"><a href="#随机算法1" class="headerlink" title="随机算法1"></a>随机算法1</h4><ol>
-<li>取表的主键ID的最大值M和最小值N；  </li>
-<li>用随机函数生成一个最大值到最小值之间的数X=(M-N)*rand()+N;  </li>
-<li>取不小于X的第一个ID的行。  </li>
-</ol>
+<h4 id="只用redo-log，不要binlog"><a href="#只用redo-log，不要binlog" class="headerlink" title="只用redo log，不要binlog"></a>只用redo log，不要binlog</h4><p>如果只从崩溃恢复的角度来讲可以。可以把binlog关掉，这样就没有两阶段提交了，但系统依然是crash-safe的。  </p>
+<p>正式的生产库上，binlog有着redo log无法替代的功能。  </p>
+<ul>
+<li>归档，redo log是循环写，写到末尾是要回到开头继续写的。这样历史日志没法保留，redo log也就起不到归档的作用。  </li>
+<li>MySQL系统以来binlog。binlog作为MySQL一开始就有的功能，被用在了很多地方。其中MySQL系统高可用的基础就是binlog复制。  </li>
+<li>异构系统(数据分析类系统)，这些系统依靠消费MySQL的binlog来更新自己的数据。关掉binlog的话，下游系统没有输入。  </li>
+</ul>
+<h4 id="redo-log一般设置多大"><a href="#redo-log一般设置多大" class="headerlink" title="redo log一般设置多大"></a>redo log一般设置多大</h4><p>redo log太小的话，会导致很快就被写满，然后不得不强行刷redo log，这样WAL机制的能力发挥不出来。  </p>
+<p>对于几个TB的磁盘，redo log设置为4个文件，每个文件1GB。  </p>
+<h4 id="正常运行中的实例，数据写入后的最终落盘，是从redo-log更新过来的还是从buffer-pool更新过来的-rodo-log里面到底是什么"><a href="#正常运行中的实例，数据写入后的最终落盘，是从redo-log更新过来的还是从buffer-pool更新过来的-rodo-log里面到底是什么" class="headerlink" title="正常运行中的实例，数据写入后的最终落盘，是从redo log更新过来的还是从buffer pool更新过来的(rodo log里面到底是什么)"></a>正常运行中的实例，数据写入后的最终落盘，是从redo log更新过来的还是从buffer pool更新过来的(rodo log里面到底是什么)</h4><p>redo log并没有记录数据页的完整数据，它并没有能力去更新磁盘数据页，页不存在“数据最终落盘，是由redo log更新过去”的情况。  </p>
+<ul>
+<li>如果是正常运行的实例，数据页被修改以后，跟磁盘的数据页不一致，称为脏页。最终数据落盘，就是把内存中的数据页写盘。这个过程跟redo log毫无关系。  </li>
+<li>在崩溃恢复场景中，InnoDB如果判断到一个数据页可能在崩溃恢复的时候丢失了更新，就会将它督导内存，然后让redo log更新内存内容，更新完成后，内存页变成脏页，就回到了第一种情况的状态。  </li>
+</ul>
+<h4 id="redo-log-buffer是什么，是先修改内存，还是先写redo-log文件"><a href="#redo-log-buffer是什么，是先修改内存，还是先写redo-log文件" class="headerlink" title="redo log buffer是什么，是先修改内存，还是先写redo log文件"></a>redo log buffer是什么，是先修改内存，还是先写redo log文件</h4><p>在一个事务的更新过程中，日志是要写多次的。每次生成的日志都得先保存起来，但又不能在还没commit的时候就直接写到redo log文件里。  </p>
+<p>redo log buffer就是一块内存，用来先存redo 日志的。真正把日志写到redo log文件(文件名是id_logfile+ 数字)，是在执行commit语句的时候做的。  </p>
 <blockquote>
-<p>select max(id),min(id) into @M,@N from t;<br>set @X= floor((@M-@N+1)*rand() + @N);<br>select * from t where id &gt;= @X limit 1;  </p>
+<p>prepare的时候就要落盘一次(包含一次写数据到盘)。一个大事务中，如果生成的redo log很多，在事务未提交之前，log也会从redo log buffer写到redo log file里。  </p>
 </blockquote>
-<p>取max(id)和min(id)走索引但不需要扫描索引，第三步的select可以用索引快速定位，综合扫描3行。  </p>
-<h4 id="随机算法2"><a href="#随机算法2" class="headerlink" title="随机算法2"></a>随机算法2</h4><ol>
-<li>取整个表的行数，记为C。  </li>
-<li>取得Y=floor(C*rand())。floor函数取整数部分。  </li>
-<li>用limitY,1取得一行。  </li>
-</ol>
-<blockquote>
-<p>select count(*) into @C from t;<br>set @Y = floor(@C * rand());<br>set @sql = concat(“select * from t limit “, @Y, “,1”);<br>prepare stmt from @sql;<br>execute stmt;<br>DEALLOCATE prepare stmt;  </p>
-</blockquote>
-<p>解决了算法1的概率不均匀问题。(算法1要求ID中间没有空洞，否则选择不同行的概率不一样)  </p>
-<p><strong>MySQL处理limit Y,1的做法是按顺序一个一个的读出来，丢掉前Y个，然后把下一个记录作为返回结果，这一步需要扫描Y+1行。</strong>加上第一步扫描的C行，总共需要扫描C+Y+1行，执行代价比算法1高，比直接order by rand()低。  </p>
-<blockquote>
-<p>limit获取数据的时候是根据主键排序获取的，主键索引天然有序，比order by rand()方法组成临时表R字段排序再获取rowid代价小。</p>
-</blockquote>
-<h4 id="随机算法3"><a href="#随机算法3" class="headerlink" title="随机算法3"></a>随机算法3</h4><ol>
-<li>取整个表的行数，记为C。  </li>
-<li>根据相同的随机方法得到Y1、Y2、Y3。  </li>
-<li>执行三个limitY,1语句得到三行数据。  </li>
-</ol>
-<blockquote>
-<p>select count(*) into @C from t;<br>set @Y1 = floor(@C * rand());<br>set @Y2 = floor(@C * rand());<br>set @Y3 = floor(@C * rand());<br>select * from t limit @Y1，1； //在应用代码里面取Y1、Y2、Y3值，拼出SQL后执行<br>select * from t limit @Y2，1；<br>select * from t limit @Y3，1；  </p>
-</blockquote>
-<p>总的扫描行数C+(Y1+1)+(Y2+1)+(Y3+1)。  </p>
-<h4 id="随机算法4"><a href="#随机算法4" class="headerlink" title="随机算法4"></a>随机算法4</h4><p>取Y1、Y2、Y3里面最大的一个数，记为M，最小的一个数记为N。</p>
-<blockquote>
-<p>select * from t limit N,M-N+1;  </p>
-</blockquote>
-<p>总的扫描行数C+M+1。  </p>
+<p>事务执行过程中不会“主动去刷盘”，以减少不必要的IO消耗。但是可能会出现“被动写入磁盘”，比如内存不够、其他事务提交等情况。  </p>
+<p>单独执行一个更新语句的时候，InnoDB会自己启动一个事务，在语句执行完成的时候提交。过程跟上面一样，只不多是“压缩”到了一个语句里面完成。  </p>
+<p>binlo 有对应的binlog cache，binlog写完磁盘就发送给从库。  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>MySQL</category>
@@ -4536,6 +4396,146 @@ checkpoint往前推进时，需要将推进过程中的日志，对应的所有�
 </blockquote>
 </li>
 </ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>随机排序</title>
+    <url>/MySQL/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>随机选择三个记录。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        单词表
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE `words` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `word` varchar(64) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line"></span><br><span class="line">delimiter ;;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">procedure</span> idata()</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">declare</span> i <span class="built_in">int</span>;</span><br><span class="line">  <span class="keyword">set</span> i=<span class="number">0</span>;</span><br><span class="line">  while i&lt;10000 do</span><br><span class="line">    <span class="keyword">insert</span> <span class="keyword">into</span> words(word) <span class="keyword">values</span>(<span class="keyword">concat</span>(<span class="built_in">char</span>(<span class="number">97</span>+(i <span class="keyword">div</span> <span class="number">1000</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">1000</span> <span class="keyword">div</span> <span class="number">100</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">100</span> <span class="keyword">div</span> <span class="number">10</span>)), <span class="built_in">char</span>(<span class="number">97</span>+(i % <span class="number">10</span>))));</span><br><span class="line">    <span class="keyword">set</span> i=i+<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">end</span> <span class="keyword">while</span>;</span><br><span class="line"><span class="keyword">end</span>;;</span><br><span class="line">delimiter ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">call</span> idata();</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+<h3 id="内存临时表"><a href="#内存临时表" class="headerlink" title="内存临时表"></a>内存临时表</h3><p>随机排序取前3个。  </p>
+<blockquote>
+<p>explain select word from words order by rand() limit 3;  </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>select_type</th>
+<th>table</th>
+<th>partitions</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>ref</th>
+<th>rows</th>
+<th>filtered</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>words</td>
+<td>NULL</td>
+<td>ALL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>9980</td>
+<td>100.00</td>
+<td>Using temporary;Using filesort</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Extra字段显示Using temporary，表示的是需要使用临时表；Using filesort，表示的是需要执行排序操作。（需要临时表，并且需要在临时表上排序）  </li>
+</ul>
+<p>对于InnoDB表，执行全字段排序会减少磁盘访问。<br>对于内存表，回表过程只是简单的根据数据行的位置，直接访问内存得到数据，根本不会导致多访问磁盘。用于排序的行越小越好，优先选择rowid排序。<br>针对临时表，小的用memory引擎，大的用innodb引擎。  </p>
+<p>执行流程：  </p>
+<ol>
+<li>创建一个临时表。临时表使用的是memory引擎，表里两个字段，第一个字段是double类型，记为字段R，第二个字段是varchar(64)类型，记为字段W。这个表没有建索引。  </li>
+<li>从words表中，按主键顺序取出所有word值。对于每一个word值，调用rand()函数生成一个大于0小于1的随机小数，并把这个随机小数和word分别存入临时表R和W字段中，此时扫描行数为10000。  </li>
+<li>临时表有10000行数据，接下来在这个没有索引的内存临时表上，按照字段R排序。  </li>
+<li>初始化sort_buffer。sort_buffer中有两个字段，一个是double类型，另一个是整型。</li>
+<li>从内存临时表中一行一行的取出R值和<strong>位置信息</strong>，分别存入sort_buffer中的两个字段里。这个过程要对内存临时表做全表扫描，此时扫描行数增加10000，为20000。  </li>
+<li>在sort_buffer中根据R的值进行排序。这个过程没有涉及到表操作，不会增加扫描行数。  </li>
+<li>排序完成后，取出前三个结果的<strong>位置信息</strong>，依次到内存临时表中取出word值，返回给客户端。访问了表的三行数据，总扫描函数变成了20003。  </li>
+</ol>
+<hr>
+<h4 id="MySQL的表定位“一行数据”的方法"><a href="#MySQL的表定位“一行数据”的方法" class="headerlink" title="MySQL的表定位“一行数据”的方法"></a>MySQL的表定位“一行数据”的方法</h4><p>如果创建的表没有主键，或者把一个表的主键删掉了，那么InnoDB会自己生成一个<strong>长度为6字节的rowid来作为主键</strong>。<strong>每个引擎用来唯一标识数据行的信息</strong>。  </p>
+<ul>
+<li>有主键的InnoDB表，rowid就是主键ID；  </li>
+<li>没有主键的InnoDB表，rowid就是由系统生成的；  </li>
+<li>MEMORY引擎不是索引组织表。可以认为它就是一个数组，rowid是数组的下标。  </li>
+</ul>
+<p>order by rand()使用了内存临时表，内存临时表排序的时候使用了rowid排序方法。  </p>
+<h3 id="磁盘临时表"><a href="#磁盘临时表" class="headerlink" title="磁盘临时表"></a>磁盘临时表</h3><p>tmp_table_size这个配置限制了内存临时表的大小，默认值是16M。如果临时表大小超过了tmp_table_size，那么内存临时表就会转成磁盘临时表。  </p>
+<p>磁盘临时表使用的引擎默认是InnoDB，由参数internal_tmp_disk_storage_engine控制。  </p>
+<p>当使用磁盘临时表的时候，对应的就是一个没有显式索引的InnoDB表的排序过程。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        磁盘临时表
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 单位字节(Byte)。1Byte=8bit</span></span><br><span class="line"><span class="keyword">set</span> tmp_table_size=<span class="number">1024</span>;</span><br><span class="line"><span class="keyword">set</span> sort_buffer_size=<span class="number">32768</span>;</span><br><span class="line"><span class="keyword">set</span> max_length_for_sort_data=<span class="number">16</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打开 optimizer_trace，只对本线程有效 */</span></span><br><span class="line"><span class="keyword">SET</span> optimizer_trace=<span class="string">'enabled=on'</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 执行语句 */</span></span><br><span class="line"><span class="keyword">select</span> word <span class="keyword">from</span> words <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 查看 OPTIMIZER_TRACE 输出 */</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`information_schema`</span>.<span class="string">`OPTIMIZER_TRACE`</span>\G</span><br><span class="line"><span class="string">``</span><span class="string">`  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span> <span class="keyword">json</span>  </span><br><span class="line"><span class="string">"filesort_priority_queue_optimization"</span>:&#123;</span><br><span class="line">    <span class="string">"limit"</span>:<span class="number">3</span>,</span><br><span class="line">    <span class="string">"rows_estimate"</span>:<span class="number">1213</span>,</span><br><span class="line">    <span class="string">"row_size"</span>:<span class="number">14</span>,</span><br><span class="line">    <span class="string">"memory_available"</span>:<span class="number">32768</span>,</span><br><span class="line">    <span class="string">"chosen"</span>:<span class="literal">true</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">"filesort_execution"</span>:[],</span><br><span class="line"><span class="string">"filesort_summary"</span>:&#123;</span><br><span class="line">    <span class="string">"rows"</span>:<span class="number">4</span>,</span><br><span class="line">    <span class="string">"examined_rows"</span>:<span class="number">10000</span>,</span><br><span class="line">    <span class="string">"number_of_tmp_files"</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">"sort_buffer_size"</span>:<span class="number">88</span>,</span><br><span class="line">    <span class="string">"sort_mode"</span>:<span class="string">"&lt;sort_key,rowid&gt;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<ul>
+<li>将max_length_for_sort_data=16，小于word字段的长度定义。sort_mode显示的是rowid排序，参与排序的是随机值R字段和rowid字段组成的行。  </li>
+<li>R字段存放的随机值是8个字节，rowid是6个字节，数据总行数是10000，总共140000字节，超过sort_buffer_size为32768字节。number_of_tmp_files为0，表示不使用临时文件。  </li>
+</ul>
+<p>MySQL5.6引入优先队列排序算法。没有使用临时文件算法—归并排序算法(所有数据有序，浪费计算量)。  </p>
+<p>执行流程：  </p>
+<ol>
+<li>对于10000个准备排序的(R,rowid)，先取前三行，构造一个堆；  </li>
+<li>取下一个行(R’,rowid’)，跟当前堆里最大的R比较，如果R’小于R，把这个(R,rowid)从堆中去掉，换成(R’,rowid’)；   </li>
+<li>重复第2步，直到第10000个(R’,rowid’)完成比较。  </li>
+</ol>
+<p>流程结束，堆中就是10000行中R值最小的三行，依次取出rowid，到临时表中拿到word字段。  </p>
+<p>OPTIMIZER_TRACE结果中，filesort_priority_queue_optimization.chosen=true；表示使用优先级队列排序算法，不需要临时文件，对应的filesort_summary.number_of_tmp_files=0。  </p>
+<blockquote>
+<p>limit参数，影响排序算法，最小堆的维护代价小于sort_buffer_size时采用优先队列排序。  </p>
+</blockquote>
+<h3 id="随机排序方法"><a href="#随机排序方法" class="headerlink" title="随机排序方法"></a>随机排序方法</h3><p>无论使用哪种类型的临时表，order by rand()都会让计算过程非常复杂，需要大量的的扫描行数，排序过程的资源消耗也很大。  </p>
+<h4 id="随机算法1"><a href="#随机算法1" class="headerlink" title="随机算法1"></a>随机算法1</h4><ol>
+<li>取表的主键ID的最大值M和最小值N；  </li>
+<li>用随机函数生成一个最大值到最小值之间的数X=(M-N)*rand()+N;  </li>
+<li>取不小于X的第一个ID的行。  </li>
+</ol>
+<blockquote>
+<p>select max(id),min(id) into @M,@N from t;<br>set @X= floor((@M-@N+1)*rand() + @N);<br>select * from t where id &gt;= @X limit 1;  </p>
+</blockquote>
+<p>取max(id)和min(id)走索引但不需要扫描索引，第三步的select可以用索引快速定位，综合扫描3行。  </p>
+<h4 id="随机算法2"><a href="#随机算法2" class="headerlink" title="随机算法2"></a>随机算法2</h4><ol>
+<li>取整个表的行数，记为C。  </li>
+<li>取得Y=floor(C*rand())。floor函数取整数部分。  </li>
+<li>用limitY,1取得一行。  </li>
+</ol>
+<blockquote>
+<p>select count(*) into @C from t;<br>set @Y = floor(@C * rand());<br>set @sql = concat(“select * from t limit “, @Y, “,1”);<br>prepare stmt from @sql;<br>execute stmt;<br>DEALLOCATE prepare stmt;  </p>
+</blockquote>
+<p>解决了算法1的概率不均匀问题。(算法1要求ID中间没有空洞，否则选择不同行的概率不一样)  </p>
+<p><strong>MySQL处理limit Y,1的做法是按顺序一个一个的读出来，丢掉前Y个，然后把下一个记录作为返回结果，这一步需要扫描Y+1行。</strong>加上第一步扫描的C行，总共需要扫描C+Y+1行，执行代价比算法1高，比直接order by rand()低。  </p>
+<blockquote>
+<p>limit获取数据的时候是根据主键排序获取的，主键索引天然有序，比order by rand()方法组成临时表R字段排序再获取rowid代价小。</p>
+</blockquote>
+<h4 id="随机算法3"><a href="#随机算法3" class="headerlink" title="随机算法3"></a>随机算法3</h4><ol>
+<li>取整个表的行数，记为C。  </li>
+<li>根据相同的随机方法得到Y1、Y2、Y3。  </li>
+<li>执行三个limitY,1语句得到三行数据。  </li>
+</ol>
+<blockquote>
+<p>select count(*) into @C from t;<br>set @Y1 = floor(@C * rand());<br>set @Y2 = floor(@C * rand());<br>set @Y3 = floor(@C * rand());<br>select * from t limit @Y1，1； //在应用代码里面取Y1、Y2、Y3值，拼出SQL后执行<br>select * from t limit @Y2，1；<br>select * from t limit @Y3，1；  </p>
+</blockquote>
+<p>总的扫描行数C+(Y1+1)+(Y2+1)+(Y3+1)。  </p>
+<h4 id="随机算法4"><a href="#随机算法4" class="headerlink" title="随机算法4"></a>随机算法4</h4><p>取Y1、Y2、Y3里面最大的一个数，记为M，最小的一个数记为N。</p>
+<blockquote>
+<p>select * from t limit N,M-N+1;  </p>
+</blockquote>
+<p>总的扫描行数C+M+1。  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>MySQL</category>
@@ -4835,6 +4835,24 @@ checkpoint往前推进时，需要将推进过程中的日志，对应的所有�
       </categories>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/uncategorized/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+  </entry>
+  <entry>
     <title>幻读</title>
     <url>/MySQL/%E5%B9%BB%E8%AF%BB/</url>
     <content><![CDATA[<div class='spoiler collapsed'>
@@ -4850,7 +4868,53 @@ checkpoint往前推进时，需要将推进过程中的日志，对应的所有�
 <p>begin;<br>select * from t where d=5 for update;<br>commit;  </p>
 </blockquote>
 <p>这个语句会命中d=5这一行，对应的主键id=5，在select语句执行完成后，id=5这一行会加一个写锁，由于两阶段锁协议，这个写锁会在执行commit语句的时候释放。（由于字段d上没有索引，这条查询语句会做全表扫描。其他被扫描到的，但是不满足条件的记录也会加锁）  </p>
-<h3 id="理解幻读"><a href="#理解幻读" class="headerlink" title="理解幻读"></a>理解幻读</h3><p>假设：<br>||sessionA|sessionB|sessionC|<br>|–|–|–|–|<br>|T1|begin;  select * from t where d=5 for update;– Q1 (5,5,5)|||<br>|T2||update t set d=5 where id=0;||<br>|T3|select * from t where d=5 for update;– Q2 (0,0,5),(5,5,5)|||<br>|T4|||insert into t values(1,1,5);|<br>|T5|select * from t where d=5 for update;– Q3 (0,0,5),(1,1,5),(5,5,5)|||<br>|T6|commit;|||</p>
+<h3 id="理解幻读"><a href="#理解幻读" class="headerlink" title="理解幻读"></a>理解幻读</h3><p>假设：  </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>begin;  select * from t where d=5 for update;– Q1 (5,5,5)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>update t set d=5 where id=0;</td>
+<td></td>
+</tr>
+<tr>
+<td>T3</td>
+<td>select * from t where d=5 for update;– Q2 (0,0,5),(5,5,5)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>T4</td>
+<td></td>
+<td></td>
+<td>insert into t values(1,1,5);</td>
+</tr>
+<tr>
+<td>T5</td>
+<td>select * from t where d=5 for update;– Q3 (0,0,5),(1,1,5),(5,5,5)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>T6</td>
+<td>commit;</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 <p>sessionA执行了三次查询：Q1、Q2、Q3。它们的SQL语句相同。select * from t where d=5 for update;查所有d=5的行，而且使用的是当前读，能读到所有已经提交的记录的最新值，并且加上写锁。  </p>
 <p>Q3读到id=1这一行的现象被称为“幻读”。<br><strong>幻读指的是一个事务在前后两次查询同一个范围的时候，后一次查询看到了前一次查询没有看到的行。</strong>  </p>
 <ul>
@@ -4942,23 +5006,5 @@ checkpoint往前推进时，需要将推进过程中的日志，对应的所有�
       <categories>
         <category>MySQL</category>
       </categories>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/uncategorized/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
   </entry>
 </search>
