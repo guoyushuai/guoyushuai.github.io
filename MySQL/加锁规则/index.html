@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="next-key lock加锁规则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加锁规则">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="next-key lock加锁规则">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-29T01:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-01T06:19:46.443Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>加锁规则 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">70</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          加锁规则
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-29 09:00:00" itemprop="dateCreated datePublished" datetime="2020-06-29T09:00:00+08:00">2020-06-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-01 14:19:46" itemprop="dateModified" datetime="2020-07-01T14:19:46+08:00">2020-07-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+            <div class="post-description">next-key lock加锁规则</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>MySQL新的版本可能会改变加锁策略，当前规则适用于5.x系列&lt;=5.7.24,8.0系列&lt;=8.0.13。  </p>
+<p>执行update和delete的时候，要“先读后写”，这个读就开始加锁了。<br>insert的时候要有插入意向锁(跟gap lock冲突)。<br><strong>查询过程中，在 InnoDB 要去找“第一个值”的时候，是按照等值去找的，用的是等值判断的规则；找到第一个值以后，要在索引内找“下一个值”，对应于规则中说的范围查找。</strong>  </p>
+<h3 id="加锁规则"><a href="#加锁规则" class="headerlink" title="加锁规则"></a>加锁规则</h3><p>包含两个“原则”、两个“优化”和一个“bug”：  </p>
+<ol>
+<li>原则1：加锁的基本单位是next-key lock(前开后闭区间)。  </li>
+<li>原则2：查找过程中访问到的对象才会加锁(查询过程中访问到的行和间隙，不是查询结果)。  </li>
+<li>优化1：索引上的等值查询，给唯一索引加锁的时候，next-key lock退化为行锁(若存在等于该值的行则退化为行锁，若不存在则不退化，参考优化2形成间隙锁)。  </li>
+<li>优化2：索引上的等值查询，(无论是唯一索引还是不唯一的普通索引)向右遍历到最后一个不满足等值条件的值，next-key lock退化为间隙锁。  </li>
+<li>一个bug：唯一索引上的范围查询也会访问到不满足条件的第一个值为止。  </li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`c`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`d`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`c`</span> (<span class="string">`c`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>),(<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>),</span><br><span class="line">(<span class="number">10</span>,<span class="number">10</span>,<span class="number">10</span>),(<span class="number">15</span>,<span class="number">15</span>,<span class="number">15</span>),(<span class="number">20</span>,<span class="number">20</span>,<span class="number">20</span>),(<span class="number">25</span>,<span class="number">25</span>,<span class="number">25</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-唯一索引等值查询"><a href="#1-唯一索引等值查询" class="headerlink" title="1. 唯一索引等值查询"></a>1. 唯一索引等值查询</h3><p>等值条件操作间隙：  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>update t set d=d+1 where id=7;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(8,8,8);</br>(block)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>update t set d=d+1 where id=10;</br>(Query OK)</td>
+</tr>
+</tbody></table>
+<p>表t中没有id=7的记录：  </p>
+<ol>
+<li>根据原则1，加锁单位是next-key lock，sessionA加锁范围是(5,10]；  </li>
+<li>根据优化2，这是一个等值查询id=7，而id=10不满足查询条件，next-key lock退化成间隙锁，最终加锁范围是(5,10)。  </li>
+</ol>
+<p>sessionB往间隙中插入id=8的记录会被锁住，sessionC修改id=10这行可以。  </p>
+<h3 id="2-非唯一索引等值查询"><a href="#2-非唯一索引等值查询" class="headerlink" title="2. 非唯一索引等值查询"></a>2. 非唯一索引等值查询</h3><p>覆盖索引上的锁：  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>select id from t where c=5 lock in share mode;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>update t set d=d+1 where id=5;</br>(Query OK)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>insert into t values(7,7,7);</br>(blocked)</td>
+</tr>
+</tbody></table>
+<p>sessionA给非唯一索引c上c=5的这一行加上读锁：  </p>
+<ol>
+<li>根据原则1，加锁单位是next-key lock，会给(0,5]加上next-key lock。  </li>
+<li>c是普通索引，仅访问c=5这一条记录不能马上停下来，需要向右遍历，查到c=10才放弃。根据原则2，访问到的都要加锁，要给(5,10]加next-key lock。  </li>
+<li>根据优化2，等值判断，向右遍历，最后一个值不满足c=5这个等值条件，退化成间隙锁(5,10)。  </li>
+<li>根据原则2，只有访问到的对象才会加锁，这个查询使用覆盖索引，并不需要访问主键索引，所以主键索引上没有加任何锁，sessionB的update语句可以执行。  </li>
+</ol>
+<p>sessionC插入c=7的记录，会被sessionA的间隙锁(5,10)锁住。  </p>
+<p><strong>锁是加在索引上的</strong>。由于覆盖索引的优化，本例中lock in share mode只锁了覆盖索引。若为了加读锁避免数据被更新，需要再查询字段中加入索引中不存在的字段，绕过覆盖索引优化；或者使用for update，系统认为接下来要更新数据，会顺便给主键索引上满足条件的行加上行锁。  </p>
+<h3 id="3-唯一索引范围锁"><a href="#3-唯一索引范围锁" class="headerlink" title="3.唯一索引范围锁"></a>3.唯一索引范围锁</h3><p>范围查询：  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>select * from t where id&gt;=10 and id&lt;11 for update;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(8,8,8);</br>(QueryOK)</br>insert into t values(13,13,13);</br>(blocked)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>update t set d=d+1 where id=15;</br>(blocked)</td>
+</tr>
+</tbody></table>
+<ol>
+<li>开始执行时，要找到第一个id=10的行(等值查询)，加上next-key lock(5,10]。根据优化1，主键id上的等值条件，退化成行锁，只加了id=10这一行的行锁。  </li>
+<li>范围查找往后继续找(范围查询)，找到id=15这一行停下来，需要加next-key lock(10,15]。  </li>
+</ol>
+<p>sessionA锁的范围就是主键索引上，行锁id=10和next-key lock(10,15]，综合为[10,15]。sessionB后半部和sessionC被锁住。  </p>
+<h3 id="4-非唯一索引范围锁"><a href="#4-非唯一索引范围锁" class="headerlink" title="4.非唯一索引范围锁"></a>4.非唯一索引范围锁</h3><p>对照案例三：  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>select * from t where c&gt;=10 and c&lt;11 for update;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(8,8,8);</br>(blocked)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>update t set d=d+1 where c=15;</br>(blocked)</td>
+</tr>
+</tbody></table>
+<p>sessionA用字段c来判断，加锁规则跟案例三不同处：在第一次用c=10定位记录的时候，索引c加上了(5,10]这个next-key lock后，由于索引c是非唯一索引，没有优化规则，不会蜕变为行锁。之后范围查询，扫描到c=15才知道不需要继续往后找了，才停止扫描。  </p>
+<p>sessionA加的锁是索引c上的(5,10]和(10,15]这两个next-key lock，综合为(5,15]。sessionB被(5,10]堵住，sessionC被(10,15]堵住。  </p>
+<blockquote>
+<p>如果sessionA中语句为select * from t where c&gt;=10 and c&lt;=15 for update;加锁范围为(5,20]。  </p>
+</blockquote>
+<h3 id="5-唯一索引范围锁bug"><a href="#5-唯一索引范围锁bug" class="headerlink" title="5.唯一索引范围锁bug"></a>5.唯一索引范围锁bug</h3><table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>select * from t where id&gt;10 and id&lt;=15 for update;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>update t set d=d+1 where id=20;</br>(blocked)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>insert into t values(16,16,16);</br>(blocked)</td>
+</tr>
+</tbody></table>
+<p>sessionA是一个范围查询，按照原则1，索引id上加(10,15]这个next-key lock，(因为id是唯一键，循环判断到id=15这一行就可以停止了)，而InnoDB会继续往前扫描到第一个不满足条件的行id=20为止。由于是范围扫描，索引id上的(15,20]这个next-key lock会被锁上且没有优化。  </p>
+<p>sessionB和sessionC被(15,20]锁住。</p>
+<hr>
+<h3 id="6-非唯一索引上存在“等值”的例子"><a href="#6-非唯一索引上存在“等值”的例子" class="headerlink" title="6.非唯一索引上存在“等值”的例子"></a>6.非唯一索引上存在“等值”的例子</h3><p>insert into t(id,c,d) values(30,10,30);  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>delete from t where c=10;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(12,12,12);</br>(blocked)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>update t set d=d+1 where c=15;</br>(Query OK)</td>
+</tr>
+</tbody></table>
+<p>sessionA在遍历的时候，先访问第一个c=10的记录，根据原则1，加的是(c=5,id=5)-(c=10,id=10)这个前开后闭的next-key lock。<br>sessionA继续向右查找，直到碰到(c=15,id=15)这一行循环才结束。根据优化2，这是一个等值查询，向右查询到了不满足条件的行，(c=10,id=10)-(c=15,id=15)这个前开后闭的next-key lock会退化成(c=5,id=5)-(c=15,id=15)前后都开的间隙锁。总体索引c上的锁范围是(c=5,id=5)-(c=15,id=15)前后都开的区间。  </p>
+<p>所以sessionB会被堵住，sessionC正常更新。  </p>
+<h3 id="7-limit语句加锁"><a href="#7-limit语句加锁" class="headerlink" title="7.limit语句加锁"></a>7.limit语句加锁</h3><p>对照案例6：  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>delete from t where c=10 limit 2;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(12,12,12);</br>(Query OK)</td>
+</tr>
+</tbody></table>
+<p>sessionA的delete语句加了limit2，表t中c=10的记录只有两条，加不加limit2，删除效果相同，但加锁效果不同。  </p>
+<p>delete语句明确加了limit2的限制，在遍历到(c=10,id=30)这一行之后，满足条件的语句已经有两条了，循环就结束了。索引c上的加锁范围变成了从(c=5,id=5)-(c=10,id=30)这个前开后闭的区间。  </p>
+<p>(c=10,id=30)-(c=15,id=15)之间是没有锁的。sessionB没有被堵住。<strong>在删除数据的时候尽量加limit。不仅可以控制删除数据的条数，让操作更安全，还可以减少加锁的范围。</strong>  </p>
+<h3 id="8-一个死锁的例子"><a href="#8-一个死锁的例子" class="headerlink" title="8.一个死锁的例子"></a>8.一个死锁的例子</h3><p>next-key lock实际上是间隙锁和行锁加起来的结果：  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>select id from t where c=10 lock in share mode;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>update t set d=d+1 where c=10;</br>(blocked)</td>
+</tr>
+<tr>
+<td>insert into t values(8,8,8);</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>ERROR 1213(40001): Deadlock found when trying to get lock;try restarting transaction;</td>
+</tr>
+</tbody></table>
+<ol>
+<li>sessionA启动事务后执行查询语句加lock in share mode，在索引c上加了next-key lock(5,10]（非唯一索引不会退化成行锁）和间隙锁(10,15)（优化2，等值查询优化后成为间隙锁）。  </li>
+<li>sessionB的update语句先要在索引c上加next-key lock(5,10]，进入锁等待。  </li>
+<li>sessionA要在插入(8,8,8)这一行，被sessionB的间隙锁锁住。出现了死锁，InnoDB让sessionB回滚。  </li>
+</ol>
+<p>sessionB的next-key lock(5,10]操作，实际上分成了两步：先是加(5,10)的间隙锁，加锁成功(间隙锁之间不互斥，只保护间隙，不让insert)；然后加c=10的行锁，加锁失败(行锁之间互斥)等待。若成功后面还要依次加(10,15]的锁。  </p>
+<h3 id="9-倒序"><a href="#9-倒序" class="headerlink" title="9.倒序"></a>9.倒序</h3><table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>begin;</br>select * from t where c&gt;=15 and c&lt;=20 order by c desc lock in share mode;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(6,6,6);</br>(blocked)</td>
+</tr>
+</tbody></table>
+<ol>
+<li>由于是order by desc，第一个要定位的是索引c上“最右边的”c=20的行，所以会加上间隙锁(20,25)和next-key lock(15,20]。  </li>
+<li>在索引c上向左遍历，要扫描到c=10才停下来(扫描到10，才知道已经不等于15了，找到第一个不等于15的值)，所以next-key lock会加到(5,10]，这是阻塞sessionB的insert语句的原因。  </li>
+<li>在扫描过程中，c=20,c=15,c=10这三行都存在值，由于是select *，所以会在主键id上加三个行锁。  </li>
+</ol>
+<p>sessionA的select语句锁的范围是：  </p>
+<ol>
+<li>索引c上(5,25)；  </li>
+<li>主键索引上id=15、20两个行锁。  </li>
+</ol>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>可重复读隔离级别。遵守两阶段锁协议，所有加锁的资源，都是在事务提交或者回滚的时候才释放。next-key lock实际上是由间隙锁加行锁实现的。如果切换到读提交隔离级别，相当于去掉间隙锁的部分，只保留行锁部分。  </p>
+<hr>
+<p>读提交隔离级别下的优化：语句执行过程中加上的行锁，在语句执行完成后，就把“不满足条件的行”上的行锁直接释放了，不需要等到事务提交。读提交隔离级别下，锁的范围更小，锁的时间更短。  </p>
+<p>读提交隔离级别下，update语句有一个“semi-consistent” read优化(delete语句无效)：如果update语句碰到一个已经被锁了的行，会读入最新的版本，然后判断一下是不是满足查询条件：</p>
+<ul>
+<li>不满足，直接跳过；  </li>
+<li>满足，进入锁等待。  </li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/MySQL/%E5%B9%BB%E8%AF%BB/" rel="prev" title="幻读">
+      <i class="fa fa-chevron-left"></i> 幻读
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/MySQL/%E5%BA%94%E6%80%A5%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87%E6%89%8B%E6%AE%B5/" rel="next" title="应急性能提升手段">
+      应急性能提升手段 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#加锁规则"><span class="nav-number">1.</span> <span class="nav-text">加锁规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-唯一索引等值查询"><span class="nav-number">2.</span> <span class="nav-text">1. 唯一索引等值查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-非唯一索引等值查询"><span class="nav-number">3.</span> <span class="nav-text">2. 非唯一索引等值查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-唯一索引范围锁"><span class="nav-number">4.</span> <span class="nav-text">3.唯一索引范围锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-非唯一索引范围锁"><span class="nav-number">5.</span> <span class="nav-text">4.非唯一索引范围锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-唯一索引范围锁bug"><span class="nav-number">6.</span> <span class="nav-text">5.唯一索引范围锁bug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-非唯一索引上存在“等值”的例子"><span class="nav-number">7.</span> <span class="nav-text">6.非唯一索引上存在“等值”的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-limit语句加锁"><span class="nav-number">8.</span> <span class="nav-text">7.limit语句加锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-一个死锁的例子"><span class="nav-number">9.</span> <span class="nav-text">8.一个死锁的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-倒序"><span class="nav-number">10.</span> <span class="nav-text">9.倒序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">11.</span> <span class="nav-text">其他</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>

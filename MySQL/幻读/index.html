@@ -26,7 +26,7 @@
 <meta property="og:description" content="行锁+间隙锁&#x3D;next-key lock">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-28T05:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-29T10:41:13.525Z">
+<meta property="article:modified_time" content="2020-06-30T07:01:58.784Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 
@@ -140,7 +140,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">67</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">70</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-29 18:41:13" itemprop="dateModified" datetime="2020-06-29T18:41:13+08:00">2020-06-29</time>
+                <time title="修改时间：2020-06-30 15:01:58" itemprop="dateModified" datetime="2020-06-30T15:01:58+08:00">2020-06-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -360,8 +360,8 @@
 <p>即使把扫描过程中碰到的行，都加上写锁(当前存在的所有行)，也只能解决update语句导致的数据不一致问题(sessionB被锁住，等到sessionA提交后才能继续执行)。但是阻止不了insert语句新插入记录，加锁的时候新插入的记录行不存在，不存在也就加不上锁(无锁可随意修改并先提交，若sessionC中加一条把d改成5的操作并先提交，根据日志语句序列依然会导致主从数据不一致)。</p>
 <h3 id="解决幻读"><a href="#解决幻读" class="headerlink" title="解决幻读"></a>解决幻读</h3><h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h4><p>产生幻读的原因是，行锁只能锁住行，但是新插入记录这个动作，要更新的是记录之间的“间隙”。为了解决幻读问题，InnoDB引入了新的锁—间隙锁(Gap Lock)。间隙锁锁的是两个值之间的空隙。  </p>
 <p>执行select * from t where d=5 for update;时，不止是给数据中已有的6个记录加上了行锁，还同时加了7个间隙锁。确保了无法再插入新的记录。  </p>
-<p>行锁分成读锁和写锁。读读兼容，读写、写写冲突。跟行锁有冲突关系的是“另外一个行锁”。  </p>
-<p><strong>间隙锁之间都不存在冲突关系。跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作。</strong></p>
+<p><strong>行锁分成读锁和写锁。读读兼容，读写、写写冲突。跟行锁有冲突关系的是“另外一个行锁”。</strong>  </p>
+<p><strong>间隙锁之间都不存在冲突关系。跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作。</strong>  </p>
 <table>
 <thead>
 <tr>
@@ -440,7 +440,10 @@
     <a href="/MySQL/%E7%AE%80%E5%8D%95%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E6%85%A2%E8%A7%A3%E6%9E%90/" rel="prev" title="简单查询执行慢解析">
       <i class="fa fa-chevron-left"></i> 简单查询执行慢解析
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/MySQL/%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/" rel="next" title="加锁规则">
+      加锁规则 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -515,7 +518,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
