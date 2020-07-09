@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="主库出问题，从库怎么办">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一主多从，主备切换逻辑">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E4%B8%80%E4%B8%BB%E5%A4%9A%E4%BB%8E%EF%BC%8C%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E9%80%BB%E8%BE%91/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="主库出问题，从库怎么办">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-05T02:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-09T10:19:57.886Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E4%B8%80%E4%B8%BB%E5%A4%9A%E4%BB%8E%EF%BC%8C%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E9%80%BB%E8%BE%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>一主多从，主备切换逻辑 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">76</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E4%B8%80%E4%B8%BB%E5%A4%9A%E4%BB%8E%EF%BC%8C%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E9%80%BB%E8%BE%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一主多从，主备切换逻辑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-05 10:00:00" itemprop="dateCreated datePublished" datetime="2020-07-05T10:00:00+08:00">2020-07-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-09 18:19:57" itemprop="dateModified" datetime="2020-07-09T18:19:57+08:00">2020-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+            <div class="post-description">主库出问题，从库怎么办</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>A和A’互为主备，从库B、C、D指向的是主库A。一主多从的设置，一般用于读写分离，主库负责所有的写入和一部分读，其他的读请求则由从库分担。相比于一主一备的切换流程，一主多从结构在切换完成后，A’会成为新的主库，从库B、C、D也要改接到A’。  </p>
+<h3 id="基于位点的主备切换"><a href="#基于位点的主备切换" class="headerlink" title="基于位点的主备切换"></a>基于位点的主备切换</h3><p>把节点B设置成节点A’的从库的时候，需要执行一条change master命令：  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CHANGE</span> <span class="keyword">MASTER</span> <span class="keyword">TO</span> </span><br><span class="line">MASTER_HOST=$host_name </span><br><span class="line">MASTER_PORT=$port </span><br><span class="line">MASTER_USER=$user_name </span><br><span class="line">MASTER_PASSWORD=$<span class="keyword">password</span> </span><br><span class="line">MASTER_LOG_FILE=$master_log_name </span><br><span class="line">MASTER_LOG_POS=$master_log_pos</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>master_host、master_port、master_user、master_password四个参数，分别代表了主库A’的IP、端口、用户名、密码。  </li>
+<li>master_log_file、master_log_pos参数，表示要从主库的master_log_name文件的master_log_pos这个位置的日志继续同步。这个位置就是同步位点，是主库对应的文件名和日志偏移量。  </li>
+</ul>
+<p>原来节点B是A的从库，本地记录的也是A的位点。但是相同的日志，A的位点和A’的位点是不同的，从库B切换的时候，需要先经过“找同步位点”逻辑。  </p>
+<h4 id="同步位点设置"><a href="#同步位点设置" class="headerlink" title="同步位点设置"></a>同步位点设置</h4><p>切换过程中不能丢数据，找位点的时候，总是要找一个“稍微往前”的，然后再通过判断跳过那些在从库上已经执行过的事务：  </p>
+<ol>
+<li>等待新主库A’把中转日志relay log全部同步完成；  </li>
+<li>在A’上执行show master status命令，得到当前A’上最新的File和Position；  </li>
+<li>取援助库A故障的时刻T；  </li>
+<li>用mysqlbinlog工具解析A’的File，等得到T时刻的位点。  <blockquote>
+<p>mysqlbinlog File –stop-datetime=T –start-datetime=T;  </p>
+</blockquote>
+</li>
+</ol>
+<p>end_log_pos后面的值假设为’123’，表示的就是A’这个实例，在T时刻写入新的binlog的位置，把这个值123作为$master_log_pos，用在节点B的change master命令里。  </p>
+<h4 id="同步位点不精确"><a href="#同步位点不精确" class="headerlink" title="同步位点不精确"></a>同步位点不精确</h4><p>在T时刻，主库A已经执行完成了一个insert语句插入了一行数据R，并且已经将binlog传给了A’和B，然后再传完的瞬间主库A的主机掉电了。  </p>
+<ol>
+<li>在从库B上，由于同步了binlog，R这一行已经存在；  </li>
+<li>在新主库A’上，R这一行也已经存在，日志是写在A的end_log_pos值123对应的位置之后；  </li>
+<li>在从库B上执行change master命令，指向A’的File文件的123位置，会把插入R这一行数据的binlog又同步到从库B去执行。  <blockquote>
+<p>从库B的同步线程会报告Duplicate entry ‘id_of_R’ for key ‘PRIMARY’错误，提示出现了主键冲突，然后停止同步。  </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>切换任务的时候，主动跳过错误的两种方法：  </p>
+<ul>
+<li>主动跳过一个事务：  </li>
+</ul>
+<p><code>set global sql_slave_skip_counter=1;  
+start slave;</code></p>
+<p>sql_slave_skip_counter跳过的是一个event，但MySQL不能只执行一半的事务，跳过了一个event，就会跳到这个事务的末尾。  </p>
+<p>切换过程中，可能会不止重复执行一个事务，需要在从库B刚开始接到新主库A’时，持续观察，每次碰到这些错误就停下来，执行一次跳过命令，直到不再出现停下来的情况，以此来跳过可能涉及的所有事务。  </p>
+<ul>
+<li>设置slave_skip_errors参数，直接跳过指定的错误：  </li>
+</ul>
+<p>在执行主备切换时，经常遇到的两类错误：1062错误是插入数据时唯一键冲突；1032错误是删除数据时找不到行。  </p>
+<p>把slave_skip_errors设置为“1032,1062”，中间碰到这两个错误时直接跳过。<br>只有主备切换过程中，直接跳过1032和1062错误时无损的，等主备间的同步关系建立按成，并稳定执行一段时间之后，需要把这个参数设置为空，以免之后真的主从数据不一致被跳过。  </p>
+<h3 id="GTID"><a href="#GTID" class="headerlink" title="GTID"></a>GTID</h3><p>MySQL5.6版本引入了GTID，解决主备切换复杂易错的问题。  </p>
+<p>GTID全称是Global Transaction Identifier，全局事务ID，是一个<strong>事务在提交的时候生成</strong>的，是这个事务的唯一标识，由两部分组成，格式是：GTID=server_uuid:gno;  </p>
+<ul>
+<li>server_uuid是一个实例第一次启动时自动生成的，是一个全局唯一的值；  </li>
+<li>gno是一个整数，初始值是1，每次提交事务的时候分配给这个事务，并加1。  </li>
+</ul>
+<p>官方文档定义格式：GTID=source_id:transaction_id;  </p>
+<ul>
+<li>source_id就是server_uuid；  </li>
+<li>transaction_id容易造成误解，用gno代替。  <blockquote>
+<p>MySQL中transaction_id是指事务id，事务id是在事务执行过程找那个分配的，即使这个事务回滚了，事务id也会递增，而gno是在事务提交的时候才会分配。<br>从效果上看GTID往往是连续的，用gno表示更容易理解。  </p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<p>启动一个MySQL实例的时候，加上参数gtid_mode=on和enforce_gtid_consistency=on；就可以启动GTID模式。  </p>
+<p>在GTID模式下，每个事务都会跟一个GTID一一对应。有两种生成方式，使用哪种方式取决于session变量gtid_next的值:  </p>
+<ol>
+<li>如果gtid_next=automatic，代表使用默认值。MySQL会把server_uuid:gno分配给这个事务。<br> a. 记录binlog的时候，先记录一行set @@session.gtid_next=’server_uuid:gno’;<br> b. 把这个gtid加入本实例的gtid集合。  </li>
+<li>如果gtid_next是一个指定的gtid值，如通过 set gtid_next=’current_gtid’指定为current_gtid，那么有两种可能：<br> a. 如果current_gtid已经存在于实例的gtid集合中，接下来执行的这个事务会直接被系统忽略；<br> b. 如果current_gtid没有存在于实例的gtid集合中，就将整个current_gtid分配给接下来要执行的事务，也就是说系统不需要给这个事务生成新的gtid，因此gno也不用加1。  </li>
+</ol>
+<p>一个current_gtid只能给一个事务使用。这个事务提交后，如果要执行下一个事务，就要执行set命令，把gtid_next设置成另外一个gtid或者automatic。  </p>
+<blockquote>
+<p>set gtid_next=’aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:10’;<br>begin;<br>commit;<br>set gtid_next=automatic;<br>start slave;  </p>
+</blockquote>
+<p><strong>每个MySQL实例都维护了一个gtid集合，用来对应“这个实例执行过的所有事务”。</strong>通过show master status命令查看，对应的Executed_Gtid_set参数值。  </p>
+<p>在binlog文件开头，有一个Previous_gtids，用于记录生成这个binlog的时候，实例的Executed_gtid_set。启动时只需要解析最后一个文件，就可以知道该实例所有的GTID集合，也可以快速的定位GTID在哪个文件。  </p>
+<h3 id="基于GTID的主备切换"><a href="#基于GTID的主备切换" class="headerlink" title="基于GTID的主备切换"></a>基于GTID的主备切换</h3><p>在GTID模式下，备库B要设置为新主库A’的从库的语法：  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CHANGE</span> <span class="keyword">MASTER</span> <span class="keyword">TO</span> </span><br><span class="line">MASTER_HOST=$host_name </span><br><span class="line">MASTER_PORT=$port </span><br><span class="line">MASTER_USER=$user_name </span><br><span class="line">MASTER_PASSWORD=$<span class="keyword">password</span> </span><br><span class="line">master_auto_position=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>master_auto_position=1表示这个准备关系使用的是GTID协议。  </li>
+</ul>
+<p>当前时刻，实例A’GTID集合记为set_a，实例B的GTID集合记为set_b。在实例B上执行start slave命令，取binlog的逻辑如下：  </p>
+<ol>
+<li>实例B指定主库A’，基于准备协议建立连接。  </li>
+<li>实例B把set_b发给主库A’。  </li>
+<li>实例A’算出set_a与set_b的差集，也就是所有存在于set_a，但是不存在于set_b的GTID的集合，判断A’本地是否包含了这个差集需要的所有binlog事务。<br> a. 如果不包含，表示A’已经把实例B需要的binlog给删掉的了，直接返回错误；<br> b. 如果确认全部包含，A’从自己的binlog文件里面，找出第一个不在set_b的事务，发给B；  </li>
+<li>之后就从这个事务开始，往后读文件，按顺序取binlog发给B去执行。  </li>
+</ol>
+<p>设计思想之一：在基于GTID的主备关系里，系统认为只要建立了主备关系，就必须保证主库发给备库的日志是完成的。因此，如果实例B需要的日志已经不存在，A’就拒绝吧日志发给B。  </p>
+<p>如果一个新的从库接上主库，但需要的binlog已经没了，解决方案：  </p>
+<ol>
+<li>如果业务允许主从不一致的情况，可以在主库上先执行show global variables like ‘gtid_purged’，得到主库已经删除的GTID集合，假设是gtid_purger1；然后先在从库上执行reset master，再执行set global gtid_purged=’gtid_purged1’；最后执行start slave，就会从主库现存的binlog开始同步。binlog缺失的那一部分，数据在从库上可能会有丢失，造成主从不一致。  </li>
+<li>如果需要主从数据一致，通过重新搭建从库来做。  </li>
+<li>如果有其他的从库保留有全量的binlog的话，可以把新的从库先接到这个保留了全量的binlog的从库，追上日志以后，如果有需要，再接回从库。  </li>
+<li>如果binlog有备份的情况，可以先在从库上应用缺失的binlog，然后再执行start slave。  </li>
+</ol>
+<p>对比区别：基于位点的协议，是由备库决定的，备库指定哪个位点，主库就发哪个位点，不做日志的完整性判断。  </p>
+<p>GTID同时解决了循环复制的问题。</p>
+<hr>
+<p>GTID模式下，一主多从主备切换，从库B、C、D只需要分别执行change master命令指向实例A’即可。找位点的工作在实例A’内部已经自动完成。对于HA系统的开发人员非常友好。  </p>
+<p>之后整个系统就由新主库A’写入，主库A’的自己生成的binlog中的GTID集合格式是：server_uuid_of_A’:1-M。  </p>
+<p>从库(包括备库)的GTID集合的整体格式为：server_uuid_of_A:1-N,server_uuid_of_A’:1-M。  </p>
+<h3 id="GTID和在线DDL"><a href="#GTID和在线DDL" class="headerlink" title="GTID和在线DDL"></a>GTID和在线DDL</h3><p>索引缺失引起的性能问题，可以通过在线加索引来解决。考虑到要避免新增索引对主库性能造成影响，可以先在备库加索引，然后再切换。  </p>
+<p>在双M结构下，备库执行的DDL语句也会传给主库，为了避免传回后对主库造成影响，要通过set sql_log_bin=off关掉binlog。binlog并没有记录下这一更新，导致数据和日志不一致。  </p>
+<p>解决：假设互为主备关系的库是实例X和实例Y，当前主库是X，并且都打开了GTID模式，主备切换流程：  </p>
+<ul>
+<li><p>在实例X上执行 stop slave。  </p>
+</li>
+<li><p>在实例Y上执行DDL语句。这里不需要关闭binlog。  </p>
+</li>
+<li><p>执行完成后，查出这个DDL语句对应的GTID，并记为server_uuid_of_Y:gno。  </p>
+</li>
+<li><p>到实例X中执行以下语句序列：  </p>
+<blockquote>
+<p>set GTID_NEXT=”server_uuid_of_Y:gno”;<br>  begin;<br>  commit;<br>  set gtid_next=automatic;<br>  start slave;</p>
+</blockquote>
+<p>  这样模拟一个空事务既可以让实例Y的更新有binlog记录，同时也可以确保不会在实例X上执行这条更新。  </p>
+</li>
+<li><p>接下来，执行完主备切换，照着上述流程再执行一遍即可。  </p>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/MySQL/%E4%B8%BB%E5%A4%87%E5%BB%B6%E8%BF%9F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="prev" title="主备延迟解决方案">
+      <i class="fa fa-chevron-left"></i> 主备延迟解决方案
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/MySQL/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AF%BC%E8%87%B4%E7%9A%84%E8%BF%87%E6%9C%9F%E8%AF%BB%E9%97%AE%E9%A2%98/" rel="next" title="读写分离导致的过期读问题">
+      读写分离导致的过期读问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于位点的主备切换"><span class="nav-number">1.</span> <span class="nav-text">基于位点的主备切换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#同步位点设置"><span class="nav-number">1.1.</span> <span class="nav-text">同步位点设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#同步位点不精确"><span class="nav-number">1.2.</span> <span class="nav-text">同步位点不精确</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决方案"><span class="nav-number">1.3.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GTID"><span class="nav-number">2.</span> <span class="nav-text">GTID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于GTID的主备切换"><span class="nav-number">3.</span> <span class="nav-text">基于GTID的主备切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GTID和在线DDL"><span class="nav-number">4.</span> <span class="nav-text">GTID和在线DDL</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>

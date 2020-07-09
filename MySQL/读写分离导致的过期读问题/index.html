@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="主备延迟在读写分离架构中引发的问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读写分离导致的过期读问题">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AF%BC%E8%87%B4%E7%9A%84%E8%BF%87%E6%9C%9F%E8%AF%BB%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="主备延迟在读写分离架构中引发的问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%20show%20slave%20status%E7%BB%93%E6%9E%9C.png">
+<meta property="article:published_time" content="2020-07-06T12:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-08T01:17:32.346Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoyushuai.github.io/img/MySQL%20show%20slave%20status%E7%BB%93%E6%9E%9C.png">
+
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AF%BC%E8%87%B4%E7%9A%84%E8%BF%87%E6%9C%9F%E8%AF%BB%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>读写分离导致的过期读问题 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">76</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AF%BC%E8%87%B4%E7%9A%84%E8%BF%87%E6%9C%9F%E8%AF%BB%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          读写分离导致的过期读问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-06 20:00:00" itemprop="dateCreated datePublished" datetime="2020-07-06T20:00:00+08:00">2020-07-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-08 09:17:32" itemprop="dateModified" datetime="2020-07-08T09:17:32+08:00">2020-07-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+            <div class="post-description">主备延迟在读写分离架构中引发的问题</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>读写分离的主要目标就是分摊主库的压力。两种架构：  </p>
+<ul>
+<li>客户端(client)主动做负载均衡，这种模式下一般会把数据库的连接信息放在客户端的连接层，由客户端来选择后端数据库进行查询。  </li>
+<li>在MySQL和客户端之间有一个中间层proxy，客户端只连接proxy，由proxy根据请求类型和上下文决定请求的分发路由。  </li>
+</ul>
+<p>架构对比：  </p>
+<ol>
+<li>客户端直连方案，因为少了一层proxy转发，查询性能稍微好一点，并且整体架构简单，排查问题更方便。缺点由于要了解后端部署细节，在出现主备切换、库迁移等操作时，客户端都会感知到，并且需要调整数据库连接信息。一般采用这样的架构，一定会伴随一个管理后端的组件，比如Zookeeper，处理冗余的配置信息，尽量让业务端只专注于业务逻辑开发。  </li>
+<li>带proxy的架构，对客户端比较友好。客户端不需要关注后端细节，连接维护、后端信息维护等工作，都是由proxy完成的。缺点对后端维护团队的要求会更高。而且proxy本身也需要有高可用架构，整体比较复杂。  </li>
+</ol>
+<hr>
+<p>由于主从可能存在延迟，客户端执行完一个更新事务后马上发起查询，如果查询选择的是从库的话，就有可能读到刚刚的事务更新之前的状态。这种<strong>在从库上会读到系统的一个过期状态的现象，称为过期读。</strong>  </p>
+<p>主从延迟是不能100%避免。但客户端希望查询从库的数据结果，跟查主库的数据结果时一样的。  </p>
+<h3 id="强制走主库方案"><a href="#强制走主库方案" class="headerlink" title="强制走主库方案"></a>强制走主库方案</h3><p>强制走主库方案其实就是，将查询请求做分类：  </p>
+<ol>
+<li>对于必须要要拿到最新结果的请求，强制将其发到主库上。在一个交易平台上，卖家发布商品以后，马上要返回主页面，看商品是否发布成功。这个请求需要拿到最新的结果，就必须走主库。  </li>
+<li>对于可以读到旧数据的请求，才将其发到从库上。在这个交易平台上，买家来逛商铺页面，就算晚几秒看到最新发布的商品，也是可以接受的。这类请求可以走从库。  </li>
+</ol>
+<p>问题：针对“所有查询都不能是过期读”的需求，金融类业务。需要放弃读写分离，放弃扩展性，所有读写压力都在主库。</p>
+<h3 id="sleep方案"><a href="#sleep方案" class="headerlink" title="sleep方案"></a>sleep方案</h3><p>主库更新后，读从库之前先sleep一下，具体方案就是，类似于执行一条select sleep(1)命令。方案的前提是，大多数情况下主备延迟在1秒之内，做一个sleep可以有很大概率拿到最新的数据。  </p>
+<p>卖家发布商品，商品发布后，用Ajax(Asynchronous JacaScript + XML,异步JavaScript和XML)直接把客户端输入的内容作为“新的商品”显示在页面上，而不是真正的去数据库做查询。卖家可以通过这个显示，来确认产品已经发布成功了，等卖家再刷新页面，去查看商品的时候，已经过了一段时间，达到了类似sleep的目的，解决了过期读的问题。  </p>
+<p>问题：1.如果这个查询请求本来0.5秒就可以在从库上拿到正确结果，也会等1秒；2.如果延迟超过1秒，还是会出现过期读。  </p>
+<h3 id="判断主备无延迟方案"><a href="#判断主备无延迟方案" class="headerlink" title="判断主备无延迟方案"></a>判断主备无延迟方案</h3><p>show slave status结果里的seconds_behind_master参数的值，可以用来衡量主备延迟时间的长短。  </p>
+<h4 id="判断seconds-behind-master确保主备无延迟"><a href="#判断seconds-behind-master确保主备无延迟" class="headerlink" title="判断seconds_behind_master确保主备无延迟"></a>判断seconds_behind_master确保主备无延迟</h4><p>每次从库执行查询请求前，先判断seconds_behind_master是否已经对于0。如果还不等于0，就必须等到这个参数变为0才能执行查询请求。  </p>
+<p>问题：SBM的单位是秒，精度不够。   </p>
+<hr>
+<img src="/img/MySQL show slave status结果.png" width="600" height="300" >
+
+<h4 id="对比位点确保主备无延迟"><a href="#对比位点确保主备无延迟" class="headerlink" title="对比位点确保主备无延迟"></a>对比位点确保主备无延迟</h4><ul>
+<li>Master_Log_File和Read_Master_Log_Pos，表示的是读到的主库的最新位点；  </li>
+<li>Relay_Master_Log_File和Exec_Master_Log_Pos，表示的是备库执行的最新位点。  </li>
+</ul>
+<p>如果这两组值完全相同，就表示接收到的日志已经同步完成。  </p>
+<h4 id="对比GTID集合确保主备无延迟"><a href="#对比GTID集合确保主备无延迟" class="headerlink" title="对比GTID集合确保主备无延迟"></a>对比GTID集合确保主备无延迟</h4><ul>
+<li>Auto_Position=1，表示这对主备关系使用了GTID协议。  </li>
+<li>Retrieved_Gtid_Set，是备库收到的所有日志的GTID集合。  </li>
+<li>Executed_Gtid_set，是备库所有已经执行完成的GTID集合。  </li>
+</ul>
+<p>如果这两个集合相同，也表示备库接收到的日志都已经同步完成。  </p>
+<hr>
+<p>在执行查询请求前，先判断从库是否同步完成的方法，相比于sleep方案，准确度有提升，但达不到“精确”的程度。  </p>
+<p>一个事务的binlog在主备之间的状态：  </p>
+<ol>
+<li>主库执行完成，写入binlog，并反馈给客户端；  </li>
+<li>binlog被从主库发送给备库，备库收到；  </li>
+<li>在备库执行binlog完成。  </li>
+</ol>
+<p>本方案中判断主备无延迟的逻辑，是备库收到的日志都执行完成了。但是还有一部分日志，处于客户端已经收到提交确认，而备库还没收到日志的状态。但从库认为已经没有同步延迟，客户端在从库上执行查询请求却查不到数据。  </p>
+<h3 id="配合semi-sync方案"><a href="#配合semi-sync方案" class="headerlink" title="配合semi-sync方案"></a>配合semi-sync方案</h3><p>半同步复制：semi-sync replication。</p>
+<ol>
+<li>事务提交的时候，主库把binlog发给从库；  </li>
+<li>从库收到binlog以后，发回给主库一个ack，表示收到了；  </li>
+<li>主库收到这个ack以后，才能给客户端返回“事务完成”的确认。  </li>
+</ol>
+<p>如果启用了semi-sync，就表示所有给客户端发送过确认的事务，都确保了备库已经收到了这个日志。<br>半同步复制也解决了普通模式下主库掉电，来不及发送给从库的binlog导致系统数据丢失的问题。  </p>
+<p>semi-sync配合关于位点(或者GTID)的判断，就能够确定在从库上执行的查询请求，可以避免过期读。  </p>
+<p>问题1：半同步复制+位点判断的方案，只对一主一备的场景是成立的。在一主多从场景中，主库只要等到一个从库的ack，就开始给客户端返回确认。此时，在从库上执行查询请求有两种情况：  </p>
+<ol>
+<li>如果查询是落在这个响应了ack的从库上，是能够确保读到最新数据；  </li>
+<li>但如果是查询落到其他从库上，它们可能还没有收到最新的日志，就会产生过期读的问题。  </li>
+</ol>
+<p>问题2：在业务更新的高峰期，主库的位点或者GTID集合更新很快，那么上面的两个位点等值判断就会一直不成立，很可能出现从库上迟迟无法响应查询请求，而过度等待的情况。  </p>
+<h3 id="等主库位点方案"><a href="#等主库位点方案" class="headerlink" title="等主库位点方案"></a>等主库位点方案</h3><p>select master_pos_wait(file, pos[, timeout]);  </p>
+<ol>
+<li>它是在从库执行的；  </li>
+<li>参数file和pos指的是主库上的文件名和位置；  </li>
+<li>timeout可选，设置为正整数N，表示这个函数最多等待N秒。  </li>
+</ol>
+<p>这个命令正常返回的结果是一个正整数M，表示从命令开始执行，到应用完file和pos表示的binlog位置，执行了多少事务。其他异常返回：  </p>
+<ol>
+<li>如果执行期间，备库同步线程发生异常，则返回NULL；  </li>
+<li>如果等待超过N秒，就返回-1；(从库的延迟时间不可控，不能无限等待，等待超时，就应该放弃，然后到主库上去查)  </li>
+<li>如果刚开始执行的时候，就发现已经执行过这个位置了，则返回0。  </li>
+</ol>
+<p>示例：<br>先执行trx1，再执行一个查询请求的逻辑，要保证能够查到正确的数据：  </p>
+<ol>
+<li>trx1事务更新完成后，马上执行show master status得到当前主库执行到的File和Position；  </li>
+<li>选定一个从库执行查询语句；  </li>
+<li>在从库上执行select master_pos_wait(File, Position, 1)；(最多等待一秒)  </li>
+<li>如果返回值是&gt;=0的正整数，则在这个从库上执行查询语句；  </li>
+<li>否则，到主库上执行查询语句。  </li>
+</ol>
+<p>问题：如果所有的从库都延迟超过了1秒，查询压力都跑到主库上了。否则就超时放弃。  </p>
+<h3 id="等GTID方案"><a href="#等GTID方案" class="headerlink" title="等GTID方案"></a>等GTID方案</h3><p>数据库开启了GTID模式，对应等主库位点的等GTID方案。  </p>
+<p>select wait_for_executed_gtid_set(gtid_set, 1);  </p>
+<ol>
+<li>等待，知道这个库执行的事务中包含传入的gtid_set，返回0；  </li>
+<li>超时返回1。  </li>
+</ol>
+<p>对比等主库位点，执行完事务后，还要主动去主库自行show master status。从MySQL5.7.6版本开始，允许在执行完更新类事务后，把这个事务的GTID返回给客户端，这样等GTID的方案可以减少一次查询。  </p>
+<p>示例：  </p>
+<ol>
+<li>trx1事务更新完成后，从返回包直接获取这个事务的GTID，记为gtid1；(将参数session_track_gtids设置为OWN_GTID，然后通过API接口mysql_session_track_get_first从返回包解析出GTID的值)  </li>
+<li>选定一个从库执行查询语句；  </li>
+<li>在从库上执行select wait_for_executed_gtid_set(gtid1, 1)；  </li>
+<li>如果返回值是0，则在这个从库执行查询语句；  </li>
+<li>否则，到主库执行查询语句。  </li>
+</ol>
+<p>问题：与等主库位点一样。超时放弃或者直接到主库查询。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/MySQL/%E4%B8%80%E4%B8%BB%E5%A4%9A%E4%BB%8E%EF%BC%8C%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E9%80%BB%E8%BE%91/" rel="prev" title="一主多从，主备切换逻辑">
+      <i class="fa fa-chevron-left"></i> 一主多从，主备切换逻辑
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/MySQL/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%82%E5%B8%B8%E7%8A%B6%E6%80%81%E5%88%A4%E6%96%AD/" rel="next" title="数据库异常状态判断">
+      数据库异常状态判断 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#强制走主库方案"><span class="nav-number">1.</span> <span class="nav-text">强制走主库方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep方案"><span class="nav-number">2.</span> <span class="nav-text">sleep方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断主备无延迟方案"><span class="nav-number">3.</span> <span class="nav-text">判断主备无延迟方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#判断seconds-behind-master确保主备无延迟"><span class="nav-number">3.1.</span> <span class="nav-text">判断seconds_behind_master确保主备无延迟</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对比位点确保主备无延迟"><span class="nav-number">3.2.</span> <span class="nav-text">对比位点确保主备无延迟</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对比GTID集合确保主备无延迟"><span class="nav-number">3.3.</span> <span class="nav-text">对比GTID集合确保主备无延迟</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配合semi-sync方案"><span class="nav-number">4.</span> <span class="nav-text">配合semi-sync方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#等主库位点方案"><span class="nav-number">5.</span> <span class="nav-text">等主库位点方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#等GTID方案"><span class="nav-number">6.</span> <span class="nav-text">等GTID方案</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>

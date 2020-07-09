@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="判断数据库异常的方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库异常状态判断">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%82%E5%B8%B8%E7%8A%B6%E6%80%81%E5%88%A4%E6%96%AD/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="判断数据库异常的方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%20performance_schema.file_summary_by_event_name.png">
+<meta property="article:published_time" content="2020-07-07T14:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-09T10:19:57.886Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoyushuai.github.io/img/MySQL%20performance_schema.file_summary_by_event_name.png">
+
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%82%E5%B8%B8%E7%8A%B6%E6%80%81%E5%88%A4%E6%96%AD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据库异常状态判断 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">76</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%82%E5%B8%B8%E7%8A%B6%E6%80%81%E5%88%A4%E6%96%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据库异常状态判断
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-07 22:00:00" itemprop="dateCreated datePublished" datetime="2020-07-07T22:00:00+08:00">2020-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-09 18:19:57" itemprop="dateModified" datetime="2020-07-09T18:19:57+08:00">2020-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+            <div class="post-description">判断数据库异常的方法</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在一主一备的双M架构中，主备切换只需要把客户端流量切到备库；而在一主多从架构中，主备切换除了要把客户端流量切到备库外，还需要把从库接到新主库上。  </p>
+<p>主备切换有两种场景，一种是主动切换，一种是被动切换。被动切换，往往是因为主库出问题了，由HA系统发起的。  </p>
+<h3 id="select-1-判断"><a href="#select-1-判断" class="headerlink" title="select 1 判断"></a>select 1 判断</h3><p>select 1成功返回，只能说明这个库的进程还在，并不能说明主库没问题。  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> innodb_thread_concurrency=<span class="number">3</span>;<span class="comment">-- 控制InnoDB的并发线程上限，一旦并发线程数达到这个值，InnoDB在接收到新请求的时候，就会进入等待状态，直到有线程退出。  </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">'t'</span> (</span><br><span class="line">    <span class="string">'id'</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'c'</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">default</span> <span class="literal">null</span>,</span><br><span class="line">    primary <span class="keyword">key</span> (<span class="string">'id'</span>)</span><br><span class="line">) <span class="keyword">engine</span>=<span class="keyword">innodb</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+<th>sessionD</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>select sleep(100) from t;</td>
+<td>select sleep(100) from t;</td>
+<td>select sleep(100) from t;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>select 1;</br>(Query OK)</br>select * from t;</br>(blocked)</td>
+</tr>
+</tbody></table>
+<p>sessionD中，select 1是能执行成功的，但是查询表t的语句会被堵住。用select 1来检测实例是否正常的话，是检测不出问题的。  </p>
+<p>MHA(Master High Availability)默认使用的方法。另一个可选方案，只做连接，如果连接成功就认为主库没问题。  </p>
+<p>在InnoDB中，innodb_thread_concurrency这个参数的默认值是0，表示不限制并发线程数量。一个机器的CPU核数有限，不限制并发数，线程全冲进来，上下文切换的成本太高。通常设置为64~128之间的值。  </p>
+<h4 id="并发连接与并发查询"><a href="#并发连接与并发查询" class="headerlink" title="并发连接与并发查询"></a>并发连接与并发查询</h4><p>show processlist，看到的几千个连接，指的是并发连接；而当前正在执行的语句，才是并发查询。  </p>
+<p>并发连接数达到几千个影响并不大，多占一些内存而已。应该关注的是并发查询，并发查询太高才是CPU杀手，必须设置innodb_thread_concurrency参数。  </p>
+<p>在线程进入锁等待以后，并发线程的计数会减一，出现同一行热点更新的问题时，等行锁(也包括间隙锁)的线程是不算在128中的。因为，进入锁等待的线程已经不吃CPU了；另外这样设计，也能避免整个系统锁死。  </p>
+<ol>
+<li>线程1执行begin；update t set c=c+1 where id=1，启动了事务trx1，然后保持这个状态。这个时候，线程处于空闲状态，不算在并发线程里面。  </li>
+<li>线程2到线程129都执行update t set c=c+1 where id=1;由于等待行锁，进入等待状态。这样就有128个线程处于等待状态；  </li>
+<li>如果处于锁等待状态的线程计数不减一，InnoDB就会认为线程数用满了，会阻止其它语句进入引擎执行，这样线程1不能提交事务，而另外128个线程又处于锁等待状态，整个系统就堵住了。  </li>
+</ol>
+<p>这时InnoDB不能响应任何请求，整个系统被锁死。而且由于所有线程都处于等待状态，此时占用的CPU却是0，不合理。所以遇到进程进入锁等待的情况时，将并发线程的计数减1的设计，是合理而且是必要的。  </p>
+<p>等锁的线程不算在并发线程计数里，但如果它在真正的执行查询(如select sleep(100) from 1)，还是要算进并发线程的计数的。  </p>
+<p>问题：<br>同时在执行的语句超过了设置的值，这时候系统其实已经不行了，但是通过select 1来检测系统，会认为系统还是正常的。  </p>
+<h3 id="查表判断"><a href="#查表判断" class="headerlink" title="查表判断"></a>查表判断</h3><p>为了能够检测InnoDB并发线程数过多导致的系统不可用情况，需要找一个访问InnoDB的场景。一般的做法是，在系统库(mysql库)里创建一个表，命名为health_check，里面只放一行数据，然后定期执行：<strong>select * from mysql.health_check;</strong>使用这个方法，可以检测出由于并发线程过多导致的数据库不可用的情况。  </p>
+<p>问题：<br>空间满了以后，这种方法会变得不好使：更新事务要写binlog，一旦binlog所在磁盘的空间占用率达到100%，那么所有的更新语句和事务提交的commit语句就会被堵住，但是，系统这时候还是可以正常读数据的。  </p>
+<h3 id="更新判断"><a href="#更新判断" class="headerlink" title="更新判断"></a>更新判断</h3><p>在表中放一个有意义的字段-timestamp，用来表示最后一次执行检测的时间：<strong>update mysql.health_check set t_modified=now();</strong></p>
+<p>节点可用性的检测应该包含主库和备库，如果用更新来检测主库，那么备库也要进行更新检测。  </p>
+<p>备库的检测也是要写binlog的，由于一般会把数据库A和B的主备关系设计为双M结构，所以在备库B上执行的检测命令，也要发回给主库A。但是如果主库A和备库B都用相同的更新命令，就可能出现行冲突，可能会导致主备同步停止。  </p>
+<p>mysql.health_check这个表就不能只有一行数据了，可以在表上存入多行数据，并用A、B的server_id做主键，保证主、备库各自的检测命令不会发生冲突。  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">'health_check'</span>(</span><br><span class="line">    <span class="string">'id'</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'t_modified'</span> <span class="built_in">timestamp</span> <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span> <span class="keyword">current_timestamp</span>,</span><br><span class="line">    primary <span class="keyword">key</span>(<span class="string">'id'</span>)</span><br><span class="line">) <span class="keyword">engine</span>=<span class="keyword">innodb</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> inro mysql.health_check(<span class="keyword">id</span>,t_modified) <span class="keyword">values</span>(@@server_id, <span class="keyword">now</span>()) <span class="keyword">on</span> <span class="keyword">duplicate</span> <span class="keyword">key</span> <span class="keyword">update</span> t_modified=<span class="keyword">now</span>();</span><br></pre></td></tr></table></figure>
+
+<p>问题：判定慢  </p>
+<ul>
+<li>所有的检测逻辑都需要一个超时时间N，执行一条update语句，超过N秒后还不返回，就认为系统不可用。  </li>
+</ul>
+<p>日志盘的IO利用率已经是100%，整个系统响应非常慢，已经需要做主备切换了。  </p>
+<p>但是IO利用率100%表示系统的IO是在工作的，每个请求都有机会获得IO资源，执行自己的任务。检测使用的update命令，需要的资源很少，可能在拿到IO资源的时候就可以提交成功，并且在超时时间N秒未到达之前就返回给了检测系统。让检测系统得到”系统正常”的结论。  </p>
+<ul>
+<li>基于外部检测还有一个天然问题，随机性。  </li>
+</ul>
+<p>外部检测都需要定时轮询，所以系统可能已经出问题了，但是却要等到下一个检测发起执行语句的时候，才有可能发现问题。而且，可能第一次轮询还不能发现，导致切换更慢。  </p>
+<h3 id="内部统计"><a href="#内部统计" class="headerlink" title="内部统计"></a>内部统计</h3><p>MySQL提供内部每一次IO请求的时间，来反映磁盘利用率的问题。  </p>
+<p>MySQL5.6版本提供performance_schema库，在file_summary_by_event_name表里统计了每次IO请求的时间。  </p>
+<img src='/img/MySQL performance_schema.file_summary_by_event_name.png'>
+
+<p>图中表示的是redo log的写入时间。</p>
+<ul>
+<li>第一列event_name表示统计的类型。  </li>
+<li>接下来有三组数据，显示的是redo log操作的时间统计。  </li>
+<li>第一组5列，是所有IO类型的统计。其中count_star是所有IO的总次数。接下来四列是具体的统计项，单位是皮秒；前缀sum、min、avg、max，分别对应总和、最小值、平均值、最大值。  </li>
+<li>第二组6列，是读操作的统计。最后一列sum_number_of_bytes_read统计的是，总共从redo log里读了多少个字节。  </li>
+<li>第三组6列，统计的是写操作。  </li>
+<li>最后四组数据，是对其他类型数据的统计。在redo log里，是对fsync的统计。  </li>
+</ul>
+<p>binlog对应的是event_name=’wait/io/file/sql/binlog’这一行。  </p>
+<hr>
+<p>每一次操作数据库，performance_schema都需要额外的统计这些信息，打开统计功能有性能损耗，打开所有的performance_schema项，性能下降10%。  </p>
+<blockquote>
+<p>update setup_instruments set enabled=’YES’, Timed=’YES’ where name like ‘%wait/io/file/innodb/innodb_log_file%’;– redo log  </p>
+</blockquote>
+<p>可以通过max_timer的值来判断数据库是否出问题。假设单次IO请求时间超过200毫秒属于异常：  </p>
+<blockquote>
+<p>select event_name,max_timer_wait from performance_schema.file_summary_by_event_name where event_name in (‘wait/io/file/innodb/innodb_log_file’,’wait/io/file/sql/binlog’) and max_timer_wait&gt;200*1000000000;</p>
+</blockquote>
+<p>发现异常后，取到需要的信息，把之前的统计信息清空，这样如果后面的监控中，再次出现这个异常，就可以加入监控累计值了（？？）：  </p>
+<blockquote>
+<p>truncate table performance_schema.file_summary_by_event_name;</p>
+</blockquote>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/MySQL/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AF%BC%E8%87%B4%E7%9A%84%E8%BF%87%E6%9C%9F%E8%AF%BB%E9%97%AE%E9%A2%98/" rel="prev" title="读写分离导致的过期读问题">
+      <i class="fa fa-chevron-left"></i> 读写分离导致的过期读问题
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#select-1-判断"><span class="nav-number">1.</span> <span class="nav-text">select 1 判断</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#并发连接与并发查询"><span class="nav-number">1.1.</span> <span class="nav-text">并发连接与并发查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查表判断"><span class="nav-number">2.</span> <span class="nav-text">查表判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新判断"><span class="nav-number">3.</span> <span class="nav-text">更新判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内部统计"><span class="nav-number">4.</span> <span class="nav-text">内部统计</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>
