@@ -27,7 +27,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%20performance_schema.file_summary_by_event_name.png">
 <meta property="article:published_time" content="2020-07-07T14:00:00.000Z">
-<meta property="article:modified_time" content="2020-07-09T10:19:57.886Z">
+<meta property="article:modified_time" content="2020-07-10T05:54:11.955Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://guoyushuai.github.io/img/MySQL%20performance_schema.file_summary_by_event_name.png">
@@ -142,7 +142,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">76</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">77</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -232,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-09 18:19:57" itemprop="dateModified" datetime="2020-07-09T18:19:57+08:00">2020-07-09</time>
+                <time title="修改时间：2020-07-10 13:54:11" itemprop="dateModified" datetime="2020-07-10T13:54:11+08:00">2020-07-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,7 +257,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
+              <span>3.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -306,7 +306,7 @@
 </tbody></table>
 <p>sessionD中，select 1是能执行成功的，但是查询表t的语句会被堵住。用select 1来检测实例是否正常的话，是检测不出问题的。  </p>
 <p>MHA(Master High Availability)默认使用的方法。另一个可选方案，只做连接，如果连接成功就认为主库没问题。  </p>
-<p>在InnoDB中，innodb_thread_concurrency这个参数的默认值是0，表示不限制并发线程数量。一个机器的CPU核数有限，不限制并发数，线程全冲进来，上下文切换的成本太高。通常设置为64~128之间的值。  </p>
+<p>在InnoDB中，innodb_thread_concurrency这个参数的默认值是0，表示不限制并发线程数量。一个机器的CPU核数有限，不限制并发数，线程全冲进来，上下文切换的成本太高。通常设置为64~128之间的值(理论上是核数的2倍左右最好)。  </p>
 <h4 id="并发连接与并发查询"><a href="#并发连接与并发查询" class="headerlink" title="并发连接与并发查询"></a>并发连接与并发查询</h4><p>show processlist，看到的几千个连接，指的是并发连接；而当前正在执行的语句，才是并发查询。  </p>
 <p>并发连接数达到几千个影响并不大，多占一些内存而已。应该关注的是并发查询，并发查询太高才是CPU杀手，必须设置innodb_thread_concurrency参数。  </p>
 <p>在线程进入锁等待以后，并发线程的计数会减一，出现同一行热点更新的问题时，等行锁(也包括间隙锁)的线程是不算在128中的。因为，进入锁等待的线程已经不吃CPU了；另外这样设计，也能避免整个系统锁死。  </p>
@@ -352,18 +352,13 @@
 <p>binlog对应的是event_name=’wait/io/file/sql/binlog’这一行。  </p>
 <hr>
 <p>每一次操作数据库，performance_schema都需要额外的统计这些信息，打开统计功能有性能损耗，打开所有的performance_schema项，性能下降10%。  </p>
-<blockquote>
-<p>update setup_instruments set enabled=’YES’, Timed=’YES’ where name like ‘%wait/io/file/innodb/innodb_log_file%’;– redo log  </p>
-</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> setup_instruments <span class="keyword">set</span> enabled=<span class="string">'YES'</span>, Timed=<span class="string">'YES'</span> <span class="keyword">where</span> <span class="keyword">name</span> <span class="keyword">like</span> <span class="string">'%wait/io/file/innodb/innodb_log_file%'</span>;<span class="comment">-- redo log</span></span><br></pre></td></tr></table></figure>
+
 <p>可以通过max_timer的值来判断数据库是否出问题。假设单次IO请求时间超过200毫秒属于异常：  </p>
-<blockquote>
-<p>select event_name,max_timer_wait from performance_schema.file_summary_by_event_name where event_name in (‘wait/io/file/innodb/innodb_log_file’,’wait/io/file/sql/binlog’) and max_timer_wait&gt;200*1000000000;</p>
-</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> event_name,max_timer_wait <span class="keyword">from</span> performance_schema.file_summary_by_event_name <span class="keyword">where</span> event_name <span class="keyword">in</span> (<span class="string">'wait/io/file/innodb/innodb_log_file'</span>,<span class="string">'wait/io/file/sql/binlog'</span>) <span class="keyword">and</span> max_timer_wait&gt;<span class="number">200</span>*<span class="number">1000000000</span>;</span><br></pre></td></tr></table></figure>
+
 <p>发现异常后，取到需要的信息，把之前的统计信息清空，这样如果后面的监控中，再次出现这个异常，就可以加入监控累计值了（？？）：  </p>
-<blockquote>
-<p>truncate table performance_schema.file_summary_by_event_name;</p>
-</blockquote>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">truncate</span> <span class="keyword">table</span> performance_schema.file_summary_by_event_name;</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
     
@@ -381,7 +376,10 @@
     <a href="/MySQL/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AF%BC%E8%87%B4%E7%9A%84%E8%BF%87%E6%9C%9F%E8%AF%BB%E9%97%AE%E9%A2%98/" rel="prev" title="读写分离导致的过期读问题">
       <i class="fa fa-chevron-left"></i> 读写分离导致的过期读问题
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/MySQL/%E7%94%A8%E5%8A%A8%E6%80%81%E7%9A%84%E8%A7%82%E7%82%B9%E7%9C%8B%E5%8A%A0%E9%94%81/" rel="next" title="用动态的观点看加锁">
+      用动态的观点看加锁 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -456,7 +454,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
