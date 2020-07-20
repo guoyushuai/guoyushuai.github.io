@@ -18,19 +18,19 @@
     var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="使用索引不能破坏索引原有的顺序：函数操作、隐式转换(类型转换、字符编码转换)、联合索引一正一倒">
+  <meta name="description" content="insert语句中的锁">
 <meta property="og:type" content="article">
-<meta property="og:title" content="相同逻辑，不同SQL，性能差异">
-<meta property="og:url" content="https://guoyushuai.github.io/MySQL/%E7%9B%B8%E5%90%8C%E9%80%BB%E8%BE%91%EF%BC%8C%E4%B8%8D%E5%90%8CSQL%EF%BC%8C%E6%80%A7%E8%83%BD%E5%B7%AE%E5%BC%82/index.html">
+<meta property="og:title" content="insert语句加的锁">
+<meta property="og:url" content="https://guoyushuai.github.io/MySQL/insert%E8%AF%AD%E5%8F%A5%E5%8A%A0%E7%9A%84%E9%94%81/index.html">
 <meta property="og:site_name" content="Notes">
-<meta property="og:description" content="使用索引不能破坏索引原有的顺序：函数操作、隐式转换(类型转换、字符编码转换)、联合索引一正一倒">
+<meta property="og:description" content="insert语句中的锁">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-06-26T03:10:10.000Z">
-<meta property="article:modified_time" content="2020-06-28T09:18:13.013Z">
+<meta property="article:published_time" content="2020-07-18T07:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-20T07:00:56.102Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E7%9B%B8%E5%90%8C%E9%80%BB%E8%BE%91%EF%BC%8C%E4%B8%8D%E5%90%8CSQL%EF%BC%8C%E6%80%A7%E8%83%BD%E5%B7%AE%E5%BC%82/">
+<link rel="canonical" href="https://guoyushuai.github.io/MySQL/insert%E8%AF%AD%E5%8F%A5%E5%8A%A0%E7%9A%84%E9%94%81/">
 
 
 <script id="page-configurations">
@@ -43,7 +43,7 @@
   };
 </script>
 
-  <title>相同逻辑，不同SQL，性能差异 | Notes</title>
+  <title>insert语句加的锁 | Notes</title>
   
 
 
@@ -200,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/%E7%9B%B8%E5%90%8C%E9%80%BB%E8%BE%91%EF%BC%8C%E4%B8%8D%E5%90%8CSQL%EF%BC%8C%E6%80%A7%E8%83%BD%E5%B7%AE%E5%BC%82/">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/MySQL/insert%E8%AF%AD%E5%8F%A5%E5%8A%A0%E7%9A%84%E9%94%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          相同逻辑，不同SQL，性能差异
+          insert语句加的锁
         </h1>
 
         <div class="post-meta">
@@ -223,14 +223,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-06-26 11:10:10" itemprop="dateCreated datePublished" datetime="2020-06-26T11:10:10+08:00">2020-06-26</time>
+              <time title="创建时间：2020-07-18 15:00:00" itemprop="dateCreated datePublished" datetime="2020-07-18T15:00:00+08:00">2020-07-18</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-28 17:18:13" itemprop="dateModified" datetime="2020-06-28T17:18:13+08:00">2020-06-28</time>
+                <time title="修改时间：2020-07-20 15:00:56" itemprop="dateModified" datetime="2020-07-20T15:00:56+08:00">2020-07-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,16 +255,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>3.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>6 分钟</span>
             </span>
-            <div class="post-description">使用索引不能破坏索引原有的顺序：函数操作、隐式转换(类型转换、字符编码转换)、联合索引一正一倒</div>
+            <div class="post-description">insert语句中的锁</div>
 
         </div>
       </header>
@@ -275,12 +275,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`tradelog`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`tradeid`</span> <span class="built_in">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`operator`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`t_modified`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`tradeid`</span> (<span class="string">`tradeid`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`t_modified`</span> (<span class="string">`t_modified`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4;</span><br></pre></td></tr></table></figure>
+        <p>普通的insert语句是一个很轻量的操作；有些特殊情况的insert语句，在执行过程中需要给其他资源加锁，无法在申请到自增id以后立马释放自增锁。  </p>
+<h3 id="insert…select语句"><a href="#insert…select语句" class="headerlink" title="insert…select语句"></a>insert…select语句</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`c`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`d`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">UNIQUE</span> <span class="keyword">KEY</span> <span class="string">`c`</span> (<span class="string">`c`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span>(<span class="literal">null</span>, <span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span>(<span class="literal">null</span>, <span class="number">2</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span>(<span class="literal">null</span>, <span class="number">3</span>,<span class="number">3</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span>(<span class="literal">null</span>, <span class="number">4</span>,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t2 <span class="keyword">like</span> t</span><br></pre></td></tr></table></figure>
 
-<h3 id="条件字段函数操作"><a href="#条件字段函数操作" class="headerlink" title="条件字段函数操作"></a>条件字段函数操作</h3><blockquote>
-<p>select count(*) from tradelog where month(t_modified)=7;  </p>
+<p>可重复读隔离级别，binlog_format为statement，执行insert into t2(c,d) select c,d from t;时，需要对表t的所有行和间隙加锁。  </p>
+<table>
+<thead>
+<tr>
+<th>sessionA</th>
+<th>sessionB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>insert into values(-1,-1,-1);</td>
+<td>insert into t2(c,d) select c,d from t;</td>
+</tr>
+</tbody></table>
+<p>如果sessionB先执行，由于语句对表t主键索引加了(-∞,1]这个next-key lock，会在语句执行完成后，才允许sessionA的insert语句执行。  </p>
+<p>如果没有锁的话，可能出现sessionB的insert语句先执行，但是后写入binlog的情况(日志和数据不一致)。到备库执行，就会把id=-1这一行也写到表t2中，出现主备不一致。  </p>
+<h3 id="insert循环写入"><a href="#insert循环写入" class="headerlink" title="insert循环写入"></a>insert循环写入</h3><p>执行insert…select的时候，对目标表不是锁全表，而是只锁住需要访问的资源。  </p>
+<h4 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h4><p>往表t2中插入一行数据，这一行的c值是表t中c值的最大值加1。</p>
+<blockquote>
+<p>insert into t2(c,d) (select c+1,d from t force index(c) order by c desc limit 1);  </p>
 </blockquote>
-<p>B+树的快速定位能力，来源于同一层兄弟节点的有序性。<br><strong>对索引字段做函数操作，可能会破坏索引值的有序性，优化器决定放弃走树搜索功能(快速定位能力)。但优化器并不是要放弃使用这个索引。</strong>  </p>
+<p>这个语句的加锁范围，是表t索引c上的(3,4]和(4,supremum]这两个next-key lock，以及主键索引上id=4这一行。  </p>
+<p>执行流程：从表t中按照索引c倒叙，扫描第一行，拿到结果写入到表t2中。整条语句的扫描行数是1。  </p>
+<p>慢查询日志slow log：{Query_time:0.000732 Lock_time:0.000356 Rows_sent:0 Rows_examined:1}  </p>
+<h4 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h4><p>将数据插入表t。(同一个表，可能造成循环写入，引入用户临时表做优化)  </p>
+<blockquote>
+<p>insert into t(c,d) (select c+1, d from t force index(c) order by c desc limit 1);  </p>
+</blockquote>
+<p>慢查询日志slow log：{Query_time:0.000478 Lock_time:0.000128 Rows_sent:0 Rows_examined:5}。扫描行数5。  </p>
 <table>
 <thead>
 <tr>
@@ -300,117 +325,124 @@
 </thead>
 <tbody><tr>
 <td>1</td>
-<td>SIMPLE</td>
-<td>tradelog</td>
-<td>NULL</td>
+<td>insert</td>
+<td>t</td>
+<td>null</td>
+<td>all</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
+</tr>
+<tr>
+<td>1</td>
+<td>simple</td>
+<td>t</td>
+<td>null</td>
 <td>index</td>
-<td>NULL</td>
-<td>t_modified</td>
-<td>6</td>
-<td>NULL</td>
-<td>100335</td>
+<td>null</td>
+<td>c</td>
+<td>5</td>
+<td>null</td>
+<td>1</td>
 <td>100.00</td>
-<td>Using where;Using index</td>
+<td>Using temporary</td>
 </tr>
 </tbody></table>
-<p>放弃了树搜索功能，优化器可以选择遍历主键索引，也可以选择遍历索引t_modified，优化器对比索引大小后发现，索引t_moditied更小，遍历这个索引比遍历主键索引更快，最终会选择索引t_modified。  </p>
-<p>key=t_modified表示使用了该索引；测试数据10W行，rows=100335说明扫描了整个索引的所有值；Extra的Using index，表示使用了覆盖索引。<br>由于在t_modified字段加了month()函数操作，MySQL无法再使用索引快速定位功能，只能使用全索引扫描。<br>即使是对于不改变有序性的函数，也不会考虑使用索引。(where id + 1 = 10000;—&gt;where id = 10000 - 1;)  </p>
-<h3 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h3><blockquote>
-<p>select * from tradelog where tradeid=110717;  </p>
-</blockquote>
-<p>tradeid字段类型是varchar(32)，输入参数是整型，需要做类型转换。  </p>
-<p><strong>在MySQL中，字符串和数字做比较的话，是将字符串转换成数字。</strong>（索引字段为整型，条件字段为字符串时，走索引。截断式转换）  </p>
-<blockquote>
-<p>select * from tradelog where CAST（tradid AS signed int） = 110717;<br>触发对索引字段做函数操作，优化器会放弃走树搜索功能。  </p>
-</blockquote>
-<h3 id="隐式字符编码转换"><a href="#隐式字符编码转换" class="headerlink" title="隐式字符编码转换"></a>隐式字符编码转换</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE `trade_detail` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `tradeid` varchar(32) DEFAULT NULL,</span><br><span class="line">  `trade_step` int(11) DEFAULT NULL, <span class="comment">/*操作步骤*/</span></span><br><span class="line">  `step_info` varchar(32) DEFAULT NULL, <span class="comment">/*步骤信息*/</span></span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `tradeid` (`tradeid`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+<p>Extra字段中Using temporary，表示这个语句用到了临时表。表示执行过程中，需要把表t的内容读出来，写入临时表。rows=1是受到了limit 1的影响。  </p>
+<p>执行语句前后查看innode_rows_read的结果：show status like ‘%Innodb_rows_read%’;增加了4。临时表默认使用Memory引擎，这4行查的都是表t，表示对表t租了全表扫描。  </p>
+<p>执行过程：  </p>
+<ol>
+<li>创建临时表，表里有两个字段c和d。  </li>
+<li>按照索引c扫描表t，依次取c=4、3、2、1，然后回表，读到c和d的值写入临时表。这时Rows_examined=4。  </li>
+<li>由于语句里面有limit 1，所以只取了临时表的第一行，再插入到表t中。这时Rows_examined的值加1，变成了5。  </li>
+</ol>
+<p>这个语句会导致在表t上做全表扫描，并且会给索引c上的所有间隙都加上共享的next-key lock。所以这个语句执行期间，其他事务不能在这个表上插入数据。  </p>
+<p>这类一边遍历数据，一边更新数据的情况，如果读出来的数据直接写回原表，就可能在遍历过程中，读到刚刚插入的记录，新插入的记录如果参与计算逻辑，就跟语义不符。（可能造成循环写入，所以需要临时表Using temporary）  </p>
+<p>由于在实现上，这个语句没有在子查询中就直接使用limit 1，导致了这个语句的执行需要遍历整个表t（？？？）。优化方法，先insert into到临时表temp_t(数据量小可以使用内存临时表)，这样就只需要扫描一行；然后再从表temp_t里面取出这行数据插入表t1。  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">temporary</span> <span class="keyword">table</span> temp_t(c <span class="built_in">int</span>, d <span class="built_in">int</span>) <span class="keyword">engine</span>=<span class="keyword">memory</span>;  </span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> temp_t (<span class="keyword">select</span> c+<span class="number">1</span>, d <span class="keyword">from</span> t <span class="keyword">force</span> <span class="keyword">index</span>(c) <span class="keyword">order</span> <span class="keyword">by</span> c <span class="keyword">desc</span> <span class="keyword">limit</span> <span class="number">1</span>);  </span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">select</span> * <span class="keyword">from</span> temp_t;  </span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> temp_t;</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>select d.* from tradelog l, trade_detail d where d.tradeid=l.tradeid and l.id=2;  </p>
-</blockquote>
-<ul>
-<li>优化器会先在交易记录表tradelog上查到id=2的行，这个步骤用上了主键索引，只扫描一行。  </li>
-<li>没有用上交易详情表trade_detail上的tradeid索引，进行了全表扫描。通过遍历主键索引的方式，一个一个的判断tradeid的值是否匹配。  </li>
-</ul>
-<p>这个执行计划里，从tradelog表中取tradeid字段，再去trade_detail表里查询匹配字段。把tradelog称为驱动表，trade_detail称为被驱动表，把tradeid称为关联字段。  </p>
-<p>这两个表的字符集不同，一个是utf8，一个是utf8mb4，做表连接查询的时候用不上关联字段的索引。字符集utf8mb4是utf8的超集，当这两个类型的字符串做比较的时候，MySQL内部的操作是，先把utf8字符串转成utf8mb4字符集，再做比较。  </p>
-<blockquote>
-<p>select * from trade_detail  where CONVERT(traideid USING utf8mb4)=$L2.tradeid.value;<br>– convert()函数，把输入的字符串转成utf8mb4字符集。<br>触发对索引字段做函数操作，优化器会放弃走树搜索功能。  </p>
-</blockquote>
-<p><strong>连接过程中要求在被驱动表的索引字段上加函数操作，是直接导致对被驱动表做全表扫描的原因。</strong></p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        样例
-    </div>
-    <div class='spoiler-content'>
-        <blockquote>
-<p>select l.operator from tradelog l , trade_detail d where d.tradeid=l.tradeid and d.id=4;</p>
-</blockquote>
-<table>
+<h3 id="insert唯一键冲突-会在冲突的唯一值上加共享的next-key-lock-S锁"><a href="#insert唯一键冲突-会在冲突的唯一值上加共享的next-key-lock-S锁" class="headerlink" title="insert唯一键冲突-会在冲突的唯一值上加共享的next-key lock(S锁)"></a>insert唯一键冲突-会在冲突的唯一值上加共享的next-key lock(S锁)</h3><table>
 <thead>
 <tr>
-<th>id</th>
-<th>select_type</th>
-<th>table</th>
-<th>partitions</th>
-<th>type</th>
-<th>possible_keys</th>
-<th>key</th>
-<th>key_len</th>
-<th>ref</th>
-<th>rows</th>
-<th>filtered</th>
-<th>Extra</th>
+<th>sessionA</th>
+<th>sessionB</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>1</td>
-<td>SIMPLE</td>
-<td>d</td>
-<td>NULL</td>
-<td>const</td>
-<td>PRIMARY</td>
-<td>PRIMARY</td>
-<td>4</td>
-<td>const</td>
-<td>1</td>
-<td>100.00</td>
-<td>NULL</td>
+<td>insert into values(10,10,10);</td>
+<td></td>
 </tr>
 <tr>
-<td>1</td>
-<td>SIMPLE</td>
-<td>l</td>
-<td>NULL</td>
-<td>ref</td>
-<td>tradeid</td>
-<td>tradeid</td>
-<td>131</td>
-<td>const</td>
-<td>1</td>
-<td>100.00</td>
-<td>NULL</td>
+<td>begin;</br>insert into values(11,10,10);<br>(Duplicate entry ‘10’ for key ‘c’)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>insert into t values(12,9,9);</blocked></td>
 </tr>
 </tbody></table>
-<p>驱动表trade_detail，被驱动表tradelog。  </p>
+<p>可重复读隔离级别下，sessionB要执行的insert语句进入了锁等待状态。  </p>
+<p>sessionA执行insert语句，发生唯一键冲突的时候，并不是简单的报错返回，还在冲突的索引上加了锁(在要写入的时候，发现有冲突，才会加上next-key lock的锁)。  </p>
+<p>一个next-key lock是由它右边界的值定义的，这时sessionA持有索引c上的(5,10]共享next-key lock(读锁)（从作用上来看，可以避免这一行被别的事务删掉）。因此碰到由于唯一键约束导致报错后，要尽快提交或回滚事务，避免加锁时间过长，导致后续出现死锁。  </p>
 <blockquote>
-<p>select opterator from tradelog where tradeid = CONVERT($R4.tradeid.value USING utf8mb4);<br>CONVERT函数是加在输入参数上的，可以用上被驱动表的tradeid索引。  </p>
+<p>gap lock无所谓S还是X的，主要解决幻读问题，不管属于读锁还是写锁，都会阻塞其他事务的写请求。gap lock+排他的record就称作排他的next-key lock。  </p>
 </blockquote>
-
-    </div>
-</div>  
-
-<p>原SQL改造：  </p>
 <ul>
-<li>把trade_detail表上的tradeid字段的字符集改成utf8mb4，避免字符集转换问题。<blockquote>
-<p>alter table trade_detail modify tradeid varchar(32) CHARACTER set utf8mb4 default null;  </p>
-</blockquote>
-</li>
-<li>修改SQL语句。<blockquote>
-<p>select d.* from tradelog l , trade_detail d where d.tradeid=CONVERT(l.tradeid USING utf8) and l.id=2; </p>
+<li>select…lock in share mode是共享锁；  </li>
+<li>select…for update和IUD语句是排它锁。  <blockquote>
+<p>复习：next-key lock由间隙锁gap lock和记录锁record lock组成。加锁单位是next-key lock。  </p>
 </blockquote>
 </li>
 </ul>
+<p>主键索引和唯一索引冲突，加的都是next-key lock(间隙锁+记录锁)。(官方文档主键索引加记录锁，唯一索引加next-key lock)  </p>
+<h4 id="死锁场景"><a href="#死锁场景" class="headerlink" title="死锁场景"></a>死锁场景</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>sessionA</th>
+<th>sessionB</th>
+<th>sessionC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>begin;</br>insert into t values(null,5,5);</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>T2</td>
+<td></td>
+<td>insert into t values(null,5,5);</td>
+<td>insert into t values(null,5,5);</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>rollback;</td>
+<td></td>
+<td>(DeadLock found)</td>
+</tr>
+</tbody></table>
+<p>sessionA执行rollback语句回滚的时候，sessionC几乎同时发现死锁并返回。  </p>
+<ol>
+<li>在T1时刻，启动sessionA，并执行insert语句，此时在索引c的c=5上加了记录锁。这个索引是唯一索引，因此退化为记录锁。  </li>
+<li>在T2时刻，sessionB要执行相同的insert语句，发现了唯一键冲突，才加上读锁；同样sessionC也在索引c上，c=5这一记录上，加了读锁。  </li>
+<li>T3时刻，sessionA回滚。这时，sessionB和sessionC都试图继续执行插入操作，都要加上写锁。两个session都要等待对方的行锁，所以就出现了死锁。  <blockquote>
+<p>插入意向锁Lock_insert_intention会被间隙锁gap lock阻塞，造成相互等待。  </p>
+</blockquote>
+</li>
+</ol>
+<h3 id="insert-into…on-duplicate-key-update"><a href="#insert-into…on-duplicate-key-update" class="headerlink" title="insert into…on duplicate key update"></a>insert into…on duplicate key update</h3><blockquote>
+<p>insert into t values(11,10,10) on duplicate key update d=100;  </p>
+</blockquote>
+<p>insert唯一键冲突示例中主键冲突后直接报错，而该例子主键冲突后会给索引c上(5,10]加一个排他的next-key lock(写锁)。  </p>
+<p>insert into…on duplicate key update这个语义的逻辑是，插入一行数据，如果碰到唯一键约束，就执行后面的更新语句。  </p>
+<p>如果有多个列违反了唯一键约束，就会按照索引的顺序，修改跟第一个索引冲突的行。  </p>
+<p>执行这条语句的affected rows返回的是2，实际上，真正更新的只有一行，只是在代码实现上，insert和update都认为自己成功了，update计数加了1，insert计数也加了1。  </p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -426,13 +458,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/MySQL/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%BA%8F/" rel="prev" title="随机排序">
-      <i class="fa fa-chevron-left"></i> 随机排序
+    <a href="/MySQL/%E8%87%AA%E5%A2%9E%E4%B8%BB%E9%94%AE/" rel="prev" title="自增主键">
+      <i class="fa fa-chevron-left"></i> 自增主键
     </a></div>
-      <div class="post-nav-item">
-    <a href="/MySQL/%E7%AE%80%E5%8D%95%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E6%85%A2%E8%A7%A3%E6%9E%90/" rel="next" title="简单查询执行慢解析">
-      简单查询执行慢解析 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -491,7 +520,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#条件字段函数操作"><span class="nav-number">1.</span> <span class="nav-text">条件字段函数操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐式类型转换"><span class="nav-number">2.</span> <span class="nav-text">隐式类型转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐式字符编码转换"><span class="nav-number">3.</span> <span class="nav-text">隐式字符编码转换</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#insert…select语句"><span class="nav-number">1.</span> <span class="nav-text">insert…select语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert循环写入"><span class="nav-number">2.</span> <span class="nav-text">insert循环写入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例1"><span class="nav-number">2.1.</span> <span class="nav-text">示例1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例2"><span class="nav-number">2.2.</span> <span class="nav-text">示例2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert唯一键冲突-会在冲突的唯一值上加共享的next-key-lock-S锁"><span class="nav-number">3.</span> <span class="nav-text">insert唯一键冲突-会在冲突的唯一值上加共享的next-key lock(S锁)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁场景"><span class="nav-number">3.1.</span> <span class="nav-text">死锁场景</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert-into…on-duplicate-key-update"><span class="nav-number">4.</span> <span class="nav-text">insert into…on duplicate key update</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
