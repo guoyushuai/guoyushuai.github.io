@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="静态绑定|动态绑定，通过类名、方法名、方法描述符识别方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM是如何执行方法调用的">
+<meta property="og:url" content="https://guoyushuai.github.io/JVM/4JVM%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E7%9A%84/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="静态绑定|动态绑定，通过类名、方法名、方法描述符识别方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-29T02:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-30T02:11:00.881Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/JVM/4JVM%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E7%9A%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JVM是如何执行方法调用的 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">97</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/JVM/4JVM%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM是如何执行方法调用的
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-29 10:00:00" itemprop="dateCreated datePublished" datetime="2020-07-29T10:00:00+08:00">2020-07-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-30 10:11:00" itemprop="dateModified" datetime="2020-07-30T10:11:00+08:00">2020-07-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+            <div class="post-description">静态绑定|动态绑定，通过类名、方法名、方法描述符识别方法</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="重载与重写"><a href="#重载与重写" class="headerlink" title="重载与重写"></a>重载与重写</h3><p>在Java程序里，如果同一个类出现多个名字相同、参数类型相同的方法，那么它无法通过编译。正常情况下，想要在同一个类中定义名字相同的方法，那么它们的参数类型必须不同。这些方法之间的关系，称之为重载。  </p>
+<p>重载的方法在编译过程中即可完成识别。<br>每一个方法调用，Java编译器会根据所传入参数的声明类型(与实际类型区分)来选取重载方法。选取过程：  </p>
+<ol>
+<li>在不考虑对基本类型自动装拆箱(auto-boxing, auto-unboxing)，以及可变长参数的情况下选取重载方法；  </li>
+<li>如果在第1个阶段中没有找到适配的方法，那么在允许自动装拆箱，但不允许可变长参数的情况下选取重载方法；  </li>
+<li>如果在第2个阶段中没有找到适配的方法，那么在允许自动装拆箱以及可变长参数的情况下选取重载方法。  </li>
+</ol>
+<p>如果Java编译器在同一个阶段中找到了多个适配的方法，那么它会在其中选择一个最为贴切的，而决定贴切程度的一个关键就是形式参数类型的继承关系。  </p>
+<p>除了同一个类中的方法，重载也可以作用于这个类所继承而来的方法。如果子类定义了与父类中非私有方法同名的方法，而且这两个方法的参数类型不同，那么在子类中，这两个方法同样构成了<strong>重载</strong>。<br>如果这两个方法的参数类型相同：如果这两个方法都是静态的，那么子类中的方法<strong>隐藏</strong>了父类中的方法；如果这两个方法都不是静态的，且都不是私有的，那么子类的方法<strong>重写</strong>了父类中的方法。  </p>
+<p>方法重写，是多态最重要的一种体现方式：它允许子类在继承父类部分功能的同时，拥有自己独特的行为。重写的调用：它会根据调用者的动态类型，来选取实际的目标方法。  </p>
+<blockquote>
+<ul>
+<li>方法重载是一个类中(或子类中)定义了多个方法名相同，而参数的数量不同或者数量相同而类型和次序不同。  </li>
+<li>方法重写是在子类存在方法与父类方法的名字相同，而参数的个数与类型一样，返回值也一样的方法。  </li>
+<li>重载是一个类(或子类与父类)的多态性表现，重写是子类与父类的一种多态性表现。  </li>
+</ul>
+</blockquote>
+<h3 id="JVM的静态绑定和动态绑定"><a href="#JVM的静态绑定和动态绑定" class="headerlink" title="JVM的静态绑定和动态绑定"></a>JVM的静态绑定和动态绑定</h3><p>JVM识别方法的关键在于类名、方法名以及方法描述符(method descriptor)。方法描述符，是由方法的参数类型以及返回类型所构成。在同一个类中，如果同时出现多个名字相同且描述符也相同的方法，那么JVM会在类的验证阶段报错。  </p>
+<p>JVM与Java语言不同，它并不限制名字与参数类型相同，但返回类型不同的方法出现在同一个类中，对于调用这些方法的字节码来说，由于字节码所附带的方法描述符包含了返回类型，因此JVM能够准确的识别目标方法。  </p>
+<p>JVM中关于方法重写的判定同样基于方法描述符。如果子类定义了与父类中非私有、非静态方法同名的方法，那么只有当这两个方法的参数类型以及返回类型一致，JVM才会判定为重写。对于Java语言中重写而JVM中非重写的情况，编译器会通过生成桥接方法来实现Java中的重写语义。  </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>重载</th>
+<th>重写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数列表</td>
+<td>必须修改</td>
+<td>一定不能修改</td>
+</tr>
+<tr>
+<td>返回类型</td>
+<td>可以修改</td>
+<td>一定不能修改</td>
+</tr>
+<tr>
+<td>异常</td>
+<td>可以修改</td>
+<td>可以减少或删除，一定不能抛出新的或者更广的异常</td>
+</tr>
+<tr>
+<td>访问</td>
+<td>可以修改</td>
+<td>一定不能做更严格的限制，可以降低限制</td>
+</tr>
+</tbody></table>
+<p>对重载方法的区分在编译阶段已经完成，可认为JVM不存在重载这一概念。重载也被称为静态绑定(static binding)，或者编译时多态(compile-time polymorphism)；重写则被称为动态绑定(dynamic binding)。但在JVM中，某个类中的重载方法可能被它的子类所重写，因此Java编译器会将所有对非私有实例方法的调用编译为需要动态绑定的类型。  </p>
+<p><strong>JVM中的静态绑定指的是在解析时便能够直接识别目标方法的情况，而动态绑定则指的是需要在运行过程中根据调用者的动态类型来识别目标方法的情况。</strong>  </p>
+<blockquote>
+<p>静态方法都是静态绑定。HotSpot虚拟机针对final方法做了优化，也会静态绑定。  </p>
+</blockquote>
+<p>Java字节码中与调用相关的指令共有五种：  </p>
+<ol>
+<li>invokestatic:用于调用静态方法。  </li>
+<li>invokespecial:用于调用私有实例方法、构造器；以及使用super关键字调用父类的实例方法或构造器，和所实现接口的默认方法(注意使用super关键字调用的默认方法)。  </li>
+<li>invokevirtual:用于调用非私有实例方法(可以也可能被子类重写)。  </li>
+<li>invokeinterface:用于调用接口方法(包括普通调用接口的默认方法，不使用super关键字调用)。  </li>
+<li>invokedynamic:用于调用动态方法。  </li>
+</ol>
+<p>对于invokestatic和invokespecial而言，JVM能够直接识别具体的目标方法。  </p>
+<p>对于invokevirtual和invokeinterface而言，在绝大部分情况下，虚拟机需要在执行过程中，根据调用者的动态类型，来确定具体的目标方法。如果虚拟机能够确定目标方法有且仅有一个，那么它可以不通过动态类型，直接确定目标方法(如目标方法被标记为final)。  </p>
+<h3 id="调用指令的符号引用"><a href="#调用指令的符号引用" class="headerlink" title="调用指令的符号引用"></a>调用指令的符号引用</h3><p>在编译过程中，并不知道目标方法的具体内存地址。Java编译器会暂时用符号引用来表示该目标方法。这一符号引用包括目标方法所在的类或接口的名字，以及目标方法的方法名和方法描述符。  </p>
+<p>符号引用存储在class文件的常量池中。根据目标方法是否为接口方法，这些引用可分为接口符号引用和非接口符号引用。在执行使用了符号引用的字节码前，JVM需要解析这些符号引用，并替换为实际引用。  </p>
+<p>对于非接口符号引用，假定该符号引用所指向的类为C，则JVM查找步骤：  </p>
+<ol>
+<li>在C中查找符合名字及描述符的方法。  </li>
+<li>如果没有找到，在C的父类中继续搜索，直至Object类。  </li>
+<li>如果没有找到，在C所直接实现或间接实现的接口中搜索，这一步搜索得到的目标方法必须是非私有、非静态的。并且，如果目标方法在间接实现的接口中，则需要满足C与该接口之间没有其他符合条件的目标方法。如果有多个符合条件的目标方法，则任意返回其中一个。  <blockquote>
+<p>静态方法也可以通过子类来调用。另外子类的静态方法会隐藏(与重写区分)父类中的同名、同描述符的静态方法(子类调不到父类的同名静态方法了)。  </p>
+</blockquote>
+</li>
+</ol>
+<p>对于接口符号引用，假定该符号引用所指向的接口为I，则JVM查找步骤：  </p>
+<ol>
+<li>在I中查找符合名字及描述符的方法。  </li>
+<li>如果没有找到，在Object类中的公有实例方法中搜索。  </li>
+<li>如果没有找到，则在I的超接口中搜索。这一步的搜索结果的要求与非接口符号引用步骤3的要求一致。  </li>
+</ol>
+<p>经过上述的解析步骤之后，符号引用会被解析成实际引用。对于可以静态绑定的方法调用而言，实际引用是一个指向方法的指针。对于需要动态绑定的方法调用而言，实际引用是一个方法表的索引。  </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Java中，方法存在重载以及重写的概念，重载指的是方法名相同而参数类型不相同的方法之间的关系，重写指的是方法名相同并且参数类型也相同的方法之间的关系。  </p>
+<p>JVM中，识别方法除了方法名和参数类型之外，还会考虑返回类型。  </p>
+<p>JVM中，静态绑定指的是在解析时便能够直接识别目标方法的情况，而动态绑定则指的是需要在运行过程中根据调用者的动态类型来识别目标方法的情况。由于Java编译器已经区分了重载的方法，可以认为JVM中不存在重载。  </p>
+<p>在Class文件中，Java编译器会用符号引用指代目标方法。在执行调用指令前，它所附带的符号引用需要被解析成实际引用。对于可以静态绑定的方法调用而言，实际引用为目标方法的指针。对于需要动态绑定的方法调用而言，实际引用为辅助动态绑定的信息。  </p>
+<p>Java的重写与JVM中的重写并不一致，但是编译器会通过桥接方法来弥补。不一致原因：  </p>
+<blockquote>
+<ul>
+<li>重写方法的返回类型不一致(Java中重写的返回值类型可以是子类)；  </li>
+<li>泛型参数类型造成的方法参数类型不一致。  </li>
+</ul>
+</blockquote>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/JVM/3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%98%AF%E5%A6%82%E4%BD%95%E5%8A%A0%E8%BD%BDJava%E7%B1%BB%E7%9A%84/" rel="prev" title="Java虚拟机是如何加载Java类的">
+      <i class="fa fa-chevron-left"></i> Java虚拟机是如何加载Java类的
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/JVM/5JVM%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E7%9A%84/" rel="next" title="JVM是如何执行方法调用的">
+      JVM是如何执行方法调用的 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#重载与重写"><span class="nav-number">1.</span> <span class="nav-text">重载与重写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM的静态绑定和动态绑定"><span class="nav-number">2.</span> <span class="nav-text">JVM的静态绑定和动态绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用指令的符号引用"><span class="nav-number">3.</span> <span class="nav-text">调用指令的符号引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>
