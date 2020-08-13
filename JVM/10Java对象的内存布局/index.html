@@ -26,7 +26,7 @@
 <meta property="og:description" content="JVM构造对象的方式、大小、内存布局">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-08-07T03:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-07T09:48:53.876Z">
+<meta property="article:modified_time" content="2020-08-10T02:22:46.179Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
 
@@ -140,7 +140,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">106</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -222,10 +222,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-08-07 11:00:00 / 修改时间：17:48:53" itemprop="dateCreated datePublished" datetime="2020-08-07T11:00:00+08:00">2020-08-07</time>
+              <time title="创建时间：2020-08-07 11:00:00" itemprop="dateCreated datePublished" datetime="2020-08-07T11:00:00+08:00">2020-08-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-10 10:22:46" itemprop="dateModified" datetime="2020-08-10T10:22:46+08:00">2020-08-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -249,7 +255,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3k</span>
+              <span>3.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -287,25 +293,28 @@
 <li>子类的构造器需要调用父类的构造器。如果父类存在无参数构造器的话，该调用可以是隐式的，Java编译器会自动添加对父类构造器的调用。但是，如果父类没有无参数构造器，那么子类的构造器则需要显式地调用父类带参数的构造器。  <ul>
 <li>直接使用”super”关键字调用父类构造器。  </li>
 <li>使用”this”关键字调用同一个类中的其他构造器。  <blockquote>
-<p>无论是直接的显式调用，还是间接的显式调用，都需要作为构造器的第一条语句，以便优先初始化集成而来的父类字段。(可以通过调用其他生成参数的方法，或者字节码注入来绕开)  </p>
+<p>无论是直接的显式调用，还是间接的显式调用，都需要作为构造器的第一条语句，以便优先初始化集成而来的父类字段。(但是可以通过调用其他生成参数的方法，或者字节码注入来绕开)  </p>
 </blockquote>
 </li>
 </ul>
 </li>
 </ul>
-<p>当调用一个构造器时，它将优先调用父类的构造器，直至Object类。这些构造器的调用者皆为同一对象，也就是通过new指令新建而来的对象。<br>它的内存涵盖了所有父类中的实例字段。虽然子类无法访问父类的私有实例字段，或者子类的实例字段隐藏了父类的同名实例字段，但是子类的实例还是会为这些父类实例字段分配内存的。  </p>
-<h3 id="压缩指针"><a href="#压缩指针" class="headerlink" title="压缩指针"></a>压缩指针</h3><p>在JVM中，每个Java对象都有一个对象头(object header)，这个由<strong>标记字段和类型指针</strong>所构成。其中，(mark word)标记字段用以存储JVM有关该对象的运行数据，如哈希码、GC信息以及锁薪资，而类型指针则指向该对象的类。  </p>
+<p><strong>当调用一个构造器时，它将优先调用父类的构造器，直至Object类。</strong>这些构造器的调用者皆为同一对象，也就是通过new指令新建而来的对象。<br>它的内存涵盖了所有父类中的实例字段。虽然子类无法访问父类的私有实例字段，或者子类的实例字段隐藏了父类的同名实例字段，但是<strong>子类的实例还是会为这些父类实例字段分配内存的</strong>。  </p>
+<h3 id="压缩指针"><a href="#压缩指针" class="headerlink" title="压缩指针"></a>压缩指针</h3><p>在JVM中，每个Java对象都有一个对象头(object header)，这个由<strong>标记字段和类型指针</strong>所构成。其中，标记字段(mark word)用以存储JVM有关该对象的运行数据，如哈希码、GC信息以及锁薪资，而类型指针则指向该对象的类。  </p>
 <p>在64位的JVM中，对象头的标记字段占64位，而类型指针又占了64位。每一个Java对象在内存中的额外开销就是16字节。以Integer类为例，它仅有一个int类型的私有字段，占4个字节。因此，每一个Integer对象的额外内存开销至少是400%。这是Java引入基本类型的原因之一。  </p>
 <p>为了尽量减少对象的内存使用量，64位JVM引入了压缩指针的概念(虚拟机选项-XX:+UseCompressedOops,默认开启)，将堆中原本64位(8字节)的Java对象指针压缩成32位(4字节)的。这样，对象头中的类型指针也会被压缩成32位，使得对象头的大小从16字节降至12字节(标记字段8字节+类型指针4字节)。压缩指针不仅可以作用于对象头的类型指针，还可以作用于引用类型的字段，以及引用类型数组。   </p>
-<h4 id="压缩指针原理"><a href="#压缩指针原理" class="headerlink" title="压缩指针原理"></a>压缩指针原理</h4><p>虚拟机选项-XX:ObjectAlignmentInBytes,默认值为8。(2的3次方)  </p>
+<h4 id="压缩指针原理"><a href="#压缩指针原理" class="headerlink" title="压缩指针原理"></a>压缩指针原理</h4><p>内存对齐，虚拟机选项-XX:ObjectAlignmentInBytes,默认值为8(2的3次方)。java对象的内存对齐大小。默认是8字节，JVM实际计算堆内存上限的方法是 4GB * ObjectAlignmentInBytes。  </p>
+<blockquote>
+<p>默认 8 字节对齐，那么最低 3 位是零，所以移动 3 位，那么就有 2<sup>32+3</sup>字节 = 32 GB 压缩引用空间。如果 16 字节对齐，那么就有 2<sup>32+4</sup>字节 = 64 GB 压缩引用堆空间<br><a href="https://shipilev.net/jvm/anatomy-quarks/24-object-alignment/" target="_blank" rel="noopener">JVM Anatomy Quark #24: 对象对齐</a></p>
+</blockquote>
 <p>默认情况下，JVM堆中对象的起始地址需要对齐至8的倍数。如果一个对象用不到8N个字节，那么空白的那部分空间就浪费掉了。这些浪费掉的空间称之为对象间的填充(padding)。  </p>
-<p>在默认情况下，JVM中的32位压缩指针可以寻址到2的35次方个字节(默认对齐*ObjectAlignmentInBytes的默认值8为2的3次方)，也就是32GB的地址空间(超过32GB则会关闭压缩指针)。在压缩指针解引用时，需要将其左移3位，再加上一个固定偏移量，便可以得到能够寻址32GB地址空间的伪64位指针了。  </p>
+<p>在默认情况下，JVM中的32位压缩指针可以寻址到2的35次方个字节，也就是32GB的地址空间(超过32GB则会关闭压缩指针)。<strong>在压缩指针解引用时，需要将其左移3位，再加上一个固定偏移量，便可以得到能够寻址32GB地址空间的伪64位指针了。</strong>  </p>
 <blockquote>
 <p>并没有通过压缩指针让两个寻址范围一致，而是通过压缩指针放大了32位的寻址空间使它够用了。<br>此外可以通过内存对齐选项-XX:ObjectAlignmentInBytes来进一步提升寻址范围。但是同时也可能增加对象间填充，导致压缩指针没有达到原本节省空间的效果。  </p>
 </blockquote>
 <p>关闭了压缩指针，JVM还是会进行内存对齐。此外，<strong>内存对齐不仅存在于对象与对象之间，也存在于对象中的字段之间</strong>。如JVM要求long字段、double字段，以及非压缩指针状态下的引用字段地址为8的倍数。  </p>
 <p>字段内存对齐的原因之一，让字段只出现在同一CPU地缓存行中。如果字段不是对齐的，那么就有可能出现跨缓存行的字段。该字段的读取可能需要替换两个缓存行，而该字段的存储也会同时污染两个缓存行。这两种情况对程序的执行效率而言都是不利的。  </p>
-<h3 id="字段重排列"><a href="#字段重排列" class="headerlink" title="字段重排列"></a>字段重排列</h3><p>字段重排列，是指JVM重新分配字段的先后顺序，以达到内存对齐的目的。JVM中有三种排列方法(对应JVM选项-XX:FieldsAllocationStyle,默认值是1)。遵循两个规则：  </p>
+<h3 id="字段重排列"><a href="#字段重排列" class="headerlink" title="字段重排列"></a>字段重排列</h3><p>字段重排列，是指<strong>JVM重新分配字段的先后顺序</strong>，以达到内存对齐的目的。JVM中有三种排列方法(对应JVM选项-XX:FieldsAllocationStyle,默认值是1)。遵循两个规则：  </p>
 <ul>
 <li>如果一个字段占据C个字节，那么该字段的偏移量需要对齐至NC。这里偏移量指的是字段地址与对象的起始地址差值。  <blockquote>
 <p>以long类为例，它仅有一个long类型(8字节)的实例字段。在使用了压缩指针的64位虚拟机中，尽管对象头的大小为12个字节，该long类型字段的偏移量也只能是16，而中间空着的4个字节便会被浪费掉。  </p>
@@ -341,7 +350,10 @@
     <a href="/JVM/9JVM%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0invokedynamic%E7%9A%84/" rel="prev" title="JVM是怎么实现invokedynamic的">
       <i class="fa fa-chevron-left"></i> JVM是怎么实现invokedynamic的
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/JVM/11%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="next" title="垃圾回收">
+      垃圾回收 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -416,7 +428,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

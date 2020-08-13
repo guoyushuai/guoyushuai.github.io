@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="引用计数法与可达性分析、STW与安全点、清除压缩复制三种垃圾回收算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垃圾回收">
+<meta property="og:url" content="https://guoyushuai.github.io/JVM/11%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="引用计数法与可达性分析、STW与安全点、清除压缩复制三种垃圾回收算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-10T02:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-10T07:46:04.460Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/JVM/11%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>垃圾回收 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">106</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/JVM/11%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          垃圾回收
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-10 10:00:00 / 修改时间：15:46:04" itemprop="dateCreated datePublished" datetime="2020-08-10T10:00:00+08:00">2020-08-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+            <div class="post-description">引用计数法与可达性分析、STW与安全点、清除压缩复制三种垃圾回收算法</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="引用计数法与可达性分析"><a href="#引用计数法与可达性分析" class="headerlink" title="引用计数法与可达性分析"></a>引用计数法与可达性分析</h3><p>垃圾回收，将已经分配出去的，但却不再使用的内存回收回来，以便能够再次分配。在JVM的语境下，垃圾指的是死亡的对象所占据的堆空间。辨别一个对象是存是亡的方法：1.引用计数法(reference counting)。2.可达性分析。  </p>
+<h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>为每个对象添加一个引用计数器，用来统计指向该对象的引用个数。一旦某个对象的引用计数器为0，则说明该对象已经死亡，便可以被回收了。  </p>
+<p>具体实现：如果有一个引用，被赋值为某一对象，那么将该对象的引用计数器+1。如果一个指向某一对象的引用，被赋值为其他值，那么该对象的引用计数器-1。需要截获所有的引用更新操作，并且相应的增减目标对象的引用计数器。  </p>
+<p>除了需要额外的空间来存储计数器，以及繁琐的更新操作，引用计数法还有一个重大的漏洞，那便是无法处理循环引用对象。假设对象a与b湘湖引用，除此之外没有其他引用指向a和b。这种情况下，a和b实际上已经死了，但是由于它们的引用计数器皆不为0，在引用计数法的心中，这两个对象还活着，循环引用对象所占据的空间将不可回收，造成内存泄漏。  </p>
+<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>目前JVM的主流垃圾回收期采用的算法。实质在于将一系列GC Roots作为初始存活对象合集(live set)，然后从该合集触发，探索所有能够被该集合引用到的对象，并将其加入到该集合中，这个过程称之为标记(mark)。最终，未被探索到的对象便是死亡的，是可以回收的。  </p>
+<blockquote>
+<p>整个堆空间减去存活对象集占用的空间就是空闲堆空间，不用具体去追究死亡对象的地址空间。  </p>
+</blockquote>
+<p>GC Roots，可以暂时理解为<strong>由堆外指向堆内的引用</strong>，一般而言包括但不限于以下几种：  </p>
+<ul>
+<li>Java方法栈帧中的局部变量；  </li>
+<li>已加载类的静态变量；  </li>
+<li>JNI(Java Native Interface) handles;  </li>
+<li>已启动且未停止的Java线程。  </li>
+</ul>
+<p>可达性分析可以解决引用计数法所不能解决的循环引用问题。即便对象a和b相互引用，只要从GC Roots出发无法到达a或者b，那么可达性分析便不会将它们加入存活对象合集之中。  </p>
+<p>多线程环境下，(没有STW时，没有做好同步的前提下)其他线程可能会更新已经访问过的对象中的引用，从而造成误报(将引用设置为null，可达性分析误认为某个死亡对象是可达的，认为可达本次不回收)或者漏报(将引用设置为未被访问过的对象，可达性分析没有发现某个存活对象可达，认为不可达给回收掉了)。误报没什么伤害，JVM至多损失了部分垃圾回收的机会。漏报比较麻烦，垃圾回收器可能回收事实上扔被引用的对象内存，一旦从原引用访问已经被回收了的对象，则很有可能会直接导致JVM崩溃。  </p>
+<blockquote>
+<p>可达性分析会找出非垃圾，而其他对象通通被认为是垃圾。  </p>
+</blockquote>
+<h3 id="Stop-the-world-以及安全点"><a href="#Stop-the-world-以及安全点" class="headerlink" title="Stop-the-world 以及安全点"></a>Stop-the-world 以及安全点</h3><p>针对漏报问题，在JVM里，传统的垃圾回收算法采用的是一种简单粗暴的方式：Stop-the-world，停止其他非垃圾回收线程的工作(禁止工作线程继续更新引用)，直到完成垃圾回收。这也就造成了垃圾回收所谓的暂停时间(GC pause)。  </p>
+<blockquote>
+<p>采用并行GC可以减少需要STW的时间。它们会在即时编译器生成的代码中加入写屏障或者读屏障。  </p>
+</blockquote>
+<p>JVM中的Stop-the-world是通过安全点(safepoint)机制来实现的。当JVM收到Stop-the-world请求，它便会等待所有的线程都到达安全点，才允许请求Stop-the-world的线程进行独占的工作。  </p>
+<blockquote>
+<p>安全词。一旦垃圾回收线程喊出了安全词，其他非垃圾回收线程便会一一停下。  </p>
+</blockquote>
+<p>安全点的初始目的并不是让其他线程停下，而是找到一个稳定的执行状态。在这个执行状态下，JVM的堆栈不会发生变化。这样，垃圾回收器便能够“安全”的执行可达性分析。  </p>
+<h4 id="执行JNI本地代码"><a href="#执行JNI本地代码" class="headerlink" title="执行JNI本地代码"></a>执行JNI本地代码</h4><p>当Java程序通过JNI执行本地代码时，如果这段代码不访问Java对象、调用Java方法或者返回至原Java方法，那么JVM的堆栈不会发生改变，也就代表着这段本地代码可以作为同一个安全点。只要不离开这个安全点，JVM便能够在垃圾回收的同时，继续运行这段本地代码。  </p>
+<p>由于本地代码需要通过JNI的API来完成上述三个操作，因此JVM仅需要在API的入口处进行安全点检测(safepoint poll)，测试是有其他线程请求停留在安全点里，便可以在必要的时候挂起当前线程。  </p>
+<h4 id="Java线程其他状态"><a href="#Java线程其他状态" class="headerlink" title="Java线程其他状态"></a>Java线程其他状态</h4><p><strong>解释执行字节码</strong>、<strong>执行即时编译器生成的机器码</strong>或<strong>线程阻塞</strong>。  </p>
+<p><strong>阻塞的线程</strong>由于处于JVM线程调度器的掌控之下，因此属于安全点。其他几种状态则是运行状态，需要虚拟机保证在可预见的时间内进入安全点。否则，垃圾回收线程可能长期处于等待所有线程进入安全点的状态，从而变相的提高了垃圾回收的暂停时间。  </p>
+<p>对<strong>解释执行来</strong>说，字节码与字节码之间皆可作为安全点。JVM采取的做法是，当有安全点请求时，执行一条字节码便进行一次安全点检测。  </p>
+<p><strong>执行即时编译器生成的机器码</strong>则比较复杂。由于这些代码直接运行在底层硬件之上，不受JVM掌控，因此在生成机器码时，即时编译器需要插入安全点检测，以避免机器码长时间没有安全点检测的情况。HotSpot虚拟机的做法便是在生成代码的方法出口以及非计数循环的循环回边(back-edge)处插入安全点检测。  </p>
+<p>不在每一条机器码或者每一个机器码基本块处插入安全点检测的原因：  </p>
+<ul>
+<li>安全点检测本身也有一定的开销。不过HotSpot虚拟机已经将机器码中安全点检测简化为<strong>一个内存访问操作</strong>。在有安全点请求的情况下，JVM会将安全点检测访问的内存所在的页设置为不可读，并且定义一个segfault处理器，来截获因访问该不可读内存而触发segfault的线程，并将它们挂起。  </li>
+<li>即时编译器生成的机器码打乱了原本栈帧上的对象分布状况。在进入安全点时，机器码还需要提供一些额外的信息，来表明哪些寄存器，或者当前栈帧上的哪些内存空间存放着指向对象的引用，以便垃圾回收器能够枚举GC Roots。  </li>
+</ul>
+<p>由于这些信息需要不少空间来存储，因此即时编译器会尽量避免过多的安全点检测。  </p>
+<p>不过，不同的即时编译器插入安全点检测的位置也可能不同。以Graal为例，除了上述位置外，它还会在计数循环的循环回边处插入安全点检测。其他的虚拟机也可能选取方法入口而非方法出口来插入安全点检测。  </p>
+<p>不管如何，其目的都是在可接受的性能开销以及内存开销之内，避免机器码长时间不进入安全点的情况，间接的减少垃圾回收的暂停时间。  </p>
+<p>除了垃圾回收之外，JVM其他一些对堆栈内容的一致性有要求的操作也会用到安全点这一机制。  </p>
+<h3 id="垃圾回收的三种方式"><a href="#垃圾回收的三种方式" class="headerlink" title="垃圾回收的三种方式"></a>垃圾回收的三种方式</h3><p>当标记完所有的存活对象时，便可以进行死亡对象的回收工作了。主流的基础回收方式可分为三种。  </p>
+<h4 id="清除"><a href="#清除" class="headerlink" title="清除"></a>清除</h4><p>第一种是<strong>清除</strong>(sweep)，即把死亡对象所占据的内存标记为空闲内存，并记录在一个空闲列表(free list)之中。当需要新建对象时，内存管理模块便会从该空闲列表中寻找空闲内存，并划分给新建的对象。  </p>
+<p>清除这种回收方式的原理极其简单，但是有两个缺点。<br>一是会造成内存碎片。由于JVM的堆中对象必须是连续分布的，因此可能出现总空闲内存足够，但是无法分配的极端情况。  </p>
+<p>另一个是分配效率较低。如果是一块连续的内存空间，那么可以通过指针加法(pointer bumping)来做分配。而对于空闲列表，JVM则需要逐个访问列表中的项，来查找能够放入新建对象的空闲内存。  </p>
+<h4 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h4><p>第二种是<strong>压缩</strong>(compact)，即把存活的对象聚集到内存区域的起始位置，从而留下一段连续的内存空间。  </p>
+<p>这种做法能够解决内存碎片化的问题，但代价是压缩算法的性能开销。  </p>
+<h4 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h4><p>第三种是<strong>复制</strong>(copy)，即把内存区域分为两等分，分别用两个指针from和to来维护，并且只是用from指针指向的内存区域来分配内存。当发生垃圾回收时，便把存活的对象复制到to指针指向的内存区域中，并且交换from指针和to指针的内容。  </p>
+<p>复制这种回收方式同样能够解决内存碎片化的问题，但是它的缺点也极其明显，即堆空间的使用效率极其低下。  </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>JVM中的垃圾回收器采用可达性分析来探索所有存活的对象。它从一些列GC Roots出发，边标记边探索所有被引用的对象。  </p>
+<p>为了防止在标记过程中堆栈的状态发生改变，JVM采取安全点机制来实现Stop-the-world操作，暂停其他非垃圾回收线程。  </p>
+<p>回收死亡对象的内存共有三种方式，分别为:会造成内存碎片的清除、性能开销较大的压缩、以及堆使用效率较低的复制。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/JVM/10Java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/" rel="prev" title="Java对象的内存布局">
+      <i class="fa fa-chevron-left"></i> Java对象的内存布局
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/JVM/12%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="next" title="垃圾回收">
+      垃圾回收 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引用计数法与可达性分析"><span class="nav-number">1.</span> <span class="nav-text">引用计数法与可达性分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引用计数法"><span class="nav-number">1.1.</span> <span class="nav-text">引用计数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">1.2.</span> <span class="nav-text">可达性分析算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stop-the-world-以及安全点"><span class="nav-number">2.</span> <span class="nav-text">Stop-the-world 以及安全点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#执行JNI本地代码"><span class="nav-number">2.1.</span> <span class="nav-text">执行JNI本地代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java线程其他状态"><span class="nav-number">2.2.</span> <span class="nav-text">Java线程其他状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收的三种方式"><span class="nav-number">3.</span> <span class="nav-text">垃圾回收的三种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#清除"><span class="nav-number">3.1.</span> <span class="nav-text">清除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#压缩"><span class="nav-number">3.2.</span> <span class="nav-text">压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制"><span class="nav-number">3.3.</span> <span class="nav-text">复制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">106</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>

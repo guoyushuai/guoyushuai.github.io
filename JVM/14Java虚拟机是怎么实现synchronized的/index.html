@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="重量级锁、轻量级锁、偏向锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java虚拟机是怎么实现synchronized的">
+<meta property="og:url" content="https://guoyushuai.github.io/JVM/14Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0synchronized%E7%9A%84/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="重量级锁、轻量级锁、偏向锁">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoyushuai.github.io/img/JVM%E9%94%81.gif">
+<meta property="article:published_time" content="2020-08-13T06:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-13T09:46:13.267Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoyushuai.github.io/img/JVM%E9%94%81.gif">
+
+<link rel="canonical" href="https://guoyushuai.github.io/JVM/14Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0synchronized%E7%9A%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java虚拟机是怎么实现synchronized的 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">106</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/JVM/14Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0synchronized%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java虚拟机是怎么实现synchronized的
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-13 14:00:00 / 修改时间：17:46:13" itemprop="dateCreated datePublished" datetime="2020-08-13T14:00:00+08:00">2020-08-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+            <div class="post-description">重量级锁、轻量级锁、偏向锁</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在Java程序中，可以利用synchronized关键字来对程序进行加锁。它既可以用来声明一个synchronized代码块，也可以直接标记静态方法或者实例方法。  </p>
+<p>当声明synchronized代码块时，编译而成的字节码将包含monitorenter和monitorexit指令。这两种指令均会消耗操作数栈上的一个引用类型的元素(synchronized关键字括号里的引用)，作为所要加锁解锁的锁对象。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        synchronized 代码块字节码
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(Object lock)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">      lock.hashCode();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 上面的Java代码将编译为下面的字节码</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(java.lang.Object)</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_1</span><br><span class="line">       <span class="number">1</span>: dup</span><br><span class="line">       <span class="number">2</span>: astore_2</span><br><span class="line">       <span class="number">3</span>: monitorenter</span><br><span class="line">       <span class="number">4</span>: aload_1</span><br><span class="line">       <span class="number">5</span>: invokevirtual java/lang/Object.hashCode:()I</span><br><span class="line">       <span class="number">8</span>: pop</span><br><span class="line">       <span class="number">9</span>: aload_2</span><br><span class="line">      <span class="number">10</span>: monitorexit</span><br><span class="line">      <span class="number">11</span>: goto          <span class="number">19</span></span><br><span class="line">      <span class="number">14</span>: astore_3</span><br><span class="line">      <span class="number">15</span>: aload_2</span><br><span class="line">      <span class="number">16</span>: monitorexit</span><br><span class="line">      <span class="number">17</span>: aload_3</span><br><span class="line">      <span class="number">18</span>: athrow</span><br><span class="line">      <span class="number">19</span>: <span class="keyword">return</span></span><br><span class="line">    Exception table:</span><br><span class="line">       from    to  target type</span><br><span class="line">           <span class="number">4</span>    <span class="number">11</span>    <span class="number">14</span>   any</span><br><span class="line">          <span class="number">14</span>    <span class="number">17</span>    <span class="number">14</span>   any</span><br><span class="line"></span><br><span class="line"><span class="comment">//字节码中包含一个monitorenter指令以及多个monitorexit指令。  </span></span><br><span class="line"><span class="comment">//JVM需要确保所获得的锁在正常执行路径，以及异常执行路径上都能够被解锁。</span></span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>当用synchronized标记方法时，字节码中方法的访问标记包括ACC_SYNCHRONIZED。该标记表示在进入该方法时，JVM需要进行monitorenter操作；而在退出该方法时，不管是正常返回，还是向调用者抛异常，JVM均需要进行monitorexit操作。  </p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        synchronized 方法字节码
+    </div>
+    <div class='spoiler-content'>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(Object lock)</span> </span>&#123;</span><br><span class="line">    lock.hashCode();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 上面的Java代码将编译为下面的字节码</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(java.lang.Object)</span></span>;</span><br><span class="line">    descriptor: (Ljava/lang/Object;)V</span><br><span class="line">    flags: (<span class="number">0x0021</span>) ACC_PUBLIC, ACC_SYNCHRONIZED</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">2</span>, args_size=<span class="number">2</span></span><br><span class="line">         <span class="number">0</span>: aload_1</span><br><span class="line">         <span class="number">1</span>: invokevirtual java/lang/Object.hashCode:()I</span><br><span class="line">         <span class="number">4</span>: pop</span><br><span class="line">         <span class="number">5</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//monitorenter和monitorexit操作所对应的锁对象是隐式的。  </span></span><br><span class="line"><span class="comment">//对于实例方法来说，这两个操作对应的锁对象是this；  </span></span><br><span class="line"><span class="comment">//对于静态方法来说，这两个操作对应的锁对象则是所在类的Class实例。</span></span><br></pre></td></tr></table></figure>
+    </div>
+</div>  
+
+<p>关于monitorenter和monitorexit的作用，可以抽象的理解为每个锁对象拥有一个锁计数器和一个指向持有该锁的线程的指针。  </p>
+<p>当执行monitorenter时，如果目标锁对象的计数器为0，那么说明它没有被其他线程所持有。在这个情况下，JVM会将该锁对象的持有线程设置为当前线程，并且将其计数器加1。  </p>
+<p>在目标锁对象的计数器不为0的情况下，如果锁对象的持有线程是当前线程，那么JVM可以将其计数器加1，否则需要等待，直到持有线程释放该锁。  </p>
+<p>当执行monitorexit时，JVM则需将锁对象的计数器减1，当计数器减为0时，那便代表该锁已经被释放掉了。  </p>
+<p>采用这种计数器的方式，是为了允许同一个线程重复获取同一把锁。如果一个Java类中拥有多个synchronized方法，那么这些方法之间的相互调用，不管是直接的还是间接的，都会涉及对同一把锁的重复加锁操作。需要设计这么一个可冲入的特性，来避免编程里的隐式约束。  </p>
+<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h3><p>重量级锁是JVM中最为基础的锁实现。在这种状态下，JVM会阻塞加锁失败的线程，并且在目标锁被释放的时候，唤醒这些线程。  </p>
+<p>Java线程的阻塞以及唤醒，都是依靠操作系统来完成的。对于符合posix接口的操作系统(macOS和大部分Linux)，上述操作是通过pthread的互斥锁(mutex)来实现的。此外，这些操作将涉及系统调用，需要从操作系统的用户态切换至内核态，其开销非常之大。  </p>
+<p>为了避免昂贵的线程阻塞、唤醒操作，JVM会在线程进入阻塞状态之前，以及被唤醒后竞争不到锁的情况下，进入自旋状态，在处理器上空跑并且轮询锁是否被释放。如果此时锁恰好被释放了，那么当前线程便无须进入阻塞状态，而是直接获得这把锁。  </p>
+<p>与线程阻塞相比，<strong>自旋状态可能会浪费大量的处理器资源</strong>。这是因为当前线程仍处于运行状况，只不过跑的是无用指令。它期望在运行无用指令的过程中，锁能够被释放出来。  </p>
+<p>JVM么有办法根据等待时间的长短来选择自旋还是阻塞。JVM啊啊给出的是自适应自旋，根据以往自旋等待时是否能够获得锁，来动态调整自旋的时间(循环数目)。  </p>
+<p><strong>自旋状态带来另外一个副作用-不公平的锁机制</strong>。处于阻塞状态的线程，并没有办法立刻竞争被释放的锁。然而，处于自旋状态的线程，则很有可能优先获得这把锁。  </p>
+<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h3><p>多个线程在不同的时间段请求同一把锁，没有锁竞争。针对这种情形，JVM采用了轻量级锁，来避免重量级锁的阻塞以及唤醒。  </p>
+<p>在对象内存布局中，对象头中的标记字段(mark word)。它的最后两位被用来表示该对象的锁状态。其中00代表轻量级锁，01代表无锁(或偏向锁)，10代表重量级锁，11则跟垃圾回收算法的标记有关。  </p>
+<img src='/img/JVM锁.gif'>
+
+<h4 id="加锁"><a href="#加锁" class="headerlink" title="加锁"></a>加锁</h4><p>当进行加锁操作时，JVM会判断是否已经是重量级锁。如果不是，它会在当前线程的当前栈帧中划出一块空间，作为该锁的锁记录，并且将锁对象的标记字段复制到该锁记录中。  </p>
+<p>然后，JVM会尝试用CAS(compare-and-swap)操作替换锁对象的标记字段。CAS是一个原子操作，它会比较目标地址的值是否和期望值相等，如果相等，则替换为一个新的值。  </p>
+<p>假设当前锁对象的标记字段为X…XYZ，JVM会比较该字段是否为X…X01。</p>
+<ul>
+<li>如果是，则替换为刚才分配的锁记录的地址。由于内存对齐的缘故，它的最后两位为00。此时，该线程已成功获得这把锁，可以继续执行了。</li>
+<li>如果不是X…X01，那么有两种可能：第一，该线程重复获取同一把锁。此时，JVM会将锁记录清零，以代表该锁被重复获取。第二，其他线程持有该锁。此时，JVM会将这把锁膨胀为重量级锁，并且阻塞当前线程。  </li>
+</ul>
+<h4 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a>解锁</h4><p>当进行解锁操作时，如果当前锁记录(可以将一个线程的所有锁记录想象成一个栈结构，每次加锁压入一条锁记录，解锁弹出一条锁记录，当前锁记录指的便是栈顶的锁记录)的值为0，则代表重复进入同一把锁，直接返回即可。  </p>
+<p>否则，JVM会尝试用CAS操作，比较锁对象的标记字段的值是否为当前锁记录的地址。如果是，则替换为锁记录中的值，也就是锁对象原本的标记字段。此时，该线程已经成功释放这把锁。如果不是，则意味着这把锁已经被膨胀为重量级锁。此时，JVM会进入重量级锁的释放过程，唤醒因竞争该锁而被阻塞了的线程。  </p>
+<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>偏向锁针对的情况更加乐观：从始至终只有一个线程请求一把锁。  </p>
+<p>在线程进行加锁时，如果该锁对象支持偏向锁，那么JVM会通过CAS操作，将当前线程的地址记录在锁对象的标记字段之中，并且将标记字段的最后三维设置为101。  </p>
+<p>在接下来的运行过程中，每当有线程请求这把锁，JVM只需要判断锁对象标记字段中：最后三位是否为101，是否包含当前线程的地址，以及epoch值是否和所对象的类的epoch值相同。如果都满足，那么当前线程持有该偏向锁，可以直接返回。  </p>
+<p>当请求加锁的线程和锁对象标记字段保持的线程地址不匹配时(而且epoch值相等，如若不等，那么当前线程可以将该锁重偏向至自己)，JVM需要撤销该偏向锁。这个撤销过程非常麻烦，它要求持有偏向锁的线程到达安全点，再将偏向锁替换成轻量级锁。  </p>
+<p>如果某一类锁对象的总撤销数超过了一个阈值(JVM参数-XX:BiasedLockingBulkRebiasThreshold，默认为20)，那么JVM会宣布这个类的偏向锁失效。  </p>
+<p>具体的做法便是在每个类中维护一个epoch值，可以理解为第几代偏向锁。当设置偏向锁时，JVM需要将该epoch值复制到锁对象的标记字段中。  </p>
+<p>在宣布某个类的偏向锁失效时，JVM实则将该类的epoch值加1，表示之前那一代的偏向锁已经失效。而新设置的偏向锁则需要复制新的epoch值。  </p>
+<p>为了保证当前持有偏向锁并且已加锁的线程不至于因此丢所，JVM需要遍历所有线程的Java栈，找出该类已加锁的实例，并且将它们标记字段中的epoch值加1。该操作需要所有线程处于安全点状态。  </p>
+<p>如果总撤销数超过另一个阈值(JVM参数-XX:BiasedLockingBulkRevokeThreshold，默认值为40)，那么JVM会认为这个类已经不再适合偏向锁。此时，JVM会撤销该类实例的偏向锁，并且在之后的加锁过程中直接为该类实例设置轻量级锁。  </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>JVM中synchronized关键字的实现，按照代价由高到低可分为重量级锁、轻量级锁和偏向锁三种。  </p>
+<p>重量级锁会阻塞、唤醒请求加锁的线程。它针对的是多个线程同时竞争同一把锁的情况。JVM采取了自适应自旋，来避免线程在面对非常小的synchronized代码块时，仍会被阻塞、唤醒的情况。  </p>
+<p>轻量级锁采用CAS操作，将锁对象的标记字段替换为一个指针，指向当前线程上的一块空间，存储着锁对象原本的标记字段。它针对的是多个线程在不同时间段申请同一把锁的情况。  </p>
+<p>偏向锁只会在第一次请求时采用CAS操作，在锁对象的标记字段中记录下当前线程的地址。在之后的运行过程中，持有该偏向锁的线程的加锁操作将直接返回。它针对的是锁仅会被同一线程持有的情况。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/JVM/13Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" rel="prev" title="Java内存模型">
+      <i class="fa fa-chevron-left"></i> Java内存模型
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#重量级锁"><span class="nav-number">1.</span> <span class="nav-text">重量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轻量级锁"><span class="nav-number">2.</span> <span class="nav-text">轻量级锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加锁"><span class="nav-number">2.1.</span> <span class="nav-text">加锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解锁"><span class="nav-number">2.2.</span> <span class="nav-text">解锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏向锁"><span class="nav-number">3.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">106</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>
