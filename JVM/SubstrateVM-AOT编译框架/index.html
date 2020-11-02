@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GraalVM中的Ahead-Of-Time(AOT)编译框架SubstrateVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SubstrateVM-AOT编译框架">
+<meta property="og:url" content="https://guoyushuai.github.io/JVM/SubstrateVM-AOT%E7%BC%96%E8%AF%91%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="GraalVM中的Ahead-Of-Time(AOT)编译框架SubstrateVM">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-30T09:00:00.000Z">
+<meta property="article:modified_time" content="2020-11-02T06:33:02.595Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/JVM/SubstrateVM-AOT%E7%BC%96%E8%AF%91%E6%A1%86%E6%9E%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SubstrateVM-AOT编译框架 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">128</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/JVM/SubstrateVM-AOT%E7%BC%96%E8%AF%91%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SubstrateVM-AOT编译框架
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-30 17:00:00" itemprop="dateCreated datePublished" datetime="2020-10-30T17:00:00+08:00">2020-10-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-02 14:33:02" itemprop="dateModified" datetime="2020-11-02T14:33:02+08:00">2020-11-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+            <div class="post-description">GraalVM中的Ahead-Of-Time(AOT)编译框架SubstrateVM</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="AOT编译"><a href="#AOT编译" class="headerlink" title="AOT编译"></a>AOT编译</h3><p>AOT编译时与即时编译相对立的一个概念。  </p>
+<ul>
+<li>即时编译指的是在程序的运行过程中，将字节码转换为可在硬件上直接运行的机器码，并部署至托管环境中的过程。  </li>
+<li>AOT编辑指的是在程序运行之前，便将字节码转换为机器码的过程。它的成果可以是需要链接至托管环境中的动态共享库，也可以是独立运行的可执行文件。  </li>
+</ul>
+<p>狭义的AOT编译针对的目标代码需要与即时编译的一致，也就是针对那些原本可以被即时编译的代码。不过，也可以简单的将AOT编译理解为类似于GCC(GNU[GNU’s Not Unix] Compiler Collection)的静态编译器。  </p>
+<p>AOT编译的优点显而易见：无须在运行过程中耗费CPU资源来进行即时编译，而程序也能够在启动伊始就达到理想的性能。  </p>
+<p>然而与即时编译相比，AOT编译无法得知程序运行时的信息，因此也无法进行基于类层次分析的完全虚方法内联，或者基于程序profile的投机性优化(并非硬性限制，可以通过限制运行范围，或者利用上一次运行的程序profile来绕开这两个限制)。这两者都会影响程序的峰值性能。  </p>
+<h4 id="jaotc"><a href="#jaotc" class="headerlink" title="jaotc"></a>jaotc</h4><p>Java9引入了实验性AOT编译工具jaotc。它借助了Graal编译器，将所输入的Java类文件转换为机器码，并存放至生成的动态共享库之中。  </p>
+<p>在启动过程中，JVM将加载参数-XX:AOTLibrary所指定的动态共享库，并部署其中的机器码。这些机器码的作用机理和即时编译生成的机器码作用机理一样，都是在方法调用时切入，并能够去优化至解释执行。  </p>
+<p>由于JVM可能通过Java agent或者C agent改动所加载的字节码，或者这份AOT编译生成的机器码针对的是旧版本的Java类，因此它需要额外的验证机制，来保证即将链接的机器码的语义与对应的Java类的语义是一致的。  </p>
+<p>jaotc使用的机制便是类指纹(class fingerpringting)。它会在动态共享库中保存被AOT编译的Java类的摘要信息。在运行过程中，JVM负责将该摘要信息与已加载的Java类相比较，一旦不匹配，则直接舍弃这份AOT编译的机器码。  </p>
+<p>jaotc的一大应用便是编译java.base module，也就是Java核心类库中最为基础的类。这些类很有可能会被应用程序所调用，但调用频率未必高到能够触发即时编译。  </p>
+<p>因此，如果JVM能够使用AOT编译技术，将他们提前编译为机器码，那么将避免在执行即时编译生成的机器码时，因为“不小心”调用到这些基础类，而需要切换至解释执行的性能惩罚。  </p>
+<h3 id="SubstrateVM的设计与实现"><a href="#SubstrateVM的设计与实现" class="headerlink" title="SubstrateVM的设计与实现"></a>SubstrateVM的设计与实现</h3><p>SubstrateVM是同样使用了Graal编译器的AOT编译框架。  </p>
+<p>SubstrateVM的设计初衷是提供一个高启动性能、低内存开销，并且能够无缝衔接C代码的Java运行时。它与jaotc的区别主要有两处。  </p>
+<ul>
+<li>第一，SubstrateVM脱离了HotSpot虚拟机，并拥有独立的运行时，包含异常处理，同步，线程管理，内存管理(垃圾回收)和JNI等组件。  </li>
+<li>第二，SubstrateVM要求目标程序是封闭的，即不能动态加载其他类库等。基于这个假设，SubstrateVM将探索整个编译空间，并通过静态分析推算出所有虚方法调用的目标方法。最终，SubstrateVM会将所有可能执行到的方法都纳入编译范围之中，从而免于实现额外的解释执行器。  </li>
+</ul>
+<p>从执行时间上来划分，SubstrateVM可以分为两部分：native image generator以及SubstrateVM运行时。后者SubstrateVM运行时便是前面提到的精简运行时，经过AOT编译的目标程序将跑在该运行时之上。  </p>
+<p>native image generator则包含了真正的AOT编译逻辑。它本身是一个Java程序，将使用Graal编译器将Java类文件编译为可执行文件或者动态链接库。  </p>
+<p>在进行编译之前，native image generator将采用指针分析(points-to analysis)，从用户提供的程序入口出发，探索所有可达的代码。在探索的同时，它还将执行初始化代码，并在最终生成可执行文件时，将已初始化的堆保存至一个堆快照之中。这样，SubstrateVM将直接从目标程序开始执行，而无须重复进行JVM的初始化。  </p>
+<p>SubStrateVM主要用于JVM语言的AOT编译，如Java、Scala、Kotlin。Truffle语言实现本质上就是Java程序，而且它所有用到的类都是编译时已知的，因此也适合在SubstrateVM上运行。不过，它并不会AOT编译用Truffle语言写就的程序。  </p>
+<h3 id="SubstrateVM的启动时间与内存开销"><a href="#SubstrateVM的启动时间与内存开销" class="headerlink" title="SubstrateVM的启动时间与内存开销"></a>SubstrateVM的启动时间与内存开销</h3><p>SubstrateVM的启动时间和内存开销非常少。Hello World程序，C程序的执行时间在10ms以下，内存开销在500KB以下；在HotSpot虚拟机上运行的Java程序则需要40ms，内存开销为24MB。使用SubstrateVM的Java程序的执行时间则与C程序持平，内幕才能开销在850KB左右。这得益于SubstrateVM所保存的堆快照，以及无须额外初始化，直接执行目标代码的特性。  </p>
+<p>对于用JavaScript编写的Hello World程序，Google的V8以及基于Truffle的Graal.js。这两个执行引擎都涉及了大量的解析代码以及执行代码，因此可以当做大型应用程序来看待。V8的执行效率非常高，能够与C程序的Hello World相媲美，但是它使用了约18MB的内存。运行在HotSpot虚拟机上的Graal.js则需要650ms方能执行完这段JavaScript的Hello World程序，而且内存开销在120MB左右。运行在SubstrateVM上的Graal.js无论是执行时间还是内存开销都十分优越，分别为10ms以下以及4.2MB。  </p>
+<p>由于SubstrateVM的轻量特性，它十分适合于嵌入至其他系统之中。Oracle Labs的另一个团队便是将Truffle语言实现嵌入至Oracle数据库之中，这样就可以在数据库中运行任意语言的预储程序(stored procedure)。[Oracle Database Multilingual Engine(MLE)]  </p>
+<h3 id="Metropolis项目"><a href="#Metropolis项目" class="headerlink" title="Metropolis项目"></a>Metropolis项目</h3><p>Metropolis项目，期望可以实现“Java-on-Java”的目标。  </p>
+<p>目前HotSpot虚拟机的绝大部分代码都是用C++写的。对Java语言本身的贡献需要精通C++。随着HotSpot项目日渐庞大，维护难度逐渐上升。使用Java开发Java虚拟机的四大好处：  </p>
+<ol>
+<li>能够完全控制编译JVM时所使用的优化技术；  </li>
+<li>能够与C++语言的更新解耦合；  </li>
+<li>能够减轻开发人员以及维护人员的负担；  </li>
+<li>能够以更为敏捷的方式实现Java的新功能。  </li>
+</ol>
+<p>JikesRVM项目和Maxine VM项目都已用Java完整的实现了一套Java虚拟机(就这的即时编译器C1X便是Graal编译器的前身)。  </p>
+<p>Java-on-Java技术通常会干扰应用程序的垃圾回收、即时编译优化，从而严重影响Java虚拟机的启动性能。  </p>
+<p>如，目前使用了Graal编译器的HotSpot虚拟机会在即时编译过程中生成大量的Java对象，这些Java对象同样会占据应用程序的堆空间，从而使得垃圾回收更加频繁。  </p>
+<p>另外，Graal编译器本身也会触发即时编译，并与应用程序的即时编译竞争编译线程的CPU资源。这将造成应用程序从解释执行切换至即时编译生成的机器码的时间大大的增长，从而降低应用程序的启动性能。  </p>
+<p>Metropolis项目的第一个子项目便是探索部署已AOT编译的Graal编译器的可能性。这个子项目将借助SubstrateVM技术，把整个Graal编译器AOT编译为机器码。这样，在运行过程中，Graal编译器不再需要被即时编译，因此也不会占据可用于即时编译应用程序的CPU资源，使用Graal编译器的HotSpot虚拟机的启动性能将得到大幅度的提升。此外，由于SubstrateVM编译得到的Graal编译器将使用独立的堆空间，因此Graal编译器在即时编译过程中生成的Java对象就将不再干扰应用程序所使用的堆空间。  </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>SubstrateVM的设计初衷是提供一个高启动性能、低内存开销，和能够无缝衔接C代码的Java运行时。它是一个独立的运行时，拥有自己的内存管理等组件。  </p>
+<p>SubstrateVM要求所要AOT编译的目标程序是封闭的，即不能动态加载其他类库等。在进行AOT编译时，它会探索所有可能运行到的方法，并全部纳入编译范围之内。  </p>
+<p>SubstrateVM的启动时间和内存开销都非常少，这主要得益于在AOT编译时便已保存了已初始化好的堆快照，并支持从程序入口直接开始运行。作为对比，HotSpot虚拟机在执行main方法前需要执行一系列的初始化操作，因此启动时间和内存开销都要远大于运行在SubstrateVM上的程序。  </p>
+<p>Metropolis项目将运用SubstrateVM项目，逐步的将HotSpot虚拟机中的C++代码替换成Java代码，从而提升HotSpot虚拟机的可维护性，也加快新Java功能的开发效率。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/JVM/Truffle-%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E6%A1%86%E6%9E%B6/" rel="prev" title="Truffle:语言实现框架">
+      <i class="fa fa-chevron-left"></i> Truffle:语言实现框架
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOT编译"><span class="nav-number">1.</span> <span class="nav-text">AOT编译</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jaotc"><span class="nav-number">1.1.</span> <span class="nav-text">jaotc</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SubstrateVM的设计与实现"><span class="nav-number">2.</span> <span class="nav-text">SubstrateVM的设计与实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SubstrateVM的启动时间与内存开销"><span class="nav-number">3.</span> <span class="nav-text">SubstrateVM的启动时间与内存开销</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metropolis项目"><span class="nav-number">4.</span> <span class="nav-text">Metropolis项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>
