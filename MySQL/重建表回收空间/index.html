@@ -25,10 +25,12 @@
 <meta property="og:site_name" content="Notes">
 <meta property="og:description" content="删除表数据，表文件大小不变">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoyushuai.github.io/img/MySQL%20InnoDB%E5%AD%98%E5%82%A8%E6%9E%B6%E6%9E%84.jpg">
 <meta property="article:published_time" content="2020-06-21T14:00:00.000Z">
-<meta property="article:modified_time" content="2020-06-23T07:09:35.553Z">
+<meta property="article:modified_time" content="2020-11-17T01:57:36.298Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoyushuai.github.io/img/MySQL%20InnoDB%E5%AD%98%E5%82%A8%E6%9E%B6%E6%9E%84.jpg">
 
 <link rel="canonical" href="https://guoyushuai.github.io/MySQL/%E9%87%8D%E5%BB%BA%E8%A1%A8%E5%9B%9E%E6%94%B6%E7%A9%BA%E9%97%B4/">
 
@@ -140,7 +142,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">141</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">155</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -230,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-23 15:09:35" itemprop="dateModified" datetime="2020-06-23T15:09:35+08:00">2020-06-23</time>
+                <time title="修改时间：2020-11-17 09:57:36" itemprop="dateModified" datetime="2020-11-17T09:57:36+08:00">2020-11-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,7 +264,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>5 分钟</span>
             </span>
             <div class="post-description">删除表数据，表文件大小不变</div>
 
@@ -275,24 +277,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>一个InnoDB表包含两部分：表结构定义和数据。<br>MySQL8.0以前，表结构是存在以.frm为后缀的文件里。MySQL8.0版本，允许把表结构定义放在系统数据表中。表结构定义占用的空间很小。  </p>
+        <img src="/img/MySQL InnoDB存储架构.jpg">
+
+<p>一个InnoDB表包含两部分：表结构定义和数据。<br>MySQL8.0以前，<strong>表结构是存在以.frm为后缀的table_name.frm文件里</strong>。MySQL8.0版本，允许把表结构定义放在系统数据表中。表结构定义占用的空间很小。  </p>
 <h3 id="表数据存储位置"><a href="#表数据存储位置" class="headerlink" title="表数据存储位置"></a>表数据存储位置</h3><p>表数据既可以存在共享表空间中，也可以是单独的文件。  </p>
 <ol>
 <li>innodb_file_per_table=OFF，表示表的数据放在系统共享表空间，也就是跟数据字典放在一起。  </li>
-<li>innodb_file_per_table=ON，（建议）表示每个InnoDB表数据存储在一个以.ibd为后缀的文件中。  </li>
+<li>innodb_file_per_table=ON，（建议）表示每个InnoDB<strong>表数据存储在一个以.ibd为后缀的table_name.ibd文件中</strong>。  </li>
 </ol>
 <p>MySQL5.6.6版本开始，该参数默认值为ON。<br>一个表单独存储为一个文件更容易管理，而且在不需要这个表的时候，通过drop table命令，系统就会直接删除这个文件。而如果是放在共享表空间，即使表删掉了，空间也是不会回收的。  </p>
 <p>针对表中某些行被删除，表空间没有被回收。  </p>
 <h3 id="数据页空洞"><a href="#数据页空洞" class="headerlink" title="数据页空洞"></a>数据页空洞</h3><p>InnoDB里的数据都是用B+树的结构组织的。  </p>
 <p>如果要删掉某个记录，InnoDB引擎只会把这个记录标记为删除，但磁盘文件的大小并不会缩小，后续有符合其前后范围的新记录插入，可能会复用这个位置。InnoDB的数据是按页存储的，如果删掉了一个数据页上的所有记录（被标记），整个数据页就可以被复用了（任意数据都可复用）。  </p>
 <p><strong>记录的复用与数据页的复用是不同的</strong>。记录的复用，只限于符合范围条件的数据。而当整个页从B+树里面摘掉以后，可以复用到任何位置。如果相邻的两个数据页利用率都很小，系统还会把这两个页上的数据合到其中一个页上，另外一个数据页就被标记为可复用。  </p>
-<p>如果用delete命令把整个表的数据删除，所有的数据页都会被标记为可复用，但是磁盘上，文件不会变小。delete命令是不能回收表空间的，这些可以复用，而没有被使用的空间，看起来就像是空洞。  </p>
+<p>如果用delete命令把整个表的数据删除，所有的数据页都会被标记为可复用，但是磁盘上，文件不会变小。<strong>delete命令是不能回收表空间的</strong>，这些可以复用，而没有被使用的空间，看起来就像是空洞。  </p>
 <hr>
 <p>插入数据也会造成空洞。  </p>
 <p>如果数据是按照索引递增顺序插入的，那么索引是紧凑的。如果数据是随机插入的，就可能造成索引的数据页分裂。  </p>
 <p>由于一个page1满了，再插入一个page1数值大小范围内的数据时，就不得不再申请一个新的页面page2来保存数据，并将page1上的后部分数据挪到page2，页分裂完成后，page1的末尾就留下了空洞。  </p>
 <p>更新索引上的值，可以理解为删除一个旧的值，再插入一个新的值，明显也会造成空洞。经过大量增删改的表，都是可能存在空洞的。把这些空洞去掉，才能达到收缩表空间的目的。  </p>
-<h3 id="重建表"><a href="#重建表" class="headerlink" title="重建表"></a>重建表</h3><p>重建表可以达到收缩表空间的目的。<br>在重建表的时候，InnoDB不会把整张表占满，每个页留了1/16给后续的更新用。重建表之后不是“最”紧凑的。  </p>
+<h3 id="重建表"><a href="#重建表" class="headerlink" title="重建表"></a>重建表</h3><p>重建表可以达到收缩表空间的目的。<br>在重建表的时候，InnoDB不会把整张表占满，每个页留了1/16给后续的update更新用。重建表之后不是“最”紧凑的。  </p>
 <blockquote>
 <p>删除主键或者创建主键都会将整个表重建。<br>更改表结构(加字段)会重建主键索引，主键索引树叶子节点的值要更新。普通索引不用重建。  </p>
 </blockquote>
@@ -437,7 +441,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">155</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
