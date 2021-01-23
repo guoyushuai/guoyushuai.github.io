@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/galo.gif">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/galo.gif">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Ma Shan Zheng:300,300italic,400,400italic,700,700italic|Noto Serif SC:300,300italic,400,400italic,700,700italic|Noto Sans SC:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoyushuai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="数据库的并发经验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件事务内存">
+<meta property="og:url" content="https://guoyushuai.github.io/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E8%BD%AF%E4%BB%B6%E4%BA%8B%E5%8A%A1%E5%86%85%E5%AD%98/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="数据库的并发经验">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-12T14:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-15T01:19:11.577Z">
+<meta property="article:author" content="Magic Candy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guoyushuai.github.io/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E8%BD%AF%E4%BB%B6%E4%BA%8B%E5%8A%A1%E5%86%85%E5%AD%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>软件事务内存 | Notes</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?66b31c6b7039a8ad7dd10df2108d6924";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Exploring note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">49</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">173</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/guoyushuai" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guoyushuai.github.io/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E8%BD%AF%E4%BB%B6%E4%BA%8B%E5%8A%A1%E5%86%85%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Magic Candy">
+      <meta itemprop="description" content="尺有所短，寸有所长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          软件事务内存
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-12 22:00:00" itemprop="dateCreated datePublished" datetime="2021-01-12T22:00:00+08:00">2021-01-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-15 09:19:11" itemprop="dateModified" datetime="2021-01-15T09:19:11+08:00">2021-01-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">并发编程</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+            <div class="post-description">数据库的并发经验</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>数据库在解决并发问题方面的事务机制非常简单易用-软件事务内存(Software Transactional Memory，STM)。  </p>
+<p>传统的数据库事务，支持4个特性ACID：原子性(Atomicity)、一致性(Consistency)、隔离性(Isolation)和持久性(Durability)，STM不涉及到持久性，只支持ACI。  </p>
+<h3 id="STM实现转账"><a href="#STM实现转账" class="headerlink" title="STM实现转账"></a>STM实现转账</h3><p><a href="/并发编程/05一不小心就死锁了，怎么办">引发的死锁的产生原因以及解决方案</a>中并发转账，简单的使用synchronized将transfer()方法编程同步方法并不能解决并发问题，因为还存在死锁问题。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UnsafeAccount</span> </span>&#123;</span><br><span class="line">    <span class="comment">//余额</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> balance;</span><br><span class="line">    <span class="comment">//构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnsafeAccount</span><span class="params">(<span class="keyword">long</span> balance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.balance = balance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//转账</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(UnsafeAccount target, <span class="keyword">long</span> amt)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.balance &gt; amt) &#123;</span><br><span class="line">            <span class="keyword">this</span>.balance -= amt;</span><br><span class="line">            target.balance += amt;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>转账操作使用数据库事务解决。如果所有SQL都正常执行，则通过commit()方法提交事务；如果SQL在执行过程中有异常，则通过rollback()方法回滚事务。数据库保证在并发情况下不会有死锁，而且还能保证ACID。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Connection conn = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//获取数据库连接</span></span><br><span class="line">    conn = DriverManager.getConnection();</span><br><span class="line">    <span class="comment">//设置手动提交事务</span></span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    <span class="comment">//执行转账SQL</span></span><br><span class="line">    。。。</span><br><span class="line">    <span class="comment">//提交事务</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="comment">//出现异常回滚事务</span></span><br><span class="line">    conn.rollbacl();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用STM实现。Java语言不支持STM，借助第三方类库Multiverse来支持。相较于UNsafeAccount，将余额的类型从long变成了TxnLong，将转账的操作放到了atomic(()-&gt;{})中。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">    <span class="comment">//余额</span></span><br><span class="line">    <span class="keyword">private</span> TxnLong balance;</span><br><span class="line">    <span class="comment">//构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account</span><span class="params">(<span class="keyword">long</span> balance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.balance = StmUtils.newTxnLong(balance);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//转账</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transfer</span><span class="params">(Account to, <span class="keyword">int</span> amt)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//原子化操作</span></span><br><span class="line">        atomic(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.balance.get() &gt; amt) &#123;</span><br><span class="line">                <span class="keyword">this</span>.balance.decrement(amt);</span><br><span class="line">                to.balance.increment(amt);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数据库事务广泛使用的是MVCC(Mutli-Version Concurrency Control)，多版本并发控制。<br><a href="/MySQL/3事务隔离">事务隔离</a><a href="/MySQL/6隔离事务">隔离事务</a></p>
+<p>MVCC可以简单的理解为数据库事务在开启的时候，会给数据库打一个快照，以后所有的读写都是基于这个快照的。当提交事务的时候，如果所有读写过的数据在该事务执行期间没有发生过变化，那么久可以提交；如果发生了变化，说明事务中有和其他事务读写的数据冲突了，这个时候是不可以提交的。  </p>
+<p>为了记录数据是否发生了变化，可以给每条数据增加一个版本号，这样每次成功修改数据都会增加版本号的值。MVCC的工作原理和<a href="/并发编程/18StampedLock：有没有比读写锁更快的锁">StampedLock</a>中的乐观锁类似。  </p>
+<h3 id="实现STM"><a href="#实现STM" class="headerlink" title="实现STM"></a>实现STM</h3><p>首先让Java中的对象有版本号，VersionedRef这个类的作用就是将对象value包装成带版本号的对象。按照MVCC理论，数据的每一次修改都对应着一个唯一的版本号，不存在仅仅改变value或者version的情况，用不变模式可以很好的解决这个问题，VersionedRef设计成不可变的。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//带版本号的对象引用</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">VersionedRef</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> T value;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">long</span> version;</span><br><span class="line">    <span class="comment">//构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">VersionedRef</span><span class="params">(T value, <span class="keyword">long</span> version)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">        <span class="keyword">this</span>.version = version;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所有对数据的读写操作，一定是在一个事务里面，TxnRef这个类负责完成事务内的读写操作，读写操作委托给了接口Txn，Txn代表的是读写操作所在的当前事务，内部持有的curRef代表的是系统中的最新值。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//支持事务的引用</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TxnRef</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">//当前数据，带版本号</span></span><br><span class="line">    <span class="keyword">volatile</span> VersionedRef curRef;</span><br><span class="line">    <span class="comment">//构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TxnRef</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.curRef = <span class="keyword">new</span> VersionedRef(value, <span class="number">0L</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获取当前事务中的数据</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">(Txn txn)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> txn.get(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在当前事务中设置数据</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(T value, Txn txn)</span> </span>&#123;</span><br><span class="line">        txn.set(<span class="keyword">this</span>, value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//事务接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Txn</span> </span>&#123;</span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">get</span><span class="params">(TxnRef&lt;T&gt; ref)</span></span>;</span><br><span class="line">    &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">set</span><span class="params">(TxnRef&lt;T&gt; ref, T value)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>STMTxn是Txn最关键的一个实现类，事务内对于数据的读写，都是通过它来完成的。STMTxn内部有两个Map:  </p>
+<ul>
+<li>inTxnMap-用于保存当前事务中所有读写的数据的快照；  </li>
+<li>writeMap-用于保存当前事务需要写入的数据。  </li>
+</ul>
+<p>每个事务都有一个唯一的事务ID txnId，全局递增的。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//STM事务实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">STMTxn</span> <span class="keyword">implements</span> <span class="title">Txn</span> </span>&#123;</span><br><span class="line">    <span class="comment">//事务ID生成器</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> AtomicLong txnSeq = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//当前事务所有的相关数据</span></span><br><span class="line">    <span class="keyword">private</span> Map&lt;TxnRef, VersionedRef&gt; inTxnMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//当前事务所有需要修改的数据</span></span><br><span class="line">    <span class="keyword">private</span> Map&lt;TxnRef, Object&gt; writeMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//当前事务ID</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> txnId;</span><br><span class="line">    STMTxn() &#123;</span><br><span class="line">        txnId = txnSeq.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取当前事务中的数据</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">get</span><span class="params">(TxnRef&lt;T&gt; ref)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//将需要读取的数据，加入inTxnMap</span></span><br><span class="line">        <span class="keyword">if</span>(!inTxnMap.containsKey(ref)) &#123;</span><br><span class="line">            inTxnMap.put(ref, ref.curRef);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (T) inTxnMap.get(ref).value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在当前事务中修改数据</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">set</span><span class="params">(TxnRef&lt;T&gt; ref, T value)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//将需要修改的数据。加入inTxnMap</span></span><br><span class="line">        <span class="keyword">if</span>(!inTxnMap.containsKey(ref)) &#123;</span><br><span class="line">            inTxnMap.put(ref, ref.curRef);</span><br><span class="line">        &#125;</span><br><span class="line">        writeMap.put(ref, value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//提交事务</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">commit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (STM.commitLock) &#123;</span><br><span class="line">            <span class="comment">//是否校验通过</span></span><br><span class="line">            <span class="keyword">boolean</span> isValid = <span class="keyword">true</span>;</span><br><span class="line">            <span class="comment">//校验所有读过的数据是否发生过变化</span></span><br><span class="line">            <span class="keyword">for</span>(Map.Entry&lt;TxnRef, VersionedRef&gt; entry : inTxnMap.entrySet()) &#123;</span><br><span class="line">                VersionedRef curRef = entry.getKey().curRef;</span><br><span class="line">                VersionedRef readRef = entry.getValue();</span><br><span class="line">                <span class="comment">//通过版本号来验证数据是否发生过变化</span></span><br><span class="line">                <span class="keyword">if</span>(curRef.version != readRef.version) &#123;</span><br><span class="line">                    idValid = <span class="keyword">false</span>;、</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果校验通过，则所有更改生效</span></span><br><span class="line">        <span class="keyword">if</span>(isValid) &#123;</span><br><span class="line">            writeMap.forEach((k, v)-&gt;&#123;</span><br><span class="line">                k.curRef = <span class="keyword">new</span> VersionedRef(v, txnId);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isValid;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>STMTxn有三个核心方法，分别是读数据的get()方法、写数据的set()方法和提交事务的commit()方法。  </p>
+<ul>
+<li>get()方法将要读取数据作为快照放入inTxnMap，同时保证每次读取的数据都是一个版本。  </li>
+<li>set()方法会将要写入的数据放入writeMap，但如果写入的数据没被读取过，也会将其放入inTxnMap。  </li>
+<li>commit()方法，简化实现，使用了互斥锁，所以事务的提交是串行的。首先检查inTxnMap中的数据是否发生过变化，如果没有发生变化，那么就将writeMap中的数据写入(这里的写入是TxnRef内部持有的curRef)；如果发生过变化，那么就不能讲writeMap中的数据写入了。  </li>
+</ul>
+<hr>
+<p>模拟实现Multiverse中的原子化操作atomic()。使用了类似CAS的操作，如果事务提交失败，那么就重新创建一个新的事务，重新执行。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TxnRunnable</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">(Txn txn)</span></span>; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//STM</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">STM</span> </span>&#123;</span><br><span class="line">    <span class="comment">//私有化构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">STM</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//提交数据需要用到的全局锁</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Object commitLock = <span class="keyword">new</span> Object();</span><br><span class="line">        <span class="comment">//原子化提交方法</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">atomic</span><span class="params">(TxnRunnable action)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">boolean</span> committed = <span class="keyword">false</span>;</span><br><span class="line">            <span class="comment">//如果，没有提交成功，则一直重试</span></span><br><span class="line">            <span class="keyword">while</span>(!committed) &#123;</span><br><span class="line">                <span class="comment">//创建新的事务</span></span><br><span class="line">                STMTxn txn = <span class="keyword">new</span> STMTxn();</span><br><span class="line">                <span class="comment">//执行业务逻辑</span></span><br><span class="line">                action.run(txn);</span><br><span class="line">                <span class="comment">//提交事务</span></span><br><span class="line">                commited = txn.commit();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>线程安全的转账操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">    <span class="comment">//余额</span></span><br><span class="line">    <span class="keyword">private</span> TxnRef&lt;Integer&gt; balance;</span><br><span class="line">    <span class="comment">//构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Account</span><span class="params">(<span class="keyword">int</span> balance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.balance = <span class="keyword">new</span> TxnRef&lt;Integer&gt;(balance);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//转账操作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transfer</span><span class="params">(Account target, <span class="keyword">int</span> amt)</span> </span>&#123;</span><br><span class="line">        STM.atomic((txn)-&gt;&#123;</span><br><span class="line">            Integer from = balance.getValue(txn);</span><br><span class="line">            balance.setValue(from-amt, txn);</span><br><span class="line">            Integer to = target.balance.getValue(txn);</span><br><span class="line">            target.balance.setValue(to+amt, txn);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>STM仅适用于存储共享变量，编程语言中各种I/O操作很难支持回滚。支持STM的编程语言主要是函数式语言，函数式语言里的数据天生具备不可变性，利用这种不可变性实现STM更加简单。  </p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Actor%E6%A8%A1%E5%9E%8B/" rel="prev" title="Actor模型">
+      <i class="fa fa-chevron-left"></i> Actor模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%8D%8F%E7%A8%8B/" rel="next" title="协程">
+      协程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#STM实现转账"><span class="nav-number">1.</span> <span class="nav-text">STM实现转账</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现STM"><span class="nav-number">2.</span> <span class="nav-text">实现STM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Magic Candy"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Magic Candy</p>
+  <div class="site-description" itemprop="description">尺有所短，寸有所长。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">173</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guoyushuai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guoyushuai" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Magic Candy</span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+</body>
+</html>
