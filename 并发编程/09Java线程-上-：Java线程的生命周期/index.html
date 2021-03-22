@@ -25,12 +25,12 @@
 <meta property="og:site_name" content="Notes">
 <meta property="og:description" content="New、Runnable、Blocked、Waiting、Timed_Waiting、Terminated">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://guoyushuai.github.io/img/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8BJava%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E7%AE%80%E5%8C%96%E8%BD%AC%E6%8D%A2%E5%9B%BE.png">
+<meta property="og:image" content="https://guoyushuai.github.io/img/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8BJava%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%9B%BE.png">
 <meta property="article:published_time" content="2020-11-10T09:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-11T08:13:26.687Z">
+<meta property="article:modified_time" content="2021-03-22T06:30:15.485Z">
 <meta property="article:author" content="Magic Candy">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://guoyushuai.github.io/img/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8BJava%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E7%AE%80%E5%8C%96%E8%BD%AC%E6%8D%A2%E5%9B%BE.png">
+<meta name="twitter:image" content="https://guoyushuai.github.io/img/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8BJava%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%9B%BE.png">
 
 <link rel="canonical" href="https://guoyushuai.github.io/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/09Java%E7%BA%BF%E7%A8%8B-%E4%B8%8A-%EF%BC%9AJava%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
 
@@ -232,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-11 16:13:26" itemprop="dateModified" datetime="2020-11-11T16:13:26+08:00">2020-11-11</time>
+                <time title="修改时间：2021-03-22 14:30:15" itemprop="dateModified" datetime="2021-03-22T14:30:15+08:00">2021-03-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,14 +257,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.4k</span>
+              <span>4.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
+              <span>8 分钟</span>
             </span>
             <div class="post-description">New、Runnable、Blocked、Waiting、Timed_Waiting、Terminated</div>
 
@@ -289,45 +289,16 @@
 </ol>
 <p>这五种状态在不同编程语言里会有简化合并。C语言的POSIX Threads规范，把初始状态和可运行状态合并了；Java语言里则把可运行状态和运行状态合并了，这两个状态在操作系统调度层面有用，而JVM层面不关心这两个状态，因为JVM把线程调度交给操作系统处理了。  </p>
 <p>除了简化合并，这五种状态也有可能被细化。Java语言细化了休眠状态。  </p>
-<h3 id="Java中线程的生命周期"><a href="#Java中线程的生命周期" class="headerlink" title="Java中线程的生命周期"></a>Java中线程的生命周期</h3><p>Java语言中线程共有六种状态：  </p>
-<ol>
-<li>New(初始化状态)</li>
-<li>Runnable(可运行/运行状态)</li>
-<li>Blocked(阻塞状态)</li>
-<li>Waiting(无时限等待)</li>
-<li>Timed_Waiting(有时限等待)</li>
-<li>Terminated(终止状态)</li>
-</ol>
-<p>在操作系统层面，Java线程中的Blocked、Waiting、Timed_Waiting是一种状态，即休眠状态。只要Java线程处于这三种状态之一，那么这个线程就永远没有CPU的使用权。  </p>
-<img src='/img/并发编程/并发编程Java中的线程状态简化转换图.png'>
+<h3 id="Java中线程的生命周期"><a href="#Java中线程的生命周期" class="headerlink" title="Java中线程的生命周期"></a>Java中线程的生命周期</h3><blockquote>
+<p>Thread类中的一个变量:private volatile int threadStatus = 0;</p>
+</blockquote>
+<p>Java语言中线程共有六种状态：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</span><br><span class="line">    NEW,            <span class="comment">//初始化状态</span></span><br><span class="line">    RUNNABLE,       <span class="comment">//可运行/运行状态</span></span><br><span class="line">    BLOCKED,        <span class="comment">//阻塞状态</span></span><br><span class="line">    WAITING,        <span class="comment">//无时限等待</span></span><br><span class="line">    TIMED_WAITING,  <span class="comment">//有时限等待</span></span><br><span class="line">    TERMINATED;     <span class="comment">//终止状态</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="Runnable与Blocked的状态转换"><a href="#Runnable与Blocked的状态转换" class="headerlink" title="Runnable与Blocked的状态转换"></a>Runnable与Blocked的状态转换</h4><p><strong>只有一种场景会触发这种转换，就是线程等待synchronized的隐式锁</strong>。synchronized修饰的方法、代码块同一时刻只允许一个线程执行，其他线程只能等待，这种情况下，等待的线程就会从Runnable转换到Blocked状态。而当等待的线程获得synchronized隐式锁时，就又会从Blocked转换到Runnable状态。  </p>
-<blockquote>
-<p>Java并发包中的锁Lock，都是基于LockSupport对象实现的。线程转换到等待状态。  </p>
-</blockquote>
-<blockquote>
-<p>阻塞态的线程不响应中断，并发包里的锁有方法能够响应中断。  </p>
-</blockquote>
-<p><strong>线程调用阻塞式API时</strong>(bio，阻塞式的读文件，读网络数据，写socket等)，在操作系统层面，线程是会转换到休眠状态的；但是在JVM层面，<strong>Java线程依然保持Runnable状态不会发生变化</strong>。JVM层面并不关心操作系统调度相关的状态，在JVM看来，等待CPU使用权(操作系统层面此时处于可执行状态)与等待I/O(操作系统层面此时处于休眠状态)没有区别，都是在等待某个资源，所以都归入了Runnable状态。  </p>
-<p>平时所谓的<strong>Java在调用阻塞式API(阻塞式的读文件，读网络数据)时，线程会阻塞，指的是操作系统线程的状态，并不是Java线程的状态</strong>。  </p>
-<h4 id="Runnable与Waiting的状态转换"><a href="#Runnable与Waiting的状态转换" class="headerlink" title="Runnable与Waiting的状态转换"></a>Runnable与Waiting的状态转换</h4><p>有三种场景会触发这种转换：  </p>
-<ul>
-<li>第一种场景，获得synchronized隐式锁的线程，调用无参数的Object.wait()方法。[管程：并发编程的万能钥匙]  </li>
-<li>第二种场景，调用无参数的Thread.join()方法。其中的join()是一种线程同步方法，如有一个线程对象threadA，当调用A.join()的时候，执行这条语句的线程会等待threadA执行完，而等待中的这个线程，其状态会从Runnable转换到Waiting。当线程threadA执行完，原来等待它的线程又会从Waiting状态转换到Runnable。  </li>
-<li>第三种场景，调用LockSupport.park()方法。Java并发包中的锁，都是基于LockSupport对象实现的。调用LockSupport.park()方法，当前线程会阻塞，线程的状态会从Runnable转换到Waiting。调用LockSupport.unpark(Thread thread)可唤醒目标线程，目标线程的状态又会从Waiting状态转换到Runnable。  <blockquote>
-<p>并发包中的lock，线程会转换到等待状态。  </p>
-</blockquote>
-</li>
-</ul>
-<h4 id="Runnable与Timed-waiting的状态转换"><a href="#Runnable与Timed-waiting的状态转换" class="headerlink" title="Runnable与Timed_waiting的状态转换"></a>Runnable与Timed_waiting的状态转换</h4><p>有五种场景会触发这种转换：  </p>
-<ul>
-<li>调用带超时参数的Thread.sleep(long millis)方法；</li>
-<li>获得synchronized隐式锁的线程，调用带超时参数的Object.wait(long timeout)方法；</li>
-<li>调用带超时参数的Thread.join(long millis)方法；</li>
-<li>调用带超时参数的LockSupport.parkNanos(Object blocker, long deadline)方法；</li>
-<li>调用带超时参数的LockSupport.parkUntil(long deadling)方法。  </li>
-</ul>
-<p>Timed_waiting和Waiting状态的区别，仅仅是触发条件多了超时参数。  </p>
+<p>在操作系统层面，Java线程中的Blocked、Waiting、Timed_Waiting是一种状态，即休眠状态。只要Java线程处于这三种状态之一，那么这个线程就永远没有CPU的使用权。  </p>
+<img src='/img/并发编程/并发编程Java中的线程状态转换图.png'>
+
+<p><a href="https://mp.weixin.qq.com/s/UOrXql_LhOD8dhTq_EPI0w" target="_blank" rel="noopener">低并发编程</a> </p>
 <h4 id="从New到Runnable状态"><a href="#从New到Runnable状态" class="headerlink" title="从New到Runnable状态"></a>从New到Runnable状态</h4><p>Java刚创建出来的Thread对象就是New状态，而创建Thread对象主要有两种方法。  </p>
 <ul>
 <li>一种是继承Thread对象，重写run()方法。    <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自定义线程对象</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//线程需要执行的代码</span></span><br><span class="line">        ···</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//创建线程对象</span></span><br><span class="line">MyThread myThread = <span class="keyword">new</span> MyThread();</span><br></pre></td></tr></table></figure></li>
@@ -338,6 +309,33 @@
 <p>New状态的线程，不会被操作系统调度，因此不会执行。Java线程要执行，就必须转换到Runnable状态。从New状态转换到Runnable状态很简单，只要调用线程对象的start()方法就可以了。  </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyThread myThread = <span class="keyword">new</span> MyThread();</span><br><span class="line">myThread.start();</span><br></pre></td></tr></table></figure>
 
+<h4 id="Runnable与Blocked的状态转换"><a href="#Runnable与Blocked的状态转换" class="headerlink" title="Runnable与Blocked的状态转换"></a>Runnable与Blocked的状态转换</h4><p><strong>只有一种场景会触发这种转换，就是线程等待synchronized的隐式锁</strong>。synchronized修饰的方法/代码块同一时刻只允许一个线程执行，其他线程只能等待，这种情况下，未获取锁而等待的线程就会从Runnable转换到Blocked状态，并且进入锁对象的<strong>同步队列</strong>。而当等待的线程获得synchronized隐式锁时，就又会从Blocked转换到Runnable状态，重新争抢锁。  </p>
+<blockquote>
+<p>Java并发包中的锁Lock，都是基于LockSupport对象实现的。线程转换到等待状态。  </p>
+</blockquote>
+<blockquote>
+<p>阻塞态的线程不响应中断，并发包里的锁有方法能够响应中断。  </p>
+</blockquote>
+<p><strong>线程调用阻塞式API时</strong>(bio，阻塞式的读文件，读网络数据，写socket等)，在操作系统层面，线程是会转换到休眠状态的；但是在JVM层面，<strong>Java线程依然保持Runnable状态不会发生变化</strong>。JVM层面并不关心操作系统调度相关的状态，在JVM看来，等待CPU使用权(操作系统层面此时处于可执行状态)与等待I/O(操作系统层面此时处于休眠状态)没有区别，都是在等待某个资源，所以都归入了Runnable状态。  </p>
+<p>平时所谓的<strong>Java在调用阻塞式API(阻塞式的读文件，读网络数据)时，线程会阻塞，指的是操作系统线程的状态，并不是Java线程的状态</strong>。  </p>
+<h4 id="Runnable与Waiting的状态转换"><a href="#Runnable与Waiting的状态转换" class="headerlink" title="Runnable与Waiting的状态转换"></a>Runnable与Waiting的状态转换</h4><p>有三种场景会触发这种转换：  </p>
+<ul>
+<li>第一种场景，获得synchronized隐式锁的线程，调用无参数的<strong>Object.wait()</strong> 方法[管程：并发编程的万能钥匙]。先释放锁对象、再将线程状态变成Waiting、最后线程进入锁对象的<strong>等待队列</strong>。(当另一个线程，调用同一个对象的notify/notifyAll方法时，该线程被唤醒，从等待队列中移出，并从Waiting状态返回Runnable状态，重新争抢锁)  </li>
+<li>第二种场景，调用无参数的<strong>Thread.join()</strong>方法。其中的join()是一种线程同步方法，如有一个线程对象threadA，当调用A.join()的时候，执行这条语句的线程会等待threadA执行完，而等待中的这个线程，其状态会从Runnable转换到Waiting。当线程threadA执行完，原来等待它的线程又会从Waiting状态转换到Runnable。(Tread.join()源码的本质仍然是执行了wait()方法，锁对象是Thread A对象本身；Thread A结束后，由JVM自动调用A.notifyAll()来唤醒主线程继续执行)  </li>
+<li>第三种场景，调用LockSupport.park()方法。Java并发包中的锁，都是基于LockSupport对象实现的。调用LockSupport.park()【0/1】方法，当前线程会阻塞，线程的状态会从Runnable转换到Waiting。调用LockSupport.unpark(Thread thread)【1】可唤醒目标线程，目标线程的状态又会从Waiting状态转换到Runnable。  <blockquote>
+<p>并发包中的Lock，线程会转换到等待状态。<br>Synchronized，线程转换到的是阻塞状态。  </p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Runnable与Timed-waiting的状态转换"><a href="#Runnable与Timed-waiting的状态转换" class="headerlink" title="Runnable与Timed_waiting的状态转换"></a>Runnable与Timed_waiting的状态转换</h4><p>有五种场景会触发这种转换：  </p>
+<ul>
+<li>调用带超时参数的Thread.sleep(long millis)方法(仅仅让线程挂起，不释放锁)；</li>
+<li>获得synchronized隐式锁的线程，调用带超时参数的Object.wait(long timeout)方法；</li>
+<li>调用带超时参数的Thread.join(long millis)方法；</li>
+<li>调用带超时参数的LockSupport.parkNanos(Object blocker, long deadline)方法；</li>
+<li>调用带超时参数的LockSupport.parkUntil(long deadling)方法。  </li>
+</ul>
+<p>Timed_waiting和Waiting状态的区别，仅仅是触发条件多了超时参数。  </p>
 <h4 id="从Runnable到Terminated状态"><a href="#从Runnable到Terminated状态" class="headerlink" title="从Runnable到Terminated状态"></a>从Runnable到Terminated状态</h4><p>线程执行完run()方法后，会自动转换到Terminated状态，当然如果执行run()方法的时候异常抛出，也会导致线程终止。有时候需要强制中断run()方法的执行，如run()方法访问一个很慢的网络，不想等下去了，Java的Thread类的stop()方法(已经标记为@Deprecated)，正确的姿势是调用interrupt()方法。  </p>
 <p>stop()方法会真的杀死线程，不给线程喘息的机会，如果线程持有ReentrantLock锁，被stop()的线程并不会自动调用ReentrantLock的unlock()去释放锁，那其他线程就再也没有机会获得ReentrantLock锁，太危险所以该方法不建议使用了，类似的方法还有suspend()和resume()也不建议使用了。  </p>
 <blockquote>
@@ -435,7 +433,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#通用的线程生命周期"><span class="nav-number">1.</span> <span class="nav-text">通用的线程生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中线程的生命周期"><span class="nav-number">2.</span> <span class="nav-text">Java中线程的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Runnable与Blocked的状态转换"><span class="nav-number">2.1.</span> <span class="nav-text">Runnable与Blocked的状态转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Runnable与Waiting的状态转换"><span class="nav-number">2.2.</span> <span class="nav-text">Runnable与Waiting的状态转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Runnable与Timed-waiting的状态转换"><span class="nav-number">2.3.</span> <span class="nav-text">Runnable与Timed_waiting的状态转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从New到Runnable状态"><span class="nav-number">2.4.</span> <span class="nav-text">从New到Runnable状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从Runnable到Terminated状态"><span class="nav-number">2.5.</span> <span class="nav-text">从Runnable到Terminated状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#通用的线程生命周期"><span class="nav-number">1.</span> <span class="nav-text">通用的线程生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中线程的生命周期"><span class="nav-number">2.</span> <span class="nav-text">Java中线程的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#从New到Runnable状态"><span class="nav-number">2.1.</span> <span class="nav-text">从New到Runnable状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Runnable与Blocked的状态转换"><span class="nav-number">2.2.</span> <span class="nav-text">Runnable与Blocked的状态转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Runnable与Waiting的状态转换"><span class="nav-number">2.3.</span> <span class="nav-text">Runnable与Waiting的状态转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Runnable与Timed-waiting的状态转换"><span class="nav-number">2.4.</span> <span class="nav-text">Runnable与Timed_waiting的状态转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从Runnable到Terminated状态"><span class="nav-number">2.5.</span> <span class="nav-text">从Runnable到Terminated状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
